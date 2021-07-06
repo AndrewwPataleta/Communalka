@@ -1,16 +1,28 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    ext.kotlin_version = "1.5.20"
+
+    ext {
+        kotlinVersion = KOTLIN_VERSION
+        moxyVersion = MOXY_VERSION
+        coroutinesVersion = COROUTINES_VERSION
+        koinVersion = KOIN_VERSION
+        retrofitVersion = RETROFIT_VERSION
+        roomVersion = ROOM_VERSION
+        okhttp3LogInterceptor = OKHTTP3LOGINTERCEPTOR_VERSION
+        architectureComponents = ARHITECTURECOMPONENTS_VERSION
+        mockitoVersion = MOCKITO_VERSION
+        chuckVersion = CHUCK_VERSION
+        lifecycleVersion = LIFECYCLE_VERSION
+    }
+
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.2.2"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "io.insert-koin:koin-gradle-plugin:$koinVersion"
     }
 }
 
@@ -18,10 +30,11 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        jcenter() // Warning: this repository is going to shut down soon
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+apply plugin: 'koin'
