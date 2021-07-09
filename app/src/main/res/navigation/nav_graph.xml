@@ -20,7 +20,9 @@
         android:name="com.patstudio.communalka.presentation.ui.auth.LoginFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_login">
-
+        <action
+            android:id="@+id/toPinCode"
+            app:destination="@id/PinCode" />
         <action
             android:id="@+id/toRegistrationFragment"
             app:destination="@id/Registration" />
@@ -31,6 +33,27 @@
         android:name="com.patstudio.communalka.presentation.ui.auth.RegistrationFragment"
         android:label="Registration Fragment"
         tools:layout="@layout/fragment_registration">
+        <action
+            android:id="@+id/toLogin"
+            app:destination="@id/LoginFragment" />
+        <action
+            android:id="@+id/toConfirmSms"
+            app:destination="@id/ConfirmSms" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/ConfirmSms"
+        android:name="com.patstudio.communalka.presentation.ui.auth.ConfirmSmsFragment"
+        android:label="ConfirmSms Fragment"
+        tools:layout="@layout/fragment_confirm_sms">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/PinCode"
+        android:name="com.patstudio.communalka.presentation.ui.auth.PinCodeFragment"
+        android:label="PinCode Fragment"
+        tools:layout="@layout/fragment_pin_code">
 
     </fragment>
 </navigation>

@@ -37,6 +37,18 @@ class MainActivity : AppCompatActivity() {
                     toolbar.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
+                R.id.Registration-> {
+                    toolbar.visibility = View.GONE
+                    bottomNavigationView.visibility = View.GONE
+                }
+                R.id.ConfirmSms-> {
+                    toolbar.visibility = View.GONE
+                    bottomNavigationView.visibility = View.GONE
+                }
+                R.id.PinCode-> {
+                    toolbar.visibility = View.GONE
+                    bottomNavigationView.visibility = View.GONE
+                }
             }
         }
     }

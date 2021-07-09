@@ -20,4 +20,12 @@
     <string name="registration">Зарегистрироваться</string>
     <string name="have_no_account">Нет аккаунта?</string>
     <string name="registration_now">Регистрация</string>
+    <string name="email">Почта</string>
+    <string name="have_account">Уже есть аккаунт?</string>
+    <string name="auth_now">Авторизоваться</string>
+    <string name="thx_for_auth">Благодарим за авторизацию в нашем сервисе. Введите код потверждения, который мы прислали вам на телефон:</string>
+    <string name="confirmation_code">Код подтверждения</string>
+    <string name="resend_via">Отправить повторно через</string>
+    <string name="install_pin_code_short">Установите PIN-код</string>
+    <string name="install_pin_code_long">Установите PIN-код, чтобы упростить доступ к приложению при следующем входе</string>
 </resources>

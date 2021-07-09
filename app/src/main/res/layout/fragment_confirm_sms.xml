@@ -2,7 +2,6 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -63,136 +62,90 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/auth_text"
+                    android:id="@+id/congratulation"
                     style="@style/TextBold1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/robotobold"
-                    android:text="@string/registration_now"
+                    android:text="Уважаемый Иванов Иван Иванович!"
                     android:textColor="@color/black"
                     android:textSize="20sp"
+                    android:gravity="center"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/close" />
 
+
                 <TextView
-                    android:id="@+id/fio_text"
+                    android:id="@+id/thx_for_auth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:paddingEnd="32dp"
+                    android:paddingStart="32dp"
+                    android:textSize="14sp"
+                    app:layout_constraintTop_toBottomOf="@id/congratulation"
+                    android:text="@string/thx_for_auth"/>
+
+                <TextView
+                    android:id="@+id/confirmation_code_text"
                     style="@style/TextBody1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/robotobold"
-                    android:text="Ваше ФИО"
+                    android:text="@string/confirmation_code"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/auth_text" />
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/fio_edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Иванов Иван Иванович"
-                    android:textColorHint="@color/black"
-                    android:textSize="16sp"
-                    android:inputType="textPersonName"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/fio_text" />
-
-                <TextView
-                    android:id="@+id/phone_text"
-                    style="@style/TextBody1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:fontFamily="@font/robotobold"
-                    android:text="@string/phone"
-                    android:textColor="@android:color/darker_gray"
-                    android:textSize="12sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/fio_edit" />
-
-                <TextView
-                    android:id="@+id/have_account_text"
-                    style="@style/TextBody1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:fontFamily="@font/robotobold"
-                    android:text="@string/have_account"
-                    android:textColor="@android:color/darker_gray"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toStartOf="@id/registration_text"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/registration" />
-
-                <TextView
-                    android:id="@+id/registration_text"
-                    style="@style/TextBody1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:fontFamily="@font/robotobold"
-                    android:text="@string/auth_now"
-                    android:textColor="@color/dark_blue"
-                    android:textSize="14sp"
-                    android:layout_marginStart="8dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/have_account_text"
-                    app:layout_constraintTop_toBottomOf="@id/registration" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/registration"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:backgroundTint="@color/dark_blue"
-                    android:fontFamily="@font/robotoregular"
-                    android:padding="8dp"
-                    android:text="@string/registration"
-                    android:textAllCaps="false"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/email_edit" />
+                    app:layout_constraintTop_toBottomOf="@id/thx_for_auth" />
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/phone_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="+7 999 876 54 32"
+                    android:hint="1234"
                     android:textColorHint="@color/black"
                     android:textSize="16sp"
-                    android:inputType="phone"
+                    android:inputType="text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/phone_text" />
+                    app:layout_constraintTop_toBottomOf="@id/confirmation_code_text" />
 
                 <TextView
-                    android:id="@+id/email_text"
+                    android:id="@+id/repeat_send_after_text"
                     style="@style/TextBody1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/robotobold"
-                    android:text="@string/email"
+                    android:text="@string/resend_via"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="12sp"
+                    app:layout_constraintEnd_toStartOf="@id/repeat_send_after_value"
+                    app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintTop_toBottomOf="@id/phone_edit" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/email_edit"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/repeat_send_after_value"
+                    style="@style/TextBody1"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="ivanov@gmail.com"
-                    android:textColorHint="@color/black"
-                    android:textSize="16sp"
-                    android:inputType="textEmailAddress"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/robotobold"
+                    android:text="00:10"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="12sp"
+                    android:layout_marginStart="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/email_text" />
+                    app:layout_constraintStart_toEndOf="@id/repeat_send_after_text"
+                    app:layout_constraintTop_toBottomOf="@id/phone_edit" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -7,19 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.patstudio.communalka.R
+import com.patstudio.communalka.databinding.FragmentConfirmSmsBinding
 import com.patstudio.communalka.databinding.FragmentLoginBinding
+import com.patstudio.communalka.databinding.FragmentRegistrationBinding
 
 
-class LoginFragment : Fragment() {
+class ConfirmSmsFragment : Fragment() {
 
-    private var _binding: FragmentLoginBinding? = null
+    private var _binding: FragmentConfirmSmsBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        _binding = FragmentConfirmSmsBinding.inflate(inflater, container, false)
         return binding.root
 
     }
@@ -27,12 +29,9 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.registrationText.setOnClickListener {
-            findNavController().navigate(R.id.toRegistrationFragment)
-        }
-        binding.login.setOnClickListener {
-            findNavController().navigate(R.id.toPinCode)
-        }
+//        binding.registrationText.setOnClickListener {
+//            findNavController().navigate(R.id.toLogin)
+//        }
     }
 
     override fun onDestroyView() {

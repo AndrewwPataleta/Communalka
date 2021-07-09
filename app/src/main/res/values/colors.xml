@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="dark_blue">#124074</color>
+    <color name="gray_pin_button">#F7F7F7</color>
 </resources>
