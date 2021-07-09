@@ -1,4 +1,23 @@
 <resources>
     <string name="app_name">Удобная коммуналка</string>
     <string name="comfortable_communal">Удобная коммуналка</string>
+    <string name="title_activity_auth">AuthActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="welcome">Добро пожаловать</string>
+    <string name="add_first_flat">Добавьте первое помещение, чтобы начать оплачивать ЖКХ</string>
+    <string name="add_premises">Добавить помещение</string>
+    <string name="comfortable_communal_apartment">Удобная\nКоммуналка</string>
+    <string name="phone">Телефон</string>
+    <string name="authorization">Авторизация</string>
+    <string name="auth">Вход</string>
+    <string name="registration">Зарегистрироваться</string>
+    <string name="have_no_account">Нет аккаунта?</string>
+    <string name="registration_now">Регистрация</string>
 </resources>

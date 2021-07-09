@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/WelcomeFragment">
+
+    <fragment
+        android:id="@+id/WelcomeFragment"
+        android:name="com.patstudio.communalka.presentation.ui.main.WelcomeFragment"
+        android:label="Добро пожаловать"
+        tools:layout="@layout/fragment_welcome">
+
+        <action
+            android:id="@+id/loLoginPage"
+            app:destination="@id/LoginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/LoginFragment"
+        android:name="com.patstudio.communalka.presentation.ui.auth.LoginFragment"
+        android:label="@string/second_fragment_label"
+        tools:layout="@layout/fragment_login">
+
+        <action
+            android:id="@+id/toRegistrationFragment"
+            app:destination="@id/Registration" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/Registration"
+        android:name="com.patstudio.communalka.presentation.ui.auth.RegistrationFragment"
+        android:label="Registration Fragment"
+        tools:layout="@layout/fragment_registration">
+
+    </fragment>
+</navigation>
