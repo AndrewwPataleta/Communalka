@@ -11,6 +11,6 @@ val appModule = module {
 
     single<DispatcherProvider> { DefaultDispatcherProvider() }
 
-    viewModel { SplashViewModel(get()) }
+
 
 }

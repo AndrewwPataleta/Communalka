@@ -1,8 +1,7 @@
 package com.patstudio.communalka
 
 import android.app.Application
-import com.patstudio.communalka.di.appModule
-import com.patstudio.communalka.di.networkingModule
+import com.patstudio.communalka.di.*
 import com.patstudio.communalka.di.databaseModule
 import com.patstudio.communalka.di.repositoryModule
 import org.koin.android.ext.koin.androidContext
@@ -28,7 +27,7 @@ class CommunalkaApp: Application() {
         org.koin.core.context.startKoin {
             androidContext(this@CommunalkaApp)
             if (BuildConfig.DEBUG) androidLogger(Level.DEBUG)
-            modules(appModules + dataModules + databaseModule+ repositoryModule)
+            modules(appModules + dataModules + databaseModule+ repositoryModule+ viewModules)
         }
     }
 
@@ -36,5 +35,6 @@ class CommunalkaApp: Application() {
 
 val appModules = listOf(appModule)
 val dataModules = listOf(networkingModule)
+val viewModules = listOf(viewModelsModule)
 val databaseModule = listOf(databaseModule)
 val repositoryModule = listOf(repositoryModule)

@@ -14,9 +14,10 @@ class UserRemoteImpl(
 ): UserRemote  {
 
 
-    override suspend fun login(username: String, password: String) = withContext(dispatcherProvider.default) {
-         userService.login(username, password)
 
+
+    override suspend fun login(phone: String) = withContext(dispatcherProvider.default) {
+        userService.login(phone)
     }
 
 

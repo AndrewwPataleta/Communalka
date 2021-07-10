@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 interface UserService {
 
-    @GET("/")
-    suspend fun login(@Query("api_key") userName: String, @Query("password") password: String): User
+    @GET("/login")
+    suspend fun login(@Query("phone") phone: String): User
 
 }

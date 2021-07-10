@@ -13,8 +13,6 @@ class SplashActivity : AppCompatActivity() {
 
     private val viewModel by viewModel<SplashViewModel>()
 
-
-
     private fun initObservers() {
 
         viewModel.users.observe(this) { result ->
@@ -28,7 +26,8 @@ class SplashActivity : AppCompatActivity() {
 
                 }
                 is Result.Empty -> {
-                  startActivity(Intent(applicationContext,MainActivity::class.java))
+                    startActivity(Intent(applicationContext,MainActivity::class.java))
+                    finish()
                 }
                 is Result.Error -> {
 
@@ -36,24 +35,6 @@ class SplashActivity : AppCompatActivity() {
             }
         }
 
-//        viewModel.images.observe(this) { result ->
-//            Log.d("SplashActivity","login result "+result)
-//            when (result) {
-//
-//                is com.patstudio.communalka.data.model.Result.Loading -> {
-//
-//                }
-//                is com.patstudio.communalka.data.model.Result.Success -> {
-//
-//                }
-//                is com.patstudio.communalka.data.model.Result.Empty -> {
-//
-//                }
-//                is com.patstudio.communalka.data.model.Result.Error -> {
-//
-//                }
-//            }
-//        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,6 +42,5 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
         initObservers()
     }
-
 
 }

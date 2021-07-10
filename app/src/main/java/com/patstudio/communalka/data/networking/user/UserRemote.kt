@@ -6,6 +6,6 @@ import okhttp3.Response
 
 interface UserRemote {
 
-    suspend fun login(username: String, password: String): User
+    suspend fun login(phone: String): User
 
 }

@@ -125,12 +125,23 @@
                     android:backgroundTint="@color/dark_blue"
                     android:fontFamily="@font/robotoregular"
                     android:padding="8dp"
+                    app:cornerRadius="8dp"
                     android:text="@string/auth"
                     android:textAllCaps="false"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/phone_edit" />
+
+                <ProgressBar
+                    android:id="@+id/progress"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/phone_edit"/>
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/phone_edit"

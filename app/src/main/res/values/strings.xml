@@ -28,4 +28,10 @@
     <string name="resend_via">Отправить повторно через</string>
     <string name="install_pin_code_short">Установите PIN-код</string>
     <string name="install_pin_code_long">Установите PIN-код, чтобы упростить доступ к приложению при следующем входе</string>
+    <string name="check_phone_number">Проверьте номер телефон</string>
+    <string name="accept_user_licence_text">Согласие с Офертой приложения “Удобная коммуналка”</string>
+    <string name="phone_number_mock">+7 999 876 54 32</string>
+    <string name="fio_mock">Иванов Иван Иванович</string>
+    <string name="email_mock">ivanov@gmail.com</string>
+    <string name="check_correct_input_data">проверьте корректность вводимых данных</string>
 </resources>

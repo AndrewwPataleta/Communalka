@@ -22,11 +22,11 @@ class UserRepository (
             Result.successOrEmpty(it)
         }
 
-     fun login(username: String, password: String): Flow<Result<User>> = flow {
+     fun login(phone: String): Flow<Result<User>> = flow {
           try {
               if (connectivity.hasNetworkAccess()) {
                   emit(Result.loading())
-                  val user = remote.login(username, password)
+                  val user = remote.login(phone)
                   emit(Result.success(user))
               }
           } catch (e: Exception) {
