@@ -34,4 +34,16 @@ class UserRepository (
           }
      }
 
+    fun confirmSmsCode(phone: String, smsCode: String): Flow<Result<User>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val user = remote.confirmSmsCode(phone, smsCode)
+                emit(Result.success(user))
+            }
+        } catch (e: Exception) {
+            emit(Result.error(e))
+        }
+    }
+
 }

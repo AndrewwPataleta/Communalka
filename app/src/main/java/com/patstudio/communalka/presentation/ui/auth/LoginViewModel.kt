@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.patstudio.communalka.data.model.ConfirmSmsParams
 import com.patstudio.communalka.data.repository.user.UserRepository
 import isValidPhoneNumber
 import kotlinx.coroutines.flow.*
@@ -19,6 +20,7 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
     private val progressPhoneSending: MutableLiveData<Boolean> = MutableLiveData()
     private val disableNavigation: MutableLiveData<Boolean> = MutableLiveData()
     private val confirmCode: MutableLiveData<String> = MutableLiveData()
+    private val confirmSmsParams: MutableLiveData<ConfirmSmsParams> = MutableLiveData()
 
     private fun validatePhoneNumber(): Boolean {
         return if (phoneNumber.isValidPhoneNumber()) {
@@ -31,22 +33,20 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
 
     fun login() {
        if (validatePhoneNumber()) {
-           confirmCode.postValue("4312")
-//           viewModelScope.launch {
-//                userRepository.login(phoneNumber)
-//                   .onStart {
-//                       progressPhoneSending.postValue(true)
-//                       disableNavigation.postValue(true)
-//                   }
-//                   .catch {
-//
-//                       Log.d("LoginViewModel", it.localizedMessage)
-//                   }
-//                   .collect {
-//                       progressPhoneSending.postValue(false)
-//                       disableNavigation.postValue(false)
-//                   }
-//           }
+
+           viewModelScope.launch {
+                userRepository.login(phoneNumber)
+                   .onStart {
+                       progressPhoneSending.postValue(true)
+                       disableNavigation.postValue(true)
+                   }
+                   .catch {
+                       Log.d("LoginViewModel", it.localizedMessage)
+                   }
+                   .collect {
+                        confirmSmsParams.postValue(ConfirmSmsParams(phoneNumber))
+                   }
+           }
 
        }
     }
@@ -62,6 +62,10 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
 
     fun getConfirmCode(): MutableLiveData<String> {
         return confirmCode
+    }
+
+    fun getConfirmSmsParams(): MutableLiveData<ConfirmSmsParams> {
+        return confirmSmsParams
     }
 
     fun getDisableNavigation(): MutableLiveData<Boolean> {

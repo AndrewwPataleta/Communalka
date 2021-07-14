@@ -2,6 +2,9 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.util.Patterns
 import android.view.View
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 fun CharSequence?.isValidPhoneNumber():Boolean{
     return !isNullOrEmpty() && Patterns.PHONE.matcher(this).matches()
@@ -9,6 +12,18 @@ fun CharSequence?.isValidPhoneNumber():Boolean{
 
 fun CharSequence?.isEmailValid(): Boolean {
     return android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
+}
+
+inline fun startCoroutineTimer(delayMillis: Long = 0, repeatMillis: Long = 0, crossinline action: () -> Unit) = GlobalScope.launch {
+    delay(delayMillis)
+    if (repeatMillis > 0) {
+        while (true) {
+            action()
+            delay(repeatMillis)
+        }
+    } else {
+        action()
+    }
 }
 
 fun View.visible(animate: Boolean = true) {

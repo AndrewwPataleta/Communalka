@@ -105,17 +105,26 @@
                     app:layout_constraintTop_toBottomOf="@id/thx_for_auth" />
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/phone_edit"
+                    android:id="@+id/smsEdit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="1234"
                     android:textColorHint="@color/black"
                     android:textSize="16sp"
                     android:inputType="number"
-                    android:maxLength="4"
+                    android:maxLength="10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/confirmation_code_text" />
+
+                <ProgressBar
+                    android:id="@+id/progressSmsSending"
+                    android:layout_width="wrap_content"
+                    android:layout_height="18dp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="@id/smsEdit"
+                    app:layout_constraintTop_toTopOf="@id/smsEdit"
+                    app:layout_constraintBottom_toBottomOf="@id/smsEdit"/>
 
                 <TextView
                     android:id="@+id/repeat_send_after_text"
@@ -127,26 +136,41 @@
                     android:text="@string/resend_via"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="12sp"
-                    app:layout_constraintEnd_toStartOf="@id/repeat_send_after_value"
+                    app:layout_constraintEnd_toStartOf="@id/repeatSendAfterValue"
                     app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintTop_toBottomOf="@id/phone_edit" />
+                    app:layout_constraintTop_toBottomOf="@id/smsEdit" />
 
                 <TextView
-                    android:id="@+id/repeat_send_after_value"
+                    android:id="@+id/repeatSmsSendBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/repeat_send_sms"
+                    android:textColor="@color/dark_blue"
+
+                    android:textSize="12sp"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    android:fontFamily="@font/robotobold"
+                    app:layout_constraintStart_toStartOf="parent"
+
+                    app:layout_constraintTop_toBottomOf="@id/smsEdit"/>
+
+                <TextView
+                    android:id="@+id/repeatSendAfterValue"
                     style="@style/TextBody1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/robotobold"
-                    android:text="00:10"
+
                     android:textColor="@android:color/darker_gray"
                     android:textSize="12sp"
                     android:layout_marginStart="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/repeat_send_after_text"
-                    app:layout_constraintTop_toBottomOf="@id/phone_edit" />
+                    app:layout_constraintTop_toBottomOf="@id/smsEdit" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

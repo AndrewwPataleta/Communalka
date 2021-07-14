@@ -5,17 +5,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.fragment.findNavController
 import com.patstudio.communalka.R
+import com.patstudio.communalka.data.model.User
 import com.patstudio.communalka.databinding.FragmentConfirmSmsBinding
 import com.patstudio.communalka.databinding.FragmentLoginBinding
 import com.patstudio.communalka.databinding.FragmentRegistrationBinding
+import gone
+import org.koin.android.viewmodel.ext.android.viewModel
+import visible
 
 
 class ConfirmSmsFragment : Fragment() {
 
     private var _binding: FragmentConfirmSmsBinding? = null
     private val binding get() = _binding!!
+    private val viewModel by viewModel<ConfirmViewModel>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,12 +33,47 @@ class ConfirmSmsFragment : Fragment() {
 
     }
 
+    private fun initObservers() {
+        viewModel.getAvailableSendSms().observe(requireActivity()) {
+            if (it) {
+                binding.repeatSendAfterText.gone(false)
+                binding.repeatSendAfterValue.gone(false)
+                binding.repeatSmsSendBtn.visible(false)
+            } else {
+                binding.repeatSendAfterText.visible(false)
+                binding.repeatSendAfterValue.visible(false)
+                binding.repeatSmsSendBtn.gone(false)
+            }
+        }
+        viewModel.getProgressSmsCodeSending().observe(requireActivity()) {
+            if (it) {
+                 binding.progressSmsSending.visible(true)
+                binding.smsEdit.isEnabled = false
+            } else {
+                binding.progressSmsSending.gone(false)
+                binding.smsEdit.isEnabled = true
+            }
+        }
+    }
+
+
+
+    private fun initListeners() {
+        binding.repeatSmsSendBtn.setOnClickListener {
+            viewModel.repeatSendSms()
+        }
+        binding.smsEdit.doAfterTextChanged {
+            viewModel.setSmsCode(it.toString())
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-//        binding.registrationText.setOnClickListener {
-//            findNavController().navigate(R.id.toLogin)
-//        }
+        initObservers()
+        arguments?.getString("phone")?.let {
+            viewModel.setPhone(it)
+        }
+        initListeners()
     }
 
     override fun onDestroyView() {

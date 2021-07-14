@@ -1,21 +1,32 @@
 package com.patstudio.communalka.presentation.ui.auth
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import com.patstudio.communalka.R
-import com.patstudio.communalka.databinding.FragmentLoginBinding
 import com.patstudio.communalka.databinding.FragmentPinCodeBinding
-import com.patstudio.communalka.databinding.FragmentRegistrationBinding
-
+import invisible
+import org.koin.android.viewmodel.ext.android.viewModel
+import visible
+import java.util.concurrent.Executor
 
 class PinCodeFragment : Fragment() {
 
     private var _binding: FragmentPinCodeBinding? = null
     private val binding get() = _binding!!
+    private val viewModel by viewModel<PinCodeViewModel>()
+    private lateinit var executor: Executor
+    private lateinit var biometricPrompt: BiometricPrompt
+    private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,8 +37,145 @@ class PinCodeFragment : Fragment() {
 
     }
 
+    private fun initObservers() {
+       viewModel.getPinCode().observe(requireActivity()) {
+           Log.d("PinCodeFragment", "pin "+it)
+           when (it.length) {
+
+               0 -> {
+                   binding.firstPinElement.background = resources.getDrawable(R.drawable.ic_pin_empty)
+                   binding.secondPinElement.background = resources.getDrawable(R.drawable.ic_pin_empty)
+                   binding.thirdPinElement.background = resources.getDrawable(R.drawable.ic_pin_empty)
+                   binding.fourthPinElement.background = resources.getDrawable(R.drawable.ic_pin_empty)
+               }
+               1 -> {
+                   binding.firstPinElement.background = resources.getDrawable(R.drawable.ic_pin)
+                   binding.secondPinElement.background = resources.getDrawable(R.drawable.ic_pin_empty)
+                   binding.thirdPinElement.background = resources.getDrawable(R.drawable.ic_pin_empty)
+                   binding.fourthPinElement.background = resources.getDrawable(R.drawable.ic_pin_empty)
+               }
+               2 -> {
+                   binding.firstPinElement.background = resources.getDrawable(R.drawable.ic_pin)
+                   binding.secondPinElement.background = resources.getDrawable(R.drawable.ic_pin)
+                   binding.thirdPinElement.background = resources.getDrawable(R.drawable.ic_pin_empty)
+                   binding.fourthPinElement.background = resources.getDrawable(R.drawable.ic_pin_empty)
+               }
+               3 -> {
+                   binding.firstPinElement.background = resources.getDrawable(R.drawable.ic_pin)
+                   binding.secondPinElement.background = resources.getDrawable(R.drawable.ic_pin)
+                   binding.thirdPinElement.background = resources.getDrawable(R.drawable.ic_pin)
+                   binding.fourthPinElement.background = resources.getDrawable(R.drawable.ic_pin_empty)
+               }
+               4 -> {
+                   binding.firstPinElement.background = resources.getDrawable(R.drawable.ic_pin)
+                   binding.secondPinElement.background = resources.getDrawable(R.drawable.ic_pin)
+                   binding.thirdPinElement.background = resources.getDrawable(R.drawable.ic_pin)
+                   binding.fourthPinElement.background = resources.getDrawable(R.drawable.ic_pin)
+               }
+           }
+       }
+        viewModel.getAvailableFingerPrint().observe(requireActivity()) {
+            if (it) {
+                binding.pinFingerprint.visible(false)
+            } else{
+                binding.pinFingerprint.invisible(false)
+            }
+        }
+
+        viewModel.getUser().observe(requireActivity()) {
+            val bundle = bundleOf("user" to it)
+            findNavController().navigate(R.id.WelcomeFragment, bundle)
+        }
+
+        viewModel.getAlertMessage().observe(requireActivity()) {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setMessage(it)
+            builder.setPositiveButton("Ок"){dialogInterface, which ->
+                dialogInterface.dismiss()
+            }
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.setCancelable(false)
+            alertDialog.show()
+        }
+
+
+        viewModel.getPinCodeMode().observe(requireActivity()) {
+            when(it) {
+                "INSTALL" -> {
+                    binding.pinCodeText.text = getString(R.string.install_pin_code_short)
+                    binding.installPinCodeLong.text = getString(R.string.install_pin_code_long)
+                }
+                "REPEAT" -> {
+                    binding.pinCodeText.text = getString(R.string.repeat_pin_code_short)
+                    binding.installPinCodeLong.text = getString(R.string.install_pin_code_long)
+                }
+                "AUTH" -> {
+                    binding.pinCodeText.text = getString(R.string.enter_pin_code)
+                    binding.installPinCodeLong.text = getString(R.string.enter_pin_code_second)
+                }
+            }
+        }
+    }
+
+    private fun initListeners() {
+        binding.pinOne.setOnClickListener { viewModel.clickDigital(getString(R.string.one)) }
+        binding.pinTwo.setOnClickListener { viewModel.clickDigital(getString(R.string.two)) }
+        binding.pinTree.setOnClickListener { viewModel.clickDigital(getString(R.string.tree)) }
+        binding.pinFour.setOnClickListener { viewModel.clickDigital(getString(R.string.four)) }
+        binding.pinFive.setOnClickListener { viewModel.clickDigital(getString(R.string.five)) }
+        binding.pinSix.setOnClickListener { viewModel.clickDigital(getString(R.string.six)) }
+        binding.pinSeven.setOnClickListener { viewModel.clickDigital(getString(R.string.seven)) }
+        binding.pinEight.setOnClickListener { viewModel.clickDigital(getString(R.string.eigth)) }
+        binding.pinNine.setOnClickListener { viewModel.clickDigital(getString(R.string.nine)) }
+        binding.pinZero.setOnClickListener { viewModel.clickDigital(getString(R.string.zero)) }
+        binding.pinBack.setOnClickListener { viewModel.removeLastItem() }
+
+        executor = ContextCompat.getMainExecutor(requireContext())
+        biometricPrompt = BiometricPrompt(this, executor,
+            object : BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationError(errorCode: Int,
+                                                   errString: CharSequence) {
+                    super.onAuthenticationError(errorCode, errString)
+                    viewModel.fingerPrintError()
+                    Toast.makeText(requireContext(),
+                        "Ошибка авторизации: $errString", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                override fun onAuthenticationSucceeded(
+                    result: BiometricPrompt.AuthenticationResult) {
+                    super.onAuthenticationSucceeded(result)
+                    viewModel.fingerPrintSuccess()
+                }
+
+                override fun onAuthenticationFailed() {
+                    super.onAuthenticationFailed()
+                }
+            })
+
+        promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle(getString(R.string.auth_with_finger_print))
+            .setNegativeButtonText(getString(R.string.user_pin_code))
+            .build()
+
+        binding.pinFingerprint.setOnClickListener {
+            biometricPrompt.authenticate(promptInfo)
+        }
+    }
+
+    private fun initNavigationListeners() {
+
+    }
+
+    private fun disableNavigationListeners() {
+
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initObservers()
+        initListeners()
+        initNavigationListeners()
     }
 
     override fun onDestroyView() {

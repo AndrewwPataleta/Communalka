@@ -11,6 +11,7 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="welcome">Добро пожаловать</string>
+    <string name="welcome_user">Добро пожаловать %1$s!</string>
     <string name="add_first_flat">Добавьте первое помещение, чтобы начать оплачивать ЖКХ</string>
     <string name="add_premises">Добавить помещение</string>
     <string name="comfortable_communal_apartment">Удобная\nКоммуналка</string>
@@ -28,10 +29,26 @@
     <string name="resend_via">Отправить повторно через</string>
     <string name="install_pin_code_short">Установите PIN-код</string>
     <string name="install_pin_code_long">Установите PIN-код, чтобы упростить доступ к приложению при следующем входе</string>
+    <string name="repeat_pin_code_short">Повторите PIN-код</string>
+    <string name="enter_pin_code">Введите PIN-код</string>
+    <string name="enter_pin_code_second">Чтобы войти в приложение</string>
     <string name="check_phone_number">Проверьте номер телефон</string>
     <string name="accept_user_licence_text">Согласие с Офертой приложения “Удобная коммуналка”</string>
     <string name="phone_number_mock">+7 999 876 54 32</string>
     <string name="fio_mock">Иванов Иван Иванович</string>
     <string name="email_mock">ivanov@gmail.com</string>
     <string name="check_correct_input_data">проверьте корректность вводимых данных</string>
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="tree">3</string>
+    <string name="four">4</string>
+    <string name="five">5</string>
+    <string name="six">6</string>
+    <string name="seven">7</string>
+    <string name="eigth">8</string>
+    <string name="nine">9</string>
+    <string name="zero">0</string>
+    <string name="auth_with_finger_print">Вход по отпечатку</string>
+    <string name="user_pin_code">Использовать пин-код</string>
+    <string name="repeat_send_sms">Отправить код повторно</string>
 </resources>

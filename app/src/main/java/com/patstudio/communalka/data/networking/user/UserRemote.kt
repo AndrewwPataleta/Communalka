@@ -8,4 +8,6 @@ interface UserRemote {
 
     suspend fun login(phone: String): User
 
+    suspend fun confirmSmsCode(phone: String, smsCode: String): User
+
 }

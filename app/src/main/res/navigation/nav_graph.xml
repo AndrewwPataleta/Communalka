@@ -14,6 +14,9 @@
         <action
             android:id="@+id/loLoginPage"
             app:destination="@id/LoginFragment" />
+        <argument
+            android:name="user"
+            app:argType="com.patstudio.communalka.data.model.User" />
     </fragment>
     <fragment
         android:id="@+id/LoginFragment"
@@ -26,6 +29,9 @@
         <action
             android:id="@+id/toRegistrationFragment"
             app:destination="@id/Registration" />
+        <action
+            android:id="@+id/ConfirmSms"
+            app:destination="@id/ConfirmSms" />
     </fragment>
 
     <fragment
@@ -47,6 +53,12 @@
         android:label="ConfirmSms Fragment"
         tools:layout="@layout/fragment_confirm_sms">
 
+        <argument
+            android:name="smsCode"
+            app:argType="string" />
+        <argument
+            android:name="repeatSend"
+            app:argType="long" />
     </fragment>
 
     <fragment
@@ -55,5 +67,8 @@
         android:label="PinCode Fragment"
         tools:layout="@layout/fragment_pin_code">
 
+        <action
+            android:id="@+id/action_PinCode_to_WelcomeFragment"
+            app:destination="@id/WelcomeFragment" />
     </fragment>
 </navigation>

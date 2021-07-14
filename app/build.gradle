@@ -23,12 +23,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField("String", "API_HOST", '"https://communalka.dev/"')
+            buildConfigField("String", "API_HOST", '"http://84.201.172.46/api/v1/"')
             buildConfigField("String", "DATABASE_NAME", '"communalka_release"')
         }
         debug {
             buildConfigField("String", "DATABASE_NAME", '"communalka_release"')
-            buildConfigField("String", "API_HOST", '"https://communalka.dev/"')
+            buildConfigField("String", "API_HOST", '"http://84.201.172.46/api/v1/"')
         }
     }
     compileOptions {
@@ -66,6 +66,9 @@ dependencies {
     //coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+
+    //biometric
+    implementation "androidx.biometric:biometric:1.0.1"
 
     //networking
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
