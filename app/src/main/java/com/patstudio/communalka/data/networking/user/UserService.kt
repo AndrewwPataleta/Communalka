@@ -16,4 +16,10 @@ interface UserService {
     @POST("auth/login/")
     suspend fun confirmSms(@Body target: JsonObject): User
 
+    @POST("auth/register/")
+    suspend fun registration(@Body target: JsonObject): User
+
+    @POST("auth/register/")
+    suspend fun registrationWithCode(@Body target: JsonObject): User
+
 }

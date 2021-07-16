@@ -45,6 +45,17 @@
         <action
             android:id="@+id/toConfirmSms"
             app:destination="@id/ConfirmSms" />
+        <action
+            android:id="@+id/toPinCode"
+            app:destination="@id/PinCode" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/Request"
+        android:name="com.patstudio.communalka.presentation.ui.main.RequestFragment"
+        android:label="Заявки"
+        tools:layout="@layout/fragment_request">
+
     </fragment>
 
     <fragment
@@ -59,6 +70,21 @@
         <argument
             android:name="repeatSend"
             app:argType="long" />
+        <argument
+            android:name="type"
+            app:argType="string" />
+        <argument
+            android:name="phone"
+            app:argType="com.patstudio.communalka.data.model.UserForm" />
+        <action
+            android:id="@+id/toPinCode"
+            app:destination="@id/PinCode" />
+        <action
+            android:id="@+id/toRegistrationFragment"
+            app:destination="@id/Registration" />
+        <action
+            android:id="@+id/toLogin"
+            app:destination="@id/LoginFragment" />
     </fragment>
 
     <fragment
@@ -70,5 +96,11 @@
         <action
             android:id="@+id/action_PinCode_to_WelcomeFragment"
             app:destination="@id/WelcomeFragment" />
+        <argument
+            android:name="user"
+            app:argType="com.patstudio.communalka.data.model.UserForm" />
+        <argument
+            android:name="type"
+            app:argType="string" />
     </fragment>
 </navigation>

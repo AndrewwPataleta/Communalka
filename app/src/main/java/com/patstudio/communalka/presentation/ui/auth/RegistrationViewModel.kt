@@ -1,36 +1,44 @@
 package com.patstudio.communalka.presentation.ui.auth
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.patstudio.communalka.common.utils.Event
+import com.patstudio.communalka.data.model.Result
+import com.patstudio.communalka.data.model.UserForm
 import com.patstudio.communalka.data.repository.user.UserRepository
 import isEmailValid
 import isValidPhoneNumber
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class RegistrationViewModel(private val userRepository: UserRepository): ViewModel() {
 
     private var phoneNumber: String = ""
     private var userFio: String = ""
     private var userEmail: String = ""
+    private var licenseAccept: Boolean = false
 
     private val phoneError: MutableLiveData<Boolean> = MutableLiveData()
     private val userFioError: MutableLiveData<Boolean> = MutableLiveData()
     private val userEmailError: MutableLiveData<Boolean> = MutableLiveData()
     private val progressPhoneSending: MutableLiveData<Boolean> = MutableLiveData()
     private val disableNavigation: MutableLiveData<Boolean> = MutableLiveData()
-    private val smsCode: MutableLiveData<String> = MutableLiveData()
+    private val userForm: MutableLiveData<Event<UserForm>> = MutableLiveData()
+    private val userMessage: MutableLiveData<String> = MutableLiveData()
 
     private fun validateUserForm(): Boolean {
         var valid = true
          if (!phoneNumber.isValidPhoneNumber()) {
              Log.d("RegistrationViewModel", "not valid phone number")
             valid = false
-        } else if (!userEmail.isEmailValid()) {
+        }
+        if (!licenseAccept) {
+            Log.d("RegistrationViewModel", "not accept")
+            valid = false
+        }
+         else if (!userEmail.isEmailValid()) {
              Log.d("RegistrationViewModel", "not valid email")
             valid = false
         } else if (userFio.isNullOrBlank()) {
@@ -42,21 +50,36 @@ class RegistrationViewModel(private val userRepository: UserRepository): ViewMod
 
     fun registration() {
        if (validateUserForm()) {
-            smsCode.postValue("4312")
-//           viewModelScope.launch {
-//                userRepository.login(phoneNumber)
-//                   .onStart {
-//                       progressPhoneSending.postValue(true)
-//                       disableNavigation.postValue(true)
-//                   }
-//                   .catch {
-//                   }
-//                   .collect {
-//                       progressPhoneSending.postValue(false)
-//                       disableNavigation.postValue(false)
-//                   }
-//           }
 
+           viewModelScope.launch {
+               userRepository.registration(userFio, phoneNumber, userEmail)
+                   .onStart {
+                       progressPhoneSending.postValue(true)
+                       disableNavigation.postValue(true)
+                   }
+                   .catch {
+
+                   }
+                   .collect {
+                       when (it) {
+
+                           is Result.Success -> {
+                                userForm.postValue(Event(UserForm(userFio, phoneNumber, userEmail, "INSTALL")))
+                               progressPhoneSending.postValue(false)
+                               disableNavigation.postValue(false)
+                           }
+                           is Result.Error -> {
+                               progressPhoneSending.postValue(false)
+                               disableNavigation.postValue(false)
+                               userMessage.postValue("Проверьте корректность заполнения полей")
+                           }
+                       }
+                   }
+           }
+
+
+       } else {
+           userMessage.postValue("Проверьте корректность заполнения полей")
        }
     }
 
@@ -84,12 +107,20 @@ class RegistrationViewModel(private val userRepository: UserRepository): ViewMod
         return userFioError
     }
 
-    fun getSmsCode(): MutableLiveData<String> {
-        return smsCode
+    fun getUserForm(): MutableLiveData<Event<UserForm>> {
+        return userForm
     }
 
     fun getDisableNavigation(): MutableLiveData<Boolean> {
         return disableNavigation
+    }
+
+    fun userLicenseAgreement(accept: Boolean) {
+        licenseAccept = accept
+    }
+
+    fun getUserMessage(): MutableLiveData<String> {
+        return userMessage
     }
 
     fun getProgressPhoneSending(): MutableLiveData<Boolean> {

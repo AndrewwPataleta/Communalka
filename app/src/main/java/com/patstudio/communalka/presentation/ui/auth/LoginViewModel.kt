@@ -5,7 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.ConfirmSmsParams
+import com.patstudio.communalka.data.model.Result
+import com.patstudio.communalka.data.model.UserForm
 import com.patstudio.communalka.data.repository.user.UserRepository
 import isValidPhoneNumber
 import kotlinx.coroutines.flow.*
@@ -20,7 +23,8 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
     private val progressPhoneSending: MutableLiveData<Boolean> = MutableLiveData()
     private val disableNavigation: MutableLiveData<Boolean> = MutableLiveData()
     private val confirmCode: MutableLiveData<String> = MutableLiveData()
-    private val confirmSmsParams: MutableLiveData<ConfirmSmsParams> = MutableLiveData()
+    private val confirmSmsParams: MutableLiveData<Event<ConfirmSmsParams>> = MutableLiveData()
+    private val userMessage: MutableLiveData<String> = MutableLiveData()
 
     private fun validatePhoneNumber(): Boolean {
         return if (phoneNumber.isValidPhoneNumber()) {
@@ -44,7 +48,24 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
                        Log.d("LoginViewModel", it.localizedMessage)
                    }
                    .collect {
-                        confirmSmsParams.postValue(ConfirmSmsParams(phoneNumber))
+                       when (it) {
+                           is Result.Success -> {
+                               confirmSmsParams.postValue(Event(ConfirmSmsParams(phoneNumber)))
+                               progressPhoneSending.postValue(false)
+                               disableNavigation.postValue(false)
+                            //   confirmSmsParams.postValue(null)
+                           }
+                           is Result.Error -> {
+                               confirmSmsParams.postValue(Event(ConfirmSmsParams(phoneNumber)))
+                               progressPhoneSending.postValue(false)
+                               disableNavigation.postValue(false)
+                            //   confirmSmsParams.postValue(null)
+//                               progressPhoneSending.postValue(false)
+//                               disableNavigation.postValue(false)
+//                               userMessage.postValue("Превышен лимит смс в сутки")
+                           }
+                       }
+
                    }
            }
 
@@ -64,12 +85,16 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
         return confirmCode
     }
 
-    fun getConfirmSmsParams(): MutableLiveData<ConfirmSmsParams> {
+    fun getConfirmSmsParams(): MutableLiveData<Event<ConfirmSmsParams>> {
         return confirmSmsParams
     }
 
     fun getDisableNavigation(): MutableLiveData<Boolean> {
         return disableNavigation
+    }
+
+    fun getUserMessage(): MutableLiveData<String> {
+        return userMessage
     }
 
     fun getProgressPhoneSending(): MutableLiveData<Boolean> {

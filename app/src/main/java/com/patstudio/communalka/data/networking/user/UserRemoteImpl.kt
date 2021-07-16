@@ -20,11 +20,33 @@ class UserRemoteImpl(
         userService.login(body)
     }
 
+    override suspend fun registration(fio: String, phone: String, email: String) = withContext(dispatcherProvider.default) {
+        val body = JsonObject()
+        body.addProperty("fio",fio)
+        body.addProperty("phone",phone)
+        body.addProperty("email",email)
+        userService.registration(body)
+    }
+
     override suspend fun confirmSmsCode(phone: String, smsCode: String) = withContext(dispatcherProvider.default) {
         val body = JsonObject()
         body.addProperty("target",phone)
         body.addProperty("code",smsCode)
         userService.confirmSms(body)
+    }
+
+    override suspend fun registrationWithCode(
+        fio: String,
+        phone: String,
+        email: String,
+        smsCode: String
+    ) = withContext(dispatcherProvider.default) {
+        val body = JsonObject()
+        body.addProperty("fio",fio)
+        body.addProperty("phone",phone)
+        body.addProperty("email",email)
+        body.addProperty("code",smsCode)
+        userService.registrationWithCode(body)
     }
 
 

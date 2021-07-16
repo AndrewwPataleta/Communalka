@@ -16,6 +16,8 @@ sealed class Result<out T> {
 
     object Loading : Result<Nothing>()
 
+
+
     companion object {
 
         fun <T> success(data: T) = Success(data)
@@ -30,4 +32,8 @@ sealed class Result<out T> {
             return if (list.isEmpty()) Empty else Success(list)
         }
     }
+
+
+
+
 }

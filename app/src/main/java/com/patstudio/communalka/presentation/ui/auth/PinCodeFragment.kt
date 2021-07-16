@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import com.patstudio.communalka.R
+import com.patstudio.communalka.data.model.UserForm
 import com.patstudio.communalka.databinding.FragmentPinCodeBinding
 import invisible
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -174,6 +175,10 @@ class PinCodeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initObservers()
+        arguments?.getParcelable<UserForm>("user")?.let {
+            viewModel.setUserForm(it)
+        }
+
         initListeners()
         initNavigationListeners()
     }

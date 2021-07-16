@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.patstudio.communalka.data.model.User
+import com.patstudio.communalka.data.model.UserForm
 import com.patstudio.communalka.data.repository.user.UserRepository
 import isValidPhoneNumber
 import kotlinx.coroutines.flow.*
@@ -16,7 +17,7 @@ class PinCodeViewModel(private val userRepository: UserRepository): ViewModel() 
 
     private var pinCode: String = ""
     private var pinCodeRepeat: String = ""
-
+    private lateinit var userForm: UserForm
     private val pinCodeMutable: MutableLiveData<String> = MutableLiveData()
     private val pinCodeMode: MutableLiveData<String> = MutableLiveData()
     private val availableFingerPrint: MutableLiveData<Boolean> = MutableLiveData()
@@ -42,7 +43,7 @@ class PinCodeViewModel(private val userRepository: UserRepository): ViewModel() 
 
         if (pinCodeRepeat.length == 4) {
             if (pinCodeRepeat.compareTo(pinCode) == 0) {
-                user.postValue(User("123", "Andre1 ", "4315`265326"))
+                user.postValue(User("1",userForm.fio, userForm.phone))
             } else {
                 pinCodeRepeat = ""
                 alertMessage.postValue("Неверный пин-код")
@@ -54,7 +55,12 @@ class PinCodeViewModel(private val userRepository: UserRepository): ViewModel() 
 
 
     private fun checkForAuth(symbol: String) {
+        pinCode += symbol
+        pinCodeMutable.postValue(pinCode)
 
+        if (pinCode.length == 4) {
+            user.postValue(User("1",userForm.fio, userForm.phone))
+        }
     }
 
     fun clickDigital(symbol: String) {
@@ -87,7 +93,7 @@ class PinCodeViewModel(private val userRepository: UserRepository): ViewModel() 
     }
 
     fun fingerPrintSuccess() {
-        user.postValue(User("312", "Andrew", "375456843681"))
+        user.postValue(User("1",userForm.fio, userForm.phone))
     }
 
     fun fingerPrintError() {
@@ -106,6 +112,12 @@ class PinCodeViewModel(private val userRepository: UserRepository): ViewModel() 
         if (pinCode.length > 0)
             pinCode = pinCode.subSequence(0, pinCode.length-1).toString()
         pinCodeMutable.postValue(pinCode)
+    }
+
+    fun setUserForm(userForm: UserForm) {
+        this.userForm = userForm
+        enterMode = userForm.type
+        pinCodeMode.postValue(enterMode)
     }
 
     fun removeLastItem() {

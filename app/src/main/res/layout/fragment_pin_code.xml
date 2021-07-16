@@ -348,6 +348,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="28sp"
                     android:src="@drawable/ic_delete"
+
                     app:iconGravity="textStart"
                     app:iconTint="@color/black"
                     android:layout_marginTop="8dp"

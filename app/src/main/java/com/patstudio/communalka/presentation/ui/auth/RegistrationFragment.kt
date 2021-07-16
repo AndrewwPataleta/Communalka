@@ -1,11 +1,13 @@
 package com.patstudio.communalka.presentation.ui.auth
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -62,6 +64,16 @@ class RegistrationFragment : Fragment() {
                 binding.progress.gone(false)
             }
         }
+        viewModel.getUserMessage().observe(requireActivity()) {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setMessage(it)
+            builder.setPositiveButton("Ок"){dialogInterface, which ->
+                dialogInterface.dismiss()
+            }
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.setCancelable(false)
+            alertDialog.show()
+        }
         viewModel.getDisableNavigation().observe(requireActivity()) {
             if (it) {
                 disableNavigationListeners()
@@ -69,8 +81,14 @@ class RegistrationFragment : Fragment() {
                 initNavigationListeners()
             }
         }
-        viewModel.getSmsCode().observe(requireActivity()) {
-            findNavController().navigate(R.id.toConfirmSms)
+        viewModel.getUserForm().observe(requireActivity()) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val bundle = bundleOf("user" to it, "type" to "Registration")
+                    findNavController().navigate(R.id.ConfirmSms, bundle)
+                }
+            }
+
         }
     }
 
@@ -101,7 +119,12 @@ class RegistrationFragment : Fragment() {
         binding.fioEdit.doAfterTextChanged {
             viewModel.setUserFio(it.toString())
         }
-
+        binding.fioEdit.doAfterTextChanged {
+            viewModel.setUserFio(it.toString())
+        }
+        binding.userLicenceCheck.setOnCheckedChangeListener { buttonView, isChecked ->
+            viewModel.userLicenseAgreement(isChecked)
+        }
         initObservers()
     }
 

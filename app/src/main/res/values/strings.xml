@@ -26,7 +26,7 @@
     <string name="auth_now">Авторизоваться</string>
     <string name="thx_for_auth">Благодарим за авторизацию в нашем сервисе. Введите код потверждения, который мы прислали вам на телефон:</string>
     <string name="confirmation_code">Код подтверждения</string>
-    <string name="resend_via">Отправить повторно через</string>
+    <string name="resend_via">Отправить повторно через:</string>
     <string name="install_pin_code_short">Установите PIN-код</string>
     <string name="install_pin_code_long">Установите PIN-код, чтобы упростить доступ к приложению при следующем входе</string>
     <string name="repeat_pin_code_short">Повторите PIN-код</string>
@@ -51,4 +51,7 @@
     <string name="auth_with_finger_print">Вход по отпечатку</string>
     <string name="user_pin_code">Использовать пин-код</string>
     <string name="repeat_send_sms">Отправить код повторно</string>
+    <string name="such_an_opportunity_will_appear_soon">Скоро появится такая возможность</string>
+    <string name="not_necessary">Не нужно</string>
+    <string name="need_faster">Сделать быстрее</string>
 </resources>

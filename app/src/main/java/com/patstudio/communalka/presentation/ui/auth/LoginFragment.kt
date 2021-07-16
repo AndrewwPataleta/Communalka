@@ -1,5 +1,6 @@
 package com.patstudio.communalka.presentation.ui.auth
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -27,6 +28,7 @@ class LoginFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel by viewModel<LoginViewModel>()
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,9 +48,24 @@ class LoginFragment : Fragment() {
             findNavController().navigate(R.id.PinCode)
         }
         viewModel.getConfirmSmsParams().observe(requireActivity()) {
-            val bundle = bundleOf("phone" to it.phone)
-            findNavController().navigate(R.id.ConfirmSms, bundle)
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val bundle = bundleOf("phone" to it.phone, "type" to "Login")
+                    findNavController().navigate(R.id.ConfirmSms, bundle)
+                }
 
+            }
+
+        }
+        viewModel.getUserMessage().observe(requireActivity()) {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setMessage(it)
+            builder.setPositiveButton("Ок"){dialogInterface, which ->
+                dialogInterface.dismiss()
+            }
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.setCancelable(false)
+            alertDialog.show()
         }
         viewModel.getProgressPhoneSending().observe(requireActivity()) {
 
