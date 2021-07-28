@@ -7,6 +7,6 @@ import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.flow.Flow
 
 @Parcelize
-data class UserForm(val fio: String, val phone: String, val email: String, val type: String) : Parcelable
+data class UserForm(val id: String, val fio: String, val phone: String, val email: String, var type: String, var token: String) : Parcelable
 
 

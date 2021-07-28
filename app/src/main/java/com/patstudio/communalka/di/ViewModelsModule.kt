@@ -1,9 +1,6 @@
 package com.patstudio.communalka.di
 
-import com.patstudio.communalka.presentation.ui.auth.ConfirmViewModel
-import com.patstudio.communalka.presentation.ui.auth.LoginViewModel
-import com.patstudio.communalka.presentation.ui.auth.PinCodeViewModel
-import com.patstudio.communalka.presentation.ui.auth.RegistrationViewModel
+import com.patstudio.communalka.presentation.ui.auth.*
 import com.patstudio.communalka.presentation.ui.main.WelcomeViewModel
 import com.patstudio.communalka.presentation.ui.splash.SplashViewModel
 import org.koin.android.viewmodel.dsl.viewModel
@@ -12,10 +9,11 @@ import org.koin.dsl.module
 val viewModelsModule = module {
 
     viewModel { SplashViewModel(get()) }
-    viewModel { LoginViewModel(get()) }
-    viewModel { RegistrationViewModel(get()) }
-    viewModel { PinCodeViewModel(get()) }
+    viewModel { LoginViewModel(get(), get()) }
+    viewModel { RegistrationViewModel(get(), get()) }
+    viewModel { PinCodeViewModel(get(), get()) }
     viewModel { WelcomeViewModel(get()) }
-    viewModel { ConfirmViewModel(get()) }
+    viewModel { ConfirmViewModel(get(),get()) }
+    viewModel { RestoreViewModel(get(),get()) }
 
 }

@@ -5,4 +5,4 @@ import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class ConfirmSmsParams(val phone: String) : Parcelable
+data class ConfirmSmsParams(val phone: String, val restore: Boolean) : Parcelable

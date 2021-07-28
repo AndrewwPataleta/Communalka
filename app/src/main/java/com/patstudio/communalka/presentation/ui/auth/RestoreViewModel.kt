@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class LoginViewModel(private val userRepository: UserRepository, private val gson: Gson): ViewModel() {
+class RestoreViewModel(private val userRepository: UserRepository, private val gson: Gson): ViewModel() {
 
     private var phoneNumber: String = ""
 
@@ -37,9 +37,7 @@ class LoginViewModel(private val userRepository: UserRepository, private val gso
         }
     }
 
-    fun login() {
-       if (validatePhoneNumber()) {
-
+    fun restore() {
            viewModelScope.launch {
                 userRepository.login(phoneNumber)
                    .onStart {
@@ -53,12 +51,8 @@ class LoginViewModel(private val userRepository: UserRepository, private val gso
                        when (it) {
                            is Result.Success -> {
                                when(it.data.status) {
-                                   "fail" -> {
-                                       var loginError = gson.fromJson(it.data.data, LoginFormError::class.java)
-                                       Log.d("LoginViewModel", loginError.toString())
-                                   }
                                    "success" -> {
-                                       confirmSmsParams.postValue(Event(ConfirmSmsParams(phoneNumber,false)))
+                                       confirmSmsParams.postValue(Event(ConfirmSmsParams(phoneNumber, true)))
                                        progressPhoneSending.postValue(false)
                                        disableNavigation.postValue(false)
                                    }
@@ -81,7 +75,6 @@ class LoginViewModel(private val userRepository: UserRepository, private val gso
                    }
            }
 
-       }
     }
 
     fun setPhoneNumber(phoneNumber: String) {

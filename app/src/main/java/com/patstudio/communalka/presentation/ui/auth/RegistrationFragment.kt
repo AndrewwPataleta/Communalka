@@ -2,6 +2,7 @@ package com.patstudio.communalka.presentation.ui.auth
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -29,6 +30,8 @@ class RegistrationFragment : Fragment() {
     private var _binding: FragmentRegistrationBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModel<RegistrationViewModel>()
+    val mask = MaskImpl.createTerminated(PredefinedSlots.RUS_PHONE_NUMBER)
+    val watcher: FormatWatcher = MaskFormatWatcher(mask)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,13 +49,25 @@ class RegistrationFragment : Fragment() {
         binding.registration.setOnClickListener {
            viewModel.registration()
         }
+        binding.userLicenceText.setOnClickListener {
+           binding.userLicenceCheck.isChecked = !binding.userLicenceCheck.isChecked
+        }
+        binding.close.setOnClickListener {
+            binding.phoneEdit.setText("")
+            binding.fioEdit.setText("")
+            binding.emailEdit.setText("")
+        }
     }
 
     private fun initObservers() {
         viewModel.getPhoneError().observe(requireActivity()) {
-            if (it) {
-                Toast.makeText(requireContext(), getString(R.string.check_correct_input_data), Toast.LENGTH_LONG).show()
-            }
+            binding.phoneEdit.setError(it)
+        }
+        viewModel.getUserEmailError().observe(requireActivity()) {
+            binding.emailEdit.setError(it)
+        }
+        viewModel.getUserFioError().observe(requireActivity()) {
+            binding.fioEdit.setError(it)
         }
         viewModel.getProgressPhoneSending().observe(requireActivity()) {
 
@@ -81,6 +96,9 @@ class RegistrationFragment : Fragment() {
                 initNavigationListeners()
             }
         }
+        viewModel.getLicenseError().observe(requireActivity()) {
+          this.binding.userLicenceText.setTextColor(resources.getColor(android.R.color.holo_red_dark))
+        }
         viewModel.getUserForm().observe(requireActivity()) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
@@ -98,8 +116,8 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun setPhoneMask() {
-        val mask = MaskImpl.createTerminated(PredefinedSlots.RUS_PHONE_NUMBER)
-        val watcher: FormatWatcher = MaskFormatWatcher(mask)
+
+
         watcher.installOn(binding.phoneEdit)
     }
 
@@ -109,7 +127,8 @@ class RegistrationFragment : Fragment() {
         setPhoneMask()
 
         binding.phoneEdit.doAfterTextChanged {
-            viewModel.setPhoneNumber(it.toString())
+            Log.d("RegistrationFragment", watcher.mask.toUnformattedString())
+            viewModel.setPhoneNumber(watcher.mask.toUnformattedString())
         }
 
         binding.emailEdit.doAfterTextChanged {

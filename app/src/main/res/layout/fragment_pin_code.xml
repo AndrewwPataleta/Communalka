@@ -342,20 +342,35 @@
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/pin_seven" />
 
-                <com.google.android.material.button.MaterialButton
+                <ImageView
                     android:id="@+id/pin_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="85dp"
+                    android:layout_height="45dp"
                     android:textSize="28sp"
                     android:src="@drawable/ic_delete"
-
+                    android:padding="14dp"
                     app:iconGravity="textStart"
                     app:iconTint="@color/black"
                     android:layout_marginTop="8dp"
-                    android:backgroundTint="@color/gray_pin_button"
+                    android:background="@color/gray_pin_button"
                     app:layout_constraintTop_toBottomOf="@id/third_flat_pin"
                     app:layout_constraintStart_toEndOf="@+id/pin_zero"
                     app:layout_constraintEnd_toEndOf="parent"/>
+
+                <TextView
+                    android:id="@+id/forgotPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:paddingStart="32dp"
+                    android:paddingEnd="32dp"
+                    android:text="Забыли PIN-код?"
+                    android:textColor="@color/dark_blue"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/pin_zero" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

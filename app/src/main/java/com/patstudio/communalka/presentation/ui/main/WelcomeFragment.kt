@@ -25,16 +25,20 @@ class WelcomeFragment : Fragment() {
     ): View? {
 
         _binding = FragmentWelcomeBinding.inflate(inflater, container, false)
-        binding.loginOrRegistration.setOnClickListener {
+        binding.login.setOnClickListener {
             findNavController().navigate(R.id.loLoginPage)
         }
-
+        binding.registration.setOnClickListener {
+            findNavController().navigate(R.id.toRegistration)
+        }
         return binding.root
     }
 
+
     private fun initObservers() {
         viewModel.getUser().observe(requireActivity()) {
-            binding.loginOrRegistration.gone(false)
+            binding.login.gone(false)
+            binding.registration.gone(false)
             binding.welcomeText.text = getString(R.string.welcome_user, it.name)
         }
     }

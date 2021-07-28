@@ -40,15 +40,17 @@ class ConfirmSmsFragment : Fragment() {
 
     private fun initObservers() {
         viewModel.getAvailableSendSms().observe(requireActivity()) {
-            if (it) {
-                binding.repeatSendAfterText.gone(false)
-                binding.repeatSendAfterValue.gone(false)
-                binding.repeatSmsSendBtn.visible(false)
-            } else {
-                binding.repeatSendAfterText.visible(false)
-                binding.repeatSendAfterValue.visible(false)
-                binding.repeatSmsSendBtn.gone(false)
-            }
+            try {
+                if (it) {
+                    binding.repeatSendAfterText.gone(false)
+                    binding.repeatSendAfterValue.gone(false)
+                    binding.repeatSmsSendBtn.visible(false)
+                } else {
+                    binding.repeatSendAfterText.visible(false)
+                    binding.repeatSendAfterValue.visible(false)
+                    binding.repeatSmsSendBtn.gone(false)
+                }
+            } catch (e: Exception) {}
         }
         viewModel.getCountDownTimer().observe(requireActivity()) {
             try {
@@ -56,14 +58,20 @@ class ConfirmSmsFragment : Fragment() {
                 binding.repeatSendAfterValue.text = it
             } catch (e: Exception) {}
         }
+
+        viewModel.getCongratulation().observe(requireActivity()) {
+            binding.congratulation.text = getString(R.string.welcome_user, it)
+        }
         viewModel.getProgressSmsCodeSending().observe(requireActivity()) {
-            if (it) {
-                binding.progressSmsSending.visible(true)
-                binding.smsEdit.isEnabled = false
-            } else {
-                binding.progressSmsSending.gone(true)
-                binding.smsEdit.isEnabled = true
-            }
+            try {
+                if (it) {
+                    binding.progressSmsSending.visible(true)
+                    binding.smsEdit.isEnabled = false
+                } else {
+                    binding.progressSmsSending.gone(true)
+                    binding.smsEdit.isEnabled = true
+                }
+            } catch (e: Exception) { }
         }
         viewModel.getUserForm().observe(requireActivity()) {
             val bundle = bundleOf("user" to it)
@@ -89,6 +97,10 @@ class ConfirmSmsFragment : Fragment() {
         binding.smsEdit.doAfterTextChanged {
             viewModel.setSmsCode(it.toString())
         }
+        binding.close.setOnClickListener {
+            binding.smsEdit.setText("")
+        }
+
     }
 
     override fun onDestroy() {
@@ -107,6 +119,9 @@ class ConfirmSmsFragment : Fragment() {
         }
         arguments?.getString("type")?.let {
             viewModel.setFormType(it)
+        }
+        arguments?.getBoolean("restore")?.let {
+            viewModel.setIsRestore(it)
         }
         initListeners()
         initObservers()

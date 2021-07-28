@@ -10,4 +10,5 @@
 
     <color name="dark_blue">#214e9d</color>
     <color name="gray_pin_button">#F7F7F7</color>
+    <color name="gray_placeholder">#ADB3C2</color>
 </resources>

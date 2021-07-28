@@ -17,6 +17,9 @@
         <argument
             android:name="user"
             app:argType="com.patstudio.communalka.data.model.User" />
+        <action
+            android:id="@+id/toRegistration"
+            app:destination="@id/Registration" />
     </fragment>
     <fragment
         android:id="@+id/LoginFragment"
@@ -25,7 +28,10 @@
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/toPinCode"
-            app:destination="@id/PinCode" />
+            app:destination="@id/PinCode"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/WelcomeFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/toRegistrationFragment"
             app:destination="@id/Registration" />
@@ -44,10 +50,16 @@
             app:destination="@id/LoginFragment" />
         <action
             android:id="@+id/toConfirmSms"
-            app:destination="@id/ConfirmSms" />
+            app:destination="@id/ConfirmSms"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/WelcomeFragment"
+            app:popUpToInclusive="true"/>
         <action
             android:id="@+id/toPinCode"
-            app:destination="@id/PinCode" />
+            app:destination="@id/PinCode"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/WelcomeFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment
@@ -78,13 +90,24 @@
             app:argType="com.patstudio.communalka.data.model.UserForm" />
         <action
             android:id="@+id/toPinCode"
-            app:destination="@id/PinCode" />
+            app:destination="@id/PinCode"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/WelcomeFragment"
+            app:popUpToInclusive="true"/>
         <action
             android:id="@+id/toRegistrationFragment"
             app:destination="@id/Registration" />
         <action
             android:id="@+id/toLogin"
             app:destination="@id/LoginFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/RestorePinCode"
+        android:name="com.patstudio.communalka.presentation.ui.auth.RestorePinFragment"
+        android:label="PinCode Fragment"
+        tools:layout="@layout/fragment_restore">
+
     </fragment>
 
     <fragment
@@ -95,7 +118,12 @@
 
         <action
             android:id="@+id/action_PinCode_to_WelcomeFragment"
-            app:destination="@id/WelcomeFragment" />
+            app:destination="@id/WelcomeFragment"
+            app:popUpTo="@+id/WelcomeFragment" />
+        <action
+            android:id="@+id/toRestore"
+            app:destination="@id/RestorePinCode"
+            app:popUpTo="@+id/WelcomeFragment" />
         <argument
             android:name="user"
             app:argType="com.patstudio.communalka.data.model.UserForm" />

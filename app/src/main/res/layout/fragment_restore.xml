@@ -63,17 +63,30 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/auth_text"
+                    android:id="@+id/forgot_text"
                     style="@style/TextBold1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/robotobold"
-                    android:text="@string/authorization"
+                    android:text="@string/forgot_pin_code"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/close" />
 
+                <TextView
+                    android:id="@+id/forgot_text_second"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="left"
+                    android:text="@string/enter_email_or_phone_to_restore_password"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/forgot_text" />
+                
                 <TextView
                     android:id="@+id/phone_text"
                     style="@style/TextBody1"
@@ -81,44 +94,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/robotobold"
-                    android:text="@string/phone"
+                    android:text="@string/email_or_phone"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/auth_text" />
-
-                <TextView
-                    android:id="@+id/have_no_account_text"
-                    style="@style/TextBody1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:fontFamily="@font/robotobold"
-                    android:text="@string/have_no_account"
-                    android:textColor="@android:color/darker_gray"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toStartOf="@id/registration_text"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/login" />
-
-                <TextView
-                    android:id="@+id/registration_text"
-                    style="@style/TextBody1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:fontFamily="@font/robotobold"
-                    android:text="@string/registration"
-                    android:textColor="@color/dark_blue"
-                    android:textSize="14sp"
-                    android:layout_marginStart="8dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/have_no_account_text"
-                    app:layout_constraintTop_toBottomOf="@id/login" />
+                    app:layout_constraintTop_toBottomOf="@id/forgot_text_second" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/login"
+                    android:id="@+id/restore"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -126,7 +109,7 @@
                     android:fontFamily="@font/robotoregular"
                     android:padding="8dp"
                     app:cornerRadius="8dp"
-                    android:text="@string/auth"
+                    android:text="@string/restore_pin_code"
                     android:textAllCaps="false"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -150,7 +133,7 @@
                     android:hint="+7 999 876 54 32"
                     android:textColorHint="@color/gray_placeholder"
                     android:textSize="16sp"
-                    android:inputType="phone"
+
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/phone_text" />

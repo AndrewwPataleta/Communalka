@@ -24,7 +24,8 @@ class UserRemoteImpl(
         val body = JsonObject()
         body.addProperty("fio",fio)
         body.addProperty("phone",phone)
-        body.addProperty("email",email)
+        if (email.length > 0)
+            body.addProperty("email",email)
         userService.registration(body)
     }
 
@@ -44,7 +45,8 @@ class UserRemoteImpl(
         val body = JsonObject()
         body.addProperty("fio",fio)
         body.addProperty("phone",phone)
-        body.addProperty("email",email)
+        if (email.length > 0)
+            body.addProperty("email",email)
         body.addProperty("code",smsCode)
         userService.registrationWithCode(body)
     }

@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.patstudio.communalka.R
 import com.patstudio.communalka.data.model.UserForm
 import com.patstudio.communalka.databinding.FragmentPinCodeBinding
+import gone
 import invisible
 import org.koin.android.viewmodel.ext.android.viewModel
 import visible
@@ -76,11 +77,13 @@ class PinCodeFragment : Fragment() {
            }
        }
         viewModel.getAvailableFingerPrint().observe(requireActivity()) {
-            if (it) {
-                binding.pinFingerprint.visible(false)
-            } else{
-                binding.pinFingerprint.invisible(false)
-            }
+            try {
+                if (it) {
+                    binding.pinFingerprint.visible(false)
+                } else {
+                    binding.pinFingerprint.invisible(false)
+                }
+            } catch (e: Exception) {}
         }
 
         viewModel.getUser().observe(requireActivity()) {
@@ -105,14 +108,17 @@ class PinCodeFragment : Fragment() {
                 "INSTALL" -> {
                     binding.pinCodeText.text = getString(R.string.install_pin_code_short)
                     binding.installPinCodeLong.text = getString(R.string.install_pin_code_long)
+                    binding.forgotPassword.gone(false)
                 }
                 "REPEAT" -> {
                     binding.pinCodeText.text = getString(R.string.repeat_pin_code_short)
                     binding.installPinCodeLong.text = getString(R.string.install_pin_code_long)
+                    binding.forgotPassword.gone(false)
                 }
                 "AUTH" -> {
                     binding.pinCodeText.text = getString(R.string.enter_pin_code)
                     binding.installPinCodeLong.text = getString(R.string.enter_pin_code_second)
+                    binding.forgotPassword.visible(true)
                 }
             }
         }
@@ -130,6 +136,7 @@ class PinCodeFragment : Fragment() {
         binding.pinNine.setOnClickListener { viewModel.clickDigital(getString(R.string.nine)) }
         binding.pinZero.setOnClickListener { viewModel.clickDigital(getString(R.string.zero)) }
         binding.pinBack.setOnClickListener { viewModel.removeLastItem() }
+        binding.forgotPassword.setOnClickListener {  findNavController().navigate(R.id.toRestore) }
 
         executor = ContextCompat.getMainExecutor(requireContext())
         biometricPrompt = BiometricPrompt(this, executor,

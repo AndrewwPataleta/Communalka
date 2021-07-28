@@ -67,7 +67,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/robotobold"
-                    android:text="Уважаемый Иванов Иван Иванович!"
+                    android:text="Уважаемый!"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:gravity="center"
@@ -104,18 +104,21 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/thx_for_auth" />
 
-                <com.google.android.material.textfield.TextInputEditText
+
+                <EditText
                     android:id="@+id/smsEdit"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="1234"
-                    android:textColorHint="@color/black"
+                    android:layout_height="40dp"
+                    android:background="@color/white"
                     android:textSize="16sp"
+                    android:textColorHint="@color/gray_placeholder"
+                    android:hint="123321"
+                    android:layout_marginTop="8dp"
                     android:inputType="number"
-                    android:maxLength="10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/confirmation_code_text" />
+                    app:layout_constraintTop_toBottomOf="@id/confirmation_code_text"
+                    android:maxLength="10" />
 
                 <ProgressBar
                     android:id="@+id/progressSmsSending"

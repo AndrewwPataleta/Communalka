@@ -67,3 +67,4 @@ private fun View.hide(hidingStrategy: Int, animate: Boolean = true) {
         visibility = hidingStrategy
     }
 }
+

@@ -11,7 +11,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val repositoryModule = module {
-  factory<UserRepository> { UserRepository(get(),get(),get()) }
+  factory<UserRepository> { UserRepository(get(),get(),get(),get()) }
   factory<Connectivity> { ConnectivityImpl(androidContext()) }
 
 

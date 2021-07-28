@@ -1,7 +1,6 @@
 package com.patstudio.communalka.data.database.user
 
-import androidx.room.Dao
-import androidx.room.Query
+import androidx.room.*
 import com.patstudio.communalka.data.model.User
 import kotlinx.coroutines.flow.Flow
 
@@ -14,4 +13,10 @@ interface UserDao {
     @Query("SELECT * FROM user LIMIT 1")
     fun getUser(): Flow<User>
 
+    @Transaction
+    @Query("SELECT * FROM user WHERE id= :userId LIMIT 1")
+    fun getUserById(userId: String): Flow<User>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun saveUser(user: User) : Long
 }

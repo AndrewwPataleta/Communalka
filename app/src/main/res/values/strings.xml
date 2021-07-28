@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Удобная коммуналка</string>
-    <string name="comfortable_communal">Удобная коммуналка</string>
+    <string name="app_name">Коммуналка</string>
+    <string name="comfortable_communal">Коммуналка</string>
     <string name="title_activity_auth">AuthActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -12,16 +12,17 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="welcome">Добро пожаловать</string>
     <string name="welcome_user">Добро пожаловать %1$s!</string>
+    <string name="welcome_user_сonfirm_code">Уважаемый %1$s!</string>
     <string name="add_first_flat">Добавьте первое помещение, чтобы начать оплачивать ЖКХ</string>
     <string name="add_premises">Добавить помещение</string>
-    <string name="comfortable_communal_apartment">Удобная\nКоммуналка</string>
+    <string name="comfortable_communal_apartment">Коммуналка</string>
     <string name="phone">Телефон</string>
     <string name="authorization">Авторизация</string>
     <string name="auth">Вход</string>
     <string name="registration">Зарегистрироваться</string>
     <string name="have_no_account">Нет аккаунта?</string>
     <string name="registration_now">Регистрация</string>
-    <string name="email">Почта</string>
+    <string name="email">Почта (необязательно)</string>
     <string name="have_account">Уже есть аккаунт?</string>
     <string name="auth_now">Авторизоваться</string>
     <string name="thx_for_auth">Благодарим за авторизацию в нашем сервисе. Введите код потверждения, который мы прислали вам на телефон:</string>
@@ -33,7 +34,7 @@
     <string name="enter_pin_code">Введите PIN-код</string>
     <string name="enter_pin_code_second">Чтобы войти в приложение</string>
     <string name="check_phone_number">Проверьте номер телефон</string>
-    <string name="accept_user_licence_text">Согласие с Офертой приложения “Удобная коммуналка”</string>
+    <string name="accept_user_licence_text">Согласие с Офертой приложения “Коммуналка”</string>
     <string name="phone_number_mock">+7 999 876 54 32</string>
     <string name="fio_mock">Иванов Иван Иванович</string>
     <string name="email_mock">ivanov@gmail.com</string>
@@ -54,4 +55,8 @@
     <string name="such_an_opportunity_will_appear_soon">Скоро появится такая возможность</string>
     <string name="not_necessary">Не нужно</string>
     <string name="need_faster">Сделать быстрее</string>
+    <string name="forgot_pin_code">Забыли PIN-код?</string>
+    <string name="enter_email_or_phone_to_restore_password">Введите почту или телефон, чтобы восстановить пароль</string>
+    <string name="email_or_phone">Почта или телефон</string>
+    <string name="restore_pin_code">Восстановить PIN-код</string>
 </resources>

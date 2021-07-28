@@ -23,7 +23,9 @@ class SplashActivity : AppCompatActivity() {
 
                 }
                 is Result.Success -> {
-
+                    Log.d("SplashActivity", result.data.toString())
+                    startActivity(Intent(applicationContext,MainActivity::class.java))
+                    finish()
                 }
                 is Result.Empty -> {
                     startActivity(Intent(applicationContext,MainActivity::class.java))
