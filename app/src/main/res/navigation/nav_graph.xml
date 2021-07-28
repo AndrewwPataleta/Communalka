@@ -20,6 +20,9 @@
         <action
             android:id="@+id/toRegistration"
             app:destination="@id/Registration" />
+        <action
+            android:id="@+id/action_WelcomeFragment_to_AddRoom"
+            app:destination="@id/AddRoom" />
     </fragment>
     <fragment
         android:id="@+id/LoginFragment"
@@ -130,5 +133,14 @@
         <argument
             android:name="type"
             app:argType="string" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/AddRoom"
+        android:name="com.patstudio.communalka.presentation.ui.main.AddRoomFragment"
+        android:label="Добавить помещение"
+        tools:layout="@layout/fragment_add_room">
+
     </fragment>
 </navigation>

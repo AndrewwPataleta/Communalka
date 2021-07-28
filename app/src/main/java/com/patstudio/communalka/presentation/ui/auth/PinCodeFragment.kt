@@ -1,6 +1,7 @@
 package com.patstudio.communalka.presentation.ui.auth
 
 import android.app.AlertDialog
+
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -92,33 +93,46 @@ class PinCodeFragment : Fragment() {
         }
 
         viewModel.getAlertMessage().observe(requireActivity()) {
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setMessage(it)
-            builder.setPositiveButton("Ок"){dialogInterface, which ->
-                dialogInterface.dismiss()
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val builder = AlertDialog.Builder(requireContext())
+                    builder.setMessage(it)
+                    builder.setPositiveButton("Ок") { dialogInterface, which ->
+                        dialogInterface.dismiss()
+                    }
+                    val alertDialog: AlertDialog = builder.create()
+                    alertDialog.setCancelable(false)
+                    alertDialog.show()
+                }
             }
-            val alertDialog: AlertDialog = builder.create()
-            alertDialog.setCancelable(false)
-            alertDialog.show()
         }
 
-
         viewModel.getPinCodeMode().observe(requireActivity()) {
-            when(it) {
-                "INSTALL" -> {
-                    binding.pinCodeText.text = getString(R.string.install_pin_code_short)
-                    binding.installPinCodeLong.text = getString(R.string.install_pin_code_long)
-                    binding.forgotPassword.gone(false)
-                }
-                "REPEAT" -> {
-                    binding.pinCodeText.text = getString(R.string.repeat_pin_code_short)
-                    binding.installPinCodeLong.text = getString(R.string.install_pin_code_long)
-                    binding.forgotPassword.gone(false)
-                }
-                "AUTH" -> {
-                    binding.pinCodeText.text = getString(R.string.enter_pin_code)
-                    binding.installPinCodeLong.text = getString(R.string.enter_pin_code_second)
-                    binding.forgotPassword.visible(true)
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    try {
+                        when (it) {
+                            "INSTALL" -> {
+                                binding.pinCodeText.text =
+                                    getString(R.string.install_pin_code_short)
+                                binding.installPinCodeLong.text =
+                                    getString(R.string.install_pin_code_long)
+                                binding.forgotPassword.gone(false)
+                            }
+                            "REPEAT" -> {
+                                binding.pinCodeText.text = getString(R.string.repeat_pin_code_short)
+                                binding.installPinCodeLong.text =
+                                    getString(R.string.install_pin_code_long)
+                                binding.forgotPassword.gone(false)
+                            }
+                            "AUTH" -> {
+                                binding.pinCodeText.text = getString(R.string.enter_pin_code)
+                                binding.installPinCodeLong.text =
+                                    getString(R.string.enter_pin_code_second)
+                                binding.forgotPassword.visible(true)
+                            }
+                        }
+                    } catch (e: Exception) {}
                 }
             }
         }

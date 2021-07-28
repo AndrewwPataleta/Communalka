@@ -95,6 +95,7 @@
                     android:hint="@string/fio_mock"
                     android:textColorHint="@color/gray_placeholder"
                     android:textSize="16sp"
+                    android:theme="@style/EditTextBottomLine"
                     android:inputType="textPersonName"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -143,25 +144,57 @@
                     app:layout_constraintStart_toEndOf="@id/have_account_text"
                     app:layout_constraintTop_toBottomOf="@id/registration" />
 
-                <com.google.android.material.checkbox.MaterialCheckBox
+                <CheckBox
                     android:id="@+id/user_licence_check"
-                    android:layout_width="wrap_content"
+                    android:layout_width="35dp"
                     android:layout_height="wrap_content"
+
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/email_edit"/>
 
                 <TextView
-                    android:id="@+id/user_licence_text"
+                    android:id="@+id/user_licence_text_first"
                     style="@style/TextBody1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/robotobold"
-                    android:text="@string/accept_user_licence_text"
+                    android:text="Согласие c "
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp"
+
+                    app:layout_constraintVertical_bias="0.5"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@id/user_licence_check"
+                    app:layout_constraintTop_toTopOf="@id/user_licence_check"
+                    app:layout_constraintBottom_toBottomOf="@id/user_licence_check"/>
+
+                <TextView
+                    android:id="@+id/user_licence_link"
+                    style="@style/TextBody1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/robotobold"
+                    android:text="Офертой "
+                    android:textColor="@color/dark_blue"
+                    android:textSize="12sp"
+                    app:layout_constraintVertical_bias="0.5"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@id/user_licence_text_first"
+                    app:layout_constraintTop_toTopOf="@id/user_licence_check"
+                    app:layout_constraintBottom_toBottomOf="@id/user_licence_check"/>
+
+                <TextView
+                    android:id="@+id/user_licence_text_second"
+                    style="@style/TextBody1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/robotobold"
+                    android:text="приложения 'Коммуналка'"
                     android:textColor="@android:color/black"
                     android:textSize="12sp"
                     app:layout_constraintVertical_bias="0.5"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@id/user_licence_check"
+                    app:layout_constraintStart_toEndOf="@id/user_licence_link"
                     app:layout_constraintTop_toTopOf="@id/user_licence_check"
                     app:layout_constraintBottom_toBottomOf="@id/user_licence_check"/>
 
@@ -172,7 +205,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:barrierDirection="bottom"
-                        app:constraint_referenced_ids="user_licence_check, user_licence_text"/>
+                        app:constraint_referenced_ids="user_licence_check, user_licence_link"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/registration"
@@ -207,6 +240,7 @@
                     android:hint="@string/phone_number_mock"
                     android:textColorHint="@color/gray_placeholder"
                     android:textSize="16sp"
+                    android:theme="@style/EditTextBottomLine"
                     android:inputType="phone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -232,6 +266,7 @@
                     android:hint="@string/email_mock"
                     android:textColorHint="@color/gray_placeholder"
                     android:textSize="16sp"
+                    android:theme="@style/EditTextBottomLine"
                     android:inputType="textEmailAddress"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

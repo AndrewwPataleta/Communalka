@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.patstudio.communalka.R
 import com.patstudio.communalka.data.model.User
 import com.patstudio.communalka.data.model.UserForm
@@ -79,14 +80,17 @@ class ConfirmSmsFragment : Fragment() {
         }
 
         viewModel.getUserMessage().observe(requireActivity()) {
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setMessage(it)
-            builder.setPositiveButton("Ок"){dialogInterface, which ->
+            val builder = MaterialAlertDialogBuilder(requireContext())
+            builder.setTitle(it)
+            builder.setPositiveButton("Отправить повторно"){dialogInterface, which ->
+               // viewModel.repeatSendSms()
                 dialogInterface.dismiss()
             }
-            val alertDialog: AlertDialog = builder.create()
-            alertDialog.setCancelable(false)
-            alertDialog.show()
+            builder.setNegativeButton("Отмена"){dialogInterface, which ->
+                dialogInterface.dismiss()
+            }
+            builder.setCancelable(false)
+            builder.show()
         }
     }
 

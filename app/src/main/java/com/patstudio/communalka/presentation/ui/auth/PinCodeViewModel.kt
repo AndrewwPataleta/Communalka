@@ -19,9 +19,9 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
     private var pinCodeRepeat: String = ""
     private lateinit var userForm: UserForm
     private val pinCodeMutable: MutableLiveData<String> = MutableLiveData()
-    private val pinCodeMode: MutableLiveData<String> = MutableLiveData()
+    private val pinCodeMode: MutableLiveData<Event<String>> = MutableLiveData()
     private val availableFingerPrint: MutableLiveData<Boolean> = MutableLiveData()
-    private val alertMessage: MutableLiveData<String> = MutableLiveData()
+    private val alertMessage: MutableLiveData<Event<String>> = MutableLiveData()
     private val user: MutableLiveData<User> = MutableLiveData()
     private var enterMode = "INSTALL"
     private lateinit var savedUser: User
@@ -32,7 +32,7 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
 
         if (pinCode.length == 4) {
             enterMode = "REPEAT"
-            pinCodeMode.postValue(enterMode)
+            pinCodeMode.postValue(Event(enterMode))
             pinCodeMutable.postValue(pinCodeRepeat)
         }
 
@@ -55,7 +55,7 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
                 }
             } else {
                 pinCodeRepeat = ""
-                alertMessage.postValue("Неверный пин-код")
+                alertMessage.postValue(Event("Неверный пин-код"))
                 pinCodeMutable.postValue(pinCodeRepeat)
             }
         }
@@ -71,7 +71,7 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
             if (savedUser.pinCode.compareTo(pinCode) == 0)
                 user.postValue(savedUser)
             else {
-                alertMessage.postValue("Неверный пин-код")
+                alertMessage.postValue(Event("Неверный пин-код"))
                 pinCode = ""
                 pinCodeMutable.postValue(pinCode)
             }
@@ -99,11 +99,11 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
         return user
     }
 
-    fun getAlertMessage(): MutableLiveData<String> {
+    fun getAlertMessage(): MutableLiveData<Event<String>> {
         return alertMessage
     }
 
-    fun getPinCodeMode(): MutableLiveData<String> {
+    fun getPinCodeMode(): MutableLiveData<Event<String>> {
         return pinCodeMode
     }
 
@@ -141,7 +141,7 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
             "REPEAT" -> availableFingerPrint.postValue(false)
             "AUTH" -> availableFingerPrint.postValue(true)
         }
-        pinCodeMode.postValue(enterMode)
+        pinCodeMode.postValue((Event(enterMode)))
     }
 
      fun setUserForm(userForm: UserForm) {
@@ -150,11 +150,11 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
          when (enterMode) {
              "INSTALL" ->  {
                  availableFingerPrint.postValue(false)
-                 pinCodeMode.postValue(enterMode)
+                 pinCodeMode.postValue((Event(enterMode)))
              }
              "REPEAT" -> {
                  availableFingerPrint.postValue(false)
-                 pinCodeMode.postValue(enterMode)
+                 pinCodeMode.postValue((Event(enterMode)))
              }
              "AUTH" -> {
                  availableFingerPrint.postValue(true)
@@ -163,12 +163,19 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
                          .catch {
                              enterMode = "INSTALL"
                              availableFingerPrint.postValue(false)
-                             pinCodeMode.postValue(enterMode)
+                             pinCodeMode.postValue((Event(enterMode)))
                          }
                          .collect {
-                             Log.d("PinCodeViewModel", "user "+it.toString())
-                             savedUser = it
-                             pinCodeMode.postValue(enterMode)
+                             Log.d("PinCodeViewModel", it.toString())
+                             if (it.pinCode != null) {
+                                 savedUser = it
+                                 pinCodeMode.postValue((Event(enterMode)))
+                             } else {
+                                 enterMode = "INSTALL"
+                                 availableFingerPrint.postValue(false)
+                                 pinCodeMode.postValue((Event(enterMode)))
+                             }
+
                          }
                  }
              }

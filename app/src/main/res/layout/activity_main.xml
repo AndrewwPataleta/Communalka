@@ -9,18 +9,20 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/Theme.Communalka.AppBarOverlay">
+        android:background="@android:color/transparent"
+        android:theme="@style/Theme.Communalka.AppBarOverlay"
+        app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@android:color/transparent"
+            app:elevation="0dp"
             app:popupTheme="@style/Theme.Communalka.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
-
-
+    
     <include
         android:id="@+id/content"
         layout="@layout/content_main" />

@@ -9,49 +9,35 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.patstudio.communalka.R
 import com.patstudio.communalka.data.model.User
+import com.patstudio.communalka.databinding.FragmentAddRoomBinding
 import com.patstudio.communalka.databinding.FragmentWelcomeBinding
 import gone
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class WelcomeFragment : Fragment() {
+class AddRoomFragment : Fragment() {
 
-    private var _binding: FragmentWelcomeBinding? = null
+    private var _binding: FragmentAddRoomBinding? = null
     private val binding get() = _binding!!
-    private val viewModel by viewModel<WelcomeViewModel>()
+    private val viewModel by viewModel<AddRoomViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentWelcomeBinding.inflate(inflater, container, false)
-        binding.login.setOnClickListener {
-            findNavController().navigate(R.id.loLoginPage)
-        }
-        binding.registration.setOnClickListener {
-            findNavController().navigate(R.id.toRegistration)
-        }
-        binding.addNewPremises.setOnClickListener {
-            findNavController().navigate(R.id.action_WelcomeFragment_to_AddRoom)
-        }
+        _binding = FragmentAddRoomBinding.inflate(inflater, container, false)
         return binding.root
     }
 
 
     private fun initObservers() {
-        viewModel.getUser().observe(requireActivity()) {
-            binding.login.gone(false)
-            binding.registration.gone(false)
-            binding.welcomeText.text = getString(R.string.welcome_user, it.name)
-        }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initObservers()
-        arguments?.getParcelable<User>("user")?.let {
-            viewModel.setCurrentUser(it)
-        }
+
     }
 
     override fun onDestroyView() {

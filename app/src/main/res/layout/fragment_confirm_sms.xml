@@ -109,10 +109,10 @@
                     android:id="@+id/smsEdit"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:background="@color/white"
                     android:textSize="16sp"
                     android:textColorHint="@color/gray_placeholder"
                     android:hint="123321"
+                    android:theme="@style/EditTextBottomLine"
                     android:layout_marginTop="8dp"
                     android:inputType="number"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -135,14 +135,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:fontFamily="@font/robotobold"
+                    android:fontFamily="@font/robotoregular"
                     android:text="@string/resend_via"
                     android:textColor="@android:color/darker_gray"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toStartOf="@id/repeatSendAfterValue"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintTop_toBottomOf="@id/smsEdit" />
 
                 <TextView
@@ -152,10 +152,10 @@
                     android:text="@string/repeat_send_sms"
                     android:textColor="@color/dark_blue"
 
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:layout_marginTop="16dp"
                     android:visibility="gone"
-                    android:fontFamily="@font/robotobold"
+                    android:fontFamily="@font/robotoregular"
                     app:layout_constraintStart_toStartOf="parent"
 
                     app:layout_constraintTop_toBottomOf="@id/smsEdit"/>
@@ -166,10 +166,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:fontFamily="@font/robotobold"
+                    android:fontFamily="@font/robotoregular"
 
                     android:textColor="@android:color/darker_gray"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:layout_marginStart="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/repeat_send_after_text"

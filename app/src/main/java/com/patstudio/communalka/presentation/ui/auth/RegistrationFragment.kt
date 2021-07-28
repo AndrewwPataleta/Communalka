@@ -1,19 +1,18 @@
 package com.patstudio.communalka.presentation.ui.auth
 
 import android.app.AlertDialog
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.patstudio.communalka.R
-import com.patstudio.communalka.databinding.FragmentLoginBinding
 import com.patstudio.communalka.databinding.FragmentRegistrationBinding
 import gone
 import invisible
@@ -49,8 +48,15 @@ class RegistrationFragment : Fragment() {
         binding.registration.setOnClickListener {
            viewModel.registration()
         }
-        binding.userLicenceText.setOnClickListener {
+        binding.userLicenceTextFirst.setOnClickListener {
            binding.userLicenceCheck.isChecked = !binding.userLicenceCheck.isChecked
+        }
+        binding.userLicenceTextSecond.setOnClickListener {
+            binding.userLicenceCheck.isChecked = !binding.userLicenceCheck.isChecked
+        }
+        binding.userLicenceLink.setOnClickListener {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://test.communalka.site/static/public_offer.pdf"))
+            startActivity(browserIntent)
         }
         binding.close.setOnClickListener {
             binding.phoneEdit.setText("")
@@ -97,7 +103,8 @@ class RegistrationFragment : Fragment() {
             }
         }
         viewModel.getLicenseError().observe(requireActivity()) {
-          this.binding.userLicenceText.setTextColor(resources.getColor(android.R.color.holo_red_dark))
+          this.binding.userLicenceTextFirst.setTextColor(resources.getColor(android.R.color.holo_red_dark))
+          this.binding.userLicenceTextSecond.setTextColor(resources.getColor(android.R.color.holo_red_dark))
         }
         viewModel.getUserForm().observe(requireActivity()) {
             if (!it.hasBeenHandled.get()) {
