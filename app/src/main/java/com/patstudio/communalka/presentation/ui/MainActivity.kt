@@ -3,12 +3,12 @@ package com.patstudio.communalka.presentation.ui
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.*
+import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
+import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.patstudio.communalka.R
 import com.patstudio.communalka.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
@@ -28,7 +28,10 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
-
+        bottomNavigationView.setupWithNavController(Navigation.findNavController(this, R.id.nav_host_fragment_content))
+        bottomNavigationView.setOnNavigationItemSelectedListener {item ->
+            onNavDestinationSelected(item, Navigation.findNavController(this, R.id.nav_host_fragment_content))
+        }
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.WelcomeFragment -> {

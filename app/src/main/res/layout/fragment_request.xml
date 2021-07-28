@@ -24,33 +24,31 @@
                 android:layout_height="match_parent"
                 android:padding="16dp">
 
-                <TextView
-                    android:id="@+id/welcome_text"
-                    style="@style/TextBold1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:fontFamily="@font/robotobold"
-                    android:text="@string/such_an_opportunity_will_appear_soon"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-
-                    app:layout_constraintBottom_toTopOf="@id/yes"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_chainStyle="packed" />
-
                 <ImageView
                     android:id="@+id/yes"
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_marginTop="16dp"
                     android:src="@drawable/ic_yes"
-                    app:layout_constraintVertical_bias="0.5"
-                    app:layout_constraintTop_toBottomOf="@id/welcome_text"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/yesText"
                     app:layout_constraintEnd_toStartOf="@id/no"
-                    android:layout_marginTop="16dp" />
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintVertical_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/welcome_text" />
+
+                <ImageView
+                    android:id="@+id/no"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/ic_no"
+                    app:layout_constraintBottom_toTopOf="@+id/noText"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintVertical_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@id/yes"
+                    app:layout_constraintTop_toBottomOf="@+id/welcome_text" />
 
                 <TextView
                     android:id="@+id/yesText"
@@ -59,33 +57,41 @@
                     android:layout_marginTop="8dp"
                     android:text="@string/need_faster"
                     android:textColor="@color/dark_blue"
-                    app:layout_constraintTop_toBottomOf="@id/yes"
-                    app:layout_constraintStart_toStartOf="@id/yes"
+
                     app:layout_constraintEnd_toEndOf="@id/yes"
-                    app:layout_constraintBottom_toBottomOf="parent"  />
+                    app:layout_constraintVertical_bias="0.0"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="@id/yes"
+                    app:layout_constraintTop_toBottomOf="@+id/yes" />
 
-                <ImageView
-                    android:id="@+id/no"
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:src="@drawable/ic_no"
+                <TextView
+                    android:id="@+id/welcome_text"
+                    style="@style/TextBold1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:fontFamily="@font/robotobold"
+                    android:text="@string/such_an_opportunity_will_appear_soon"
+                    android:textColor="@color/black"
                     app:layout_constraintVertical_bias="0.5"
-                    app:layout_constraintTop_toBottomOf="@id/welcome_text"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/yes"
-                    android:layout_marginTop="16dp" />
+                    android:textSize="17sp"
 
-                    <TextView
-                        android:id="@+id/noText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/not_necessary"
-                        android:textColor="@android:color/holo_red_dark"
-                        app:layout_constraintTop_toBottomOf="@id/no"
-                        app:layout_constraintStart_toStartOf="@id/no"
-                        app:layout_constraintEnd_toEndOf="@id/no"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/noText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/not_necessary"
+                    android:textColor="@android:color/holo_red_dark"
+                    app:layout_constraintEnd_toEndOf="@id/no"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="@id/no"
+                    app:layout_constraintTop_toBottomOf="@+id/no" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
