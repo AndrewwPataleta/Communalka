@@ -59,4 +59,5 @@
     <string name="enter_email_or_phone_to_restore_password">Введите почту или телефон, чтобы восстановить пароль</string>
     <string name="email_or_phone">Почта или телефон</string>
     <string name="restore_pin_code">Восстановить PIN-код</string>
+    <string name="add_room">Добавить помещение</string>
 </resources>

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "646404517142",
+    "project_id": "kommunalka-91b26",
+    "storage_bucket": "kommunalka-91b26.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:646404517142:android:a2de52e3c8a674a2ab7437",
+        "android_client_info": {
+          "package_name": "com.patstudio.communalka"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "646404517142-nb1f7irctqalu9pulsfj31t1lv0veca0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQFhyMCDvNxA9t1iWanZudRgznvlRd1iU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "646404517142-nb1f7irctqalu9pulsfj31t1lv0veca0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

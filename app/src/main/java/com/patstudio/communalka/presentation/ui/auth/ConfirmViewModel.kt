@@ -6,9 +6,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.imagegallery.contextprovider.DispatcherProvider
 import com.google.gson.Gson
 import com.patstudio.communalka.data.model.ConfirmSmsParams
 import com.patstudio.communalka.data.model.Result
+import com.patstudio.communalka.data.model.User
 import com.patstudio.communalka.data.model.UserForm
 import com.patstudio.communalka.data.model.auth.ConfirmFormError
 import com.patstudio.communalka.data.model.auth.ConfirmSmsFormError
@@ -21,7 +23,7 @@ import kotlinx.coroutines.NonCancellable.isActive
 import kotlinx.coroutines.flow.*
 import startCoroutineTimer
 
-class ConfirmViewModel(private val userRepository: UserRepository, private val gson: Gson): ViewModel() {
+class ConfirmViewModel(private val userRepository: UserRepository, private val gson: Gson, private val dispatcherProvider: DispatcherProvider): ViewModel() {
 
     private var smsCode = ""
     private lateinit var userForm: UserForm
@@ -42,7 +44,9 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val g
          timer = object: CountDownTimer(TIME_FOR_REPEAT_SMS_SEND.toLong(), 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 Log.d("ConfirmSmsCode", millisUntilFinished.toString())
-                countDownTimer.postValue((millisUntilFinished / 1000 % 60).toString())
+                var second = (millisUntilFinished / 1000 % 60).toString()
+
+                countDownTimer.postValue("0:"+second)
             }
 
             override fun onFinish() {
@@ -83,7 +87,8 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val g
                                     }
 
                                     userForm.consumer.token = userForm.tokens.access
-                                    userFormMutable.postValue(userForm.consumer)
+                                    userForm.consumer.refresh = userForm.tokens.refresh
+                                    checkExistAndSaveUser(userForm)
                                     progressPhoneSending.postValue(false)
                                 }
                             }
@@ -97,6 +102,36 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val g
                                 }
                             }
                         }
+                    }
+                }
+        }
+    }
+
+    private fun checkExistAndSaveUser(userForm: ConfirmSmsWrapper) {
+        Log.d("ConfirmViewModel", "check exist "+userForm.consumer)
+        viewModelScope.launch(dispatcherProvider.io) {
+            userRepository.getUserById(userForm.consumer.id)
+                .catch {
+                    it.printStackTrace()
+                }
+                .collect {
+                    if (it != null) {
+                    //    userRepository.updateToken(userForm.consumer.token, userForm.consumer.refresh, userForm.consumer.id)
+                        userFormMutable.postValue(userForm.consumer)
+
+                    } else {
+                        var userForSave = User(
+                            userForm.consumer.id,
+                            userForm.consumer.fio,
+                            userForm.consumer.phone,
+                            userForm.consumer.email,
+                            "",
+                            userForm.consumer.token,
+                            userForm.consumer.refresh,
+                            true
+                        )
+                        userRepository.saveUser(userForSave)
+                        userFormMutable.postValue(userForm.consumer)
                     }
                 }
         }
@@ -120,8 +155,8 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val g
                                     var userForm: ConfirmSmsWrapper = gson.fromJson(it.data.data, ConfirmSmsWrapper::class.java)
                                     userForm.consumer.type = "INSTALL"
                                     userForm.consumer.token = userForm.tokens.access
-                                    userFormMutable.postValue(userForm.consumer)
-
+                                    userForm.consumer.refresh = userForm.tokens.refresh
+                                    checkExistAndSaveUser(userForm)
                                 }
                             }
                         }

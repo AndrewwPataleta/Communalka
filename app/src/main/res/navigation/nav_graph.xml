@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/WelcomeFragment"
         android:name="com.patstudio.communalka.presentation.ui.main.WelcomeFragment"
-        android:label="Добро пожаловать"
+        android:label="Главная"
         tools:layout="@layout/fragment_welcome">
 
         <action
@@ -31,10 +31,7 @@
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/toPinCode"
-            app:destination="@id/PinCode"
-            app:launchSingleTop="true"
-            app:popUpTo="@+id/WelcomeFragment"
-            app:popUpToInclusive="true" />
+            app:destination="@id/PinCode" />
         <action
             android:id="@+id/toRegistrationFragment"
             app:destination="@id/Registration" />
@@ -53,16 +50,10 @@
             app:destination="@id/LoginFragment" />
         <action
             android:id="@+id/toConfirmSms"
-            app:destination="@id/ConfirmSms"
-            app:launchSingleTop="true"
-            app:popUpTo="@+id/WelcomeFragment"
-            app:popUpToInclusive="true"/>
+            app:destination="@id/ConfirmSms" />
         <action
             android:id="@+id/toPinCode"
-            app:destination="@id/PinCode"
-            app:launchSingleTop="true"
-            app:popUpTo="@+id/WelcomeFragment"
-            app:popUpToInclusive="true"/>
+            app:destination="@id/PinCode" />
     </fragment>
 
     <fragment
@@ -93,10 +84,7 @@
             app:argType="com.patstudio.communalka.data.model.UserForm" />
         <action
             android:id="@+id/toPinCode"
-            app:destination="@id/PinCode"
-            app:launchSingleTop="true"
-            app:popUpTo="@+id/WelcomeFragment"
-            app:popUpToInclusive="true"/>
+            app:destination="@id/PinCode" />
         <action
             android:id="@+id/toRegistrationFragment"
             app:destination="@id/Registration" />
@@ -135,10 +123,17 @@
             app:argType="string" />
     </fragment>
 
+    <fragment
+        android:id="@+id/Profile"
+        android:name="com.patstudio.communalka.presentation.ui.main.welcome.ProfileFragment"
+        android:label="Профиль"
+        tools:layout="@layout/fragment_profile">
+
+    </fragment>
 
     <fragment
         android:id="@+id/AddRoom"
-        android:name="com.patstudio.communalka.presentation.ui.main.AddRoomFragment"
+        android:name="com.patstudio.communalka.presentation.ui.main.room.AddRoomFragment"
         android:label="Добавить помещение"
         tools:layout="@layout/fragment_add_room">
 

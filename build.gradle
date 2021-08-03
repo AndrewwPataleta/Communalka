@@ -24,6 +24,8 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "io.insert-koin:koin-gradle-plugin:$koinVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.20"
+        classpath 'com.google.gms:google-services:4.3.8'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
     }
 }
 

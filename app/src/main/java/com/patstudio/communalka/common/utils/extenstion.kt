@@ -2,9 +2,15 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.util.Patterns
 import android.view.View
+import com.google.gson.Gson
+import com.google.gson.JsonElement
+import com.google.gson.reflect.TypeToken
+import com.patstudio.communalka.data.model.APIResponse
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
+
 
 fun CharSequence?.isValidPhoneNumber():Boolean{
     return !isNullOrEmpty() && Patterns.PHONE.matcher(this).matches()
@@ -37,6 +43,13 @@ fun View.visible(animate: Boolean = true) {
     } else {
         visibility = View.VISIBLE
     }
+}
+
+fun convertErrorBody(throwable: HttpException): APIResponse<JsonElement> {
+
+    val type = object : TypeToken<APIResponse<JsonElement>>() {}.type
+    return Gson().fromJson(throwable.response()?.errorBody()!!.charStream().readText(), type)
+
 }
 
 fun View.invisible(animate: Boolean = true) {

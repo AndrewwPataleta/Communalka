@@ -35,6 +35,17 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:src="@drawable/ic_home"/>
 
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iconAdd"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/circle_white_with_stroke_background"
+                    android:padding="12dp"
+                    app:layout_constraintBottom_toBottomOf="@id/attachRoomImage"
+                    app:layout_constraintEnd_toEndOf="@id/attachRoomImage"
+                    android:src="@drawable/ic_camera"/>
+
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/secondAddRoomIcon"
                     android:layout_width="55dp"
@@ -104,7 +115,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/room_name_edit" />
 
-                <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/address_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -116,6 +127,15 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/address_text" />
+
+                <ProgressBar
+                    android:id="@+id/progressSuggestions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="18dp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="@id/address_edit"
+                    app:layout_constraintTop_toTopOf="@id/address_edit"
+                    app:layout_constraintBottom_toBottomOf="@id/address_edit"/>
 
                 <TextView
                     android:id="@+id/room_name_text"
@@ -177,7 +197,8 @@
                     android:textColorHint="@color/gray_placeholder"
                     android:textSize="16sp"
                     android:theme="@style/EditTextBottomLine"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
+                    android:digits="0123456789."
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/total_area_text" />
@@ -203,13 +224,26 @@
                     android:textColorHint="@color/gray_placeholder"
                     android:textSize="16sp"
                     android:theme="@style/EditTextBottomLine"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
+                    android:digits="0123456789."
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/living_space_text" />
 
+                <ProgressBar
+                    android:id="@+id/progressCreate"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/living_space_edit"
+                    app:layout_constraintVertical_bias="1.0"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/login"
+                    android:id="@+id/saveRoom"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -217,7 +251,7 @@
                     android:fontFamily="@font/robotoregular"
                     android:padding="8dp"
                     app:cornerRadius="8dp"
-                    android:text="Добавить помещение"
+                    android:text="@string/add_room"
                     android:textAllCaps="false"
                     android:textStyle="bold"
                     app:layout_constraintTop_toBottomOf="@id/living_space_edit"

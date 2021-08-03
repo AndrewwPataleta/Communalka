@@ -24,4 +24,7 @@ interface UserService {
     @POST("auth/register/")
     suspend fun registrationWithCode(@Body target: JsonObject): APIResponse<JsonElement>
 
+    @POST("auth/update_token/")
+    suspend fun refreshToken(@Body target: JsonObject): APIResponse<JsonElement>
+
 }

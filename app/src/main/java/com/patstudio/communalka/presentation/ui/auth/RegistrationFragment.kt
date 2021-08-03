@@ -66,16 +66,16 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun initObservers() {
-        viewModel.getPhoneError().observe(requireActivity()) {
+        viewModel.getPhoneError().observe(this) {
             binding.phoneEdit.setError(it)
         }
-        viewModel.getUserEmailError().observe(requireActivity()) {
+        viewModel.getUserEmailError().observe(this) {
             binding.emailEdit.setError(it)
         }
-        viewModel.getUserFioError().observe(requireActivity()) {
+        viewModel.getUserFioError().observe(this) {
             binding.fioEdit.setError(it)
         }
-        viewModel.getProgressPhoneSending().observe(requireActivity()) {
+        viewModel.getProgressPhoneSending().observe(this) {
 
             if (it) {
                 binding.registration.invisible(false)
@@ -85,7 +85,7 @@ class RegistrationFragment : Fragment() {
                 binding.progress.gone(false)
             }
         }
-        viewModel.getUserMessage().observe(requireActivity()) {
+        viewModel.getUserMessage().observe(this) {
             val builder = AlertDialog.Builder(requireContext())
             builder.setMessage(it)
             builder.setPositiveButton("Ок"){dialogInterface, which ->
@@ -95,18 +95,18 @@ class RegistrationFragment : Fragment() {
             alertDialog.setCancelable(false)
             alertDialog.show()
         }
-        viewModel.getDisableNavigation().observe(requireActivity()) {
+        viewModel.getDisableNavigation().observe(this) {
             if (it) {
                 disableNavigationListeners()
             } else {
                 initNavigationListeners()
             }
         }
-        viewModel.getLicenseError().observe(requireActivity()) {
+        viewModel.getLicenseError().observe(this) {
           this.binding.userLicenceTextFirst.setTextColor(resources.getColor(android.R.color.holo_red_dark))
           this.binding.userLicenceTextSecond.setTextColor(resources.getColor(android.R.color.holo_red_dark))
         }
-        viewModel.getUserForm().observe(requireActivity()) {
+        viewModel.getUserForm().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     val bundle = bundleOf("user" to it, "type" to "Registration")

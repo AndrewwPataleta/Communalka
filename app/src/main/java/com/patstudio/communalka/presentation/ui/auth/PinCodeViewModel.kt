@@ -22,7 +22,7 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
     private val pinCodeMode: MutableLiveData<Event<String>> = MutableLiveData()
     private val availableFingerPrint: MutableLiveData<Boolean> = MutableLiveData()
     private val alertMessage: MutableLiveData<Event<String>> = MutableLiveData()
-    private val user: MutableLiveData<User> = MutableLiveData()
+    private val user: MutableLiveData<Event<User>> = MutableLiveData()
     private var enterMode = "INSTALL"
     private lateinit var savedUser: User
 
@@ -44,11 +44,13 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
 
         if (pinCodeRepeat.length == 4) {
             if (pinCodeRepeat.compareTo(pinCode) == 0) {
-                var userForSave = User(userForm.id,userForm.fio, userForm.phone, userForm.email, pinCode, userForm.token)
+                var userForSave = User(userForm.id,userForm.fio, userForm.phone, userForm.email, pinCode, userForm.token, userForm.refresh, true)
                 viewModelScope.launch(dispatcherProvider.io) {
                     try {
                         userRepository.saveUser(userForSave)
-                        user.postValue(userForSave)
+                        userRepository.updatePreviosAuthUser()
+                        userRepository.setLastLoginUser(userForSave)
+                        user.postValue(Event(userForSave))
                     }catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -68,9 +70,19 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
         pinCodeMutable.postValue(pinCode)
 
         if (pinCode.length == 4 ) {
-            if (savedUser.pinCode.compareTo(pinCode) == 0)
-                user.postValue(savedUser)
-            else {
+            if (savedUser.pinCode.compareTo(pinCode) == 0) {
+                viewModelScope.launch(dispatcherProvider.io) {
+                    try {
+
+                        userRepository.updatePreviosAuthUser()
+                        userRepository.setLastLoginUser(savedUser)
+                        user.postValue(Event(savedUser))
+                    }catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+
+            } else {
                 alertMessage.postValue(Event("Неверный пин-код"))
                 pinCode = ""
                 pinCodeMutable.postValue(pinCode)
@@ -95,7 +107,7 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
         return availableFingerPrint
     }
 
-    fun getUser(): MutableLiveData<User> {
+    fun getUser(): MutableLiveData<Event<User>> {
         return user
     }
 
@@ -108,7 +120,11 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
     }
 
     fun fingerPrintSuccess() {
-        user.postValue(savedUser)
+        viewModelScope.launch(dispatcherProvider.io) {
+            userRepository.updatePreviosAuthUser()
+            userRepository.setLastLoginUser(savedUser)
+            user.postValue(Event(savedUser))
+        }
     }
 
     fun fingerPrintError() {
@@ -167,7 +183,7 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
                          }
                          .collect {
                              Log.d("PinCodeViewModel", it.toString())
-                             if (it.pinCode != null) {
+                             if (it.pinCode.isNotEmpty()) {
                                  savedUser = it
                                  pinCodeMode.postValue((Event(enterMode)))
                              } else {
@@ -175,7 +191,6 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
                                  availableFingerPrint.postValue(false)
                                  pinCodeMode.postValue((Event(enterMode)))
                              }
-
                          }
                  }
              }

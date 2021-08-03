@@ -40,15 +40,15 @@ class LoginFragment : Fragment() {
     }
 
     private fun initObservers() {
-        viewModel.getPhoneError().observe(requireActivity()) {
+        viewModel.getPhoneError().observe(this) {
             if (it) {
                 Toast.makeText(requireContext(), getString(R.string.check_phone_number), Toast.LENGTH_LONG).show()
             }
         }
-        viewModel.getConfirmCode().observe(requireActivity()) {
+        viewModel.getConfirmCode().observe(this) {
             findNavController().navigate(R.id.PinCode)
         }
-        viewModel.getConfirmSmsParams().observe(requireActivity()) {
+        viewModel.getConfirmSmsParams().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     val bundle = bundleOf("phone" to it.phone, "type" to "Login")
@@ -58,7 +58,7 @@ class LoginFragment : Fragment() {
             }
 
         }
-        viewModel.getUserMessage().observe(requireActivity()) {
+        viewModel.getUserMessage().observe(this) {
             val builder = AlertDialog.Builder(requireContext())
             builder.setMessage(it)
             builder.setPositiveButton("Ок"){dialogInterface, which ->
@@ -68,7 +68,7 @@ class LoginFragment : Fragment() {
             alertDialog.setCancelable(false)
             alertDialog.show()
         }
-        viewModel.getProgressPhoneSending().observe(requireActivity()) {
+        viewModel.getProgressPhoneSending().observe(this) {
 
             if (it) {
                 binding.login.invisible(false)
@@ -78,7 +78,7 @@ class LoginFragment : Fragment() {
                 binding.progress.gone(false)
             }
         }
-        viewModel.getDisableNavigation().observe(requireActivity()) {
+        viewModel.getDisableNavigation().observe(this) {
             if (it) {
                disableNavigationListeners()
             } else {

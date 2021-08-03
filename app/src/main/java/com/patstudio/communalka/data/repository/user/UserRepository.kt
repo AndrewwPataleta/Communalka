@@ -1,5 +1,6 @@
 package com.patstudio.communalka.data.repository.user
 
+import android.content.SharedPreferences
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonElement
@@ -18,7 +19,8 @@ class UserRepository (
     private val remote: UserRemote,
     private val dao: UserDao,
     private val connectivity: Connectivity,
-    private val gson: Gson
+    private val gson: Gson,
+    private val sharedPreferences: SharedPreferences
 ) {
 
      val users: Flow<Result<List<User>>>
@@ -74,12 +76,33 @@ class UserRepository (
         return dao.saveUser(user)
     }
 
-    fun getUserById(userId: String): Flow<User>  {
-
-        return dao.getUserById(userId)
-
+    fun updateToken(token: String, refresh: String, userId: String): Int {
+        return dao.updateToken(token, refresh, userId)
     }
 
+    suspend fun setLastLoginUser(user: User) {
+        sharedPreferences.edit().putString("currentToken", user.token).apply()
+        sharedPreferences.edit().putString("currentRefreshToken", user.refresh).apply()
+        return dao.setLastUpdateUser(user.id)
+    }
+
+    suspend fun updatePreviosAuthUser() {
+        return dao.updatePreviosAuth()
+    }
+
+    fun getUserById(userId: String): Flow<User>  {
+        return dao.getUserById(userId)
+    }
+
+    fun getLastAuthUser(): Flow<User>  {
+        return dao.getLastAuth()
+    }
+
+    fun logoutAll()  {
+        sharedPreferences.edit().putString("currentToken", null).apply()
+        sharedPreferences.edit().putString("currentRefreshToken", null).apply()
+        return dao.updatePreviosAuth(false)
+    }
 
     fun confirmSmsCode(phone: String, smsCode: String): Flow<Result<APIResponse<JsonElement>>> = flow {
         try {
@@ -126,12 +149,7 @@ class UserRepository (
     private fun convertErrorBody(throwable: HttpException): APIResponse<JsonElement> {
 
             val type = object : TypeToken<APIResponse<JsonElement>>() {}.type
-
-
             return gson.fromJson(throwable.response()?.errorBody()!!.charStream().readText(), type)
-
-
-
 
     }
 

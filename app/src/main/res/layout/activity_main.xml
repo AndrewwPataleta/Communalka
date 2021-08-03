@@ -22,7 +22,7 @@
             app:popupTheme="@style/Theme.Communalka.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
-    
+
     <include
         android:id="@+id/content"
         layout="@layout/content_main" />

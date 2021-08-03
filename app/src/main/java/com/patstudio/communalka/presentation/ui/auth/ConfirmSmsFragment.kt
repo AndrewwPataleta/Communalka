@@ -2,6 +2,7 @@ package com.patstudio.communalka.presentation.ui.auth
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.text.format.DateUtils
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -40,7 +41,7 @@ class ConfirmSmsFragment : Fragment() {
     }
 
     private fun initObservers() {
-        viewModel.getAvailableSendSms().observe(requireActivity()) {
+        viewModel.getAvailableSendSms().observe(this) {
             try {
                 if (it) {
                     binding.repeatSendAfterText.gone(false)
@@ -53,17 +54,17 @@ class ConfirmSmsFragment : Fragment() {
                 }
             } catch (e: Exception) {}
         }
-        viewModel.getCountDownTimer().observe(requireActivity()) {
+        viewModel.getCountDownTimer().observe(this) {
             try {
 
                 binding.repeatSendAfterValue.text = it
             } catch (e: Exception) {}
         }
 
-        viewModel.getCongratulation().observe(requireActivity()) {
+        viewModel.getCongratulation().observe(this) {
             binding.congratulation.text = getString(R.string.welcome_user, it)
         }
-        viewModel.getProgressSmsCodeSending().observe(requireActivity()) {
+        viewModel.getProgressSmsCodeSending().observe(this) {
             try {
                 if (it) {
                     binding.progressSmsSending.visible(true)
@@ -74,12 +75,12 @@ class ConfirmSmsFragment : Fragment() {
                 }
             } catch (e: Exception) { }
         }
-        viewModel.getUserForm().observe(requireActivity()) {
+        viewModel.getUserForm().observe(this) {
             val bundle = bundleOf("user" to it)
             findNavController().navigate(R.id.PinCode, bundle)
         }
 
-        viewModel.getUserMessage().observe(requireActivity()) {
+        viewModel.getUserMessage().observe(this) {
             val builder = MaterialAlertDialogBuilder(requireContext())
             builder.setTitle(it)
             builder.setPositiveButton("Отправить повторно"){dialogInterface, which ->

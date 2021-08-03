@@ -64,7 +64,7 @@ class RegistrationViewModel(private val userRepository: UserRepository, private 
                            is Result.Success -> {
                                when(it.data.status) {
                                    "success" -> {
-                                       var userFormResp = UserForm("",userFio,phoneNumber,userEmail,"INSTALL","")
+                                       var userFormResp = UserForm("",userFio,phoneNumber,userEmail,"INSTALL","","")
                                        userForm.postValue(Event(userFormResp))
                                        progressPhoneSending.postValue(false)
                                        disableNavigation.postValue(false)

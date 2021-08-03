@@ -1,23 +1,30 @@
 package com.patstudio.communalka.presentation.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toolbar
+import androidx.core.os.bundleOf
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.patstudio.communalka.R
 import com.patstudio.communalka.data.model.User
 import com.patstudio.communalka.databinding.FragmentWelcomeBinding
+import com.patstudio.communalka.presentation.ui.main.room.PlacementAdapter
 import gone
 import org.koin.android.viewmodel.ext.android.viewModel
+import visible
 
 class WelcomeFragment : Fragment() {
 
     private var _binding: FragmentWelcomeBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModel<WelcomeViewModel>()
+    private lateinit var placementAdapter: PlacementAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,26 +39,62 @@ class WelcomeFragment : Fragment() {
             findNavController().navigate(R.id.toRegistration)
         }
         binding.addNewPremises.setOnClickListener {
-            findNavController().navigate(R.id.action_WelcomeFragment_to_AddRoom)
+            viewModel.checkAvailableToOpenAddRoom()
+        }
+        binding.addRoom.setOnClickListener {
+            viewModel.checkAvailableToOpenAddRoom()
         }
         return binding.root
     }
 
 
     private fun initObservers() {
-        viewModel.getUser().observe(requireActivity()) {
-            binding.login.gone(false)
-            binding.registration.gone(false)
-            binding.welcomeText.text = getString(R.string.welcome_user, it.name)
+        viewModel.getUser().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    binding.login.gone(false)
+                    binding.registration.gone(false)
+                    binding.welcomeText.text = getString(R.string.welcome_user, it.name)
+                }
+            }
+        }
+        viewModel.getNavigateTo().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                   when (it) {
+                       "ADD_ROOM" ->  {
+                           findNavController().navigate(R.id.action_WelcomeFragment_to_AddRoom)
+                       }
+                       "REGISTRATION" ->  {
+                           findNavController().navigate(R.id.toRegistration)
+                       }
+                   }
+                }
+
+            }
+        }
+        viewModel.getPlacementList().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    requireActivity().findViewById<Toolbar>(R.id.toolbar).visible(false)
+                    Log.d("WelcomeFragment", it.toString())
+                    binding.userContainer.gone(false)
+                    binding.premisesContainer.visible(false)
+                    val adapter = PlacementAdapter(it)
+                    binding.premisesList.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL ,false)
+                    binding.premisesList.adapter = adapter
+                }
+            }
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initObservers()
-        arguments?.getParcelable<User>("user")?.let {
-            viewModel.setCurrentUser(it)
-        }
+        viewModel.initCurrentUser()
+//        arguments?.getParcelable<User>("user")?.let {
+//            viewModel.setCurrentUser(it)
+//        }
     }
 
     override fun onDestroyView() {

@@ -41,7 +41,7 @@ class PinCodeFragment : Fragment() {
     }
 
     private fun initObservers() {
-       viewModel.getPinCode().observe(requireActivity()) {
+       viewModel.getPinCode().observe(this) {
            Log.d("PinCodeFragment", "pin "+it)
            when (it.length) {
 
@@ -77,7 +77,7 @@ class PinCodeFragment : Fragment() {
                }
            }
        }
-        viewModel.getAvailableFingerPrint().observe(requireActivity()) {
+        viewModel.getAvailableFingerPrint().observe(this) {
             try {
                 if (it) {
                     binding.pinFingerprint.visible(false)
@@ -87,12 +87,16 @@ class PinCodeFragment : Fragment() {
             } catch (e: Exception) {}
         }
 
-        viewModel.getUser().observe(requireActivity()) {
-            val bundle = bundleOf("user" to it)
-            findNavController().navigate(R.id.WelcomeFragment, bundle)
+        viewModel.getUser().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val bundle = bundleOf("user" to it)
+                    findNavController().navigate(R.id.WelcomeFragment, bundle)
+                }
+            }
         }
 
-        viewModel.getAlertMessage().observe(requireActivity()) {
+        viewModel.getAlertMessage().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     val builder = AlertDialog.Builder(requireContext())
@@ -107,7 +111,7 @@ class PinCodeFragment : Fragment() {
             }
         }
 
-        viewModel.getPinCodeMode().observe(requireActivity()) {
+        viewModel.getPinCodeMode().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     try {
