@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.patstudio.communalka.R
 import com.patstudio.communalka.data.model.UserForm
@@ -154,6 +155,7 @@ class PinCodeFragment : Fragment() {
         binding.pinNine.setOnClickListener { viewModel.clickDigital(getString(R.string.nine)) }
         binding.pinZero.setOnClickListener { viewModel.clickDigital(getString(R.string.zero)) }
         binding.pinBack.setOnClickListener { viewModel.removeLastItem() }
+        binding.close.setOnClickListener { viewModel.removeAllPin() }
         binding.forgotPassword.setOnClickListener {  findNavController().navigate(R.id.toRestore) }
 
         executor = ContextCompat.getMainExecutor(requireContext())
@@ -196,6 +198,7 @@ class PinCodeFragment : Fragment() {
     private fun disableNavigationListeners() {
 
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

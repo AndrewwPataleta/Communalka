@@ -131,6 +131,27 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
 
     }
 
+    private fun removeWhenInstallPinCode() {
+        if (pinCode.length < 4 && pinCode.length > 0) {
+            pinCode = ""
+            pinCodeMutable.postValue(pinCode)
+        }
+    }
+
+    private fun removeWhenRepeatPinCode() {
+        if (pinCodeRepeat.length < 4 && pinCodeRepeat.length > 0) {
+            pinCodeRepeat = ""
+            pinCodeMutable.postValue(pinCodeRepeat)
+        }
+    }
+
+    private fun removeWhenAuthPinCode() {
+        if (pinCode.length > 0)
+            pinCode = ""
+        pinCodeMutable.postValue(pinCode)
+    }
+
+
     private fun removeLastWhenInstallPinCode() {
         if (pinCode.length < 4 && pinCode.length > 0) {
             pinCode = pinCode.subSequence(0, pinCode.length-1).toString()
@@ -185,6 +206,7 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
                              Log.d("PinCodeViewModel", it.toString())
                              if (it.pinCode.isNotEmpty()) {
                                  savedUser = it
+                                 availableFingerPrint.postValue(true)
                                  pinCodeMode.postValue((Event(enterMode)))
                              } else {
                                  enterMode = "INSTALL"
@@ -195,6 +217,15 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
                  }
              }
          }
+    }
+
+    fun removeAllPin() {
+        when (enterMode) {
+            "INSTALL" -> removeWhenInstallPinCode()
+            "REPEAT" -> removeWhenRepeatPinCode()
+            "AUTH" -> removeWhenAuthPinCode()
+        }
+
     }
 
     fun removeLastItem() {

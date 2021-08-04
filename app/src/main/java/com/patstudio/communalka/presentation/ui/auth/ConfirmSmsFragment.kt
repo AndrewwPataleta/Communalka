@@ -76,22 +76,36 @@ class ConfirmSmsFragment : Fragment() {
             } catch (e: Exception) { }
         }
         viewModel.getUserForm().observe(this) {
-            val bundle = bundleOf("user" to it)
-            findNavController().navigate(R.id.PinCode, bundle)
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val bundle = bundleOf("user" to it)
+                    findNavController().navigate(R.id.PinCode, bundle)
+                }
+            }
         }
-
+        viewModel.getSmsCode().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                   binding.smsEdit.setText(it)
+                }
+            }
+        }
         viewModel.getUserMessage().observe(this) {
-            val builder = MaterialAlertDialogBuilder(requireContext())
-            builder.setTitle(it)
-            builder.setPositiveButton("Отправить повторно"){dialogInterface, which ->
-               // viewModel.repeatSendSms()
-                dialogInterface.dismiss()
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val builder = MaterialAlertDialogBuilder(requireContext())
+                    builder.setTitle(it)
+                    builder.setPositiveButton("Отправить повторно"){dialogInterface, which ->
+                        viewModel.repeatSendSms()
+                        dialogInterface.dismiss()
+                    }
+                    builder.setNegativeButton("Отмена"){dialogInterface, which ->
+                        dialogInterface.dismiss()
+                    }
+                    builder.setCancelable(false)
+                    builder.show()
+                }
             }
-            builder.setNegativeButton("Отмена"){dialogInterface, which ->
-                dialogInterface.dismiss()
-            }
-            builder.setCancelable(false)
-            builder.show()
         }
     }
 

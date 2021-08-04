@@ -32,7 +32,7 @@ class RegistrationViewModel(private val userRepository: UserRepository, private 
 
     private fun validateUserForm(): Boolean {
         var valid = true
-         if (!phoneNumber.isValidPhoneNumber()) {
+         if (phoneNumber.length != 12) {
              phoneError.postValue("Проверьте номер телефона")
             valid = false
         }
@@ -43,7 +43,16 @@ class RegistrationViewModel(private val userRepository: UserRepository, private 
          if (userFio.length == 0) {
             userFioError.postValue("Проверьте ваше ФИО")
             valid = false
+         } else if (userFio.trim().split(" ").size < 2) {
+             userFioError.postValue("Проверьте ваше ФИО")
+             valid = false
          }
+        if (userEmail.length > 0) {
+            if (!userEmail.isEmailValid()) {
+                userEmailError.postValue("Некорректно введен email")
+                valid = false
+            }
+        }
         return valid
     }
 

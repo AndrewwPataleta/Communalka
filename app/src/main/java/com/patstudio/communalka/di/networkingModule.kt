@@ -42,7 +42,7 @@ val networkingModule = module {
            addInterceptor(get())
 
            addInterceptor(AuthInterceptor(get(named("securePrefs"))))
-           .authenticator(TokenAuthenticator(get(named("securePrefs"))))
+  //         .authenticator(TokenAuthenticator(get(named("securePrefs"))))
           .callTimeout(10, TimeUnit.SECONDS)
           .addInterceptor(ChuckerInterceptor(get()))
     }.build()

@@ -84,6 +84,8 @@
             app:argType="com.patstudio.communalka.data.model.UserForm" />
         <action
             android:id="@+id/toPinCode"
+            app:popUpTo="@id/WelcomeFragment"
+
             app:destination="@id/PinCode" />
         <action
             android:id="@+id/toRegistrationFragment"

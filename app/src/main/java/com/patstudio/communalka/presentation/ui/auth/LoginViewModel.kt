@@ -26,10 +26,12 @@ class LoginViewModel(private val userRepository: UserRepository, private val gso
     private val disableNavigation: MutableLiveData<Boolean> = MutableLiveData()
     private val confirmCode: MutableLiveData<String> = MutableLiveData()
     private val confirmSmsParams: MutableLiveData<Event<ConfirmSmsParams>> = MutableLiveData()
-    private val userMessage: MutableLiveData<String> = MutableLiveData()
+    private val userMessage: MutableLiveData<Event<String>> = MutableLiveData()
 
     private fun validatePhoneNumber(): Boolean {
-        return if (phoneNumber.isValidPhoneNumber()) {
+        Log.d("LoginViewModel", phoneNumber)
+        Log.d("LoginViewModel", "phone length".plus(phoneNumber.length))
+        return if (phoneNumber.length == 12) {
             true
         } else {
             phoneError.postValue(true)
@@ -71,7 +73,7 @@ class LoginViewModel(private val userRepository: UserRepository, private val gso
                            is Result.ErrorResponse -> {
                                when(it.data.status) {
                                    "fail" -> {
-                                       userMessage.postValue(it.data.message)
+                                       userMessage.postValue(Event(it.data.message))
                                        progressPhoneSending.postValue(false)
                                        disableNavigation.postValue(false)
                                    }
@@ -105,7 +107,7 @@ class LoginViewModel(private val userRepository: UserRepository, private val gso
         return disableNavigation
     }
 
-    fun getUserMessage(): MutableLiveData<String> {
+    fun getUserMessage(): MutableLiveData<Event<String>> {
         return userMessage
     }
 
