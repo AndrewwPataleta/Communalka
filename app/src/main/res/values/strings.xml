@@ -12,6 +12,7 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="welcome">Добро пожаловать</string>
     <string name="welcome_user">Уважаемый %1$s!</string>
+    <string name="static_address_url">https://static-maps.yandex.ru/1.x/?ll=%2$s,%1$s&amp;size=650,350&amp;z=15&amp;l=map&amp;pt=%2$s,%1$s,pm2dbl~%2$s,%1$s</string>
     <string name="welcome_user_сonfirm_code">Добро пожаловать %1$s!</string>
     <string name="add_first_flat">Добавьте первое помещение, чтобы начать оплачивать ЖКХ</string>
     <string name="add_premises">Добавить помещение</string>

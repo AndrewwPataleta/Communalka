@@ -1,5 +1,6 @@
 package com.patstudio.communalka.presentation.ui.main.room
 
+import android.graphics.Point
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -26,9 +27,11 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val p
     private val nameRoomError: MutableLiveData<Event<String>> = MutableLiveData()
     private val fioOwnerError: MutableLiveData<Event<String>> = MutableLiveData()
     private val addressError: MutableLiveData<Event<String>> = MutableLiveData()
+    private val staticAddressImage: MutableLiveData<Event<Pair<String,String>>> = MutableLiveData()
     private val progressCreateRoom: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val totalSpaceError: MutableLiveData<Event<String>> = MutableLiveData()
     private val totalLivingError: MutableLiveData<Event<String>> = MutableLiveData()
+    private val showAddressLocation: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val checkReadExternalPermission: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val openExternalPermission: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val imageURI: MutableLiveData<Event<Uri>> = MutableLiveData()
@@ -82,6 +85,8 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val p
 
     fun selectSuggest(position: Int) {
         selectedSuggestion = lastListSuggestions.get(position)
+        showAddressLocation.postValue(Event(true))
+        staticAddressImage.postValue(Event(Pair(selectedSuggestion.data.geoLat, selectedSuggestion.data.geoLon)))
     }
 
     private fun validateRoomForm(): Boolean {
@@ -191,6 +196,7 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val p
 
     fun setAddressName(addressRoom: String) {
         this.addressRoom = addressRoom
+        showAddressLocation.postValue(Event(false))
         Log.d("AddRoomViewMode", addressRoom)
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
@@ -244,6 +250,10 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val p
         return openExternalPermission
     }
 
+    fun getStaticAddressImage() : MutableLiveData<Event<Pair<String,String>>> {
+        return staticAddressImage
+    }
+
     fun getProgressCreateRoom() : MutableLiveData<Event<Boolean>> {
         return progressCreateRoom
     }
@@ -292,9 +302,15 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val p
         return imageURI
     }
 
+    fun getShowAddressLocation() : MutableLiveData<Event<Boolean>> {
+        return showAddressLocation
+    }
+
+
     fun setCurrentRoomImage(currentPath: Uri) {
         IMAGE_MODE = "STORAGE"
         this.currentPath = currentPath
+        showAddressLocation.postValue(Event(true))
         imageURI.postValue(Event(currentPath))
     }
 

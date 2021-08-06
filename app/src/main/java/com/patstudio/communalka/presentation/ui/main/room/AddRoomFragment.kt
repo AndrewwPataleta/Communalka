@@ -17,6 +17,7 @@ import android.widget.ImageView
 import androidx.core.view.setPadding
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.patstudio.communalka.R
 import com.patstudio.communalka.databinding.FragmentAddRoomBinding
 import gone
@@ -76,6 +77,18 @@ class AddRoomFragment : Fragment() {
                       intent.type = "image/*"
                       startActivityForResult(intent, IMAGE_PICK_CODE)
                   }
+                }
+            }
+        }
+
+        viewModel.getShowAddressLocation().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    if (it) {
+                       binding.addressLocation.visible(false)
+                    } else {
+                        binding.addressLocation.gone(false)
+                    }
                 }
             }
         }
@@ -167,6 +180,16 @@ class AddRoomFragment : Fragment() {
                             Manifest.permission.READ_EXTERNAL_STORAGE,
                         ), REQUEST_READ_EXTERNAL
                     )
+                }
+            }
+        }
+
+        viewModel.getStaticAddressImage().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val path = getString(R.string.static_address_url, it.first, it.second)
+                    Log.d("AddRoomFragment", "path "+path)
+                    Glide.with(requireActivity()).load(path).into(binding.addressLocation);
                 }
             }
         }

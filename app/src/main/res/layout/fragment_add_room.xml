@@ -123,6 +123,25 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/address_text" />
 
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/addressBarrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:constraint_referenced_ids="address_edit, address_location, room_name_edit, room_name_text"
+                    app:barrierDirection="bottom"/>
+
+                <ImageView
+                    android:id="@+id/address_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/address_edit"/>
+
                 <ProgressBar
                     android:id="@+id/progressSuggestions"
                     android:layout_width="wrap_content"
@@ -130,7 +149,7 @@
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="@id/address_edit"
                     app:layout_constraintTop_toTopOf="@id/address_edit"
-                    app:layout_constraintBottom_toBottomOf="@id/address_edit"/>
+                    />
 
                 <TextView
                     android:id="@+id/room_name_text"
@@ -156,7 +175,7 @@
                     android:textColor="@android:color/darker_gray"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/address_edit" />
+                    app:layout_constraintTop_toBottomOf="@id/addressBarrier" />
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/fio_edit"
