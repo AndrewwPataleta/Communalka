@@ -73,6 +73,16 @@ class WelcomeFragment : Fragment() {
 
             }
         }
+        viewModel.getPinForm().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    Log.d("WelcomeFragment", "open pin form")
+                    val bundle = bundleOf("user" to it)
+                    findNavController().navigate(R.id.toPinCode, bundle)
+                }
+
+            }
+        }
         viewModel.getPlacementList().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
@@ -91,10 +101,15 @@ class WelcomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initObservers()
-        viewModel.initCurrentUser()
-//        arguments?.getParcelable<User>("user")?.let {
-//            viewModel.setCurrentUser(it)
-//        }
+
+        val needLogin = arguments?.getBoolean("need_login", true)
+        Log.d("WelcomeFragment", needLogin.toString())
+        if (needLogin != null) {
+            viewModel.setNeedEnterPin(needLogin)
+            viewModel.initCurrentUser()
+        } else {
+            viewModel.initCurrentUser()
+        }
     }
 
     override fun onDestroyView() {

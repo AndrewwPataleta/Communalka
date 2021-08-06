@@ -1,5 +1,6 @@
 package com.patstudio.communalka.presentation.ui.main.room
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,8 +29,12 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val p
     private val progressCreateRoom: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val totalSpaceError: MutableLiveData<Event<String>> = MutableLiveData()
     private val totalLivingError: MutableLiveData<Event<String>> = MutableLiveData()
+    private val checkReadExternalPermission: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    private val openExternalPermission: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    private val imageURI: MutableLiveData<Event<Uri>> = MutableLiveData()
     private val progressSuggestions: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val listSuggestions: MutableLiveData<Event<List<Suggestion>>> = MutableLiveData()
+    private val imagesMutable: MutableLiveData<Event<HashMap<Int, String>>> = MutableLiveData()
     private var roomName: String = ""
     private var addressRoom: String = ""
     private var fioOwner: String = ""
@@ -39,8 +44,13 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val p
     private var searchJob: Job? = null
     private lateinit var lastListSuggestions: List<Suggestion>
     private lateinit var selectedSuggestion: Suggestion
+    private var images: HashMap<Int, String> = hashMapOf(1 to "HOME", 2 to "ROOM", 3 to "OFFICE", 4 to "HOUSE")
+    private var selectedImage = images.get(1)
+    private lateinit var currentPath: Uri
+    private var IMAGE_MODE = "DEFAULT"
 
     fun initApiKey() {
+        imagesMutable.postValue(Event(images))
         viewModelScope.launch(dispatcherProvider.io) {
             premisesRepository.getActualApiKey()
                 .collect {
@@ -230,11 +240,66 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val p
         return totalSpaceError
     }
 
+    fun getOpenExternalPermission() : MutableLiveData<Event<Boolean>> {
+        return openExternalPermission
+    }
+
     fun getProgressCreateRoom() : MutableLiveData<Event<Boolean>> {
         return progressCreateRoom
     }
 
+    fun getImages() : MutableLiveData<Event<HashMap<Int, String>>> {
+        return imagesMutable
+    }
+
+    fun getCheckExternalPermission() : MutableLiveData<Event<Boolean>> {
+        return checkReadExternalPermission
+    }
+
+    fun selectFirstImage() {
+        checkReadExternalPermission.postValue(Event(true))
+    }
+
+    fun selectSecondImage() {
+        IMAGE_MODE = "DEFAULT"
+        images.put(1,images.get(2)!!)
+        images.put(2,selectedImage!!)
+        selectedImage = images.get(1)
+        imagesMutable.postValue(Event(images))
+    }
+
+    fun selectThirdImage() {
+        IMAGE_MODE = "DEFAULT"
+        images.put(1,images.get(3)!!)
+        images.put(3,selectedImage!!)
+        selectedImage = images.get(1)
+        imagesMutable.postValue(Event(images))
+    }
+
+    fun selectFourImage() {
+        IMAGE_MODE = "DEFAULT"
+        images.put(1,images.get(4)!!)
+        images.put(4,selectedImage!!)
+        selectedImage = images.get(1)
+        imagesMutable.postValue(Event(images))
+    }
+
     fun getTotalLivingError() : MutableLiveData<Event<String>> {
         return totalLivingError
+    }
+
+    fun getImageURI() : MutableLiveData<Event<Uri>> {
+        return imageURI
+    }
+
+    fun setCurrentRoomImage(currentPath: Uri) {
+        IMAGE_MODE = "STORAGE"
+        this.currentPath = currentPath
+        imageURI.postValue(Event(currentPath))
+    }
+
+    fun haveReadExternalPermission(havePermission: Boolean) {
+        if (havePermission)
+            openExternalPermission.postValue(Event(true))
     }
 }

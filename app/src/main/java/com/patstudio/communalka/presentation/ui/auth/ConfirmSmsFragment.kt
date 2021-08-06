@@ -42,27 +42,49 @@ class ConfirmSmsFragment : Fragment() {
 
     private fun initObservers() {
         viewModel.getAvailableSendSms().observe(this) {
-            try {
-                if (it) {
-                    binding.repeatSendAfterText.gone(false)
-                    binding.repeatSendAfterValue.gone(false)
-                    binding.repeatSmsSendBtn.visible(false)
-                } else {
-                    binding.repeatSendAfterText.visible(false)
-                    binding.repeatSendAfterValue.visible(false)
-                    binding.repeatSmsSendBtn.gone(false)
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    try {
+                        Log.d("ConfirmSmsFragment","available sms "+it)
+                        if (it) {
+                            binding.repeatSendAfterText.gone(false)
+                            binding.repeatSendAfterValue.gone(false)
+                            binding.repeatSmsSendBtn.visible(false)
+                        } else {
+                            binding.repeatSendAfterText.visible(false)
+                            binding.repeatSendAfterValue.visible(false)
+                            binding.repeatSmsSendBtn.gone(false)
+                        }
+                    } catch (e: Exception) {}
                 }
-            } catch (e: Exception) {}
+            }
         }
         viewModel.getCountDownTimer().observe(this) {
-            try {
-
-                binding.repeatSendAfterValue.text = it
-            } catch (e: Exception) {}
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    Log.d("ConfirmSmsFramgment", "set timer "+it)
+                    try {
+                        binding.repeatSmsSendBtn.gone(false)
+                        binding.repeatSendAfterValue.text = it
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
         }
 
         viewModel.getCongratulation().observe(this) {
-            binding.congratulation.text = getString(R.string.welcome_user, it)
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                  if (it != null) {
+                      binding.congratulation.visible(false)
+                      binding.congratulation.text = getString(R.string.welcome_user, it)
+                  } else {
+                      binding.congratulation.gone(false)
+                  }
+                }
+            }
+
         }
         viewModel.getProgressSmsCodeSending().observe(this) {
             try {
@@ -79,6 +101,7 @@ class ConfirmSmsFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     val bundle = bundleOf("user" to it)
+                    Log.d("ConfirmSmsFragment", "open Pin Code")
                     findNavController().navigate(R.id.PinCode, bundle)
                 }
             }
@@ -87,6 +110,16 @@ class ConfirmSmsFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                    binding.smsEdit.setText(it)
+                }
+            }
+        }
+        viewModel.getAvailableEmailSendSms().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    binding.repeatSendAfterText.gone(false)
+                    binding.repeatSendAfterValue.gone(false)
+                    binding.repeatSmsSendBtn.gone(false)
+                    binding.sendWithEmail.visible(false)
                 }
             }
         }
@@ -119,7 +152,10 @@ class ConfirmSmsFragment : Fragment() {
         binding.close.setOnClickListener {
             binding.smsEdit.setText("")
         }
-
+        binding.sendWithEmail.setOnClickListener{
+            val bundle = bundleOf("type" to "email")
+            findNavController().navigate(R.id.toLogin, bundle)
+        }
     }
 
     override fun onDestroy() {

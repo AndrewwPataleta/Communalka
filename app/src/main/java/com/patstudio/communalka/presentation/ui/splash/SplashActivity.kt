@@ -13,6 +13,7 @@ class SplashActivity : AppCompatActivity() {
 
     private val viewModel by viewModel<SplashViewModel>()
 
+
     private fun initObservers() {
 
         viewModel.users.observe(this) { result ->

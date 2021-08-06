@@ -40,10 +40,13 @@ val networkingModule = module {
     OkHttpClient.Builder().apply {
       if (BuildConfig.DEBUG)
            addInterceptor(get())
-
-           addInterceptor(AuthInterceptor(get(named("securePrefs"))))
-  //         .authenticator(TokenAuthenticator(get(named("securePrefs"))))
-          .callTimeout(10, TimeUnit.SECONDS)
+           .connectTimeout(30, TimeUnit.SECONDS)
+           .readTimeout(30, TimeUnit.SECONDS)
+           .callTimeout(30, TimeUnit.SECONDS)
+           .followRedirects(false)
+           .followSslRedirects(false)
+            addInterceptor(AuthInterceptor(get(named("securePrefs"))))
+           .authenticator(TokenAuthenticator(get(named("securePrefs"))))
           .addInterceptor(ChuckerInterceptor(get()))
     }.build()
   }

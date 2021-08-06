@@ -21,15 +21,17 @@ import kotlinx.coroutines.withContext
 
 class WelcomeViewModel(private val userRepository: UserRepository, private val premisesRepository: PremisesRepository, private val dispatcherProvider: DispatcherProvider, private val gson: Gson): ViewModel() {
 
-   private var user: User? = null
-   private val userMutable: MutableLiveData<Event<User>> = MutableLiveData()
-   private val navigateTo: MutableLiveData<Event<String>> = MutableLiveData()
-   private val placementListMutable: MutableLiveData<Event<List<Placement>>> = MutableLiveData()
+    private var user: User? = null
+    private val userMutable: MutableLiveData<Event<User>> = MutableLiveData()
+    private val navigateTo: MutableLiveData<Event<String>> = MutableLiveData()
+    private val pinForm: MutableLiveData<Event<UserForm>> = MutableLiveData()
+
+    private val placementListMutable: MutableLiveData<Event<List<Placement>>> = MutableLiveData()
+    private var needEnterPin = true
 
    fun setCurrentUser(user:User) {
        this.user = user
        userMutable.postValue(Event(user))
-
    }
 
     private fun getUserPremises() {
@@ -54,6 +56,11 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val p
         }
     }
 
+    fun setNeedEnterPin(needPin: Boolean) {
+        Log.d("WelcomeViewModel", "need pin: "+needPin)
+        this.needEnterPin = needPin
+    }
+
     fun initCurrentUser() {
         viewModelScope.launch(dispatcherProvider.io) {
             userRepository.getLastAuthUser()
@@ -63,13 +70,21 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val p
                 .collect {
                    it?.let {
                        user = it
-                       Log.d("WelcomeViewModel", it.toString())
-                       userMutable.postValue(Event(it))
-                       getUserPremises()
+                       if (needEnterPin) {
+                           var userForm = UserForm(it.id, it.name, it.phone, it.email, "AUTH", it.token, it.refresh)
+                           pinForm.postValue(Event(userForm))
+                       } else {
+                           Log.d("WelcomeViewModel", it.toString())
+                           userMutable.postValue(Event(it))
+                           getUserPremises()
+                       }
+
                    }
                 }
         }
     }
+
+
 
     fun checkAvailableToOpenAddRoom() {
         if (user != null) {
@@ -81,6 +96,10 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val p
 
     fun getUser(): MutableLiveData<Event<User>> {
         return userMutable
+    }
+
+    fun getPinForm(): MutableLiveData<Event<UserForm>> {
+        return pinForm
     }
 
     fun getPlacementList(): MutableLiveData<Event<List<Placement>>> {

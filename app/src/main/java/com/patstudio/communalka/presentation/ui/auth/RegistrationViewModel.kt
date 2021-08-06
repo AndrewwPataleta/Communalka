@@ -33,7 +33,7 @@ class RegistrationViewModel(private val userRepository: UserRepository, private 
     private fun validateUserForm(): Boolean {
         var valid = true
          if (phoneNumber.length != 12) {
-             phoneError.postValue("Проверьте номер телефона")
+             phoneError.postValue("Вы неправильно указали номер телефона!")
             valid = false
         }
         if (!licenseAccept) {
@@ -41,15 +41,15 @@ class RegistrationViewModel(private val userRepository: UserRepository, private 
             valid = false
         }
          if (userFio.length == 0) {
-            userFioError.postValue("Проверьте ваше ФИО")
+            userFioError.postValue("Вы не заполнили обязательное поле - ФИО. Заполните, и продолжите регистрацию")
             valid = false
          } else if (userFio.trim().split(" ").size < 2) {
-             userFioError.postValue("Проверьте ваше ФИО")
+             userFioError.postValue("Вы не заполнили обязательное поле - ФИО. Заполните, и продолжите регистрацию")
              valid = false
          }
         if (userEmail.length > 0) {
             if (!userEmail.isEmailValid()) {
-                userEmailError.postValue("Некорректно введен email")
+                userEmailError.postValue("Вы неправильно указали адрес электронной почты!")
                 valid = false
             }
         }
@@ -109,12 +109,7 @@ class RegistrationViewModel(private val userRepository: UserRepository, private 
                        }
                    }
            }
-
-
        }
-//       else {
-//           userMessage.postValue("Проверьте корректность заполнения полей")
-//       }
     }
 
     fun setPhoneNumber(phoneNumber: String) {

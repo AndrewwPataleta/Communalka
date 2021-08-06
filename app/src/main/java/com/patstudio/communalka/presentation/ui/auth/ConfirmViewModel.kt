@@ -9,10 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.imagegallery.contextprovider.DispatcherProvider
 import com.google.gson.Gson
 import com.patstudio.communalka.common.utils.Event
-import com.patstudio.communalka.data.model.ConfirmSmsParams
-import com.patstudio.communalka.data.model.Result
-import com.patstudio.communalka.data.model.User
-import com.patstudio.communalka.data.model.UserForm
+import com.patstudio.communalka.data.model.*
 import com.patstudio.communalka.data.model.auth.ConfirmFormError
 import com.patstudio.communalka.data.model.auth.ConfirmSmsFormError
 import com.patstudio.communalka.data.model.auth.ConfirmSmsWrapper
@@ -32,14 +29,16 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val g
     private lateinit var formType: String
     private var restore = false
     private var TIME_FOR_REPEAT_SMS_SEND = 60000
-    private val availableSendSms: MutableLiveData<Boolean> = MutableLiveData()
+    private val availableSendSms: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    private val availableEmailSendSms: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val progressPhoneSending: MutableLiveData<Boolean> = MutableLiveData()
     private val userFormMutable: MutableLiveData<Event<UserForm>> = MutableLiveData()
-    private val countDownTimer: MutableLiveData<String> = MutableLiveData()
+    private val countDownTimer: MutableLiveData<Event<String>> = MutableLiveData()
     private val smsCodeMutable: MutableLiveData<Event<String>> = MutableLiveData()
     private val userMessage: MutableLiveData<Event<String>> = MutableLiveData()
-    private val congratulation: MutableLiveData<String> = MutableLiveData()
+    private val congratulation: MutableLiveData<Event<String>> = MutableLiveData()
     private var timer: CountDownTimer? = null
+    private var repeatCount = 1
 
     private fun startTimer() {
 
@@ -49,22 +48,39 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val g
          }
          timer = object: CountDownTimer(TIME_FOR_REPEAT_SMS_SEND.toLong(), 1000) {
             override fun onTick(millisUntilFinished: Long) {
+
                 Log.d("ConfirmSmsCode", millisUntilFinished.toString())
-                var second = (millisUntilFinished / 1000 % 60).toString()
-                countDownTimer.postValue("0:"+second)
+                var second = (millisUntilFinished / 1000 % 60)
+                var printSecond = ""
+                if (second < 10)
+                    printSecond = "0"+second.toString()
+                else {
+                    printSecond = second.toString()
+                }
+                countDownTimer.postValue(Event("0:"+printSecond))
             }
 
             override fun onFinish() {
-                availableSendSms.postValue(true)
+                if (repeatCount+1 > 4) {
+                    availableEmailSendSms.postValue(Event(true))
+                } else {
+                    repeatCount += 1
+                    availableSendSms.postValue(Event(true))
+                }
             }
         }
         timer?.let {
-            it.start()
+            if (repeatCount+1 > 4) {
+                availableEmailSendSms.postValue(Event(true))
+            } else {
+                availableSendSms.postValue(Event(false))
+                it.start()
+            }
         }
     }
 
     fun setPhone(phone: String) {
-        availableSendSms.postValue(false)
+        availableSendSms.postValue(Event(false))
         startTimer()
         this.phone = phone;
     }
@@ -118,35 +134,34 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val g
     private fun checkExistAndSaveUser(userForm: ConfirmSmsWrapper) {
         Log.d("ConfirmViewModel", "check exist "+userForm.consumer)
         viewModelScope.launch(dispatcherProvider.io) {
-            userRepository.getUserById(userForm.consumer.id)
-                .catch {
-                    it.printStackTrace()
+            val user = userRepository.getUserById(userForm.consumer.id)
+            if (user != null) {
+                Log.d("ConfirmViewMode", user.toString())
+                withContext(dispatcherProvider.io) {
+                    userRepository.updateToken(user.token, user.refresh, user.id)
                 }
-                .collect {
-                    if (it != null) {
-                    //    userRepository.updateToken(userForm.consumer.token, userForm.consumer.refresh, userForm.consumer.id)
-                        smsCode = ""
-                        destoyTimer()
-                        smsCodeMutable.postValue(Event(smsCode))
-                        userFormMutable.postValue(Event(userForm.consumer))
-                    } else {
-                        var userForSave = User(
-                            userForm.consumer.id,
-                            userForm.consumer.fio,
-                            userForm.consumer.phone,
-                            userForm.consumer.email,
-                            "",
-                            userForm.consumer.token,
-                            userForm.consumer.refresh,
-                            true
-                        )
-                        userRepository.saveUser(userForSave)
-                        destoyTimer()
-                        smsCode = ""
-                        smsCodeMutable.postValue(Event(smsCode))
-                        userFormMutable.postValue(Event(userForm.consumer))
-                    }
-                }
+                smsCode = ""
+                destoyTimer()
+                smsCodeMutable.postValue(Event(smsCode))
+                userFormMutable.postValue(Event(userForm.consumer))
+            } else {
+                Log.d("ConfirmViewMode", "have no exist")
+                var userForSave = User(
+                    userForm.consumer.id,
+                    userForm.consumer.fio,
+                    userForm.consumer.phone,
+                    userForm.consumer.email,
+                    "",
+                    userForm.consumer.token,
+                    userForm.consumer.refresh,
+                    true
+                )
+                userRepository.saveUser(userForSave)
+                destoyTimer()
+                smsCode = ""
+                smsCodeMutable.postValue(Event(smsCode))
+                userFormMutable.postValue(Event(userForm.consumer))
+            }
         }
     }
 
@@ -207,7 +222,7 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val g
         return userFormMutable
     }
 
-    fun getCongratulation(): MutableLiveData<String> {
+    fun getCongratulation(): MutableLiveData<Event<String>> {
         return congratulation
     }
 
@@ -225,8 +240,8 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val g
     fun setUserForm(userForm: UserForm) {
         this.phone = userForm.phone
         this.userForm = userForm
-        availableSendSms.postValue(false)
-        congratulation.postValue(userForm.fio)
+        availableSendSms.postValue(Event(false))
+        congratulation.postValue(Event(userForm.fio))
         startTimer()
     }
 
@@ -238,7 +253,7 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val g
         this.restore = restore;
     }
 
-    fun getCountDownTimer(): MutableLiveData<String> {
+    fun getCountDownTimer(): MutableLiveData<Event<String>> {
        return countDownTimer
     }
 
@@ -254,12 +269,25 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val g
     private fun repeatSmsLogin() {
         viewModelScope.launch {
             userRepository.login(phone)
-                .onStart {}
+                .onStart {
+
+                }
                 .collect {
                     when (it) {
-                        is Result.Success -> { }
-                        is Result.Error -> { }
-                        is Result.ErrorResponse -> { }
+                        is Result.Success -> {
+                            startTimer()
+                            Log.d("ConfirmViewModel", "success")
+                        }
+                        is Result.Error -> {
+                            Log.d("ConfirmViewModel", "error")
+
+                        }
+                        is Result.ErrorResponse -> {
+                            var smsError = gson.fromJson(it.data.data, APIResponse::class.java)
+                            Log.d("ConfirmViewModel", "error response "+smsError)
+                           // userMessage.postValue(Event(smsError.message))
+                            availableEmailSendSms.postValue(Event(true))
+                        }
                     }
                 }
         }
@@ -271,25 +299,39 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val g
                 .onStart {}
                 .collect {
                     when (it) {
-                        is Result.Success -> { }
-                        is Result.Error -> { }
-                        is Result.ErrorResponse -> { }
+                        is Result.Success -> {
+                            startTimer()
+                            Log.d("ConfirmViewModel", "success")
+                        }
+                        is Result.Error -> {
+                            Log.d("ConfirmViewModel", "error")
+
+                        }
+                        is Result.ErrorResponse -> {
+                            Log.d("ConfirmViewModel", "error response "+it.toString())
+                       //     var smsError = gson.fromJson(it.data.data, APIResponse::class.java)
+
+                            // userMessage.postValue(Event(smsError.message))
+                            availableEmailSendSms.postValue(Event(true))
+                        }
                     }
                 }
         }
     }
 
     fun repeatSendSms() {
-        startTimer()
+
         when (formType) {
             "Login" -> repeatSmsLogin()
             "Registration" -> repeatSmsRegistration()
         }
-        availableSendSms.postValue(false)
     }
 
-    fun getAvailableSendSms(): MutableLiveData<Boolean> {
+    fun getAvailableSendSms(): MutableLiveData<Event<Boolean>> {
         return availableSendSms
     }
 
+    fun getAvailableEmailSendSms(): MutableLiveData<Event<Boolean>> {
+        return availableEmailSendSms
+    }
 }

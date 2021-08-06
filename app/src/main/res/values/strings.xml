@@ -23,6 +23,7 @@
     <string name="have_no_account">Нет аккаунта?</string>
     <string name="registration_now">Регистрация</string>
     <string name="email">Почта (необязательно)</string>
+    <string name="email_require">Почта</string>
     <string name="have_account">Уже есть аккаунт?</string>
     <string name="auth_now">Авторизоваться</string>
     <string name="thx_for_auth">Благодарим за авторизацию в нашем сервисе. Введите код потверждения, который мы прислали вам на телефон:</string>
@@ -33,7 +34,7 @@
     <string name="repeat_pin_code_short">Повторите PIN-код</string>
     <string name="enter_pin_code">Введите PIN-код</string>
     <string name="enter_pin_code_second">Чтобы войти в приложение</string>
-    <string name="check_phone_number">Проверьте номер телефон</string>
+    <string name="check_phone_number">Вы неправильно указали номер телефона!</string>
     <string name="accept_user_licence_text">Согласие с Офертой приложения “Коммуналка”</string>
     <string name="phone_number_mock">+7 999 876 54 32</string>
     <string name="fio_mock">Иванов Иван Иванович</string>
@@ -51,6 +52,7 @@
     <string name="zero">0</string>
     <string name="auth_with_finger_print">Вход по отпечатку</string>
     <string name="user_pin_code">Использовать пин-код</string>
+    <string name="repeat_send_sms_email">Отправить код по email</string>
     <string name="repeat_send_sms">Отправить код повторно</string>
     <string name="such_an_opportunity_will_appear_soon">Скоро появится такая возможность</string>
     <string name="not_necessary">Не нужно</string>
@@ -60,4 +62,7 @@
     <string name="email_or_phone">Почта или телефон</string>
     <string name="restore_pin_code">Восстановить PIN-код</string>
     <string name="add_room">Добавить помещение</string>
+    <string name="phone_hint">+7 999 876 54 32</string>
+    <string name="email_hint">ivanov@gmail.com</string>
+    <string name="user_licence_text_second">приложения \"Коммуналка\"</string>
 </resources>

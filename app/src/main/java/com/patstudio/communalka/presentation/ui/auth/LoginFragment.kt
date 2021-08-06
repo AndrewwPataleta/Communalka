@@ -41,8 +41,17 @@ class LoginFragment : Fragment() {
 
     private fun initObservers() {
         viewModel.getPhoneError().observe(this) {
-            if (it) {
-                binding.phoneEdit.setError("Проверьте номер телефона")
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    binding.phoneEdit.setError("Вы неправильно указали номер телефона!")
+                }
+            }
+        }
+        viewModel.getEmailError().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    binding.emailEdit.setError("Вы неправильно указали почту!")
+                }
             }
         }
         viewModel.getConfirmCode().observe(this) {
@@ -56,7 +65,42 @@ class LoginFragment : Fragment() {
                 }
 
             }
+        }
 
+        viewModel.getLoginType().observe(this) {
+            Log.d("LoginFragment", "new type")
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                   when (it) {
+                       "phone" -> {
+                           binding.emailEdit.gone(false)
+                           binding.phoneEdit.visible(false)
+                           binding.phoneEdit.hint = resources.getString(R.string.phone_hint)
+                           binding.titleText.text = resources.getString(R.string.phone)
+                           binding.phoneEdit.doAfterTextChanged {
+                               viewModel.setPhoneNumber(watcher.mask.toUnformattedString())
+                           }
+                           binding.close.setOnClickListener {
+                               binding.phoneEdit.setText("")
+                           }
+                           watcher.installOn(binding.phoneEdit)
+                       }
+                       "email" -> {
+                           binding.emailEdit.visible(false)
+                           binding.phoneEdit.invisible(false)
+                           binding.emailEdit.hint = resources.getString(R.string.email_hint)
+                           binding.titleText.text = resources.getString(R.string.email_require)
+                           binding.emailEdit.doAfterTextChanged {
+                               viewModel.setEmail(it.toString())
+                           }
+                           binding.close.setOnClickListener {
+                               binding.emailEdit.setText("")
+                           }
+                       }
+                   }
+                }
+
+            }
         }
         viewModel.getUserMessage().observe(this) {
             if (!it.hasBeenHandled.get()) {
@@ -108,18 +152,13 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initNavigationListeners()
-
-        binding.phoneEdit.doAfterTextChanged {
-            viewModel.setPhoneNumber(watcher.mask.toUnformattedString())
-        }
-        binding.close.setOnClickListener {
-            binding.phoneEdit.setText("")
-        }
-
-
-        watcher.installOn(binding.phoneEdit)
-
         initObservers()
+        arguments?.getString("type", "phone").let {
+            Log.d("LoginFragment", "type "+it.toString())
+            viewModel.setLoginType(it)
+        }
+
+
     }
 
     override fun onDestroyView() {

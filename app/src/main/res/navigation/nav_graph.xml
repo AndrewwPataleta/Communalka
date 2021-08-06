@@ -14,6 +14,10 @@
         <action
             android:id="@+id/loLoginPage"
             app:destination="@id/LoginFragment" />
+        <action
+            android:id="@+id/toPinCode"
+
+            app:destination="@id/PinCode" />
         <argument
             android:name="user"
             app:argType="com.patstudio.communalka.data.model.User" />
@@ -112,6 +116,8 @@
         <action
             android:id="@+id/action_PinCode_to_WelcomeFragment"
             app:destination="@id/WelcomeFragment"
+            app:launchSingleTop="true"
+            app:popUpToInclusive="true"
             app:popUpTo="@+id/WelcomeFragment" />
         <action
             android:id="@+id/toRestore"

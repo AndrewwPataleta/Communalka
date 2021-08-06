@@ -14,7 +14,7 @@ interface UserDao {
     fun getUser(): Flow<User>
 
     @Query("SELECT * FROM user WHERE id= :userId LIMIT 1")
-    fun getUserById(userId: String): Flow<User>
+    fun getUserById(userId: String): User
 
     @Transaction
     @Query("SELECT * FROM user WHERE lastAuth= :lastAuth")
@@ -24,8 +24,9 @@ interface UserDao {
     @Query("UPDATE user SET lastAuth = :lastAuth")
     fun updatePreviosAuth(lastAuth: Boolean = false)
 
+    @Transaction
     @Query("UPDATE user SET token = :token, refresh = :refresh WHERE id = :userId")
-    fun updateToken(token: String, refresh: String, userId: String): Int
+    fun updateToken(token: String, refresh: String, userId: String)
 
     @Transaction
     @Query("UPDATE user SET lastAuth = :lastAuth WHERE id = :userId ")

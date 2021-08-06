@@ -91,7 +91,8 @@ class PinCodeFragment : Fragment() {
         viewModel.getUser().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                    val bundle = bundleOf("user" to it)
+                    val bundle = bundleOf("need_login" to false)
+              //      val bundle = bundleOf("user" to it)
                     findNavController().navigate(R.id.WelcomeFragment, bundle)
                 }
             }

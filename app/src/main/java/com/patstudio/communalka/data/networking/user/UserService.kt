@@ -5,10 +5,7 @@ import com.google.gson.JsonObject
 import com.patstudio.communalka.data.model.APIResponse
 import com.patstudio.communalka.data.model.User
 import okhttp3.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface UserService {
 
@@ -24,7 +21,8 @@ interface UserService {
     @POST("auth/register/")
     suspend fun registrationWithCode(@Body target: JsonObject): APIResponse<JsonElement>
 
+    @FormUrlEncoded
     @POST("auth/update_token/")
-    suspend fun refreshToken(@Body target: JsonObject): APIResponse<JsonElement>
+    fun refreshToken(@Field("refresh") refresh: String): retrofit2.Call<APIResponse<JsonElement>>
 
 }

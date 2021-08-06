@@ -76,8 +76,9 @@ class UserRepository (
         return dao.saveUser(user)
     }
 
-    fun updateToken(token: String, refresh: String, userId: String): Int {
-        return dao.updateToken(token, refresh, userId)
+    fun updateToken(token: String, refresh: String, userId: String) {
+        Log.d("UserRepository", "update")
+         dao.updateToken(token, refresh, userId)
     }
 
     suspend fun setLastLoginUser(user: User) {
@@ -90,7 +91,7 @@ class UserRepository (
         return dao.updatePreviosAuth()
     }
 
-    fun getUserById(userId: String): Flow<User>  {
+    fun getUserById(userId: String): User  {
         return dao.getUserById(userId)
     }
 
@@ -149,6 +150,7 @@ class UserRepository (
     private fun convertErrorBody(throwable: HttpException): APIResponse<JsonElement> {
 
             val type = object : TypeToken<APIResponse<JsonElement>>() {}.type
+            Log.d("UserRepository", "login error body"+throwable.response()?.errorBody()!!)
             return gson.fromJson(throwable.response()?.errorBody()!!.charStream().readText(), type)
 
     }

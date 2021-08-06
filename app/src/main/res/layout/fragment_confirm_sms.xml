@@ -68,6 +68,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/robotobold"
                     android:text="Уважаемый!"
+                    android:visibility="gone"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:gravity="center"
@@ -151,13 +152,24 @@
                     android:layout_height="wrap_content"
                     android:text="@string/repeat_send_sms"
                     android:textColor="@color/dark_blue"
-
                     android:textSize="14sp"
                     android:layout_marginTop="16dp"
                     android:visibility="gone"
                     android:fontFamily="@font/robotoregular"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/smsEdit"/>
 
+                <TextView
+                    android:id="@+id/sendWithEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/repeat_send_sms_email"
+                    android:textColor="@color/dark_blue"
+                    android:textSize="14sp"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    android:fontFamily="@font/robotoregular"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/smsEdit"/>
 
                 <TextView

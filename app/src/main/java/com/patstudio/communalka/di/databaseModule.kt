@@ -21,6 +21,7 @@ val databaseModule = module {
 
 private fun provideAppDatabase(application: Application): AppDatabase {
     return Room.databaseBuilder(application, AppDatabase::class.java, DATABASE_NAME)
+        .fallbackToDestructiveMigration()
         .build()
 }
 

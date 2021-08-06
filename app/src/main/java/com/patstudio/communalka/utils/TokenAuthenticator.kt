@@ -12,53 +12,60 @@ import okhttp3.*
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 class TokenAuthenticator(private val sharedPreferences: SharedPreferences): Authenticator {
+
+    val okHttpClient = OkHttpClient().newBuilder()
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .callTimeout(30, TimeUnit.SECONDS)
+        .followRedirects(false)
+        .followSslRedirects(false)
+        .build()
+
+    val retrofit = Retrofit.Builder()
+        .baseUrl(BuildConfig.API_HOST)
+        .client(okHttpClient)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+    val service = retrofit.create(UserService::class.java)
 
     override fun authenticate(route: Route?, response: Response): Request? {
         Log.d("TokenAuthenticator", "response "+response.request().toString())
 
-        return runBlocking {
-
-            val refreshToken = sharedPreferences.getString("currentRefreshToken", "")
-            Log.d("TokenAuthenticator", "old token "+sharedPreferences.getString("currentToken",""))
-            Log.d("TokenAuthenticator", "current refresh token "+refreshToken)
-            val updateResponse = getUpdatedToken(refreshToken!!)
-
-            val tokens = updateResponse.data?.asJsonObject?.get("tokens")
-            sharedPreferences.edit().putString("currentToken", tokens?.asJsonObject?.get("access").toString()).apply()
-            sharedPreferences.edit().putString("currentRefreshToken", tokens?.asJsonObject?.get("refresh").toString()).apply()
-            Log.d("TokenAuthenticator", "updated token "+sharedPreferences.getString("currentToken",""))
-
-            val accessToken = sharedPreferences.getString("currentToken","")
-
-            response.request().newBuilder()
-                .header("Authorization", "Bearer ${accessToken}")
+        val refreshToken = sharedPreferences.getString("currentRefreshToken", "")
+        val updatedToken = getNewToken(refreshToken!!)
+        return updatedToken?.let {
+            Log.d("TokenAuthenticator ", "new token " + updatedToken)
+            response.request().newBuilder().header("Authorization", "Bearer " + it.toString())
                 .build()
-
         }
     }
 
-    private suspend fun getUpdatedToken(refreshToken: String): APIResponse<JsonElement> {
+    private fun getNewToken( refreshToken: String): String? {
+        Log.d("TokenAuthenticator ", "get token func")
 
-        val okHttpClient = OkHttpClient().newBuilder()
-            .build()
+        val resp = service.refreshToken(refreshToken).execute()
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BuildConfig.API_HOST)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        Log.d("TokenAuthenticator", "resp is successful "+resp.isSuccessful)
+
+        if (resp.isSuccessful) {
+
+            val tokens = resp?.body()?.data?.asJsonObject?.get("tokens")
+            Log.d("TokenAuthenticator ", "tokens "+tokens)
+
+            sharedPreferences.edit().putString("currentToken", tokens?.asJsonObject?.get("access")!!.asString).apply()
+            sharedPreferences.edit().putString("currentRefreshToken", tokens?.asJsonObject?.get("refresh")!!.asString).apply()
 
 
-        val service = retrofit.create(UserService::class.java)
-        val body = JsonObject()
-        body.addProperty("refresh",refreshToken)
+            Log.d("TokenAuthenticator ", "token return"+tokens?.asJsonObject?.get("access")!!.asString.toString())
 
-        Log.d("TokenAuthenticator", "body "+body.toString())
-        Log.d("TokenAuthenticator", "service "+service.toString())
-        return service.refreshToken(body)
+            return tokens?.asJsonObject?.get("access")!!.asString
+        } else {
+            return null
+        }
+
 
     }
-
 }

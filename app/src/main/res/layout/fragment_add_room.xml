@@ -24,17 +24,15 @@
                 android:layout_height="match_parent"
                 android:padding="16dp">
 
-                <androidx.appcompat.widget.AppCompatImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/attachRoomImage"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:background="@drawable/circle_gray_background"
-                    android:padding="38dp"
+                    android:padding="28dp"
                     android:tint="@color/gray_dark"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:src="@drawable/ic_home"/>
-
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iconAdd"
@@ -55,8 +53,7 @@
                     android:tint="@color/gray_dark"
                     android:layout_marginStart="16dp"
                     app:layout_constraintStart_toEndOf="@id/attachRoomImage"
-                    app:layout_constraintBottom_toBottomOf="@id/attachRoomImage"
-                    android:src="@drawable/ic_second_icon_room"/>
+                    app:layout_constraintBottom_toBottomOf="@id/attachRoomImage" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/thirdAddRoomIcon"
@@ -67,8 +64,7 @@
                     android:tint="@color/gray_dark"
                     android:layout_marginStart="16dp"
                     app:layout_constraintStart_toEndOf="@id/secondAddRoomIcon"
-                    app:layout_constraintBottom_toBottomOf="@id/attachRoomImage"
-                    android:src="@drawable/ic_office"/>
+                    app:layout_constraintBottom_toBottomOf="@id/attachRoomImage" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/fourAddRoomIcon"
@@ -79,8 +75,7 @@
                     android:tint="@color/gray_dark"
                     android:layout_marginStart="16dp"
                     app:layout_constraintStart_toEndOf="@id/thirdAddRoomIcon"
-                    app:layout_constraintBottom_toBottomOf="@id/attachRoomImage"
-                    android:src="@drawable/ic_country_house"/>
+                    app:layout_constraintBottom_toBottomOf="@id/attachRoomImage" />
 
                 <androidx.constraintlayout.widget.Barrier
                     android:id="@+id/barrierImages"
