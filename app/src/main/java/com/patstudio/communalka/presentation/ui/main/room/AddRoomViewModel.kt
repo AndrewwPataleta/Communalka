@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AddRoomViewModel(private val userRepository: UserRepository, private val premisesRepository: PremisesRepository, private val daDataRepository: DaDataRepository, private val dispatcherProvider: DispatcherProvider, private val gson: Gson): ViewModel() {
 
@@ -30,6 +31,7 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val p
     private val staticAddressImage: MutableLiveData<Event<Pair<String,String>>> = MutableLiveData()
     private val progressCreateRoom: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val totalSpaceError: MutableLiveData<Event<String>> = MutableLiveData()
+    private val userMessage: MutableLiveData<Event<String>> = MutableLiveData()
     private val totalLivingError: MutableLiveData<Event<String>> = MutableLiveData()
     private val showAddressLocation: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val checkReadExternalPermission: MutableLiveData<Event<Boolean>> = MutableLiveData()
@@ -118,6 +120,18 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val p
         return isValidate
     }
 
+    private suspend fun saveRoomLocal(premises: Premises) {
+        try {
+            withContext(dispatcherProvider.io) {
+                premisesRepository.saveLocalPremises(premises)
+                progressCreateRoom.postValue(Event(false))
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
     fun saveRoom() {
         if (validateRoomForm()) {
             viewModelScope.launch(dispatcherProvider.io) {
@@ -145,8 +159,23 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val p
                                     it.printStackTrace()
                                 }
                                 .collect {
-                                    progressCreateRoom.postValue(Event(false))
-                                    it.toString()
+                                    when (it) {
+                                        is Result.Success -> {
+                                            var value = ""
+                                            when(IMAGE_MODE) {
+                                                "DEFAULT" -> value = selectedImage.toString()
+                                                "STORAGE" -> value = currentPath.toString()
+                                            }
+                                            var placement = gson.fromJson(it.data.data!!.asJsonObject.get("placement"), Placement::class.java)
+                                            val premisesLocal = Premises(placement.id, placement.name, placement.address, "", placement.consumer, placement.totalArea.toFloat(), placement.livingArea.toFloat(), IMAGE_MODE, value,false)
+                                            Log.d("AddRoomViewModel", "save "+premisesLocal.toString())
+                                            saveRoomLocal(premisesLocal)
+                                            userMessage.postValue(Event("Помещение создано"))
+                                        }
+                                        is Result.ErrorResponse -> { }
+                                        is Result.Error -> { }
+                                    }
+
                                 }
                         }
                     }
@@ -254,6 +283,10 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val p
         return staticAddressImage
     }
 
+    fun getUserMessage() : MutableLiveData<Event<String>> {
+        return userMessage
+    }
+
     fun getProgressCreateRoom() : MutableLiveData<Event<Boolean>> {
         return progressCreateRoom
     }
@@ -310,7 +343,7 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val p
     fun setCurrentRoomImage(currentPath: Uri) {
         IMAGE_MODE = "STORAGE"
         this.currentPath = currentPath
-        showAddressLocation.postValue(Event(true))
+
         imageURI.postValue(Event(currentPath))
     }
 

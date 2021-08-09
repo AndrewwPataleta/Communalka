@@ -21,35 +21,35 @@ class RegistrationViewModel(private val userRepository: UserRepository, private 
     private var userFio: String = ""
     private var userEmail: String = ""
     private var licenseAccept: Boolean = false
-    private val phoneError: MutableLiveData<String> = MutableLiveData()
-    private val userFioError: MutableLiveData<String> = MutableLiveData()
-    private val userEmailError: MutableLiveData<String> = MutableLiveData()
-    private val userLicenseAcceptError: MutableLiveData<String> = MutableLiveData()
+    private val phoneError: MutableLiveData<Event<String>> = MutableLiveData()
+    private val userFioError: MutableLiveData<Event<String>> = MutableLiveData()
+    private val userEmailError: MutableLiveData<Event<String>> = MutableLiveData()
+    private val userLicenseAcceptError: MutableLiveData<Event<String>> = MutableLiveData()
     private val progressPhoneSending: MutableLiveData<Boolean> = MutableLiveData()
     private val disableNavigation: MutableLiveData<Boolean> = MutableLiveData()
     private val userForm: MutableLiveData<Event<UserForm>> = MutableLiveData()
-    private val userMessage: MutableLiveData<String> = MutableLiveData()
+    private val userMessage: MutableLiveData<Event<String>> = MutableLiveData()
 
     private fun validateUserForm(): Boolean {
         var valid = true
          if (phoneNumber.length != 12) {
-             phoneError.postValue("Вы неправильно указали номер телефона!")
+             phoneError.postValue(Event("Вы неправильно указали номер телефона!"))
             valid = false
         }
         if (!licenseAccept) {
-            userLicenseAcceptError.postValue("Подтвердите согласие с офертой")
+            userLicenseAcceptError.postValue(Event("Подтвердите согласие с офертой"))
             valid = false
         }
          if (userFio.length == 0) {
-            userFioError.postValue("Вы не заполнили обязательное поле - ФИО. Заполните, и продолжите регистрацию")
+            userFioError.postValue(Event("Вы не заполнили обязательное поле - ФИО. Заполните, и продолжите регистрацию"))
             valid = false
          } else if (userFio.trim().split(" ").size < 2) {
-             userFioError.postValue("Вы не заполнили обязательное поле - ФИО. Заполните, и продолжите регистрацию")
+             userFioError.postValue(Event("Вы не заполнили обязательное поле - ФИО. Заполните, и продолжите регистрацию"))
              valid = false
          }
         if (userEmail.length > 0) {
             if (!userEmail.isEmailValid()) {
-                userEmailError.postValue("Вы неправильно указали адрес электронной почты!")
+                userEmailError.postValue(Event("Вы неправильно указали адрес электронной почты!"))
                 valid = false
             }
         }
@@ -87,13 +87,13 @@ class RegistrationViewModel(private val userRepository: UserRepository, private 
                                        var confirmError = gson.fromJson(it.data.data, LoginFormError::class.java)
                                        Log.d("RegistrationViewModel", confirmError.toString())
                                        confirmError.email?.let {
-                                           userEmailError.postValue(confirmError.email[0])
+                                           userEmailError.postValue(Event(confirmError.email[0]))
                                        }
                                        confirmError.fio?.let {
-                                           userFioError.postValue(confirmError.fio[0])
+                                           userFioError.postValue(Event(confirmError.fio[0]))
                                        }
                                        confirmError.phone?.let {
-                                           phoneError.postValue(confirmError.phone[0])
+                                           phoneError.postValue(Event(confirmError.phone[0]))
                                        }
                                    }
                                }
@@ -104,7 +104,7 @@ class RegistrationViewModel(private val userRepository: UserRepository, private 
                                Log.d("RegistrationViewModel", "Error "+it.toString())
                                progressPhoneSending.postValue(false)
                                disableNavigation.postValue(false)
-                               userMessage.postValue("Проверьте корректность заполнения полей")
+                               userMessage.postValue(Event("Проверьте корректность заполнения полей"))
                            }
                        }
                    }
@@ -124,19 +124,19 @@ class RegistrationViewModel(private val userRepository: UserRepository, private 
         this.userEmail = userEmail
     }
 
-    fun getPhoneError(): MutableLiveData<String> {
+    fun getPhoneError(): MutableLiveData<Event<String>> {
         return phoneError
     }
 
-    fun getUserEmailError(): MutableLiveData<String> {
+    fun getUserEmailError(): MutableLiveData<Event<String>> {
         return userEmailError
     }
 
-    fun getUserFioError(): MutableLiveData<String> {
+    fun getUserFioError(): MutableLiveData<Event<String>> {
         return userFioError
     }
 
-    fun getLicenseError(): MutableLiveData<String> {
+    fun getLicenseError(): MutableLiveData<Event<String>> {
         return userLicenseAcceptError
     }
 
@@ -152,7 +152,7 @@ class RegistrationViewModel(private val userRepository: UserRepository, private 
         licenseAccept = accept
     }
 
-    fun getUserMessage(): MutableLiveData<String> {
+    fun getUserMessage(): MutableLiveData<Event<String>> {
         return userMessage
     }
 

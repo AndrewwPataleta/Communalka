@@ -31,6 +31,16 @@ class LoginViewModel(private val userRepository: UserRepository, private val gso
 
     private fun validateForm(): Boolean {
         when (loginType) {
+            "default" -> {
+
+                Log.d("LoginViewModel", "phone number "+phoneNumber+" validate "+(phoneNumber.length == 12)+" "+phoneNumber.isEmailValid())
+                return if (phoneNumber.length == 12 || phoneNumber.isEmailValid()) {
+                    true
+                } else {
+                    phoneError.postValue(Event(true))
+                    false
+                }
+            }
             "phone" -> {
                 return if (phoneNumber.length == 12) {
                     true
@@ -56,6 +66,9 @@ class LoginViewModel(private val userRepository: UserRepository, private val gso
        if (validateForm()) {
            var value = ""
            when (loginType) {
+               "default" -> {
+                   value = phoneNumber
+               }
                "phone" -> {
                  value = phoneNumber
                }
@@ -94,8 +107,10 @@ class LoginViewModel(private val userRepository: UserRepository, private val gso
                            is Result.ErrorResponse -> {
                                when(it.data.status) {
                                    "fail" -> {
+                                       it.data.message?.let {
+                                           userMessage.postValue(Event(it))
+                                       }
 
-                                       userMessage.postValue(Event(it.data.message))
                                        progressPhoneSending.postValue(false)
                                        disableNavigation.postValue(false)
                                    }
@@ -110,6 +125,8 @@ class LoginViewModel(private val userRepository: UserRepository, private val gso
     fun setPhoneNumber(phoneNumber: String) {
         this.phoneNumber = phoneNumber
     }
+
+
 
     fun setEmail(email: String) {
         this.email = email

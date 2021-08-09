@@ -162,6 +162,7 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val g
                 smsCodeMutable.postValue(Event(smsCode))
                 userFormMutable.postValue(Event(userForm.consumer))
             }
+            progressPhoneSending.postValue(false)
         }
     }
 

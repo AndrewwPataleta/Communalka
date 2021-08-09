@@ -104,7 +104,7 @@ class RestorePinFragment : Fragment() {
             viewModel.setPhoneNumber(it.toString())
         }
         binding.close.setOnClickListener {
-            binding.phoneEdit.setText("")
+            requireActivity().onBackPressed()
         }
         binding.restore.setOnClickListener {
           viewModel.restore()

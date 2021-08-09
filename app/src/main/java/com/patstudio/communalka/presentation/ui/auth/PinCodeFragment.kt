@@ -1,6 +1,7 @@
 package com.patstudio.communalka.presentation.ui.auth
 
 import android.app.AlertDialog
+import android.content.Intent
 
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import com.patstudio.communalka.R
 import com.patstudio.communalka.data.model.UserForm
 import com.patstudio.communalka.databinding.FragmentPinCodeBinding
+import com.patstudio.communalka.presentation.ui.MainActivity
 import gone
 import invisible
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -156,7 +158,9 @@ class PinCodeFragment : Fragment() {
         binding.pinNine.setOnClickListener { viewModel.clickDigital(getString(R.string.nine)) }
         binding.pinZero.setOnClickListener { viewModel.clickDigital(getString(R.string.zero)) }
         binding.pinBack.setOnClickListener { viewModel.removeLastItem() }
-        binding.close.setOnClickListener { viewModel.removeAllPin() }
+        binding.close.setOnClickListener {
+            startActivity(Intent(requireContext(),MainActivity::class.java))
+        }
         binding.forgotPassword.setOnClickListener {  findNavController().navigate(R.id.toRestore) }
 
         executor = ContextCompat.getMainExecutor(requireContext())

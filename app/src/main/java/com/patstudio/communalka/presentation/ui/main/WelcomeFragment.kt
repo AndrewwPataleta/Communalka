@@ -33,7 +33,8 @@ class WelcomeFragment : Fragment() {
 
         _binding = FragmentWelcomeBinding.inflate(inflater, container, false)
         binding.login.setOnClickListener {
-            findNavController().navigate(R.id.loLoginPage)
+            val bundle = bundleOf("type" to "default")
+            findNavController().navigate(R.id.loLoginPage, bundle)
         }
         binding.registration.setOnClickListener {
             findNavController().navigate(R.id.toRegistration)

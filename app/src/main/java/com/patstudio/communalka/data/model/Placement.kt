@@ -11,5 +11,7 @@ data class Placement (
     val totalArea: Double,
     val livingArea: Double,
     val address: String,
+    var imageType: String,
+    var path: String,
     val createdDate: String
 ) : Parcelable

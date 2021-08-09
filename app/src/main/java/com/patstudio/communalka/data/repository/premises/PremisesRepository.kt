@@ -23,9 +23,14 @@ class PremisesRepository(
     private val gson: Gson
 ) {
 
-    suspend fun savePremises(premises: Premises): Long {
+    suspend fun saveLocalPremises(premises: Premises): Long {
         return premisesDao.savePremises(premises)
     }
+
+    suspend fun getUserPremises(userId: String): List<Premises> {
+        return premisesDao.getUserPremises(userId)
+    }
+
 
     suspend fun sendPremises(room: Room): Flow<Result<APIResponse<JsonElement>>> = flow {
         try {

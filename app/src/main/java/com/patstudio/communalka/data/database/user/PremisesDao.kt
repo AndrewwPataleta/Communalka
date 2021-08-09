@@ -20,4 +20,8 @@ interface PremisesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun savePremises(premises: Premises) : Long
+
+    @Transaction
+    @Query("SELECT * FROM premises WHERE idOwner= :ownerId")
+    fun getUserPremises(ownerId: String): List<Premises>
 }

@@ -1,7 +1,9 @@
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.text.InputFilter
 import android.util.Patterns
 import android.view.View
+import android.widget.EditText
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.reflect.TypeToken
@@ -30,6 +32,10 @@ inline fun startCoroutineTimer(delayMillis: Long = 0, repeatMillis: Long = 0, cr
     } else {
         action()
     }
+}
+
+fun EditText.setMaxLength(maxLength: Int){
+    filters = arrayOf<InputFilter>(InputFilter.LengthFilter(maxLength))
 }
 
 fun View.visible(animate: Boolean = true) {

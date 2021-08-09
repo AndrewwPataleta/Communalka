@@ -45,8 +45,20 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val p
                         when (it) {
                             is Result.Success -> {
                                 var placementList: PlacementWrapper = gson.fromJson(it.data.data, PlacementWrapper::class.java)
-                                if (placementList.placements.count() > 0)
+                                if (placementList.placements.count() > 0) {
+                                    var placementLocal = premisesRepository.getUserPremises(user!!.id)
+                                    Log.d("WelcomeViewModel", "local "+placementLocal)
+                                    placementList.placements.map { parent ->
+                                        placementLocal.map { child ->
+                                            if (parent.id.compareTo(child.id) == 0) {
+                                                Log.d("WelcomeViewModel", "find local")
+                                                parent.imageType = child.imageType
+                                                parent.path = child.imagePath
+                                            }
+                                        }
+                                    }
                                     placementListMutable.postValue(Event(placementList.placements))
+                                }
                             }
                             is Result.ErrorResponse -> { }
                             is Result.Error -> { }

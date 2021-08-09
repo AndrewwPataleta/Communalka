@@ -2,11 +2,13 @@ package com.patstudio.communalka.presentation.ui.auth
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.text.InputFilter
+import android.text.InputFilter.LengthFilter
+import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -20,7 +22,9 @@ import ru.tinkoff.decoro.MaskImpl
 import ru.tinkoff.decoro.slots.PredefinedSlots
 import ru.tinkoff.decoro.watchers.FormatWatcher
 import ru.tinkoff.decoro.watchers.MaskFormatWatcher
+import setMaxLength
 import visible
+
 
 class LoginFragment : Fragment() {
 
@@ -43,7 +47,7 @@ class LoginFragment : Fragment() {
         viewModel.getPhoneError().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                    binding.phoneEdit.setError("Вы неправильно указали номер телефона!")
+                    binding.phoneEdit.setError("Проверьте корректность введенных данных")
                 }
             }
         }
@@ -72,16 +76,60 @@ class LoginFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                    when (it) {
+                       "default"-> {
+                           binding.emailEdit.gone(false)
+                           binding.phoneEdit.visible(false)
+                           binding.phoneEdit.inputType = InputType.TYPE_CLASS_TEXT
+                           binding.phoneEdit.hint = resources.getString(R.string.phone_hint)
+                           binding.titleText.text = resources.getString(R.string.email_or_phone)
+//                           binding.phoneEdit.doBeforeTextChanged { text, start, count, after ->
+//                               text?.let { it ->
+//                                   if (it.trim().toString().compareTo("+7") == 0) {
+//                                       binding.phoneEdit.removeTextChangedListener(watcher)
+//                                       binding.phoneEdit.setText("")
+//
+//                                   //    watcher.removeFromTextView()
+//                                    //   binding.phoneEdit.inputType = InputType.TYPE_CLASS_TEXT
+//                                   }
+//                               }
+//                           }
+
+                           binding.phoneEdit.doAfterTextChanged {
+
+                               it?.let { it ->
+
+                                   if (it.length == 1) {
+                                       Log.d("LoginFragment", "current "+it.length+" is digit "+it[0].isDigit())
+                                       if (it[0].isDigit())  {
+                                           binding.phoneEdit.setText("+"+it.toString())
+                                           binding.phoneEdit.setSelection(binding.phoneEdit.text!!.length);
+                                           binding.phoneEdit.setMaxLength(12)
+                                           binding.phoneEdit.inputType = InputType.TYPE_CLASS_PHONE
+                                       }
+                                   } else if (it.length == 0) {
+                                       binding.phoneEdit.setMaxLength(100)
+                                       binding.phoneEdit.inputType = InputType.TYPE_CLASS_TEXT
+                                   }
+                               }
+                               viewModel.setPhoneNumber(binding.phoneEdit.text.toString())
+                           }
+
+                           binding.close.setOnClickListener {
+                               requireActivity().onBackPressed()
+                           }
+
+                       }
                        "phone" -> {
                            binding.emailEdit.gone(false)
                            binding.phoneEdit.visible(false)
                            binding.phoneEdit.hint = resources.getString(R.string.phone_hint)
+                           binding.phoneEdit.inputType = InputType.TYPE_CLASS_PHONE
                            binding.titleText.text = resources.getString(R.string.phone)
                            binding.phoneEdit.doAfterTextChanged {
                                viewModel.setPhoneNumber(watcher.mask.toUnformattedString())
                            }
                            binding.close.setOnClickListener {
-                               binding.phoneEdit.setText("")
+                               requireActivity().onBackPressed()
                            }
                            watcher.installOn(binding.phoneEdit)
                        }
@@ -94,7 +142,7 @@ class LoginFragment : Fragment() {
                                viewModel.setEmail(it.toString())
                            }
                            binding.close.setOnClickListener {
-                               binding.emailEdit.setText("")
+                               requireActivity().onBackPressed()
                            }
                        }
                    }
@@ -144,6 +192,8 @@ class LoginFragment : Fragment() {
         }
     }
 
+
+
     private fun disableNavigationListeners() {
         binding.registrationText.setOnClickListener(null)
         binding.login.setOnClickListener(null)
@@ -153,7 +203,7 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initNavigationListeners()
         initObservers()
-        arguments?.getString("type", "phone").let {
+        arguments?.getString("type", "default").let {
             Log.d("LoginFragment", "type "+it.toString())
             viewModel.setLoginType(it)
         }

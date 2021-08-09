@@ -43,7 +43,8 @@ class RegistrationFragment : Fragment() {
 
     private fun initNavigationListeners() {
         binding.registrationText.setOnClickListener {
-            findNavController().navigate(R.id.toLogin)
+            val bundle = bundleOf("type" to "default")
+            findNavController().navigate(R.id.toLogin, bundle)
         }
         binding.registration.setOnClickListener {
            viewModel.registration()
@@ -59,21 +60,34 @@ class RegistrationFragment : Fragment() {
             startActivity(browserIntent)
         }
         binding.close.setOnClickListener {
-            binding.phoneEdit.setText("")
-            binding.fioEdit.setText("")
-            binding.emailEdit.setText("")
+            requireActivity().onBackPressed()
         }
     }
 
     private fun initObservers() {
         viewModel.getPhoneError().observe(this) {
-            binding.phoneEdit.setError(it)
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    binding.phoneEdit.setError(it)
+                }
+            }
         }
+
         viewModel.getUserEmailError().observe(this) {
-            binding.emailEdit.setError(it)
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    binding.emailEdit.setError(it)
+                }
+            }
         }
+
         viewModel.getUserFioError().observe(this) {
-            binding.fioEdit.setError(it)
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    binding.fioEdit.setError(it)
+                }
+            }
+
         }
         viewModel.getProgressPhoneSending().observe(this) {
 
@@ -86,14 +100,19 @@ class RegistrationFragment : Fragment() {
             }
         }
         viewModel.getUserMessage().observe(this) {
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setMessage(it)
-            builder.setPositiveButton("Ок"){dialogInterface, which ->
-                dialogInterface.dismiss()
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val builder = AlertDialog.Builder(requireContext())
+                    builder.setMessage(it)
+                    builder.setPositiveButton("Ок"){dialogInterface, which ->
+                        dialogInterface.dismiss()
+                    }
+                    val alertDialog: AlertDialog = builder.create()
+                    alertDialog.setCancelable(false)
+                    alertDialog.show()
+                }
             }
-            val alertDialog: AlertDialog = builder.create()
-            alertDialog.setCancelable(false)
-            alertDialog.show()
+
         }
         viewModel.getDisableNavigation().observe(this) {
             if (it) {

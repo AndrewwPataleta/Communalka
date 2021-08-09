@@ -150,7 +150,7 @@ class ConfirmSmsFragment : Fragment() {
             viewModel.setSmsCode(it.toString())
         }
         binding.close.setOnClickListener {
-            binding.smsEdit.setText("")
+            requireActivity().onBackPressed()
         }
         binding.sendWithEmail.setOnClickListener{
             val bundle = bundleOf("type" to "email")
