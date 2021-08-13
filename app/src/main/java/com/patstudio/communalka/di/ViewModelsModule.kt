@@ -15,7 +15,7 @@ val viewModelsModule = module {
     viewModel { RegistrationViewModel(get(), get()) }
     viewModel { PinCodeViewModel(get(), get()) }
     viewModel { WelcomeViewModel(get(), get(), get(), get()) }
-    viewModel { ConfirmViewModel(get(),get(), get()) }
+    viewModel { ConfirmViewModel(get(), get(), get(), get()) }
     viewModel { RestoreViewModel(get(),get()) }
     viewModel { ProfileViewModel(get(),get()) }
     viewModel { AddRoomViewModel(get(), get(), get(),get(), get()) }

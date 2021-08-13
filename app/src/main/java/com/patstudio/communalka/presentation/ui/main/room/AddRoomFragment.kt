@@ -149,6 +149,15 @@ class AddRoomFragment : Fragment() {
                 }
             }
         }
+        viewModel.getOpenRegistration().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    if (it) {
+
+                    }
+                }
+            }
+        }
         viewModel.getUserMessage().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {

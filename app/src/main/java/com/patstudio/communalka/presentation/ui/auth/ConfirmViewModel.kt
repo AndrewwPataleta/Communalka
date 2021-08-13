@@ -14,6 +14,7 @@ import com.patstudio.communalka.data.model.auth.ConfirmFormError
 import com.patstudio.communalka.data.model.auth.ConfirmSmsFormError
 import com.patstudio.communalka.data.model.auth.ConfirmSmsWrapper
 import com.patstudio.communalka.data.model.auth.LoginFormError
+import com.patstudio.communalka.data.repository.premises.RoomRepository
 import com.patstudio.communalka.data.repository.user.UserRepository
 import isValidPhoneNumber
 import kotlinx.coroutines.*
@@ -21,7 +22,7 @@ import kotlinx.coroutines.NonCancellable.isActive
 import kotlinx.coroutines.flow.*
 import startCoroutineTimer
 
-class ConfirmViewModel(private val userRepository: UserRepository, private val gson: Gson, private val dispatcherProvider: DispatcherProvider): ViewModel() {
+class ConfirmViewModel(private val userRepository: UserRepository, private val roomRepository: RoomRepository, private val gson: Gson, private val dispatcherProvider: DispatcherProvider): ViewModel() {
 
     private var smsCode = ""
     private lateinit var userForm: UserForm
@@ -142,8 +143,6 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val g
                 }
                 smsCode = ""
                 destoyTimer()
-                smsCodeMutable.postValue(Event(smsCode))
-                userFormMutable.postValue(Event(userForm.consumer))
             } else {
                 Log.d("ConfirmViewMode", "have no exist")
                 var userForSave = User(
@@ -157,12 +156,38 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val g
                     true
                 )
                 userRepository.saveUser(userForSave)
+                userRepository.setLastLoginUser(userForSave)
                 destoyTimer()
                 smsCode = ""
+            }
+
+            val room = roomRepository.getFirstInitRoom()
+            Log.d("ConfirmViewModel", room.toString())
+            if (room != null) {
+                roomRepository.sendPremises(room)
+                    .catch {
+                        it.printStackTrace()
+                    }
+                    .collect {
+                        when (it) {
+                            is Result.Success -> {
+                                roomRepository.removeFirstInitRoom()
+                                smsCodeMutable.postValue(Event(smsCode))
+                                userFormMutable.postValue(Event(userForm.consumer))
+                                progressPhoneSending.postValue(false)
+                            }
+                            is Result.ErrorResponse -> {
+                            }
+                            is Result.Error -> {
+                            }
+                        }
+                    }
+            } else {
                 smsCodeMutable.postValue(Event(smsCode))
                 userFormMutable.postValue(Event(userForm.consumer))
+                progressPhoneSending.postValue(false)
             }
-            progressPhoneSending.postValue(false)
+
         }
     }
 

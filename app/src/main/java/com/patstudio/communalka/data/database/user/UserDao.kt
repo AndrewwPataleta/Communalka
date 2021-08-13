@@ -32,6 +32,7 @@ interface UserDao {
     @Query("UPDATE user SET lastAuth = :lastAuth WHERE id = :userId ")
     fun setLastUpdateUser(userId: String, lastAuth: Boolean = true)
 
+    @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveUser(user: User) : Long
 }

@@ -4,39 +4,50 @@ import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.reflect.TypeToken
-import com.patstudio.communalka.data.database.user.PremisesDao
+import com.patstudio.communalka.data.database.user.RoomDao
 import com.patstudio.communalka.data.model.APIResponse
 import com.patstudio.communalka.data.model.Premises
 import com.patstudio.communalka.data.model.Result
 import com.patstudio.communalka.data.model.Room
-import com.patstudio.communalka.data.networking.premises.PremisesRemote
+import com.patstudio.communalka.data.networking.premises.RoomRemote
 import com.patstudio.data.common.utils.Connectivity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import java.io.IOException
 
-class PremisesRepository(
-    private val premisesRemote: PremisesRemote,
-    private val premisesDao: PremisesDao,
+class RoomRepository(
+    private val roomRemote: RoomRemote,
+    private val roomDao: RoomDao,
     private val connectivity: Connectivity,
     private val gson: Gson
 ) {
 
     suspend fun saveLocalPremises(premises: Premises): Long {
-        return premisesDao.savePremises(premises)
+        return roomDao.savePremises(premises)
+    }
+
+    suspend fun saveRoomLocal(room: Room): Long {
+        return roomDao.saveRoomLocal(room)
     }
 
     suspend fun getUserPremises(userId: String): List<Premises> {
-        return premisesDao.getUserPremises(userId)
+        return roomDao.getUserPremises(userId)
     }
 
+    suspend fun getFirstInitRoom(): Room {
+        return roomDao.getFirstInitRoom(true)
+    }
+
+    suspend fun removeFirstInitRoom() {
+         roomDao.removeFirstInitRoom(true)
+    }
 
     suspend fun sendPremises(room: Room): Flow<Result<APIResponse<JsonElement>>> = flow {
         try {
             if (connectivity.hasNetworkAccess()) {
                 emit(Result.loading())
-                val premises = premisesRemote.savePremises(room)
+                val premises = roomRemote.sendRoom(room)
                 emit(Result.success(premises))
             }
         } catch (throwable: Exception) {
@@ -59,7 +70,7 @@ class PremisesRepository(
         try {
             if (connectivity.hasNetworkAccess()) {
                 emit(Result.loading())
-                val premises = premisesRemote.getPremises()
+                val premises = roomRemote.getRooms()
                 emit(Result.success(premises))
             }
         } catch (throwable: Exception) {
@@ -82,7 +93,7 @@ class PremisesRepository(
         try {
             if (connectivity.hasNetworkAccess()) {
                 emit(Result.loading())
-                val premises = premisesRemote.getActualApiKey()
+                val premises = roomRemote.getActualApiKey()
                 emit(Result.success(premises))
             }
         } catch (throwable: Exception) {

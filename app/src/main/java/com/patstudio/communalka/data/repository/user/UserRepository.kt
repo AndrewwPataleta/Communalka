@@ -78,7 +78,7 @@ class UserRepository (
 
     fun updateToken(token: String, refresh: String, userId: String) {
         Log.d("UserRepository", "update")
-         dao.updateToken(token, refresh, userId)
+        dao.updateToken(token, refresh, userId)
     }
 
     suspend fun setLastLoginUser(user: User) {

@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import com.patstudio.communalka.BuildConfig
 import com.patstudio.communalka.data.database.AppDatabase
-import com.patstudio.communalka.data.database.user.PremisesDao
+import com.patstudio.communalka.data.database.user.RoomDao
 import com.patstudio.communalka.data.database.user.UserDao
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
@@ -29,6 +29,6 @@ private fun provideUserDao(database: AppDatabase): UserDao {
     return database.userDao()
 }
 
-private fun providePremisesDao(database: AppDatabase): PremisesDao {
+private fun providePremisesDao(database: AppDatabase): RoomDao {
     return database.premisesDao()
 }

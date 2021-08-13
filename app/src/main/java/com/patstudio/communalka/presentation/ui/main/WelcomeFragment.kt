@@ -1,5 +1,8 @@
 package com.patstudio.communalka.presentation.ui.main
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -21,6 +24,7 @@ import visible
 
 class WelcomeFragment : Fragment() {
 
+    private val REQUEST_READ_EXTERNAL: Int = 111
     private var _binding: FragmentWelcomeBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModel<WelcomeViewModel>()
@@ -84,6 +88,25 @@ class WelcomeFragment : Fragment() {
 
             }
         }
+        viewModel.getReadStoragePermission().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        requestPermissions(
+                            arrayOf(
+                                Manifest.permission.ACCESS_MEDIA_LOCATION,
+                            ), REQUEST_READ_EXTERNAL
+                        )
+                    } else {
+                        requestPermissions(
+                            arrayOf(
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                            ), REQUEST_READ_EXTERNAL
+                        )
+                    }
+                }
+            }
+        }
         viewModel.getPlacementList().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
@@ -110,6 +133,19 @@ class WelcomeFragment : Fragment() {
             viewModel.initCurrentUser()
         } else {
             viewModel.initCurrentUser()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode) {
+            REQUEST_READ_EXTERNAL -> {
+                viewModel.setReadStoragePermission(grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            }
         }
     }
 

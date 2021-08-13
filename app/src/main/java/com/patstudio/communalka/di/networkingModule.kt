@@ -7,13 +7,12 @@ import com.patstudio.communalka.data.networking.CommunalkaApi
 import com.patstudio.communalka.data.networking.dadata.DaDataRemote
 import com.patstudio.communalka.data.networking.dadata.DaDataRemoteImpl
 import com.patstudio.communalka.data.networking.dadata.DaDataService
-import com.patstudio.communalka.data.networking.premises.PremisesRemote
-import com.patstudio.communalka.data.networking.premises.PremisesRemoteImpl
+import com.patstudio.communalka.data.networking.premises.RoomRemote
+import com.patstudio.communalka.data.networking.premises.RoomRemoteImpl
 import com.patstudio.communalka.data.networking.premises.PremisesService
 import com.patstudio.communalka.data.networking.user.UserRemote
 import com.patstudio.communalka.data.networking.user.UserRemoteImpl
 import com.patstudio.communalka.data.networking.user.UserService
-import com.patstudio.communalka.data.repository.user.UserRepository
 import com.patstudio.communalka.utils.AuthDaDataInterceptor
 import com.patstudio.communalka.utils.AuthInterceptor
 import com.patstudio.communalka.utils.HeaderInterceptor
@@ -84,7 +83,7 @@ val networkingModule = module {
     single { provideDaDataService(get(named("DADATA_URL"))) }
     // RedditImageRemote instance
     single<UserRemote> { provideUserRemoteImpl(get(), get()) }
-    single<PremisesRemote> { providePremisesRemoteImpl(get(), get()) }
+    single<RoomRemote> { providePremisesRemoteImpl(get(), get()) }
     single<DaDataRemote> { provideDaDataRemoteImpl(get(), get()) }
 
 }
@@ -118,8 +117,8 @@ private fun providePremisesService(retrofit: Retrofit): PremisesService {
 private fun providePremisesRemoteImpl(
     service: PremisesService,
     dispatchers: DispatcherProvider
-): PremisesRemote {
-    return PremisesRemoteImpl(dispatchers,service)
+): RoomRemote {
+    return RoomRemoteImpl(dispatchers,service)
 }
 
 

@@ -5,13 +5,13 @@ import com.patstudio.communalka.data.model.APIResponse
 import com.patstudio.communalka.data.model.Premises
 import com.patstudio.communalka.data.model.Room
 
-interface PremisesRemote {
+interface RoomRemote {
 
-    suspend fun getPremisesByUserId(userId: String): APIResponse<JsonElement>
+    suspend fun getRoomByUserId(userId: String): APIResponse<JsonElement>
 
-    suspend fun getPremises(): APIResponse<JsonElement>
+    suspend fun getRooms(): APIResponse<JsonElement>
 
-    suspend fun savePremises(room: Room): APIResponse<JsonElement>
+    suspend fun sendRoom(room: Room): APIResponse<JsonElement>
 
     suspend fun getActualApiKey(): APIResponse<JsonElement>
 

@@ -1,6 +1,5 @@
 package com.patstudio.communalka.presentation.ui.main.room
 
-import android.graphics.Point
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -11,7 +10,7 @@ import com.google.gson.Gson
 import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.*
 import com.patstudio.communalka.data.repository.premises.DaDataRepository
-import com.patstudio.communalka.data.repository.premises.PremisesRepository
+import com.patstudio.communalka.data.repository.premises.RoomRepository
 import com.patstudio.communalka.data.repository.user.UserRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -21,7 +20,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AddRoomViewModel(private val userRepository: UserRepository, private val premisesRepository: PremisesRepository, private val daDataRepository: DaDataRepository, private val dispatcherProvider: DispatcherProvider, private val gson: Gson): ViewModel() {
+class AddRoomViewModel(private val userRepository: UserRepository, private val roomRepository: RoomRepository, private val daDataRepository: DaDataRepository, private val dispatcherProvider: DispatcherProvider, private val gson: Gson): ViewModel() {
 
     private lateinit var user: User
     private val userMutable: MutableLiveData<User> = MutableLiveData()
@@ -36,6 +35,7 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val p
     private val showAddressLocation: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val checkReadExternalPermission: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val openExternalPermission: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    private val openRegistration: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val imageURI: MutableLiveData<Event<Uri>> = MutableLiveData()
     private val progressSuggestions: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val listSuggestions: MutableLiveData<Event<List<Suggestion>>> = MutableLiveData()
@@ -48,7 +48,7 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val p
     private var actualApiKey: String = ""
     private var searchJob: Job? = null
     private lateinit var lastListSuggestions: List<Suggestion>
-    private lateinit var selectedSuggestion: Suggestion
+    private var selectedSuggestion: Suggestion? = null
     private var images: HashMap<Int, String> = hashMapOf(1 to "HOME", 2 to "ROOM", 3 to "OFFICE", 4 to "HOUSE")
     private var selectedImage = images.get(1)
     private lateinit var currentPath: Uri
@@ -57,7 +57,7 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val p
     fun initApiKey() {
         imagesMutable.postValue(Event(images))
         viewModelScope.launch(dispatcherProvider.io) {
-            premisesRepository.getActualApiKey()
+            roomRepository.getActualApiKey()
                 .collect {
                     Log.d("AddRoomViewModel", "actual key resulr"+it.toString())
                     when (it) {
@@ -88,7 +88,7 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val p
     fun selectSuggest(position: Int) {
         selectedSuggestion = lastListSuggestions.get(position)
         showAddressLocation.postValue(Event(true))
-        staticAddressImage.postValue(Event(Pair(selectedSuggestion.data.geoLat, selectedSuggestion.data.geoLon)))
+        staticAddressImage.postValue(Event(Pair(selectedSuggestion!!.data.geoLat, selectedSuggestion!!.data.geoLon)))
     }
 
     private fun validateRoomForm(): Boolean {
@@ -113,18 +113,16 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val p
             totalLivingError.postValue(Event("Поле не может быть пустым"))
             isValidate = false
         }
-//        if (livingSpace.toLong() > totalSpace.toLong()) {
-//            totalLivingError.postValue(Event("Не может быть больше чем общая площадь"))
-//            isValidate = false
-//        }
         return isValidate
     }
 
-    private suspend fun saveRoomLocal(premises: Premises) {
+    private suspend fun saveRoomLocal(room: Room) {
         try {
             withContext(dispatcherProvider.io) {
-                premisesRepository.saveLocalPremises(premises)
+                roomRepository.saveRoomLocal(room)
                 progressCreateRoom.postValue(Event(false))
+                val room = roomRepository.getFirstInitRoom()
+                Log.d("AddRoomViewModel", room.toString())
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -137,21 +135,32 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val p
             viewModelScope.launch(dispatcherProvider.io) {
                 userRepository.getLastAuthUser()
                     .collect {
+                        var room: Room
+                        var value = ""
+                        when(IMAGE_MODE) {
+                            "DEFAULT" -> value = selectedImage.toString()
+                            "STORAGE" -> value = currentPath.toString()
+                        }
+                        if (selectedSuggestion != null) {
+                            val detailAddressInfo = selectedSuggestion!!.data
+                                 room = Room("",roomName,totalSpace.toDouble(), livingSpace.toDouble(),selectedSuggestion!!.value,
+                                    detailAddressInfo.postalCode,detailAddressInfo.country,detailAddressInfo.countryIsoCode,
+                                    detailAddressInfo.federalDistrict,detailAddressInfo.regionFiasId,detailAddressInfo.regionKladrId,
+                                    detailAddressInfo.regionIsoCode,detailAddressInfo.regionWithType,detailAddressInfo.regionType,
+                                    detailAddressInfo.regionTypeFull,detailAddressInfo.region,detailAddressInfo.cityFiasId,
+                                    detailAddressInfo.cityKladrId,detailAddressInfo.cityWithType,detailAddressInfo.cityType,
+                                    detailAddressInfo.cityTypeFull,detailAddressInfo.city,detailAddressInfo.streetFiasId,detailAddressInfo.streetKladrId,
+                                    detailAddressInfo.streetWithType,detailAddressInfo.streetType,detailAddressInfo.streetTypeFull,detailAddressInfo.street,
+                                    detailAddressInfo.houseFiasId,detailAddressInfo.houseKladrId,detailAddressInfo.houseType,detailAddressInfo.houseTypeFull,
+                                    detailAddressInfo.house,detailAddressInfo.flatFiasId,detailAddressInfo.flatType,detailAddressInfo.flatTypeFull,detailAddressInfo.flat,
+                                    detailAddressInfo.fiasId,detailAddressInfo.fiasLevel,detailAddressInfo.kladrId,detailAddressInfo.timezone,detailAddressInfo.geoLat,
+                                    detailAddressInfo.geoLon, imageType = IMAGE_MODE, imagePath = value, firstSave = false)
+                        } else {
+                            room = Room("firstInit",roomName,totalSpace.toDouble(), livingSpace.toDouble(), addressRoom, firstSave = true,imageType = IMAGE_MODE, imagePath = value)
+                        }
+
                         if (it != null) {
-                            val detailAddressInfo = selectedSuggestion.data
-                            val room = Room(roomName,totalSpace.toDouble(), livingSpace.toDouble(),selectedSuggestion.value,
-                                detailAddressInfo.postalCode,detailAddressInfo.country,detailAddressInfo.countryIsoCode,
-                                detailAddressInfo.federalDistrict,detailAddressInfo.regionFiasId,detailAddressInfo.regionKladrId,
-                                detailAddressInfo.regionIsoCode,detailAddressInfo.regionWithType,detailAddressInfo.regionType,
-                                detailAddressInfo.regionTypeFull,detailAddressInfo.region,detailAddressInfo.cityFiasId,
-                                detailAddressInfo.cityKladrId,detailAddressInfo.cityWithType,detailAddressInfo.cityType,
-                                detailAddressInfo.cityTypeFull,detailAddressInfo.city,detailAddressInfo.streetFiasId,detailAddressInfo.streetKladrId,
-                                detailAddressInfo.streetWithType,detailAddressInfo.streetType,detailAddressInfo.streetTypeFull,detailAddressInfo.street,
-                                detailAddressInfo.houseFiasId,detailAddressInfo.houseKladrId,detailAddressInfo.houseType,detailAddressInfo.houseTypeFull,
-                                detailAddressInfo.house,detailAddressInfo.flatFiasId,detailAddressInfo.flatType,detailAddressInfo.flatTypeFull,detailAddressInfo.flat,
-                                detailAddressInfo.fiasId,detailAddressInfo.fiasLevel,detailAddressInfo.kladrId,detailAddressInfo.timezone,detailAddressInfo.geoLat,
-                                detailAddressInfo.geoLon)
-                            premisesRepository.sendPremises(room)
+                            roomRepository.sendPremises(room)
                                 .onStart {
                                     progressCreateRoom.postValue(Event(true))
                                 }
@@ -161,15 +170,12 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val p
                                 .collect {
                                     when (it) {
                                         is Result.Success -> {
-                                            var value = ""
-                                            when(IMAGE_MODE) {
-                                                "DEFAULT" -> value = selectedImage.toString()
-                                                "STORAGE" -> value = currentPath.toString()
-                                            }
+
                                             var placement = gson.fromJson(it.data.data!!.asJsonObject.get("placement"), Placement::class.java)
                                             val premisesLocal = Premises(placement.id, placement.name, placement.address, "", placement.consumer, placement.totalArea.toFloat(), placement.livingArea.toFloat(), IMAGE_MODE, value,false)
-                                            Log.d("AddRoomViewModel", "save "+premisesLocal.toString())
-                                            saveRoomLocal(premisesLocal)
+                                            room.id = placement.id
+                                            room.consumer = placement.consumer
+                                            saveRoomLocal(room)
                                             userMessage.postValue(Event("Помещение создано"))
                                         }
                                         is Result.ErrorResponse -> { }
@@ -177,6 +183,11 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val p
                                     }
 
                                 }
+                        } else {
+
+                            saveRoomLocal(room)
+                            userMessage.postValue(Event("Помещение создано"))
+                            openRegistration.postValue(Event(true))
                         }
                     }
             }
@@ -258,6 +269,11 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val p
     fun getProgressSuggestions() : MutableLiveData<Event<Boolean>> {
         return progressSuggestions
     }
+
+    fun getOpenRegistration() : MutableLiveData<Event<Boolean>> {
+        return openRegistration
+    }
+
 
     fun getListSuggestions() : MutableLiveData<Event<List<Suggestion>>> {
         return listSuggestions
