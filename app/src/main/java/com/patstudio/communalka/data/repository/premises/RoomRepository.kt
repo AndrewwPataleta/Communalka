@@ -31,8 +31,8 @@ class RoomRepository(
         return roomDao.saveRoomLocal(room)
     }
 
-    suspend fun getUserPremises(userId: String): List<Premises> {
-        return roomDao.getUserPremises(userId)
+    suspend fun getUserPremises(userId: String): List<Room> {
+        return roomDao.getUserRooms(userId)
     }
 
     suspend fun getFirstInitRoom(): Room {
@@ -43,14 +43,21 @@ class RoomRepository(
          roomDao.removeFirstInitRoom(true)
     }
 
-    suspend fun sendPremises(room: Room): Flow<Result<APIResponse<JsonElement>>> = flow {
+    suspend fun updateFirstInitRoom(idRoom: String, consumerId: String) {
+        roomDao.updateFirstInitRoom(idRoom, consumerId, firstSaveNew = false, firstSaveOld = true)
+    }
+
+     fun sendPremises(room: Room): Flow<Result<APIResponse<JsonElement>>> = flow {
+        Log.d("RoomRepository", "sub send ")
         try {
             if (connectivity.hasNetworkAccess()) {
-                emit(Result.loading())
+
+                Log.d("RoomRepository", "send room")
                 val premises = roomRemote.sendRoom(room)
                 emit(Result.success(premises))
             }
         } catch (throwable: Exception) {
+            throwable.printStackTrace()
             Log.d("PremisesRepository", (throwable is HttpException).toString())
             when (throwable) {
                 is IOException ->  emit(Result.error(throwable))
@@ -60,6 +67,7 @@ class RoomRepository(
                     emit(Result.errorResponse(errorResponse))
                 }
                 else -> {
+                    throwable.printStackTrace()
                     emit(Result.Error(throwable))
                 }
             }

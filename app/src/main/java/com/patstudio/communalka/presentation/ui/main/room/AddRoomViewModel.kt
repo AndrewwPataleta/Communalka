@@ -31,6 +31,7 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
     private val progressCreateRoom: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val totalSpaceError: MutableLiveData<Event<String>> = MutableLiveData()
     private val userMessage: MutableLiveData<Event<String>> = MutableLiveData()
+    private val openMainPage: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val totalLivingError: MutableLiveData<Event<String>> = MutableLiveData()
     private val showAddressLocation: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val checkReadExternalPermission: MutableLiveData<Event<Boolean>> = MutableLiveData()
@@ -119,10 +120,11 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
     private suspend fun saveRoomLocal(room: Room) {
         try {
             withContext(dispatcherProvider.io) {
-                roomRepository.saveRoomLocal(room)
+                val result = roomRepository.saveRoomLocal(room)
+                Log.d("AddRoomViewModel", "result "+result)
+                val firstInit = roomRepository.getFirstInitRoom()
+                Log.d("AddRoomViewModel", "first "+firstInit)
                 progressCreateRoom.postValue(Event(false))
-                val room = roomRepository.getFirstInitRoom()
-                Log.d("AddRoomViewModel", room.toString())
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -154,9 +156,9 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
                                     detailAddressInfo.houseFiasId,detailAddressInfo.houseKladrId,detailAddressInfo.houseType,detailAddressInfo.houseTypeFull,
                                     detailAddressInfo.house,detailAddressInfo.flatFiasId,detailAddressInfo.flatType,detailAddressInfo.flatTypeFull,detailAddressInfo.flat,
                                     detailAddressInfo.fiasId,detailAddressInfo.fiasLevel,detailAddressInfo.kladrId,detailAddressInfo.timezone,detailAddressInfo.geoLat,
-                                    detailAddressInfo.geoLon, imageType = IMAGE_MODE, imagePath = value, firstSave = false)
+                                    detailAddressInfo.geoLon, imageType = IMAGE_MODE, imagePath = value)
                         } else {
-                            room = Room("firstInit",roomName,totalSpace.toDouble(), livingSpace.toDouble(), addressRoom, firstSave = true,imageType = IMAGE_MODE, imagePath = value)
+                            room = Room("",roomName,totalSpace.toDouble(), livingSpace.toDouble(), addressRoom, imageType = IMAGE_MODE, imagePath = value)
                         }
 
                         if (it != null) {
@@ -174,9 +176,10 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
                                             var placement = gson.fromJson(it.data.data!!.asJsonObject.get("placement"), Placement::class.java)
                                             val premisesLocal = Premises(placement.id, placement.name, placement.address, "", placement.consumer, placement.totalArea.toFloat(), placement.livingArea.toFloat(), IMAGE_MODE, value,false)
                                             room.id = placement.id
+                                            room.firstSave = false
                                             room.consumer = placement.consumer
                                             saveRoomLocal(room)
-                                            userMessage.postValue(Event("Помещение создано"))
+                                            openMainPage.postValue(Event(true))
                                         }
                                         is Result.ErrorResponse -> { }
                                         is Result.Error -> { }
@@ -184,9 +187,10 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
 
                                 }
                         } else {
-
+                            room.id = "firstInit"
+                            room.firstSave = true
                             saveRoomLocal(room)
-                            userMessage.postValue(Event("Помещение создано"))
+                          //  userMessage.postValue(Event("Помещение создано"))
                             openRegistration.postValue(Event(true))
                         }
                     }
@@ -355,6 +359,9 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
         return showAddressLocation
     }
 
+    fun getOpenMainPage() : MutableLiveData<Event<Boolean>> {
+        return openMainPage
+    }
 
     fun setCurrentRoomImage(currentPath: Uri) {
         IMAGE_MODE = "STORAGE"

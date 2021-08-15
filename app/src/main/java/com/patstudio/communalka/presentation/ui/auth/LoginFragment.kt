@@ -98,18 +98,18 @@ class LoginFragment : Fragment() {
 
                                it?.let { it ->
 
-                                   if (it.length == 1) {
-                                       Log.d("LoginFragment", "current "+it.length+" is digit "+it[0].isDigit())
-                                       if (it[0].isDigit())  {
-                                           binding.phoneEdit.setText("+"+it.toString())
-                                           binding.phoneEdit.setSelection(binding.phoneEdit.text!!.length);
-                                           binding.phoneEdit.setMaxLength(12)
-                                           binding.phoneEdit.inputType = InputType.TYPE_CLASS_PHONE
-                                       }
-                                   } else if (it.length == 0) {
-                                       binding.phoneEdit.setMaxLength(100)
-                                       binding.phoneEdit.inputType = InputType.TYPE_CLASS_TEXT
-                                   }
+//                                   if (it.length == 1) {
+//                                       Log.d("LoginFragment", "current "+it.length+" is digit "+it[0].isDigit())
+//                                       if (it[0].isDigit())  {
+//                                           binding.phoneEdit.setText("+"+it.toString())
+//                                           binding.phoneEdit.setSelection(binding.phoneEdit.text!!.length);
+//                                           binding.phoneEdit.setMaxLength(12)
+//                                           binding.phoneEdit.inputType = InputType.TYPE_CLASS_PHONE
+//                                       }
+//                                   } else if (it.length == 0) {
+//                                       binding.phoneEdit.setMaxLength(100)
+//                                       binding.phoneEdit.inputType = InputType.TYPE_CLASS_TEXT
+//                                   }
                                }
                                viewModel.setPhoneNumber(binding.phoneEdit.text.toString())
                            }

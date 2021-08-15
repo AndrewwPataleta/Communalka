@@ -59,7 +59,8 @@ class WelcomeFragment : Fragment() {
                 it.getContentIfNotHandled {
                     binding.login.gone(false)
                     binding.registration.gone(false)
-                    binding.welcomeText.text = getString(R.string.welcome_user, it.name)
+                    val splitFio = it.name.split(" ")
+                    binding.welcomeText.text = getString(R.string.welcome_user, (splitFio[0]+" "+splitFio[1]))
                 }
             }
         }

@@ -17,11 +17,11 @@ class RoomRemoteImpl(
         premisesService.getPremisesByUserId(body)
     }
 
-    override suspend fun getRooms() = withContext(dispatcherProvider.default) {
+    override suspend fun getRooms() = withContext(dispatcherProvider.io) {
         premisesService.getPremises()
     }
 
-    override suspend fun sendRoom(room: Room) = withContext(dispatcherProvider.default) {
+    override suspend fun sendRoom(room: Room) = withContext(dispatcherProvider.io) {
         val body = JsonObject()
 
         premisesService.addPlacement(room)

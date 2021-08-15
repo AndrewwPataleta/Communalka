@@ -144,6 +144,13 @@
         android:name="com.patstudio.communalka.presentation.ui.main.room.AddRoomFragment"
         android:label="Добавить помещение"
         tools:layout="@layout/fragment_add_room">
-
+        <action
+            android:id="@+id/toWelcomePage"
+            app:destination="@id/WelcomeFragment"
+            app:popUpTo="@+id/WelcomeFragment" />
+        <action
+            android:id="@+id/toRegistration"
+            app:destination="@id/Registration"
+            app:popUpTo="@+id/Registration" />
     </fragment>
 </navigation>

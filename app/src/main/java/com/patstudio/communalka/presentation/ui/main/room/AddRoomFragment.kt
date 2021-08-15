@@ -17,9 +17,11 @@ import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import androidx.core.os.bundleOf
 import androidx.core.view.setPadding
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.patstudio.communalka.R
@@ -153,7 +155,7 @@ class AddRoomFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     if (it) {
-
+                        findNavController().navigate(R.id.toRegistration)
                     }
                 }
             }
@@ -168,6 +170,17 @@ class AddRoomFragment : Fragment() {
                     }
                     builder.setCancelable(true)
                     builder.show()
+                }
+            }
+        }
+
+        viewModel.getOpenMainPage().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    if (it) {
+                        val bundle = bundleOf("need_login" to false)
+                        findNavController().navigate(R.id.toWelcomePage, bundle)
+                    }
                 }
             }
         }

@@ -31,10 +31,18 @@ interface RoomDao {
     fun getUserPremises(ownerId: String): List<Premises>
 
     @Transaction
+    @Query("SELECT * FROM room WHERE consumer= :ownerId")
+    fun getUserRooms(ownerId: String): List<Room>
+
+    @Transaction
     @Query("SELECT * FROM room WHERE firstSave= :firstInit LIMIT 1")
     fun getFirstInitRoom(firstInit: Boolean): Room
 
     @Transaction
     @Query("DELETE FROM room WHERE firstSave= :firstInit ")
     fun removeFirstInitRoom(firstInit: Boolean)
+
+
+    @Query("UPDATE room SET id=:idRoom, consumer=:consumerId, firstSave=:firstSaveNew WHERE firstSave =:firstSaveOld ")
+    fun updateFirstInitRoom(idRoom: String, consumerId: String, firstSaveNew: Boolean, firstSaveOld: Boolean)
 }

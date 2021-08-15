@@ -78,10 +78,24 @@ class ConfirmSmsFragment : Fragment() {
                 it.getContentIfNotHandled {
                   if (it != null) {
                       binding.congratulation.visible(false)
-                      binding.congratulation.text = getString(R.string.welcome_user, it)
+                      val splitFio = it.split(" ")
+                      binding.congratulation.text = getString(R.string.welcome_user, (splitFio[0]+" "+splitFio[1]))
                   } else {
                       binding.congratulation.gone(false)
                   }
+                }
+            }
+
+        }
+
+        viewModel.getClearSmsForm().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    if (it != null) {
+                        if (it) {
+                            binding.smsEdit.text.clear();
+                        }
+                    }
                 }
             }
 

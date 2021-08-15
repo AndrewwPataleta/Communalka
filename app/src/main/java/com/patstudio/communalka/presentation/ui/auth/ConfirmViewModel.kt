@@ -33,6 +33,7 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
     private val availableSendSms: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val availableEmailSendSms: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val progressPhoneSending: MutableLiveData<Boolean> = MutableLiveData()
+    private val clearSmsForm: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val userFormMutable: MutableLiveData<Event<UserForm>> = MutableLiveData()
     private val countDownTimer: MutableLiveData<Event<String>> = MutableLiveData()
     private val smsCodeMutable: MutableLiveData<Event<String>> = MutableLiveData()
@@ -88,7 +89,7 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
 
 
     private fun login() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcherProvider.io) {
             userRepository.confirmSmsCode(phone, smsCode)
                 .onStart {
                     progressPhoneSending.postValue(true)
@@ -121,6 +122,7 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
                         is Result.ErrorResponse -> {
                             when(it.data.status) {
                                 "fail" -> {
+                                    clearSmsForm.postValue(Event(true))
                                     userMessage.postValue(Event(it.data.message))
                                     progressPhoneSending.postValue(false)
                                 }
@@ -129,6 +131,33 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
                     }
                 }
         }
+    }
+
+    private fun sendLocalRoom(room: Room, userForm: ConfirmSmsWrapper) {
+        Log.d("ConfirmViewModel", "send local room")
+        viewModelScope.launch(dispatcherProvider.io) {
+            roomRepository.sendPremises(room)
+                .catch {
+                    it.printStackTrace()
+                }
+                .collect {
+                    when (it) {
+                        is Result.Success -> {
+                            Log.d("ConfirmViewModel", "result "+it.toString())
+                            var placement = gson.fromJson(it.data.data!!.asJsonObject.get("placement"), Placement::class.java)
+                            roomRepository.updateFirstInitRoom(placement.id, placement.consumer)
+                            smsCodeMutable.postValue(Event(smsCode))
+                            userFormMutable.postValue(Event(userForm.consumer))
+                            progressPhoneSending.postValue(false)
+                        }
+                        is Result.ErrorResponse -> {
+                        }
+                        is Result.Error -> {
+                        }
+                    }
+                }
+        }
+
     }
 
 
@@ -160,39 +189,23 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
                 destoyTimer()
                 smsCode = ""
             }
-
-            val room = roomRepository.getFirstInitRoom()
-            Log.d("ConfirmViewModel", room.toString())
-            if (room != null) {
-                roomRepository.sendPremises(room)
-                    .catch {
-                        it.printStackTrace()
-                    }
-                    .collect {
-                        when (it) {
-                            is Result.Success -> {
-                                roomRepository.removeFirstInitRoom()
-                                smsCodeMutable.postValue(Event(smsCode))
-                                userFormMutable.postValue(Event(userForm.consumer))
-                                progressPhoneSending.postValue(false)
-                            }
-                            is Result.ErrorResponse -> {
-                            }
-                            is Result.Error -> {
-                            }
-                        }
-                    }
-            } else {
-                smsCodeMutable.postValue(Event(smsCode))
-                userFormMutable.postValue(Event(userForm.consumer))
-                progressPhoneSending.postValue(false)
+            withContext(dispatcherProvider.io) {
+                val room = roomRepository.getFirstInitRoom()
+                if (room != null) {
+                    sendLocalRoom(room, userForm)
+                } else {
+                    smsCodeMutable.postValue(Event(smsCode))
+                    userFormMutable.postValue(Event(userForm.consumer))
+                    progressPhoneSending.postValue(false)
+                }
             }
-
         }
     }
 
+
+
     private fun registration() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcherProvider.io){
             userRepository.registrationWithCode(userForm.fio, userForm.phone, userForm.email, smsCode)
                 .onStart {
                     progressPhoneSending.postValue(true)
@@ -220,10 +233,12 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
                                     var confirmError = gson.fromJson(it.data.data, ConfirmFormError::class.java)
                                     userMessage.postValue(Event(confirmError.code))
                                     progressPhoneSending.postValue(false)
+                                    clearSmsForm.postValue(Event(true))
                                 }
                             }
                         }
                         is Result.Error -> {
+                            clearSmsForm.postValue(Event(true))
                             userMessage.postValue(Event("Ошибка"))
                             progressPhoneSending.postValue(false)
                             Log.d("RegistrationViewMode", "Succ")
@@ -254,6 +269,10 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
 
     fun getUserMessage(): MutableLiveData<Event<String>> {
         return userMessage
+    }
+
+    fun getClearSmsForm(): MutableLiveData<Event<Boolean>> {
+        return clearSmsForm
     }
 
 

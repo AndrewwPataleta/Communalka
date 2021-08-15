@@ -9,6 +9,7 @@ import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.ConfirmSmsParams
 import com.patstudio.communalka.data.model.Result
 import com.patstudio.communalka.data.model.auth.LoginFormError
+import com.patstudio.communalka.data.model.auth.LoginResponseError
 import com.patstudio.communalka.data.repository.user.UserRepository
 import isEmailValid
 import kotlinx.coroutines.flow.*
@@ -34,7 +35,7 @@ class LoginViewModel(private val userRepository: UserRepository, private val gso
             "default" -> {
 
                 Log.d("LoginViewModel", "phone number "+phoneNumber+" validate "+(phoneNumber.length == 12)+" "+phoneNumber.isEmailValid())
-                return if (phoneNumber.length == 12 || phoneNumber.isEmailValid()) {
+                return if (phoneNumber.length > 11 && phoneNumber.length <= 12 || phoneNumber.isEmailValid()) {
                     true
                 } else {
                     phoneError.postValue(Event(true))
@@ -109,6 +110,13 @@ class LoginViewModel(private val userRepository: UserRepository, private val gso
                                    "fail" -> {
                                        it.data.message?.let {
                                            userMessage.postValue(Event(it))
+                                       }
+
+                                       it.data?.let {
+                                           var loginResponseError = gson.fromJson(it.data, LoginResponseError::class.java)
+                                           loginResponseError?.let {
+                                               userMessage.postValue(Event(it.target))
+                                           }
                                        }
 
                                        progressPhoneSending.postValue(false)
