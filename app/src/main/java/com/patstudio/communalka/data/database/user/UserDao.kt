@@ -18,7 +18,7 @@ interface UserDao {
 
     @Transaction
     @Query("SELECT * FROM user WHERE lastAuth= :lastAuth")
-    fun getLastAuth(lastAuth: Boolean = true): Flow<User>
+    fun getLastAuth(lastAuth: Boolean = true): User
 
     @Transaction
     @Query("UPDATE user SET lastAuth = :lastAuth")

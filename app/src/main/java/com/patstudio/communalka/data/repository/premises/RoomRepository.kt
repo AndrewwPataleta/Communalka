@@ -47,31 +47,9 @@ class RoomRepository(
         roomDao.updateFirstInitRoom(idRoom, consumerId, firstSaveNew = false, firstSaveOld = true)
     }
 
-     fun sendPremises(room: Room): Flow<Result<APIResponse<JsonElement>>> = flow {
+    suspend fun sendPremises(room: Room): APIResponse<JsonElement> {
         Log.d("RoomRepository", "sub send ")
-        try {
-            if (connectivity.hasNetworkAccess()) {
-
-                Log.d("RoomRepository", "send room")
-                val premises = roomRemote.sendRoom(room)
-                emit(Result.success(premises))
-            }
-        } catch (throwable: Exception) {
-            throwable.printStackTrace()
-            Log.d("PremisesRepository", (throwable is HttpException).toString())
-            when (throwable) {
-                is IOException ->  emit(Result.error(throwable))
-                is HttpException -> {
-                    val errorResponse = convertErrorBody(throwable)
-                    Log.d("PremisesRepository", errorResponse.toString())
-                    emit(Result.errorResponse(errorResponse))
-                }
-                else -> {
-                    throwable.printStackTrace()
-                    emit(Result.Error(throwable))
-                }
-            }
-        }
+       return  roomRemote.sendRoom(room)
     }
 
     suspend fun getUserPremises(): Flow<Result<APIResponse<JsonElement>>> = flow {

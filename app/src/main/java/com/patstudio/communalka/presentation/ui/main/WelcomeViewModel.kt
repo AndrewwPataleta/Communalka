@@ -80,24 +80,19 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
 
     fun initCurrentUser() {
         viewModelScope.launch(dispatcherProvider.io) {
-            userRepository.getLastAuthUser()
-                .catch {
-                    it.printStackTrace()
+            val it = userRepository.getLastAuthUser()
+            it?.let {
+                user = it
+                if (needEnterPin) {
+                    var userForm = UserForm(it.id, it.name, it.phone, it.email, "AUTH", it.token, it.refresh)
+                    pinForm.postValue(Event(userForm))
+                } else {
+                    Log.d("WelcomeViewModel", it.toString())
+                    userMutable.postValue(Event(it))
+                    getUserPremises()
                 }
-                .collect {
-                   it?.let {
-                       user = it
-                       if (needEnterPin) {
-                           var userForm = UserForm(it.id, it.name, it.phone, it.email, "AUTH", it.token, it.refresh)
-                           pinForm.postValue(Event(userForm))
-                       } else {
-                           Log.d("WelcomeViewModel", it.toString())
-                           userMutable.postValue(Event(it))
-                           getUserPremises()
-                       }
 
-                   }
-                }
+            }
         }
     }
 

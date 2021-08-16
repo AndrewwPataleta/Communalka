@@ -135,65 +135,70 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
     fun saveRoom() {
         if (validateRoomForm()) {
             viewModelScope.launch(dispatcherProvider.io) {
-                userRepository.getLastAuthUser()
-                    .collect {
-                        var room: Room
-                        var value = ""
-                        when(IMAGE_MODE) {
-                            "DEFAULT" -> value = selectedImage.toString()
-                            "STORAGE" -> value = currentPath.toString()
-                        }
-                        if (selectedSuggestion != null) {
-                            val detailAddressInfo = selectedSuggestion!!.data
-                                 room = Room("",roomName,totalSpace.toDouble(), livingSpace.toDouble(),selectedSuggestion!!.value,
-                                    detailAddressInfo.postalCode,detailAddressInfo.country,detailAddressInfo.countryIsoCode,
-                                    detailAddressInfo.federalDistrict,detailAddressInfo.regionFiasId,detailAddressInfo.regionKladrId,
-                                    detailAddressInfo.regionIsoCode,detailAddressInfo.regionWithType,detailAddressInfo.regionType,
-                                    detailAddressInfo.regionTypeFull,detailAddressInfo.region,detailAddressInfo.cityFiasId,
-                                    detailAddressInfo.cityKladrId,detailAddressInfo.cityWithType,detailAddressInfo.cityType,
-                                    detailAddressInfo.cityTypeFull,detailAddressInfo.city,detailAddressInfo.streetFiasId,detailAddressInfo.streetKladrId,
-                                    detailAddressInfo.streetWithType,detailAddressInfo.streetType,detailAddressInfo.streetTypeFull,detailAddressInfo.street,
-                                    detailAddressInfo.houseFiasId,detailAddressInfo.houseKladrId,detailAddressInfo.houseType,detailAddressInfo.houseTypeFull,
-                                    detailAddressInfo.house,detailAddressInfo.flatFiasId,detailAddressInfo.flatType,detailAddressInfo.flatTypeFull,detailAddressInfo.flat,
-                                    detailAddressInfo.fiasId,detailAddressInfo.fiasLevel,detailAddressInfo.kladrId,detailAddressInfo.timezone,detailAddressInfo.geoLat,
-                                    detailAddressInfo.geoLon, imageType = IMAGE_MODE, imagePath = value)
-                        } else {
-                            room = Room("",roomName,totalSpace.toDouble(), livingSpace.toDouble(), addressRoom, imageType = IMAGE_MODE, imagePath = value)
-                        }
+                val it =  userRepository.getLastAuthUser()
+                var room: Room
+                var value = ""
+                when(IMAGE_MODE) {
+                    "DEFAULT" -> value = selectedImage.toString()
+                    "STORAGE" -> value = currentPath.toString()
+                }
+                if (selectedSuggestion != null) {
+                    val detailAddressInfo = selectedSuggestion!!.data
+                    room = Room("",roomName,totalSpace.toDouble(), livingSpace.toDouble(),selectedSuggestion!!.value,
+                        detailAddressInfo.postalCode,detailAddressInfo.country,detailAddressInfo.countryIsoCode,
+                        detailAddressInfo.federalDistrict,detailAddressInfo.regionFiasId,detailAddressInfo.regionKladrId,
+                        detailAddressInfo.regionIsoCode,detailAddressInfo.regionWithType,detailAddressInfo.regionType,
+                        detailAddressInfo.regionTypeFull,detailAddressInfo.region,detailAddressInfo.cityFiasId,
+                        detailAddressInfo.cityKladrId,detailAddressInfo.cityWithType,detailAddressInfo.cityType,
+                        detailAddressInfo.cityTypeFull,detailAddressInfo.city,detailAddressInfo.streetFiasId,detailAddressInfo.streetKladrId,
+                        detailAddressInfo.streetWithType,detailAddressInfo.streetType,detailAddressInfo.streetTypeFull,detailAddressInfo.street,
+                        detailAddressInfo.houseFiasId,detailAddressInfo.houseKladrId,detailAddressInfo.houseType,detailAddressInfo.houseTypeFull,
+                        detailAddressInfo.house,detailAddressInfo.flatFiasId,detailAddressInfo.flatType,detailAddressInfo.flatTypeFull,detailAddressInfo.flat,
+                        detailAddressInfo.fiasId,detailAddressInfo.fiasLevel,detailAddressInfo.kladrId,detailAddressInfo.timezone,detailAddressInfo.geoLat,
+                        detailAddressInfo.geoLon, imageType = IMAGE_MODE, imagePath = value)
+                } else {
+                    room = Room("",roomName,totalSpace.toDouble(), livingSpace.toDouble(), addressRoom, imageType = IMAGE_MODE, imagePath = value)
+                }
 
-                        if (it != null) {
-                            roomRepository.sendPremises(room)
-                                .onStart {
-                                    progressCreateRoom.postValue(Event(true))
-                                }
-                                .catch {
-                                    it.printStackTrace()
-                                }
-                                .collect {
-                                    when (it) {
-                                        is Result.Success -> {
-
-                                            var placement = gson.fromJson(it.data.data!!.asJsonObject.get("placement"), Placement::class.java)
-                                            val premisesLocal = Premises(placement.id, placement.name, placement.address, "", placement.consumer, placement.totalArea.toFloat(), placement.livingArea.toFloat(), IMAGE_MODE, value,false)
-                                            room.id = placement.id
-                                            room.firstSave = false
-                                            room.consumer = placement.consumer
-                                            saveRoomLocal(room)
-                                            openMainPage.postValue(Event(true))
-                                        }
-                                        is Result.ErrorResponse -> { }
-                                        is Result.Error -> { }
-                                    }
-
-                                }
-                        } else {
-                            room.id = "firstInit"
-                            room.firstSave = true
-                            saveRoomLocal(room)
-                          //  userMessage.postValue(Event("Помещение создано"))
-                            openRegistration.postValue(Event(true))
-                        }
-                    }
+                if (it != null) {
+                    val resp = roomRepository.sendPremises(room)
+                    var placement = gson.fromJson(resp.data!!.asJsonObject.get("placement"), Placement::class.java)
+                    val premisesLocal = Premises(placement.id, placement.name, placement.address, "", placement.consumer, placement.totalArea.toFloat(), placement.livingArea.toFloat(), IMAGE_MODE, value,false)
+                    room.id = placement.id
+                    room.firstSave = false
+                    room.consumer = placement.consumer
+                    saveRoomLocal(room)
+                    openMainPage.postValue(Event(true))
+    //                                .onStart {
+    //                                    progressCreateRoom.postValue(Event(true))
+    //                                }
+    //                                .catch {
+    //                                    it.printStackTrace()
+    //                                }
+    //                                .collect {
+    //                                    when (it) {
+    //                                        is Result.Success -> {
+    //
+    //                                            var placement = gson.fromJson(it.data.data!!.asJsonObject.get("placement"), Placement::class.java)
+    //                                            val premisesLocal = Premises(placement.id, placement.name, placement.address, "", placement.consumer, placement.totalArea.toFloat(), placement.livingArea.toFloat(), IMAGE_MODE, value,false)
+    //                                            room.id = placement.id
+    //                                            room.firstSave = false
+    //                                            room.consumer = placement.consumer
+    //                                            saveRoomLocal(room)
+    //                                            openMainPage.postValue(Event(true))
+    //                                        }
+    //                                        is Result.ErrorResponse -> { }
+    //                                        is Result.Error -> { }
+    //                                    }
+    //
+    //                                }
+                } else {
+                    room.id = "firstInit"
+                    room.firstSave = true
+                    saveRoomLocal(room)
+                    //  userMessage.postValue(Event("Помещение создано"))
+                    openRegistration.postValue(Event(true))
+                }
             }
         }
     }

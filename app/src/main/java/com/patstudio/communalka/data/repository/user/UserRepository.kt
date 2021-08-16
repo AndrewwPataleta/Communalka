@@ -95,7 +95,7 @@ class UserRepository (
         return dao.getUserById(userId)
     }
 
-    fun getLastAuthUser(): Flow<User>  {
+    fun getLastAuthUser(): User  {
         return dao.getLastAuth()
     }
 

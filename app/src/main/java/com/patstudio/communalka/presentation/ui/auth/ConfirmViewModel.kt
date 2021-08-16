@@ -136,26 +136,35 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
     private fun sendLocalRoom(room: Room, userForm: ConfirmSmsWrapper) {
         Log.d("ConfirmViewModel", "send local room")
         viewModelScope.launch(dispatcherProvider.io) {
-            roomRepository.sendPremises(room)
-                .catch {
-                    it.printStackTrace()
-                }
-                .collect {
-                    when (it) {
-                        is Result.Success -> {
-                            Log.d("ConfirmViewModel", "result "+it.toString())
-                            var placement = gson.fromJson(it.data.data!!.asJsonObject.get("placement"), Placement::class.java)
-                            roomRepository.updateFirstInitRoom(placement.id, placement.consumer)
-                            smsCodeMutable.postValue(Event(smsCode))
-                            userFormMutable.postValue(Event(userForm.consumer))
-                            progressPhoneSending.postValue(false)
-                        }
-                        is Result.ErrorResponse -> {
-                        }
-                        is Result.Error -> {
-                        }
-                    }
-                }
+            val resp = roomRepository.sendPremises(room)
+
+            var placement = gson.fromJson(resp.data!!.asJsonObject.get("placement"), Placement::class.java)
+            roomRepository.updateFirstInitRoom(placement.id, placement.consumer)
+            smsCodeMutable.postValue(Event(smsCode))
+            userFormMutable.postValue(Event(userForm.consumer))
+            progressPhoneSending.postValue(false)
+
+//                .catch {
+//                    it.printStackTrace()
+//                }
+//                .collect {
+//                    when (it) {
+//                        is Result.Success -> {
+//                            Log.d("ConfirmViewModel", "result "+it.toString())
+//                            var placement = gson.fromJson(it.data.data!!.asJsonObject.get("placement"), Placement::class.java)
+//                            roomRepository.updateFirstInitRoom(placement.id, placement.consumer)
+//                            smsCodeMutable.postValue(Event(smsCode))
+//                            userFormMutable.postValue(Event(userForm.consumer))
+//                            progressPhoneSending.postValue(false)
+//                        }
+//                        is Result.ErrorResponse -> {
+//
+//                        }
+//                        is Result.Error -> {
+//
+//                        }
+//                    }
+//                }
         }
 
     }

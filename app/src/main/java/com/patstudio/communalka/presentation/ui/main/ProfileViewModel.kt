@@ -28,17 +28,11 @@ class ProfileViewModel(private val userRepository: UserRepository, private val d
 
     fun initCurrentUser() {
         viewModelScope.launch(dispatcherProvider.io) {
-            userRepository.getLastAuthUser()
-                .catch {
-                    it.printStackTrace()
-                }
-                .collect {
-
-                   it?.let {
-                       Log.d("WelcomeViewModel", it.toString())
-                       userMutable.postValue(Event(it))
-                   }
-                }
+            val user = userRepository.getLastAuthUser()
+            user?.let {
+                Log.d("WelcomeViewModel", it.toString())
+                userMutable.postValue(Event(it))
+            }
         }
     }
 
