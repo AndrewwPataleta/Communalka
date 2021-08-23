@@ -10,10 +10,13 @@ import retrofit2.http.*
 interface UserService {
 
     @POST("auth/send_code/")
-    suspend fun login(@Body target: JsonObject): APIResponse<JsonElement>
+    suspend fun sendCode(@Body target: JsonObject): APIResponse<JsonElement>
 
     @POST("auth/login/")
     suspend fun confirmSms(@Body target: JsonObject): APIResponse<JsonElement>
+
+    @POST("auth/login/")
+    suspend fun login(@Body target: JsonObject): APIResponse<JsonElement>
 
     @POST("auth/register/")
     suspend fun registration(@Body target: JsonObject): APIResponse<JsonElement>

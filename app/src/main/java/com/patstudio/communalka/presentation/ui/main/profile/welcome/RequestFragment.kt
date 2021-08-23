@@ -1,18 +1,11 @@
-package com.patstudio.communalka.presentation.ui.main
+package com.patstudio.communalka.presentation.ui.main.profile.welcome
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import com.patstudio.communalka.R
-import com.patstudio.communalka.data.model.User
 import com.patstudio.communalka.databinding.FragmentRequestBinding
-import com.patstudio.communalka.databinding.FragmentWelcomeBinding
-import gone
-import org.koin.android.viewmodel.ext.android.viewModel
 
 class RequestFragment : Fragment() {
 

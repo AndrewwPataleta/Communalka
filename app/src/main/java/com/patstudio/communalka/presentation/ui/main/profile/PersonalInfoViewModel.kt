@@ -1,4 +1,4 @@
-package com.patstudio.communalka.presentation.ui.main
+package com.patstudio.communalka.presentation.ui.main.profile
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -15,12 +15,12 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ProfileViewModel(private val userRepository: UserRepository, private val dispatcherProvider: DispatcherProvider): ViewModel() {
+class PersonalInfoViewModel(private val userRepository: UserRepository, private val dispatcherProvider: DispatcherProvider): ViewModel() {
 
    private lateinit var user: User
    private val userMutable: MutableLiveData<Event<User>> = MutableLiveData()
 
-   private val _haveNoAuthUser: MutableLiveData<Event<Boolean>> = MutableLiveData()
+
 
    fun setCurrentUser(user:User) {
        this.user = user
@@ -34,24 +34,15 @@ class ProfileViewModel(private val userRepository: UserRepository, private val d
             if (user != null)  {
                 Log.d("WelcomeViewModel", user.toString())
                 userMutable.postValue(Event(user))
-            } else {
-                _haveNoAuthUser.postValue(Event(true))
             }
         }
     }
 
-    fun logout() {
-        viewModelScope.launch(dispatcherProvider.io) {
-            userRepository.logoutAll()
-        }
-    }
 
     fun getUser(): MutableLiveData<Event<User>> {
         return userMutable
     }
 
-    fun getHaveNoAuth(): MutableLiveData<Event<Boolean>> {
-        return _haveNoAuthUser
-    }
+
 
 }

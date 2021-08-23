@@ -78,8 +78,23 @@ class ConfirmSmsFragment : Fragment() {
                 it.getContentIfNotHandled {
                   if (it != null) {
                       binding.congratulation.visible(false)
-                      val splitFio = it.split(" ")
-                      binding.congratulation.text = getString(R.string.welcome_user, (splitFio[0]+" "+splitFio[1]))
+                      val splitFio = it.trim().split(" ")
+
+                      var fio = ""
+                      if (splitFio.size > 2) {
+                          splitFio[1]?.let {
+                              fio+=it
+                          }
+                          splitFio[2]?.let {
+                              fio += " "+it
+                          }
+                      } else {
+                          splitFio[1]?.let {
+                              fio+=it
+                          }
+                      }
+
+                      binding.congratulation.text = getString(R.string.welcome_user, fio)
                   } else {
                       binding.congratulation.gone(false)
                   }

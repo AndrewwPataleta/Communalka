@@ -1,4 +1,4 @@
-package com.patstudio.communalka.presentation.ui.main
+package com.patstudio.communalka.presentation.ui.main.profile.welcome
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -11,12 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toolbar
 import androidx.core.os.bundleOf
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.patstudio.communalka.R
-import com.patstudio.communalka.data.model.User
 import com.patstudio.communalka.databinding.FragmentWelcomeBinding
+import com.patstudio.communalka.presentation.ui.main.WelcomeViewModel
 import com.patstudio.communalka.presentation.ui.main.room.PlacementAdapter
 import gone
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -56,14 +55,40 @@ class WelcomeFragment : Fragment() {
     private fun initObservers() {
         viewModel.getUser().observe(this) {
             if (!it.hasBeenHandled.get()) {
+
                 it.getContentIfNotHandled {
+
+                    this.binding.contentContainer.visible(true)
                     binding.login.gone(false)
                     binding.registration.gone(false)
                     val splitFio = it.name.split(" ")
-                    binding.welcomeText.text = getString(R.string.welcome_user, (splitFio[0]+" "+splitFio[1]))
+                    var fio = ""
+                    if (splitFio.size > 2) {
+                        splitFio[1]?.let {
+                            fio += it
+                        }
+                        splitFio[2]?.let {
+                            fio += " " + it
+                        }
+                    } else {
+                        splitFio[1]?.let {
+                            fio += it
+                        }
+                    }
+
+                    binding.welcomeText.text = getString(R.string.welcome_user, fio)
+
                 }
             }
         }
+        viewModel.getWithoutUser().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                   this.binding.contentContainer.visible(true)
+                }
+            }
+        }
+
         viewModel.getNavigateTo().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {

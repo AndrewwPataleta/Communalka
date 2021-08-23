@@ -7,26 +7,42 @@
 
     <fragment
         android:id="@+id/WelcomeFragment"
-        android:name="com.patstudio.communalka.presentation.ui.main.WelcomeFragment"
+        android:name="com.patstudio.communalka.presentation.ui.main.profile.welcome.WelcomeFragment"
         android:label="Главная"
         tools:layout="@layout/fragment_welcome">
 
         <action
             android:id="@+id/loLoginPage"
-            app:destination="@id/LoginFragment" />
+            app:destination="@id/LoginFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/toPinCode"
 
-            app:destination="@id/PinCode" />
+            app:destination="@id/PinCode"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <argument
             android:name="user"
             app:argType="com.patstudio.communalka.data.model.User" />
         <action
             android:id="@+id/toRegistration"
-            app:destination="@id/Registration" />
+            app:destination="@id/Registration"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_WelcomeFragment_to_AddRoom"
-            app:destination="@id/AddRoom" />
+            app:destination="@id/AddRoom"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/LoginFragment"
@@ -35,13 +51,25 @@
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/toPinCode"
-            app:destination="@id/PinCode" />
+            app:destination="@id/PinCode"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/toRegistrationFragment"
-            app:destination="@id/Registration" />
+            app:destination="@id/Registration"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/ConfirmSms"
-            app:destination="@id/ConfirmSms" />
+            app:destination="@id/ConfirmSms"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -51,18 +79,30 @@
         tools:layout="@layout/fragment_registration">
         <action
             android:id="@+id/toLogin"
-            app:destination="@id/LoginFragment" />
+            app:destination="@id/LoginFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/toConfirmSms"
-            app:destination="@id/ConfirmSms" />
+            app:destination="@id/ConfirmSms"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/toPinCode"
-            app:destination="@id/PinCode" />
+            app:destination="@id/PinCode"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
         android:id="@+id/Request"
-        android:name="com.patstudio.communalka.presentation.ui.main.RequestFragment"
+        android:name="com.patstudio.communalka.presentation.ui.main.profile.welcome.RequestFragment"
         android:label="Заявки"
         tools:layout="@layout/fragment_request">
 
@@ -89,14 +129,25 @@
         <action
             android:id="@+id/toPinCode"
             app:popUpTo="@id/WelcomeFragment"
-
-            app:destination="@id/PinCode" />
+            app:destination="@id/PinCode"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/toRegistrationFragment"
-            app:destination="@id/Registration" />
+            app:destination="@id/Registration"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/toLogin"
-            app:destination="@id/LoginFragment" />
+            app:destination="@id/LoginFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -116,13 +167,18 @@
         <action
             android:id="@+id/action_PinCode_to_WelcomeFragment"
             app:destination="@id/WelcomeFragment"
-            app:launchSingleTop="true"
-            app:popUpToInclusive="true"
-            app:popUpTo="@+id/WelcomeFragment" />
+            app:popUpTo="@+id/WelcomeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/toRestore"
             app:destination="@id/RestorePinCode"
-            app:popUpTo="@+id/WelcomeFragment" />
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <argument
             android:name="user"
             app:argType="com.patstudio.communalka.data.model.UserForm" />
@@ -133,9 +189,30 @@
 
     <fragment
         android:id="@+id/Profile"
-        android:name="com.patstudio.communalka.presentation.ui.main.welcome.ProfileFragment"
+        android:name="com.patstudio.communalka.presentation.ui.main.profile.welcome.ProfileFragment"
         android:label="Профиль"
         tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/toWelcomePage"
+            app:destination="@id/WelcomeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/toPersonalInfo"
+            app:destination="@id/PersonalInfo"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/PersonalInfo"
+        android:name="com.patstudio.communalka.presentation.ui.main.profile.PersonalInfoFragment"
+        android:label="Личные данные"
+        tools:layout="@layout/fragment_personal_info">
 
     </fragment>
 
@@ -147,10 +224,18 @@
         <action
             android:id="@+id/toWelcomePage"
             app:destination="@id/WelcomeFragment"
-            app:popUpTo="@+id/WelcomeFragment" />
+            app:popUpTo="@+id/WelcomeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/toRegistration"
             app:destination="@id/Registration"
-            app:popUpTo="@+id/Registration" />
+            app:popUpTo="@+id/Registration"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 </navigation>

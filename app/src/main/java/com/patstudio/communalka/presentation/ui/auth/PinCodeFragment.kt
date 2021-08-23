@@ -103,14 +103,27 @@ class PinCodeFragment : Fragment() {
         viewModel.getAlertMessage().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                    val builder = AlertDialog.Builder(requireContext())
-                    builder.setMessage(it)
+                    val builder = AlertDialog.Builder(requireActivity())
+                    builder.setTitle(it)
                     builder.setPositiveButton("Ок") { dialogInterface, which ->
                         dialogInterface.dismiss()
                     }
                     val alertDialog: AlertDialog = builder.create()
                     alertDialog.setCancelable(false)
                     alertDialog.show()
+                }
+            }
+        }
+
+        viewModel.getAccessBack().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+//                   if (it) {
+//                       binding.close.visible(false)
+//                   } else {
+//                       binding.close.invisible(false)
+//
+//                   }
                 }
             }
         }
@@ -145,6 +158,8 @@ class PinCodeFragment : Fragment() {
             }
         }
     }
+
+
 
     private fun initListeners() {
         binding.pinOne.setOnClickListener { viewModel.clickDigital(getString(R.string.one)) }

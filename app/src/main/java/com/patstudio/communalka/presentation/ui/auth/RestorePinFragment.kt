@@ -60,14 +60,18 @@ class RestorePinFragment : Fragment() {
 
         }
         viewModel.getUserMessage().observe(this) {
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setMessage(it)
-            builder.setPositiveButton("Ок"){dialogInterface, which ->
-                dialogInterface.dismiss()
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val builder = AlertDialog.Builder(requireContext())
+                    builder.setMessage(it)
+                    builder.setPositiveButton("Ок"){dialogInterface, which ->
+                        dialogInterface.dismiss()
+                    }
+                    val alertDialog: AlertDialog = builder.create()
+                    alertDialog.setCancelable(false)
+                    alertDialog.show()
+                }
             }
-            val alertDialog: AlertDialog = builder.create()
-            alertDialog.setCancelable(false)
-            alertDialog.show()
         }
         viewModel.getProgressPhoneSending().observe(this) {
 

@@ -11,6 +11,7 @@ import com.patstudio.communalka.data.model.ConfirmSmsParams
 import com.patstudio.communalka.data.model.Result
 import com.patstudio.communalka.data.model.UserForm
 import com.patstudio.communalka.data.model.auth.LoginFormError
+import com.patstudio.communalka.data.model.auth.LoginResponseError
 import com.patstudio.communalka.data.repository.user.UserRepository
 import isValidPhoneNumber
 import kotlinx.coroutines.flow.*
@@ -26,7 +27,7 @@ class RestoreViewModel(private val userRepository: UserRepository, private val g
     private val disableNavigation: MutableLiveData<Boolean> = MutableLiveData()
     private val confirmCode: MutableLiveData<String> = MutableLiveData()
     private val confirmSmsParams: MutableLiveData<Event<ConfirmSmsParams>> = MutableLiveData()
-    private val userMessage: MutableLiveData<String> = MutableLiveData()
+    private val userMessage: MutableLiveData<Event<String>> = MutableLiveData()
 
     private fun validatePhoneNumber(): Boolean {
         return if (phoneNumber.isValidPhoneNumber()) {
@@ -65,7 +66,17 @@ class RestoreViewModel(private val userRepository: UserRepository, private val g
                            is Result.ErrorResponse -> {
                                when(it.data.status) {
                                    "fail" -> {
-                                       userMessage.postValue(it.data.message)
+                                       it.data.message?.let {
+                                           userMessage.postValue(Event(it))
+                                       }
+
+                                       it.data?.let {
+                                           var loginResponseError = gson.fromJson(it.data, LoginResponseError::class.java)
+                                           loginResponseError?.let {
+                                               userMessage.postValue(Event(it.target))
+                                           }
+                                       }
+
                                        progressPhoneSending.postValue(false)
                                        disableNavigation.postValue(false)
                                    }
@@ -98,7 +109,7 @@ class RestoreViewModel(private val userRepository: UserRepository, private val g
         return disableNavigation
     }
 
-    fun getUserMessage(): MutableLiveData<String> {
+    fun getUserMessage(): MutableLiveData<Event<String>> {
         return userMessage
     }
 

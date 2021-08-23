@@ -90,14 +90,50 @@ class LoginViewModel(private val userRepository: UserRepository, private val gso
                        when (it) {
                            is Result.Success -> {
                                when(it.data.status) {
-                                   "fail" -> {
-                                       var loginError = gson.fromJson(it.data.data, LoginFormError::class.java)
-                                       Log.d("LoginViewModel", loginError.toString())
-                                   }
                                    "success" -> {
-                                       confirmSmsParams.postValue(Event(ConfirmSmsParams(value,false)))
-                                       progressPhoneSending.postValue(false)
-                                       disableNavigation.postValue(false)
+                                       userRepository.sendCode(value)
+                                           .catch {
+                                               Log.d("LoginViewModel", it.localizedMessage)
+                                           }
+                                           .collect {
+                                               when (it) {
+                                                   is Result.Success -> {
+                                                       when(it.data.status) {
+                                                           "fail" -> {
+                                                               var loginError = gson.fromJson(it.data.data, LoginFormError::class.java)
+                                                               Log.d("LoginViewModel", loginError.toString())
+                                                           }
+                                                           "success" -> {
+                                                               confirmSmsParams.postValue(Event(ConfirmSmsParams(value,false)))
+                                                               progressPhoneSending.postValue(false)
+                                                               disableNavigation.postValue(false)
+                                                           }
+                                                       }
+                                                   }
+                                                   is Result.Error -> {
+                                                       progressPhoneSending.postValue(false)
+                                                       disableNavigation.postValue(false)
+                                                   }
+                                                   is Result.ErrorResponse -> {
+                                                       when(it.data.status) {
+                                                           "fail" -> {
+                                                               it.data.message?.let {
+                                                                   userMessage.postValue(Event(it))
+                                                               }
+
+                                                               it.data?.let {
+                                                                   var loginResponseError = gson.fromJson(it.data, LoginResponseError::class.java)
+                                                                   loginResponseError?.let {
+                                                                       userMessage.postValue(Event(it.target))
+                                                                   }
+                                                               }
+                                                               progressPhoneSending.postValue(false)
+                                                               disableNavigation.postValue(false)
+                                                           }
+                                                       }
+                                                   }
+                                               }
+                                           }
                                    }
                                }
                            }

@@ -49,6 +49,27 @@ class UserRepository (
           }
      }
 
+    fun sendCode(value: String): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val user = remote.sendCode(value)
+                emit(Result.success(user))
+            }
+        } catch (throwable: Exception) {
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
     fun registration(fio: String, phone: String, email: String): Flow<Result<APIResponse<JsonElement>>> = flow {
         try {
             if (connectivity.hasNetworkAccess()) {

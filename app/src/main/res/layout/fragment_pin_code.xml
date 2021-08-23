@@ -58,6 +58,7 @@
                     android:id="@+id/close"
                     android:layout_width="35dp"
                     android:layout_height="25dp"
+                    android:visibility="gone"
                     android:src="@drawable/ic_close"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -69,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/robotobold"
                     android:gravity="center"
-                    android:text="@string/install_pin_code_short"
+
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -85,7 +86,7 @@
                     android:gravity="center"
                     android:paddingStart="32dp"
                     android:paddingEnd="32dp"
-                    android:text="@string/install_pin_code_long"
+
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"

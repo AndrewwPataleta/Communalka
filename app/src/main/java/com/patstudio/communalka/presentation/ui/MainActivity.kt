@@ -46,6 +46,10 @@ class MainActivity : AppCompatActivity() {
                     toolbar.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
+                R.id.Profile-> {
+                    toolbar.visibility = View.VISIBLE
+                    bottomNavigationView.visibility = View.VISIBLE
+                }
                 R.id.AddRoom-> {
                     toolbar.visibility = View.VISIBLE
                     bottomNavigationView.visibility = View.GONE

@@ -17,6 +17,7 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
 
     private var user: User? = null
     private val userMutable: MutableLiveData<Event<User>> = MutableLiveData()
+    private val withoutUser: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val readStoragePermissionMutable: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val navigateTo: MutableLiveData<Event<String>> = MutableLiveData()
     private val pinForm: MutableLiveData<Event<UserForm>> = MutableLiveData()
@@ -63,6 +64,8 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
                                     }
                                     userPlacement = placementList.placements
                                     readStoragePermissionMutable.postValue(Event(true))
+                                } else {
+                                    userMutable.postValue(Event(user!!))
                                 }
                             }
                             is Result.ErrorResponse -> { }
@@ -81,18 +84,26 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
     fun initCurrentUser() {
         viewModelScope.launch(dispatcherProvider.io) {
             val it = userRepository.getLastAuthUser()
-            it?.let {
-                user = it
-                if (needEnterPin) {
-                    var userForm = UserForm(it.id, it.name, it.phone, it.email, "AUTH", it.token, it.refresh)
-                    pinForm.postValue(Event(userForm))
-                } else {
-                    Log.d("WelcomeViewModel", it.toString())
-                    userMutable.postValue(Event(it))
-                    getUserPremises()
-                }
-
+            user = it
+            if (needEnterPin && user != null) {
+                var userForm = UserForm(it.id, it.name, it.phone, it.email, "AUTH", it.token, it.refresh)
+                pinForm.postValue(Event(userForm))
+            } else if (user != null) {
+                userMutable.postValue(Event(it))
+                getUserPremises()
+            } else {
+                withoutUser.postValue(Event(true))
             }
+//            if (user != null) {
+//                else {
+//                    Log.d("WelcomeViewModel", it.toString())
+//                    userMutable.postValue(Event(it))
+//                    getUserPremises()
+//                }
+//            } else {
+//
+//            }
+
         }
     }
 
@@ -120,6 +131,10 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
 
     fun getReadStoragePermission(): MutableLiveData<Event<Boolean>> {
         return readStoragePermissionMutable
+    }
+
+    fun getWithoutUser(): MutableLiveData<Event<Boolean>> {
+        return withoutUser
     }
 
     fun getNavigateTo(): MutableLiveData<Event<String>> {
