@@ -29,7 +29,7 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
     private lateinit var phone: String
     private lateinit var formType: String
     private var restore = false
-    private var TIME_FOR_REPEAT_SMS_SEND = 60000
+    private var TIME_FOR_REPEAT_SMS_SEND = 3000
     private val availableSendSms: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val availableEmailSendSms: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val progressPhoneSending: MutableLiveData<Boolean> = MutableLiveData()
@@ -44,41 +44,35 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
 
     private fun startTimer() {
 
-         timer?.let {
-             it.cancel()
-             it.onFinish()
-         }
-         timer = object: CountDownTimer(TIME_FOR_REPEAT_SMS_SEND.toLong(), 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-
-                Log.d("ConfirmSmsCode", millisUntilFinished.toString())
-                var second = (millisUntilFinished / 1000 % 60)
-                var printSecond = ""
-                if (second < 10)
-                    printSecond = "0"+second.toString()
-                else {
-                    printSecond = second.toString()
-                }
-                countDownTimer.postValue(Event("0:"+printSecond))
+            timer?.let {
+                it.cancel()
+                it.onFinish()
             }
 
-            override fun onFinish() {
-                if (repeatCount+1 > 4) {
-                    availableEmailSendSms.postValue(Event(true))
-                } else {
-                    repeatCount += 1
+            timer = object: CountDownTimer(TIME_FOR_REPEAT_SMS_SEND.toLong(), 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+
+                    Log.d("ConfirmSmsCode", millisUntilFinished.toString())
+                    var second = (millisUntilFinished / 1000 % 60)
+                    var printSecond = ""
+                    if (second < 10)
+                        printSecond = "0"+second.toString()
+                    else {
+                        printSecond = second.toString()
+                    }
+                    countDownTimer.postValue(Event("0:"+printSecond))
+                }
+
+                override fun onFinish() {
                     availableSendSms.postValue(Event(true))
                 }
             }
-        }
-        timer?.let {
-            if (repeatCount+1 > 4) {
-                availableEmailSendSms.postValue(Event(true))
-            } else {
+            timer?.let {
                 availableSendSms.postValue(Event(false))
                 it.start()
             }
-        }
+
+
     }
 
     fun setPhone(phone: String) {
@@ -323,7 +317,7 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
 
     private fun repeatSmsLogin() {
         viewModelScope.launch {
-            userRepository.login(phone)
+            userRepository.sendCode(phone)
                 .onStart {
 
                 }
@@ -350,7 +344,7 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
 
     private fun repeatSmsRegistration() {
         viewModelScope.launch {
-            userRepository.login(phone)
+            userRepository.sendCode(phone)
                 .onStart {}
                 .collect {
                     when (it) {

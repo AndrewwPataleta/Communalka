@@ -253,7 +253,7 @@ class WelcomeFragment : Fragment() {
         balloonTransmit.getContentView().findViewById<View>(R.id.okTooltip).setOnClickListener{
             balloonTransmit.dismiss()
             showPaymentTooltip()
-        }§
+        }
 
         balloonTransmit.setOnBalloonDismissListener {
             showPaymentTooltip()

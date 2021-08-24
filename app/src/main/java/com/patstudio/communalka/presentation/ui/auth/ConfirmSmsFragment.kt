@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.patstudio.communalka.R
@@ -36,35 +37,49 @@ class ConfirmSmsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentConfirmSmsBinding.inflate(inflater, container, false)
+
         return binding.root
 
     }
 
     private fun initObservers() {
-        viewModel.getAvailableSendSms().observe(this) {
+        viewModel.getAvailableSendSms().observe(viewLifecycleOwner,  {
+
             if (!it.hasBeenHandled.get()) {
-                it.getContentIfNotHandled {
-                    try {
-                        Log.d("ConfirmSmsFragment","available sms "+it)
+                Log.d("ConfirmSmsFragment", "available sms peek " + it.peekContent())
+                try {
+                    it.getContentIfNotHandled {
                         if (it) {
-                            binding.repeatSendAfterText.gone(false)
-                            binding.repeatSendAfterValue.gone(false)
-                            binding.repeatSmsSendBtn.visible(false)
+                            Log.d("ConfirmSmsFragment", "gone start")
+                            binding.repeatSendAfterText.visibility = View.GONE
+                            binding.repeatSendAfterValue.visibility = View.GONE
+                            binding.repeatSmsSendBtn.visibility = View.VISIBLE
+
+                            Log.d("ConfirmSmsFragment", "gone ok")
                         } else {
-                            binding.repeatSendAfterText.visible(false)
-                            binding.repeatSendAfterValue.visible(false)
-                            binding.repeatSmsSendBtn.gone(false)
+                            binding.repeatSendAfterText.visibility = View.VISIBLE
+                            binding.repeatSendAfterValue.visibility = View.VISIBLE
+                            binding.repeatSmsSendBtn.visibility = View.GONE
                         }
-                    } catch (e: Exception) {}
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
+//                it.getContentIfNotHandled {
+//                    try {
+//                        Log.d("ConfirmSmsFragment","available sms "+it)
+//
+//                    } catch (e: Exception) {}
+//                }
             }
-        }
-        viewModel.getCountDownTimer().observe(this) {
+        });
+
+        viewModel.getCountDownTimer().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     Log.d("ConfirmSmsFramgment", "set timer "+it)
                     try {
-                        binding.repeatSmsSendBtn.gone(false)
+                      //  binding.repeatSmsSendBtn.gone(false)
                         binding.repeatSendAfterValue.text = it
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -73,7 +88,7 @@ class ConfirmSmsFragment : Fragment() {
             }
         }
 
-        viewModel.getCongratulation().observe(this) {
+        viewModel.getCongratulation().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                   if (it != null) {
@@ -82,14 +97,14 @@ class ConfirmSmsFragment : Fragment() {
 
                       var fio = ""
                       if (splitFio.size > 2) {
-                          splitFio[1]?.let {
+                          splitFio[1].let {
                               fio+=it
                           }
-                          splitFio[2]?.let {
+                          splitFio[2].let {
                               fio += " "+it
                           }
                       } else {
-                          splitFio[1]?.let {
+                          splitFio[1].let {
                               fio+=it
                           }
                       }
@@ -103,19 +118,19 @@ class ConfirmSmsFragment : Fragment() {
 
         }
 
-        viewModel.getClearSmsForm().observe(this) {
+        viewModel.getClearSmsForm().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     if (it != null) {
                         if (it) {
-                            binding.smsEdit.text.clear();
+                            binding.smsEdit.text.clear()
                         }
                     }
                 }
             }
 
         }
-        viewModel.getProgressSmsCodeSending().observe(this) {
+        viewModel.getProgressSmsCodeSending().observe(viewLifecycleOwner) {
             try {
                 if (it) {
                     binding.progressSmsSending.visible(true)
@@ -135,14 +150,15 @@ class ConfirmSmsFragment : Fragment() {
                 }
             }
         }
-        viewModel.getSmsCode().observe(this) {
+        viewModel.getSmsCode().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                    binding.smsEdit.setText(it)
                 }
             }
         }
-        viewModel.getAvailableEmailSendSms().observe(this) {
+        viewModel.getAvailableEmailSendSms().observe(viewLifecycleOwner) {
+
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     binding.repeatSendAfterText.gone(false)
@@ -152,7 +168,7 @@ class ConfirmSmsFragment : Fragment() {
                 }
             }
         }
-        viewModel.getUserMessage().observe(this) {
+        viewModel.getUserMessage().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     val builder = MaterialAlertDialogBuilder(requireContext())
@@ -213,6 +229,7 @@ class ConfirmSmsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        Log.d("ConfirmSmsFragment","destoy view")
         _binding = null
     }
 }
