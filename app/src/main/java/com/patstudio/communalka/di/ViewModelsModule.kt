@@ -5,6 +5,7 @@ import com.patstudio.communalka.presentation.ui.main.room.AddRoomViewModel
 import com.patstudio.communalka.presentation.ui.main.ProfileViewModel
 import com.patstudio.communalka.presentation.ui.main.WelcomeViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.PersonalInfoViewModel
+import com.patstudio.communalka.presentation.ui.splash.MainViewModel
 import com.patstudio.communalka.presentation.ui.splash.SplashViewModel
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -12,6 +13,7 @@ import org.koin.dsl.module
 val viewModelsModule = module {
 
     viewModel { SplashViewModel(get()) }
+    viewModel { MainViewModel(get()) }
     viewModel { LoginViewModel(get(), get()) }
     viewModel { RegistrationViewModel(get(), get()) }
     viewModel { PinCodeViewModel(get(), get()) }

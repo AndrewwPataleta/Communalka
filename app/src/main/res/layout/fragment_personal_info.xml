@@ -18,11 +18,22 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:background="@drawable/circle_gray_background"
-            android:padding="28dp"
+
             android:tint="@color/gray_dark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/mockAvatar"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:padding="12dp"
+            app:layout_constraintTop_toTopOf="@id/attachRoomImage"
+            app:layout_constraintStart_toStartOf="@id/attachRoomImage"
+            app:layout_constraintBottom_toBottomOf="@id/attachRoomImage"
+            app:layout_constraintEnd_toEndOf="@id/attachRoomImage"
+            android:src="@drawable/ic_profile"/>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iconAdd"
@@ -62,7 +73,7 @@
             app:layout_constraintTop_toBottomOf="@id/fio_text" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/saveRoom"
+            android:id="@+id/editUserBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

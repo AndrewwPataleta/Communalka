@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/tooltipTitle"
+        style="@style/TextBold1"
+        android:layout_width="match_parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/robotobold"
+
+        android:text="Передача показаний"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/tooltipMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+
+
+        android:paddingEnd="32dp"
+        android:text="Как только л/с пройдут проверку, можно будет вносить показания по счетчикам"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tooltipTitle" />
+
+    <Button
+        android:id="@+id/okTooltip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ок"
+        style="?android:attr/borderlessButtonStyle"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/dark_blue"
+        android:textAllCaps="false"
+        app:layout_constraintTop_toBottomOf="@+id/tooltipMessage"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

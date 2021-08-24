@@ -191,7 +191,8 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
                     "",
                     userForm.consumer.token,
                     userForm.consumer.refresh,
-                    true
+                    true,
+                    ""
                 )
                 userRepository.saveUser(userForSave)
                 userRepository.setLastLoginUser(userForSave)

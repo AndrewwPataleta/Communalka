@@ -1,6 +1,7 @@
 package com.patstudio.communalka.presentation.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.Navigation
@@ -9,16 +10,37 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.navigation.ui.NavigationUI.setupWithNavController
+import com.bumptech.glide.Glide
 import com.patstudio.communalka.R
 import com.patstudio.communalka.databinding.ActivityMainBinding
+import com.patstudio.communalka.presentation.ui.splash.MainViewModel
+import com.patstudio.communalka.presentation.ui.splash.SplashViewModel
+import gone
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import org.koin.android.viewmodel.ext.android.viewModel
+import visible
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private val viewModel by viewModel<MainViewModel>()
+
+    private fun initObservers() {
+        viewModel.getNeedShadow().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    if (it) {
+                        binding.backgroundShadow.visible(false)
+                    } else {
+                        binding.backgroundShadow.gone(false)
+                    }
+                }
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +90,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        initObservers()
     }
 
     override fun onSupportNavigateUp(): Boolean {

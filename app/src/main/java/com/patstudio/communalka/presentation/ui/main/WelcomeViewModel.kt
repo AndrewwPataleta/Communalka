@@ -108,7 +108,6 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
     }
 
 
-
     fun checkAvailableToOpenAddRoom() {
         if (user != null) {
            navigateTo.postValue(Event("ADD_ROOM"))

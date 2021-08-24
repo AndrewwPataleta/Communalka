@@ -51,7 +51,8 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
 
         if (pinCodeRepeat.length == 4) {
             if (pinCodeRepeat.compareTo(pinCode) == 0) {
-                var userForSave = User(userForm.id,userForm.fio, userForm.phone, userForm.email, pinCode, userForm.token, userForm.refresh, true)
+                var userForSave = User(userForm.id,userForm.fio, userForm.phone, userForm.email, pinCode, userForm.token, userForm.refresh, true,
+                    "")
                 viewModelScope.launch(dispatcherProvider.io) {
                     try {
                         userRepository.saveUser(userForSave)

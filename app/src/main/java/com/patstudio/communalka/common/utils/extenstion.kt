@@ -1,5 +1,6 @@
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.content.res.Resources
 import android.text.InputFilter
 import android.util.Patterns
 import android.view.View
@@ -17,6 +18,11 @@ import retrofit2.HttpException
 fun CharSequence?.isValidPhoneNumber():Boolean{
     return !isNullOrEmpty() && Patterns.PHONE.matcher(this).matches()
 }
+
+val Int.dp: Int
+    get() = (this / Resources.getSystem().displayMetrics.density).toInt()
+val Int.px: Int
+    get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
 fun CharSequence?.isEmailValid(): Boolean {
     return android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()

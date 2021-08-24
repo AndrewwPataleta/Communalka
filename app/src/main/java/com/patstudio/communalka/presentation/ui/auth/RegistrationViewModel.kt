@@ -18,10 +18,11 @@ import kotlinx.coroutines.launch
 class RegistrationViewModel(private val userRepository: UserRepository, private val gson: Gson): ViewModel() {
 
     private var phoneNumber: String = ""
-    private var userFio: String = ""
+
     private var userEmail: String = ""
     private var licenseAccept: Boolean = false
     private val phoneError: MutableLiveData<Event<String>> = MutableLiveData()
+    private var userFio: String = ""
     private val userFioError: MutableLiveData<Event<String>> = MutableLiveData()
     private val userEmailError: MutableLiveData<Event<String>> = MutableLiveData()
     private val userLicenseAcceptError: MutableLiveData<Event<String>> = MutableLiveData()

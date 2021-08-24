@@ -27,4 +27,16 @@
         android:id="@+id/content"
         layout="@layout/content_main" />
 
+    <FrameLayout
+        android:id="@+id/backgroundShadow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/bottomNavigationView"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:alpha="0.5"></FrameLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
