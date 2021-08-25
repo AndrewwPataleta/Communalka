@@ -8,6 +8,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Entity(tableName = "user")
 @Parcelize
-data class User(@PrimaryKey val id: String, val name: String, val phone: String, val email:String, val pinCode: String, val token: String,  val refresh: String, val lastAuth: Boolean, val photoPath: String) : Parcelable
+data class User(@PrimaryKey val id: String, var name: String, val phone: String, val email:String, val pinCode: String, val token: String,  val refresh: String, val lastAuth: Boolean, var photoPath: String) : Parcelable
 
 

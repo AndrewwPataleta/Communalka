@@ -164,9 +164,7 @@ class RegistrationFragment : Fragment() {
         binding.fioEdit.doAfterTextChanged {
             viewModel.setUserFio(it.toString())
         }
-        binding.fioEdit.doAfterTextChanged {
-            viewModel.setUserFio(it.toString())
-        }
+
         binding.userLicenceCheck.setOnCheckedChangeListener { buttonView, isChecked ->
             viewModel.userLicenseAgreement(isChecked)
         }

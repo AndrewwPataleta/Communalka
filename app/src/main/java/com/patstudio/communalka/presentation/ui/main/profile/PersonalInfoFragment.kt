@@ -5,6 +5,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
+import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.fragment.findNavController
 import com.patstudio.communalka.R
 import com.patstudio.communalka.databinding.FragmentPersonalInfoBinding
@@ -47,6 +49,8 @@ class PersonalInfoFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     this.binding.fioEdit.setText(it.name)
+                    binding.mockAvatar.gone(false)
+                    binding.attachRoomImage.setImageURI(Uri.parse(it.photoPath))
                 }
             }
         }
@@ -121,6 +125,9 @@ class PersonalInfoFragment : Fragment() {
         }
         binding.editUserBtn.setOnClickListener {
             viewModel.editUser()
+        }
+        binding.fioEdit.doAfterTextChanged {
+            viewModel.setUserFio(it.toString())
         }
     }
 

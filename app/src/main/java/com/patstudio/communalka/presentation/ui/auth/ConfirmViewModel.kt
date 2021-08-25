@@ -29,7 +29,7 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
     private lateinit var phone: String
     private lateinit var formType: String
     private var restore = false
-    private var TIME_FOR_REPEAT_SMS_SEND = 3000
+    private var TIME_FOR_REPEAT_SMS_SEND = 60000
     private val availableSendSms: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val availableEmailSendSms: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val progressPhoneSending: MutableLiveData<Boolean> = MutableLiveData()

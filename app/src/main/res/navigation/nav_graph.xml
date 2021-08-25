@@ -202,6 +202,52 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/toAboutApp"
+            app:destination="@id/AboutApp"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/AboutApp"
+        android:name="com.patstudio.communalka.presentation.ui.main.profile.AboutAppFragment"
+        android:label="О приложении"
+        tools:layout="@layout/fragment_about_app">
+        <action
+            android:id="@+id/toHistoryVersion"
+            app:destination="@id/HistoryVersion"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/toConnectDeveloper"
+            app:destination="@id/ConnectDeveloper"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/ConnectDeveloper"
+        android:name="com.patstudio.communalka.presentation.ui.main.profile.ConnectDeveloperFragment"
+        android:label="Связь с разработчиками"
+        tools:layout="@layout/fragment_connect_developer">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/HistoryVersion"
+        android:name="com.patstudio.communalka.presentation.ui.main.profile.HistoryVersionFragment"
+        android:label="История версий приложения"
+        tools:layout="@layout/fragment_history_version">
+
     </fragment>
 
     <fragment

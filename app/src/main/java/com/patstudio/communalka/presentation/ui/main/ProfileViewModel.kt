@@ -43,6 +43,7 @@ class ProfileViewModel(private val userRepository: UserRepository, private val d
     fun logout() {
         viewModelScope.launch(dispatcherProvider.io) {
             userRepository.logoutAll()
+            _haveNoAuthUser.postValue(Event(true))
         }
     }
 

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:paddingTop="32dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/logo"/>
+
+        <TextView
+            android:id="@+id/versionAppText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/logo"
+            android:text="Версия 4.4"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"/>
+
+        <View
+            android:id="@+id/aboutAppDecorator"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#EEF1F5"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/versionAppText"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/historyVersionIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_app"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/aboutAppDecorator"/>
+
+        <TextView
+            android:id="@+id/historyVersionText"
+            style="@style/TextBody1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/robotobold"
+            android:text="История версий приложения"
+            android:textColor="@android:color/black"
+            android:textSize="17sp"
+            android:padding="16dp"
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/historyVersionIcon"
+            app:layout_constraintTop_toTopOf="@id/historyVersionIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/historyVersionIcon"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/historyVersionArrow"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_down"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/historyVersionText"
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintBottom_toBottomOf="@id/historyVersionText"
+            android:rotation="270"/>
+
+        <View
+            android:id="@+id/historyVersionDecorator"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#EEF1F5"
+            app:layout_constraintTop_toBottomOf="@id/historyVersionText"/>
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/connectDeveloperIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_mail"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/historyVersionDecorator"/>
+
+        <TextView
+            android:id="@+id/connectDeveloperText"
+            style="@style/TextBody1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/robotobold"
+            android:text="Связь с разработчиком"
+            android:textColor="@android:color/black"
+            android:textSize="17sp"
+            android:padding="16dp"
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/connectDeveloperIcon"
+            app:layout_constraintTop_toTopOf="@id/connectDeveloperIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/connectDeveloperIcon"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/connectDeveloperArrow"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_down"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/connectDeveloperText"
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintBottom_toBottomOf="@id/connectDeveloperText"
+            android:rotation="270"/>
+
+        <View
+            android:id="@+id/connectDeveloperDecorator"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#EEF1F5"
+            app:layout_constraintTop_toBottomOf="@id/connectDeveloperText"/>
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/appLicenceIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_list"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/connectDeveloperDecorator"/>
+
+        <TextView
+            android:id="@+id/appLicenceText"
+            style="@style/TextBody1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/robotobold"
+            android:text="Пользовательское соглашение"
+            android:textColor="@android:color/black"
+            android:textSize="17sp"
+            android:padding="16dp"
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/appLicenceIcon"
+            app:layout_constraintTop_toTopOf="@id/appLicenceIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/appLicenceIcon"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/appLicenceArrow"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_down"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/appLicenceText"
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintBottom_toBottomOf="@id/appLicenceText"
+            android:rotation="270"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

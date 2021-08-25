@@ -23,7 +23,7 @@ class PersonalInfoViewModel(private val userRepository: UserRepository, private 
     private val checkReadExternalPermission: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val openExternalPermission: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val imageURI: MutableLiveData<Event<Uri>> = MutableLiveData()
-    private lateinit var currentPath: Uri
+    private var currentPath: String = ""
     private var userFio: String = ""
     private val userFioError: MutableLiveData<Event<String>> = MutableLiveData()
     private val userMessage: MutableLiveData<Event<String>> = MutableLiveData()
@@ -36,9 +36,8 @@ class PersonalInfoViewModel(private val userRepository: UserRepository, private 
 
     fun initCurrentUser() {
         viewModelScope.launch(dispatcherProvider.io) {
-            val user = userRepository.getLastAuthUser()
+             user = userRepository.getLastAuthUser()
             if (user != null)  {
-
                 userMutable.postValue(Event(user))
             }
         }
@@ -50,7 +49,8 @@ class PersonalInfoViewModel(private val userRepository: UserRepository, private 
     }
 
     fun setUserAvatar(currentPath: Uri) {
-        this.currentPath = currentPath
+        Log.d("PersonalInfo", currentPath.path!!+" "+currentPath+" "+currentPath.toString())
+        this.currentPath = currentPath.toString()
         imageURI.postValue(Event(currentPath))
     }
 
@@ -72,10 +72,20 @@ class PersonalInfoViewModel(private val userRepository: UserRepository, private 
         return valid
     }
 
-    fun editUser() {
+     fun editUser() {
         if (validateUserForm()) {
+            user.name = userFio
+            if (currentPath.length > 0) user.photoPath = currentPath
+            viewModelScope.launch(dispatcherProvider.io) {
+                userRepository.saveUser(user)
+                userMessage.postValue(Event("Изменения сохранены"))
+            }
 
         }
+    }
+
+    fun setUserFio(userFio: String) {
+        this.userFio = userFio
     }
 
     fun getUser(): MutableLiveData<Event<User>> {

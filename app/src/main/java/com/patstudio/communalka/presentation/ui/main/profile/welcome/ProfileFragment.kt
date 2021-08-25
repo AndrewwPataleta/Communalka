@@ -32,17 +32,21 @@ class ProfileFragment : Fragment() {
 
 
     private fun setAuthNavigation() {
-
+        this.binding.profileText.setOnClickListener {
+            findNavController().navigate(R.id.PersonalInfo)
+        }
     }
 
     private fun removeAuthNavigation() {
-
+        this.binding.profileText.setOnClickListener {}
     }
 
     private fun haveNoAuthUser() {
+        removeAuthNavigation()
         this.binding.avatar.gone(false)
         this.binding.userFio.gone(false)
         this.binding.iconDown.gone(false)
+        this.binding.logoutGroup.gone(false)
         this.binding.loginBtn.visible(false)
         this.binding.profileText.setTextColor(resources.getColor(R.color.gray_dark))
         this.binding.cardsText.setTextColor(resources.getColor(R.color.gray_dark))
@@ -54,6 +58,7 @@ class ProfileFragment : Fragment() {
         this.binding.securityArrow.setColorFilter(ContextCompat.getColor(requireContext(), R.color.gray_dark), android.graphics.PorterDuff.Mode.MULTIPLY)
         this.binding.notificationArrow.setColorFilter(ContextCompat.getColor(requireContext(), R.color.gray_dark), android.graphics.PorterDuff.Mode.MULTIPLY)
 
+
     }
 
     private fun initObservers() {
@@ -62,6 +67,7 @@ class ProfileFragment : Fragment() {
                 it.getContentIfNotHandled {
                     setAuthNavigation()
                     this.binding.userFio.text = it.name
+
                 }
             }
         }
@@ -75,10 +81,18 @@ class ProfileFragment : Fragment() {
     }
 
     private fun initListeners() {
-        this.binding.loginBtn.setOnClickListener{
-            findNavController().navigate(R.id.WelcomeFragment)}
-        this.binding.profileText.setOnClickListener{
-            findNavController().navigate(R.id.PersonalInfo)}
+        this.binding.loginBtn.setOnClickListener {
+            findNavController().navigate(R.id.WelcomeFragment)
+        }
+        this.binding.profileText.setOnClickListener {
+            findNavController().navigate(R.id.PersonalInfo)
+        }
+        this.binding.InfoAppText.setOnClickListener {
+            findNavController().navigate(R.id.AboutApp)
+        }
+        this.binding.logoutText.setOnClickListener {
+            viewModel.logout()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

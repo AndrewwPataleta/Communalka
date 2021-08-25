@@ -4,6 +4,7 @@ import com.patstudio.communalka.presentation.ui.auth.*
 import com.patstudio.communalka.presentation.ui.main.room.AddRoomViewModel
 import com.patstudio.communalka.presentation.ui.main.ProfileViewModel
 import com.patstudio.communalka.presentation.ui.main.WelcomeViewModel
+import com.patstudio.communalka.presentation.ui.main.profile.HistoryVersionViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.PersonalInfoViewModel
 import com.patstudio.communalka.presentation.ui.splash.MainViewModel
 import com.patstudio.communalka.presentation.ui.splash.SplashViewModel
@@ -23,5 +24,6 @@ val viewModelsModule = module {
     viewModel { ProfileViewModel(get(),get()) }
     viewModel { AddRoomViewModel(get(), get(), get(),get(), get()) }
     viewModel { PersonalInfoViewModel(get(), get()) }
+    viewModel { HistoryVersionViewModel(get(), get()) }
 
 }
