@@ -8,7 +8,7 @@ import com.patstudio.communalka.data.database.user.UserDao
 import com.patstudio.communalka.data.model.Premises
 import com.patstudio.communalka.data.model.Room
 
-@Database(entities = [User::class, Premises::class, Room::class], version = 4, exportSchema = false)
+@Database(entities = [User::class, Premises::class, Room::class], version = 5, exportSchema = false)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun userDao(): UserDao

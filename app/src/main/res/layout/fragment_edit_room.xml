@@ -7,7 +7,7 @@
         <variable name="viewModel" type="com.patstudio.communalka.presentation.ui.main.WelcomeViewModel"/>
         <variable name="position" type="Integer"/>
         <variable name="model" type="com.patstudio.communalka.data.model.Placement"/>
-        <import type="String"/>
+
     </data>
 
 <ScrollView
@@ -17,7 +17,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="0dp"
@@ -217,7 +217,7 @@
                     android:id="@+id/total_area_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{String.valueOf(model.totalArea)}"
+                  
                     android:textColorHint="@color/gray_placeholder"
                     android:textSize="16sp"
                     android:theme="@style/EditTextBottomLine"
@@ -244,7 +244,7 @@
                     android:id="@+id/living_space_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{String.valueOf(model.livingArea)}"
+
                     android:textColorHint="@color/gray_placeholder"
                     android:textSize="16sp"
                     android:theme="@style/EditTextBottomLine"
@@ -290,4 +290,5 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
+
 </layout>

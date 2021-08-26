@@ -54,6 +54,7 @@ data class Room (
     @SerializedName("timezone") var timezone : String?= null,
     @SerializedName("geo_lat") var geoLat : String?= null,
     @SerializedName("geo_lon") var geoLon : String?= null,
+    @SerializedName("created_date") var createdDate : String?= null,
     @Expose
     @SerializedName("firstSave") var firstSave : Boolean?= false,
     @Expose

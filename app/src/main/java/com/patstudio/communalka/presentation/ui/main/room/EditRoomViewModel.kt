@@ -146,8 +146,8 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
                 }
                 if (selectedSuggestion != null) {
                     val detailAddressInfo = selectedSuggestion!!.data
-                    room = Room("",roomName,totalSpace.toDouble(), livingSpace.toDouble(),selectedSuggestion!!.value,
-                        detailAddressInfo.postalCode,detailAddressInfo.country,detailAddressInfo.countryIsoCode,
+                    room = Room(currentPlacement.id,roomName,totalSpace.toDouble(), livingSpace.toDouble(),selectedSuggestion!!.value,
+                        detailAddressInfo.postalCode, detailAddressInfo.country, currentPlacement.consumer,detailAddressInfo.countryIsoCode,
                         detailAddressInfo.federalDistrict,detailAddressInfo.regionFiasId,detailAddressInfo.regionKladrId,
                         detailAddressInfo.regionIsoCode,detailAddressInfo.regionWithType,detailAddressInfo.regionType,
                         detailAddressInfo.regionTypeFull,detailAddressInfo.region,detailAddressInfo.cityFiasId,
@@ -157,7 +157,7 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
                         detailAddressInfo.houseFiasId,detailAddressInfo.houseKladrId,detailAddressInfo.houseType,detailAddressInfo.houseTypeFull,
                         detailAddressInfo.house,detailAddressInfo.flatFiasId,detailAddressInfo.flatType,detailAddressInfo.flatTypeFull,detailAddressInfo.flat,
                         detailAddressInfo.fiasId,detailAddressInfo.fiasLevel,detailAddressInfo.kladrId,detailAddressInfo.timezone,detailAddressInfo.geoLat,
-                        detailAddressInfo.geoLon, imageType = IMAGE_MODE, imagePath = value)
+                        detailAddressInfo.geoLon, imageType = IMAGE_MODE, imagePath = value, createdDate = currentPlacement.createdDate )
                 } else {
                     room = Room("",roomName,totalSpace.toDouble(), livingSpace.toDouble(), addressRoom, imageType = IMAGE_MODE, imagePath = value)
                 }

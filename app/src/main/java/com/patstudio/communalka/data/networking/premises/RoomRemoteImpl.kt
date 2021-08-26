@@ -30,8 +30,18 @@ class RoomRemoteImpl(
     }
 
     override suspend fun updateRoom(room: Room) = withContext(dispatcherProvider.io)  {
-        premisesService.updatePlacement(room)
+        var jsonObject: JsonObject = JsonObject()
+        jsonObject.addProperty("id",room.id)
+        jsonObject.addProperty("consumer",room.consumer)
+        jsonObject.addProperty("name",room.name)
+        jsonObject.addProperty("total_area",room.totalArea)
+        jsonObject.addProperty("living_area",room.livingArea)
+        jsonObject.addProperty("address",room.address)
+        jsonObject.addProperty("created_date",room.createdDate)
+
+        premisesService.updatePlacement(jsonObject, room.id)
     }
+
 
     override suspend fun getActualApiKey() = withContext(dispatcherProvider.default) {
         premisesService.getDaDataApiKey()
