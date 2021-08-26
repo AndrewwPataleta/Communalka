@@ -15,10 +15,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.patstudio.communalka.R
 import com.patstudio.communalka.data.model.Placement
 import com.patstudio.communalka.databinding.ItemPlacementBinding
+import com.patstudio.communalka.presentation.ui.main.WelcomeViewModel
 import com.skydoves.balloon.*
+import gone
 import it.sephiroth.android.library.xtooltip.Tooltip
+import visible
 
-class PlacementAdapter(private val placementList: List<Placement>,  val context: Context, val lifecycleOwner: LifecycleOwner) : RecyclerView.Adapter<PlacementAdapter.PlacementHolder>() {
+class PlacementAdapter(private val placementList: List<Placement>,  val context: Context,  val viewModel: WelcomeViewModel) : RecyclerView.Adapter<PlacementAdapter.PlacementHolder>() {
 
     lateinit var res: Resources
     var value: Float = 0.0f
@@ -28,21 +31,23 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
         value = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8F, res.getDisplayMetrics())
         val itemBinding =
             ItemPlacementBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PlacementHolder(itemBinding, value, context, lifecycleOwner)
+        return PlacementHolder(itemBinding, value, context, viewModel)
     }
 
     override fun onBindViewHolder(holder: PlacementHolder, position: Int) {
         val placement: Placement = placementList[position]
-        holder.bind(placement)
+        holder.bind(placement, position)
     }
 
     override fun getItemCount(): Int = placementList.size
 
-    class PlacementHolder(private val itemBinding: ItemPlacementBinding, private val value: Float, private val context: Context, private val lifecycleOwner: LifecycleOwner) :
+    class PlacementHolder(private val itemBinding: ItemPlacementBinding, private val value: Float, private val context: Context, val viewModel: WelcomeViewModel) :
         RecyclerView.ViewHolder(itemBinding.root) {
-        fun bind(placement: Placement) {
+        fun bind(placement: Placement, position: Int) {
 
-            itemBinding.placementName.text = placement.name
+            itemBinding.model = placement
+            itemBinding.viewModel = viewModel
+            itemBinding.position = position
             when (placement.imageType) {
                 "DEFAULT" -> {
                     itemBinding.placementImage.setPadding(value.toInt())
@@ -67,6 +72,16 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
                     Log.d("PlacementAdapter", "URI "+placement.path.toUri())
                     itemBinding.placementImage.setImageURI(placement.path.toUri())
                 }
+            }
+
+            if (!placement.isOpened) {
+                itemBinding.arrow.rotation = 0f
+                itemBinding.addressRoom.gone(false)
+                itemBinding.edit.gone(false)
+            } else {
+                itemBinding.arrow.rotation = 180f
+                itemBinding.addressRoom.visible(false)
+                itemBinding.edit.visible(false)
             }
         }
     }

@@ -7,6 +7,7 @@ import com.patstudio.communalka.data.model.Room
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 
 interface PremisesService {
 
@@ -18,6 +19,9 @@ interface PremisesService {
 
     @POST("placement/")
     suspend fun addPlacement(@Body room: Room): APIResponse<JsonElement>
+
+    @PUT("placement/")
+    suspend fun updatePlacement(@Body room: Room): APIResponse<JsonElement>
 
     @GET("api_keys/dadata/")
     suspend fun getDaDataApiKey(): APIResponse<JsonElement>

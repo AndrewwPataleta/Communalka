@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="viewModel" type="com.patstudio.communalka.presentation.ui.main.WelcomeViewModel"/>
+        <variable name="position" type="Integer"/>
+        <variable name="model" type="com.patstudio.communalka.data.model.Placement"/>
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/placementRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/rounded_gray_background"
     android:layout_marginTop="8dp"
     android:padding="16dp">
@@ -26,31 +35,68 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/robotobold"
-        android:text="Квартира"
+        android:text="@{model.name}"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:layout_marginStart="16dp"
         app:layout_constraintStart_toEndOf="@id/placementImage"
         app:layout_constraintTop_toTopOf="@id/placementImage" />
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/edit"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:visibility="gone"
+        android:src="@drawable/ic_edit"
+        android:onClick="@{() -> viewModel.selectEdit(model)}"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ownerName"
+        app:layout_constraintBottom_toBottomOf="@+id/ownerName"
+        app:layout_constraintVertical_bias="0.5"/>
+
+    <TextView
+        android:id="@+id/addressRoom"
+        style="@style/TextBold1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:text="@{model.address}"
+        android:visibility="gone"
+        app:fontFamily="@font/robotoregular"
+        android:textColor="@color/gray_dark"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@id/placementName"
+        app:layout_constraintBottom_toBottomOf="@id/placementImage"
+        app:layout_constraintTop_toBottomOf="@id/placementName"
+        app:layout_constraintEnd_toStartOf="@+id/arrow"/>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/addressBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:constraint_referenced_ids="addressRoom"
+        app:barrierDirection="bottom"/>
+
     <TextView
         android:id="@+id/ownerName"
         style="@style/TextBold1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+        app:fontFamily="@font/robotoregular"
         android:text="Иван В.В"
         android:textColor="@color/gray_dark"
         android:textSize="16sp"
-        app:layout_constraintVertical_bias="1.0"
         app:layout_constraintStart_toStartOf="@id/placementName"
-        app:layout_constraintBottom_toBottomOf="@id/placementImage"
-        app:layout_constraintTop_toBottomOf="@id/placementName" />
+        app:layout_constraintTop_toBottomOf="@id/addressBarrier" />
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/arrow"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:src="@drawable/ic_down"
+        android:onClick="@{() -> viewModel.clickArrow(position)}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -58,7 +104,7 @@
         android:id="@+id/roomInfoBarrier"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="ownerName, placementName, placementImage"
+        app:constraint_referenced_ids="ownerName, addressRoom, placementName"
         app:barrierDirection="bottom"/>
 
     <View
@@ -136,3 +182,4 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

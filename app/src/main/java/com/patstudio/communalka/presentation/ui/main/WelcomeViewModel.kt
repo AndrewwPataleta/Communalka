@@ -21,6 +21,9 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
     private val readStoragePermissionMutable: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val navigateTo: MutableLiveData<Event<String>> = MutableLiveData()
     private val pinForm: MutableLiveData<Event<UserForm>> = MutableLiveData()
+    private val updateByPosition: MutableLiveData<Event<Int>> = MutableLiveData()
+    private val editPlacementDialog: MutableLiveData<Event<Placement>> = MutableLiveData()
+    private val editPlacement: MutableLiveData<Event<Placement>> = MutableLiveData()
 
     private val placementListMutable: MutableLiveData<Event<List<Placement>>> = MutableLiveData()
     private var needEnterPin = true
@@ -116,6 +119,10 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
         }
     }
 
+    fun selectEdit(model: Placement) {
+        editPlacementDialog.postValue(Event(model))
+    }
+
     fun getUser(): MutableLiveData<Event<User>> {
         return userMutable
     }
@@ -136,8 +143,30 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
         return withoutUser
     }
 
+    fun getEditPlacementDialog(): MutableLiveData<Event<Placement>> {
+        return editPlacementDialog
+    }
+
+    fun getEditPlacement(): MutableLiveData<Event<Placement>> {
+        return editPlacement
+    }
+
+
+    fun selectEditPlacement(placement: Placement) {
+        editPlacement.postValue(Event(placement))
+    }
+
+    fun clickArrow(position: Int) {
+        userPlacement[position].isOpened = !userPlacement[position].isOpened
+        updateByPosition.postValue(Event(position))
+    }
+
     fun getNavigateTo(): MutableLiveData<Event<String>> {
         return navigateTo
+    }
+
+    fun getUpdatePosition(): MutableLiveData<Event<Int>> {
+        return updateByPosition
     }
 
 }

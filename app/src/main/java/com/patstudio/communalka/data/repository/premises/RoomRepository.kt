@@ -52,6 +52,11 @@ class RoomRepository(
        return  roomRemote.sendRoom(room)
     }
 
+
+    suspend fun updatePremises(room: Room): APIResponse<JsonElement> {
+        Log.d("RoomRepository", "sub send ")
+        return  roomRemote.updateRoom(room)
+    }
     suspend fun getUserPremises(): Flow<Result<APIResponse<JsonElement>>> = flow {
         try {
             if (connectivity.hasNetworkAccess()) {

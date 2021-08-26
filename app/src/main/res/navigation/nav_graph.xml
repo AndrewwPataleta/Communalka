@@ -37,9 +37,32 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
         <action
+            android:id="@+id/toEditPlacement"
+            app:destination="@id/EditPlacement"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
             android:id="@+id/action_WelcomeFragment_to_AddRoom"
             app:destination="@id/AddRoom" />
     </fragment>
+
+    <fragment
+        android:id="@+id/EditPlacement"
+        android:name="com.patstudio.communalka.presentation.ui.main.room.EditRoomFragment"
+        android:label="Редактировать помещение"
+        tools:layout="@layout/fragment_edit_room">
+        <action
+            android:id="@+id/toWelcomePage"
+            app:destination="@id/WelcomeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+
     <fragment
         android:id="@+id/LoginFragment"
         android:name="com.patstudio.communalka.presentation.ui.auth.LoginFragment"

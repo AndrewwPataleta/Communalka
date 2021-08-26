@@ -13,5 +13,6 @@ data class Placement (
     val address: String,
     var imageType: String,
     var path: String,
-    val createdDate: String
+    val createdDate: String,
+    var isOpened: Boolean = false
 ) : Parcelable

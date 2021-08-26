@@ -22,9 +22,11 @@
         <activity
             android:name=".presentation.ui.MainActivity"
             android:label="@string/title_activity_auth"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Communalka.NoActionBar"></activity>
         <activity
             android:name=".presentation.ui.splash.SplashActivity"
+
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -6,6 +6,7 @@ import com.patstudio.communalka.presentation.ui.main.ProfileViewModel
 import com.patstudio.communalka.presentation.ui.main.WelcomeViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.HistoryVersionViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.PersonalInfoViewModel
+import com.patstudio.communalka.presentation.ui.main.room.EditRoomViewModel
 import com.patstudio.communalka.presentation.ui.splash.MainViewModel
 import com.patstudio.communalka.presentation.ui.splash.SplashViewModel
 import org.koin.android.viewmodel.dsl.viewModel
@@ -25,5 +26,6 @@ val viewModelsModule = module {
     viewModel { AddRoomViewModel(get(), get(), get(),get(), get()) }
     viewModel { PersonalInfoViewModel(get(), get()) }
     viewModel { HistoryVersionViewModel(get(), get()) }
+    viewModel { EditRoomViewModel(get(), get(), get(),get(), get()) }
 
 }

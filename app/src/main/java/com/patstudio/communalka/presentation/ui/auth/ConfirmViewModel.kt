@@ -2,7 +2,6 @@ package com.patstudio.communalka.presentation.ui.auth
 
 import android.os.CountDownTimer
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,16 +10,12 @@ import com.google.gson.Gson
 import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.*
 import com.patstudio.communalka.data.model.auth.ConfirmFormError
-import com.patstudio.communalka.data.model.auth.ConfirmSmsFormError
 import com.patstudio.communalka.data.model.auth.ConfirmSmsWrapper
-import com.patstudio.communalka.data.model.auth.LoginFormError
 import com.patstudio.communalka.data.repository.premises.RoomRepository
 import com.patstudio.communalka.data.repository.user.UserRepository
-import isValidPhoneNumber
+import isEmailValid
 import kotlinx.coroutines.*
-import kotlinx.coroutines.NonCancellable.isActive
 import kotlinx.coroutines.flow.*
-import startCoroutineTimer
 
 class ConfirmViewModel(private val userRepository: UserRepository, private val roomRepository: RoomRepository, private val gson: Gson, private val dispatcherProvider: DispatcherProvider): ViewModel() {
 
@@ -34,22 +29,26 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
     private val availableEmailSendSms: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val progressPhoneSending: MutableLiveData<Boolean> = MutableLiveData()
     private val clearSmsForm: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    private val loginByEmail: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val userFormMutable: MutableLiveData<Event<UserForm>> = MutableLiveData()
     private val countDownTimer: MutableLiveData<Event<String>> = MutableLiveData()
     private val smsCodeMutable: MutableLiveData<Event<String>> = MutableLiveData()
+    private val openDialogEmail: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val userMessage: MutableLiveData<Event<String>> = MutableLiveData()
+    private val userMessageWithoutButton: MutableLiveData<Event<String>> = MutableLiveData()
     private val congratulation: MutableLiveData<Event<String>> = MutableLiveData()
-    private var timer: CountDownTimer? = null
+    private var timerSms: CountDownTimer? = null
+    private var timerEmail: CountDownTimer? = null
     private var repeatCount = 1
 
     private fun startTimer() {
 
-            timer?.let {
+            timerSms?.let {
                 it.cancel()
                 it.onFinish()
             }
 
-            timer = object: CountDownTimer(TIME_FOR_REPEAT_SMS_SEND.toLong(), 1000) {
+            timerSms = object: CountDownTimer(TIME_FOR_REPEAT_SMS_SEND.toLong(), 1000) {
                 override fun onTick(millisUntilFinished: Long) {
 
                     Log.d("ConfirmSmsCode", millisUntilFinished.toString())
@@ -67,12 +66,10 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
                     availableSendSms.postValue(Event(true))
                 }
             }
-            timer?.let {
+            timerSms?.let {
                 availableSendSms.postValue(Event(false))
                 it.start()
             }
-
-
     }
 
     fun setPhone(phone: String) {
@@ -252,6 +249,46 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
         }
     }
 
+    fun selectSentByEmail() {
+        when (formType) {
+            "Login" -> {
+                loginByEmail.postValue(Event(true))
+            }
+            "Registration" -> {
+                if (userForm.email.length == 0) {
+                    getOpenDialogEmail().postValue(Event(true))
+                } else {
+                    repeatSmsLoginByEmail()
+                }
+            }
+        }
+    }
+
+    private fun repeatSmsLoginByEmail() {
+        viewModelScope.launch {
+            userRepository.sendCode(userForm.email)
+                .onStart {
+                    startTimerForEmail()
+                }
+                .collect {
+                    when (it) {
+                        is Result.Success -> {
+                            startTimerForEmail()
+                            Log.d("ConfirmViewModel", "success")
+                        }
+                        is Result.Error -> {
+                            Log.d("ConfirmViewModel", "error")
+
+                        }
+                        is Result.ErrorResponse -> {
+                            var smsError = gson.fromJson(it.data.data, APIResponse::class.java)
+                            Log.d("ConfirmViewModel", "error response "+smsError)
+                        }
+                    }
+                }
+        }
+    }
+
     fun setSmsCode(smsCode: String) {
         this.smsCode = smsCode
         if (this.smsCode.length == 6) {
@@ -281,7 +318,7 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
 
 
     fun destoyTimer() {
-        timer?.let {
+        timerSms?.let {
             it.cancel()
         }
     }
@@ -309,6 +346,55 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
 
     fun getProgressSmsCodeSending(): MutableLiveData<Boolean> {
         return progressPhoneSending
+    }
+
+    fun getOpenDialogEmail(): MutableLiveData<Event<Boolean>> {
+        return openDialogEmail
+    }
+
+    private fun startTimerForEmail() {
+
+        timerEmail?.let {
+            it.cancel()
+            it.onFinish()
+        }
+
+        timerEmail = object: CountDownTimer(TIME_FOR_REPEAT_SMS_SEND.toLong(), 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+
+                Log.d("ConfirmSmsCode", millisUntilFinished.toString())
+                var second = (millisUntilFinished / 1000 % 60)
+                var printSecond = ""
+                if (second < 10)
+                    printSecond = "0"+second.toString()
+                else {
+                    printSecond = second.toString()
+                }
+                countDownTimer.postValue(Event("0:"+printSecond))
+            }
+
+            override fun onFinish() {
+                availableEmailSendSms.postValue(Event(true))
+            }
+        }
+        timerEmail?.let {
+            availableEmailSendSms.postValue(Event(false))
+
+            it.start()
+        }
+    }
+
+    fun setEmailFromDialog(email: String) {
+         if (email.isEmailValid()) {
+            userForm.email = email
+             selectSentByEmail()
+        } else {
+           userMessageWithoutButton.postValue(Event("Вы неправильно указали адрес электронной почты!"))
+        }
+    }
+
+    fun getLoginByEmail(): MutableLiveData<Event<Boolean>> {
+        return loginByEmail
     }
 
     fun getSmsCode(): MutableLiveData<Event<String>> {
@@ -378,6 +464,10 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
 
     fun getAvailableSendSms(): MutableLiveData<Event<Boolean>> {
         return availableSendSms
+    }
+
+    fun getUserMessageWithoutButton(): MutableLiveData<Event<String>> {
+        return userMessageWithoutButton
     }
 
     fun getAvailableEmailSendSms(): MutableLiveData<Event<Boolean>> {

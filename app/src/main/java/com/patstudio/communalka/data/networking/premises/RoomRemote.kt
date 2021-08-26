@@ -13,6 +13,8 @@ interface RoomRemote {
 
     suspend fun sendRoom(room: Room): APIResponse<JsonElement>
 
+    suspend fun updateRoom(room: Room): APIResponse<JsonElement>
+
     suspend fun getActualApiKey(): APIResponse<JsonElement>
 
 }

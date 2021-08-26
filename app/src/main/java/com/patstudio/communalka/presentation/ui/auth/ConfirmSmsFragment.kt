@@ -2,12 +2,14 @@ package com.patstudio.communalka.presentation.ui.auth
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.text.InputType
 import android.text.format.DateUtils
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
@@ -161,10 +163,18 @@ class ConfirmSmsFragment : Fragment() {
 
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                    binding.repeatSendAfterText.gone(false)
-                    binding.repeatSendAfterValue.gone(false)
-                    binding.repeatSmsSendBtn.gone(false)
-                    binding.sendWithEmail.visible(false)
+                    if (it) {
+                        binding.repeatSendAfterText.gone(false)
+                        binding.repeatSendAfterValue.gone(false)
+                        binding.repeatSmsSendBtn.gone(false)
+                        binding.sendWithEmail.visible(false)
+                    } else {
+                        binding.repeatSendAfterText.visible(false)
+                        binding.repeatSendAfterValue.visible(false)
+                        binding.repeatSmsSendBtn.gone(false)
+                        binding.sendWithEmail.gone(false)
+                    }
+
                 }
             }
         }
@@ -185,6 +195,48 @@ class ConfirmSmsFragment : Fragment() {
                 }
             }
         }
+        viewModel.getUserMessageWithoutButton().observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val builder = MaterialAlertDialogBuilder(requireContext())
+                    builder.setTitle(it)
+                    builder.setPositiveButton("Ок"){dialogInterface, which ->
+                        dialogInterface.dismiss()
+                    }
+                    builder.setCancelable(false)
+                    builder.show()
+                }
+            }
+        }
+
+        viewModel.getLoginByEmail().observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val bundle = bundleOf("type" to "email")
+                    findNavController().navigate(R.id.toLogin, bundle)
+                }
+            }
+        }
+
+        viewModel.getOpenDialogEmail().observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val inputEditTextField = EditText(requireActivity())
+                    inputEditTextField.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+
+                    val dialog = AlertDialog.Builder(requireContext())
+                        .setMessage("Укажите вашу почту")
+                        .setView(inputEditTextField)
+                        .setPositiveButton("Ок") { _, _ ->
+                            val editTextInput = inputEditTextField.text.toString()
+                            viewModel.setEmailFromDialog(editTextInput)
+                        }
+
+                        .create()
+                    dialog.show()
+                }
+            }
+        }
     }
 
     private fun initListeners() {
@@ -197,9 +249,8 @@ class ConfirmSmsFragment : Fragment() {
         binding.close.setOnClickListener {
             requireActivity().onBackPressed()
         }
-        binding.sendWithEmail.setOnClickListener{
-            val bundle = bundleOf("type" to "email")
-            findNavController().navigate(R.id.toLogin, bundle)
+        binding.sendWithEmail.setOnClickListener {
+            viewModel.selectSentByEmail()
         }
     }
 

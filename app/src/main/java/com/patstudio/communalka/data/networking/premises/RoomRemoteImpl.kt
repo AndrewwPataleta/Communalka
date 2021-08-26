@@ -1,7 +1,9 @@
 package com.patstudio.communalka.data.networking.premises
 
 import com.example.imagegallery.contextprovider.DispatcherProvider
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import com.patstudio.communalka.data.model.APIResponse
 import com.patstudio.communalka.data.model.Room
 import kotlinx.coroutines.withContext
 
@@ -25,6 +27,10 @@ class RoomRemoteImpl(
         val body = JsonObject()
 
         premisesService.addPlacement(room)
+    }
+
+    override suspend fun updateRoom(room: Room) = withContext(dispatcherProvider.io)  {
+        premisesService.updatePlacement(room)
     }
 
     override suspend fun getActualApiKey() = withContext(dispatcherProvider.default) {
