@@ -17,7 +17,7 @@ interface PremisesService {
     @POST("placement/")
     suspend fun addPlacement(@Body room: Room): APIResponse<JsonElement>
 
-    @PUT("placement/{id}")
+    @PUT("placement/{id}/")
     suspend fun updatePlacement(@Body room: JsonObject, @Path("id") id: String): APIResponse<JsonElement>
 
     @GET("api_keys/dadata/")

@@ -159,7 +159,7 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
                         detailAddressInfo.fiasId,detailAddressInfo.fiasLevel,detailAddressInfo.kladrId,detailAddressInfo.timezone,detailAddressInfo.geoLat,
                         detailAddressInfo.geoLon, imageType = IMAGE_MODE, imagePath = value, createdDate = currentPlacement.createdDate )
                 } else {
-                    room = Room("",roomName,totalSpace.toDouble(), livingSpace.toDouble(), addressRoom, imageType = IMAGE_MODE, imagePath = value)
+                    room = Room(currentPlacement.id,roomName,totalSpace.toDouble(), livingSpace.toDouble(), addressRoom, imageType = IMAGE_MODE, imagePath = value)
                 }
 
                 if (it != null) {
@@ -349,6 +349,10 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
 
     fun getShowAddressLocation() : MutableLiveData<Event<Boolean>> {
         return showAddressLocation
+    }
+
+    fun selectDelete() {
+       Log.d("EditRoom", "delete room")
     }
 
     fun getOpenMainPage() : MutableLiveData<Event<Boolean>> {

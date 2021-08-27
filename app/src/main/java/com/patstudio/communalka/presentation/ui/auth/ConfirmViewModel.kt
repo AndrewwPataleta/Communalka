@@ -11,6 +11,7 @@ import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.*
 import com.patstudio.communalka.data.model.auth.ConfirmFormError
 import com.patstudio.communalka.data.model.auth.ConfirmSmsWrapper
+import com.patstudio.communalka.data.model.auth.LoginFormError
 import com.patstudio.communalka.data.repository.premises.RoomRepository
 import com.patstudio.communalka.data.repository.user.UserRepository
 import isEmailValid
@@ -231,8 +232,20 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
                         is Result.ErrorResponse -> {
                             when(it.data.status) {
                                 "fail" -> {
-                                    var confirmError = gson.fromJson(it.data.data, ConfirmFormError::class.java)
-                                    userMessage.postValue(Event(confirmError.code))
+                                    var confirmErrorCode = gson.fromJson(it.data.data, ConfirmFormError::class.java)
+                                    confirmErrorCode?.let {
+                                        it.code?.let {
+                                            userMessage.postValue(Event(it))
+                                        }
+
+                                    }
+
+                                    var confirmError = gson.fromJson(it.data.data, LoginFormError::class.java)
+                                    confirmError.email?.let {
+                                        userForm.email = ""
+                                        userMessageWithoutButton.postValue(Event(confirmError.email[0]))
+                                    }
+                                 
                                     progressPhoneSending.postValue(false)
                                     clearSmsForm.postValue(Event(true))
                                 }

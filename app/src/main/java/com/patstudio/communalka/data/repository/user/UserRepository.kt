@@ -116,6 +116,11 @@ class UserRepository (
         return dao.getUserById(userId)
     }
 
+    fun getUsers(): List<User>  {
+        return dao.getUsers()
+    }
+
+
     fun getLastAuthUser(): User  {
         return dao.getLastAuth()
     }

@@ -78,6 +78,14 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
+
+        viewModel.getShowSwitchUsers().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+
+                }
+            }
+        }
     }
 
     private fun initListeners() {
@@ -92,6 +100,9 @@ class ProfileFragment : Fragment() {
         }
         this.binding.logoutText.setOnClickListener {
             viewModel.logout()
+        }
+        this.binding.profileContainer.setOnClickListener {
+            viewModel.selectChangeProfile()
         }
     }
 

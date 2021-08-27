@@ -39,6 +39,8 @@ class RoomRemoteImpl(
         jsonObject.addProperty("address",room.address)
         jsonObject.addProperty("created_date",room.createdDate)
 
+
+
         premisesService.updatePlacement(jsonObject, room.id)
     }
 

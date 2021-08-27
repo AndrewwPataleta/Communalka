@@ -191,7 +191,7 @@ class AddRoomFragment : Fragment() {
                     val addresses:List<String> = it.map { it.value }
                     val adapter = ArrayAdapter(
                         requireContext(),
-                        android.R.layout.simple_spinner_dropdown_item,
+                        R.layout.spinner_dropdown_item,
                         addresses
                     )
 

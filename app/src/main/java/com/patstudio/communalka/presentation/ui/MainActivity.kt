@@ -13,10 +13,12 @@ import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.bumptech.glide.Glide
 import com.patstudio.communalka.R
 import com.patstudio.communalka.databinding.ActivityMainBinding
+import com.patstudio.communalka.presentation.ui.main.room.EditRoomViewModel
 import com.patstudio.communalka.presentation.ui.splash.MainViewModel
 import com.patstudio.communalka.presentation.ui.splash.SplashViewModel
 import gone
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.content_main.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import visible
@@ -27,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private val viewModel by viewModel<MainViewModel>()
+    private val editRoomView by viewModel<EditRoomViewModel>()
 
     private fun initObservers() {
         viewModel.getNeedShadow().observe(this) {
@@ -42,11 +45,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun initListeners() {
+        binding.deleteRoom.setOnClickListener {
+            editRoomView.selectDelete()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
+        initListeners()
         val navController = findNavController(R.id.nav_host_fragment_content)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -58,34 +68,47 @@ class MainActivity : AppCompatActivity() {
             when (destination.id) {
                 R.id.WelcomeFragment -> {
                     toolbar.visibility = View.GONE
+                    deleteRoom.visibility = View.GONE
                     bottomNavigationView.visibility = View.VISIBLE
                 }
                 R.id.LoginFragment-> {
                     toolbar.visibility = View.GONE
+                    deleteRoom.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
                 R.id.Registration-> {
                     toolbar.visibility = View.GONE
+                    deleteRoom.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
                 R.id.Profile-> {
                     toolbar.visibility = View.VISIBLE
+                    deleteRoom.visibility = View.GONE
                     bottomNavigationView.visibility = View.VISIBLE
                 }
                 R.id.AddRoom-> {
                     toolbar.visibility = View.VISIBLE
+                    deleteRoom.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
                 R.id.ConfirmSms-> {
                     toolbar.visibility = View.GONE
+                    deleteRoom.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
                 R.id.Request-> {
                     toolbar.visibility = View.VISIBLE
+                    deleteRoom.visibility = View.GONE
                     bottomNavigationView.visibility = View.VISIBLE
                 }
                 R.id.PinCode-> {
                     toolbar.visibility = View.GONE
+                    deleteRoom.visibility = View.GONE
+                    bottomNavigationView.visibility = View.GONE
+                }
+                R.id.EditPlacement-> {
+                    toolbar.visibility = View.VISIBLE
+                    deleteRoom.visibility = View.VISIBLE
                     bottomNavigationView.visibility = View.GONE
                 }
             }
