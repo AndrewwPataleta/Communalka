@@ -176,7 +176,7 @@ class WelcomeFragment : Fragment() {
                             paymentAnchor = root.findViewById(R.id.paymentBalloonTrigger)
                             showTransmitTooltip()
                         }
-                    }, 500)
+                    }, 200)
                 }
             }
         }

@@ -66,4 +66,5 @@
     <string name="phone_hint">+7 999 876 54 32</string>
     <string name="email_hint">ivanov@gmail.com</string>
     <string name="user_licence_text_second">приложения \"Коммуналка\"</string>
+    <string name="create_new_user">Добавить нового пользователя</string>
 </resources>

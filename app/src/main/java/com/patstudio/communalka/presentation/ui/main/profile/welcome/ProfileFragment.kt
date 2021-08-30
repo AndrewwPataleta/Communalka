@@ -1,15 +1,23 @@
 package com.patstudio.communalka.presentation.ui.main.profile.welcome
 
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.setPadding
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.patstudio.communalka.R
 import com.patstudio.communalka.databinding.FragmentProfileBinding
 import com.patstudio.communalka.presentation.ui.main.ProfileViewModel
+import com.patstudio.communalka.presentation.ui.main.profile.SwitchProfileAdapter
+import com.skydoves.balloon.extensions.dp
 import gone
 import org.koin.android.viewmodel.ext.android.viewModel
 import visible
@@ -19,6 +27,8 @@ class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModel<ProfileViewModel>()
+    private lateinit var adapter: SwitchProfileAdapter
+    private lateinit var switchUserBinding: BottomSheetDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,10 +45,14 @@ class ProfileFragment : Fragment() {
         this.binding.profileText.setOnClickListener {
             findNavController().navigate(R.id.PersonalInfo)
         }
+        this.binding.securityText.setOnClickListener {
+            findNavController().navigate(R.id.toEntrance)
+        }
     }
 
     private fun removeAuthNavigation() {
         this.binding.profileText.setOnClickListener {}
+        this.binding.securityText.setOnClickListener {}
     }
 
     private fun haveNoAuthUser() {
@@ -67,10 +81,19 @@ class ProfileFragment : Fragment() {
                 it.getContentIfNotHandled {
                     setAuthNavigation()
                     this.binding.userFio.text = it.name
+                    if (it.photoPath.length > 0) {
+                        binding.avatar.setPadding(0)
+                        binding.avatar.setImageURI(Uri.parse(it.photoPath))
+                    } else {
+                        binding.avatar.setPadding(16.dp)
+                        binding.avatar.setImageResource(requireContext().resources.getIdentifier("ic_profile", "drawable", requireActivity().packageName))
+                        binding.avatar.setBackgroundResource(requireContext().resources.getIdentifier("circle_gray_background", "drawable", requireActivity().packageName))
+                    }
 
                 }
             }
         }
+
         viewModel.getHaveNoAuth().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
@@ -79,10 +102,30 @@ class ProfileFragment : Fragment() {
             }
         }
 
+        viewModel.getCloseSwitchDialog().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                   if (it) {
+                       switchUserBinding.dismiss()
+                   }
+                }
+            }
+        }
+
         viewModel.getShowSwitchUsers().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-
+                    adapter = SwitchProfileAdapter(it, viewModel)
+                    val root = layoutInflater.inflate(R.layout.layout_switch_users, null)
+                    switchUserBinding = BottomSheetDialog(requireContext(), R.style.AppBottomSheetDialogTheme)
+                    switchUserBinding.setContentView(root)
+                    root.findViewById<RecyclerView>(R.id.profileList).layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL ,false)
+                    root.findViewById<RecyclerView>(R.id.profileList).adapter = adapter
+                    root.findViewById<View>(R.id.login).setOnClickListener {
+                        switchUserBinding.dismiss()
+                        findNavController().navigate(R.id.toLogin)
+                    }
+                    switchUserBinding.show()
                 }
             }
         }
@@ -101,9 +144,11 @@ class ProfileFragment : Fragment() {
         this.binding.logoutText.setOnClickListener {
             viewModel.logout()
         }
-        this.binding.profileContainer.setOnClickListener {
+        this.binding.userFio.setOnClickListener {
             viewModel.selectChangeProfile()
         }
+
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

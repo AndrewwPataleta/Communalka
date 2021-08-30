@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="viewModel" type="com.patstudio.communalka.presentation.ui.main.profile.security.EntranceSecurityViewModel"/>
+        <variable name="position" type="Integer"/>
+        <variable name="model" type="com.patstudio.communalka.data.model.User"/>
+    </data>
+
+
+    <ScrollView
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:paddingTop="32dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+
+
+            <TextView
+                android:id="@+id/security"
+                style="@style/TextBold1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/robotobold"
+                android:text="Безопасность"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/securityDecorator"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#EEF1F5"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/security"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/phoneIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_phone"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/securityDecorator"/>
+
+            <TextView
+                android:id="@+id/phoneText"
+                style="@style/TextBody1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/robotobold"
+                android:text="Телефон"
+                android:textColor="@android:color/black"
+                android:textSize="17sp"
+                android:padding="16dp"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@id/phoneIcon"
+                app:layout_constraintTop_toTopOf="@id/phoneIcon"
+                app:layout_constraintEnd_toStartOf="@id/phoneValue"
+                app:layout_constraintBottom_toBottomOf="@id/phoneIcon"/>
+
+            <TextView
+                android:id="@+id/phoneValue"
+                style="@style/TextBody1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/robotobold"
+                android:text="+7 --- --- -- 99"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="17sp"
+                android:padding="16dp"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintTop_toTopOf="@id/phoneIcon"
+                app:layout_constraintEnd_toStartOf="@id/phoneArrow"
+                app:layout_constraintBottom_toBottomOf="@id/phoneIcon"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/phoneArrow"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_down"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/phoneText"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintBottom_toBottomOf="@id/phoneText"
+                android:rotation="270"/>
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/proneBarrier"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+
+                app:constraint_referenced_ids="phoneText,phoneArrow, phoneValue, phoneIcon"
+                app:barrierDirection="bottom" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/proneBarrier"
+                android:background="#EEF1F5"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/emailIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_envelope"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/proneBarrier"/>
+
+            <TextView
+                android:id="@+id/emailText"
+                style="@style/TextBody1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/robotobold"
+                android:text="Почта"
+                android:textColor="@android:color/black"
+                android:textSize="17sp"
+                android:padding="16dp"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@id/emailIcon"
+                app:layout_constraintTop_toTopOf="@id/emailIcon"
+                app:layout_constraintEnd_toStartOf="@id/emailValue"
+                app:layout_constraintBottom_toBottomOf="@id/emailIcon"/>
+
+            <TextView
+                android:id="@+id/emailValue"
+                style="@style/TextBody1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/robotobold"
+                android:text="iv...@gmail.com"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="17sp"
+                android:padding="16dp"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintTop_toTopOf="@id/emailIcon"
+                app:layout_constraintEnd_toStartOf="@id/emailArrow"
+                app:layout_constraintBottom_toBottomOf="@id/emailIcon"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/emailArrow"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_down"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/emailText"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintBottom_toBottomOf="@id/emailText"
+                android:rotation="270"/>
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/emailBarrier"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:background="#EEF1F5"
+                app:constraint_referenced_ids="emailText,emailArrow, emailValue, emailIcon"
+                app:barrierDirection="bottom" />
+
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/emailBarrier"
+                android:background="#EEF1F5"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/pinCodeIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_password"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/emailBarrier"/>
+
+            <TextView
+                android:id="@+id/pinCodeText"
+                style="@style/TextBody1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/robotobold"
+                android:text="PIN-код"
+                android:textColor="@android:color/black"
+                android:textSize="17sp"
+                android:padding="16dp"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@id/pinCodeIcon"
+                app:layout_constraintTop_toTopOf="@id/pinCodeIcon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/pinCodeIcon"/>
+
+
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/pinCodeArrow"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_down"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/pinCodeText"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintBottom_toBottomOf="@id/pinCodeText"
+                android:rotation="270"/>
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/pinCodeBarrier"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:background="#EEF1F5"
+                app:constraint_referenced_ids="pinCodeArrow, pinCodeIcon, pinCodeText"
+                app:barrierDirection="bottom" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pinCodeBarrier"
+                android:background="#EEF1F5"/>
+
+            <TextView
+                android:id="@+id/enterConfig"
+                style="@style/TextBold1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/robotobold"
+                android:text="Настройки входа"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/pinCodeBarrier" />
+
+            <TextView
+                android:id="@+id/enterByFingerPrint"
+                style="@style/TextBody1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/robotobold"
+                android:text="Вход по отпечатку пальца"
+                android:textColor="@android:color/black"
+                android:textSize="17sp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/switchSigninFingerprint"
+                app:layout_constraintTop_toBottomOf="@id/enterConfig"/>
+
+            <Switch
+                android:id="@+id/switchSigninFingerprint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:checked="true"
+                android:checked="@{model.fingerPrintSignIn}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/enterByFingerPrint"
+                app:layout_constraintBottom_toBottomOf="@id/enterByFingerPrint"/>
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/fingerPrintBarrier"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:background="#EEF1F5"
+                app:constraint_referenced_ids="switchSigninFingerprint, enterByFingerPrint"
+                app:barrierDirection="bottom" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fingerPrintBarrier"
+                android:background="#EEF1F5"/>
+
+
+            <TextView
+                android:id="@+id/autoSignInPrint"
+                style="@style/TextBody1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/robotobold"
+                android:text="Входить автоматически"
+                android:textColor="@android:color/black"
+                android:textSize="17sp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/switchSigninFingerprint"
+                app:layout_constraintTop_toBottomOf="@id/fingerPrintBarrier"/>
+
+            <Switch
+                android:id="@+id/switchAutoSignIn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:checked="@{model.autoSignIn}"
+                tools:checked="true"
+                app:layout_constraintTop_toTopOf="@id/autoSignInPrint"
+                app:layout_constraintBottom_toBottomOf="@id/autoSignInPrint"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/autoSignInPrint"
+                android:background="#EEF1F5"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

@@ -232,7 +232,20 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
-
+        <action
+            android:id="@+id/toLogin"
+            app:destination="@id/LoginFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/toEntrance"
+            app:destination="@id/EntranceSecurity"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -270,6 +283,14 @@
         android:name="com.patstudio.communalka.presentation.ui.main.profile.HistoryVersionFragment"
         android:label="История версий приложения"
         tools:layout="@layout/fragment_history_version">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/EntranceSecurity"
+        android:name="com.patstudio.communalka.presentation.ui.main.profile.security.EntranceSecurityFragment"
+        android:label="Безопасность и вход"
+        tools:layout="@layout/fragment_entrance_security">
 
     </fragment>
 

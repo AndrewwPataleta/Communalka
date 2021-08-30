@@ -22,6 +22,8 @@ class ProfileViewModel(private val userRepository: UserRepository, private val d
 
    private val _haveNoAuthUser: MutableLiveData<Event<Boolean>> = MutableLiveData()
    private val showSwitchUserDialog: MutableLiveData<Event<List<User>>> = MutableLiveData()
+   private val closeSwitchDialog: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    private lateinit var users: List<User>
 
    fun setCurrentUser(user:User) {
        this.user = user
@@ -33,7 +35,7 @@ class ProfileViewModel(private val userRepository: UserRepository, private val d
         viewModelScope.launch(dispatcherProvider.io) {
             val user = userRepository.getLastAuthUser()
             if (user != null)  {
-                Log.d("WelcomeViewModel", user.toString())
+
                 userMutable.postValue(Event(user))
             } else {
                 _haveNoAuthUser.postValue(Event(true))
@@ -50,8 +52,18 @@ class ProfileViewModel(private val userRepository: UserRepository, private val d
 
     fun selectChangeProfile() {
         viewModelScope.launch(dispatcherProvider.io) {
-            val users = userRepository.getUsers()
+            users = userRepository.getUsers()
             showSwitchUserDialog.postValue(Event(users))
+        }
+    }
+
+    fun selectSwitchUserByPosition(position: Int) {
+        val user = users[position]
+        viewModelScope.launch(dispatcherProvider.io) {
+            closeSwitchDialog.postValue(Event(true))
+            userRepository.updatePreviosAuthUser()
+            userRepository.setLastLoginUser(user)
+            initCurrentUser()
         }
     }
 
@@ -61,6 +73,10 @@ class ProfileViewModel(private val userRepository: UserRepository, private val d
 
     fun getShowSwitchUsers(): MutableLiveData<Event<List<User>>> {
         return showSwitchUserDialog
+    }
+
+    fun getCloseSwitchDialog(): MutableLiveData<Event<Boolean>> {
+        return closeSwitchDialog
     }
 
     fun getHaveNoAuth(): MutableLiveData<Event<Boolean>> {

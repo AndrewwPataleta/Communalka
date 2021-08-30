@@ -195,11 +195,12 @@ class ConfirmSmsFragment : Fragment() {
                 }
             }
         }
+
         viewModel.getUserMessageWithoutButton().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     val builder = MaterialAlertDialogBuilder(requireContext())
-                    builder.setTitle(it)
+                    builder.setMessage(it)
                     builder.setPositiveButton("Ок"){dialogInterface, which ->
                         dialogInterface.dismiss()
                     }
