@@ -163,7 +163,7 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
                 if (it != null) {
                     val resp = roomRepository.sendPremises(room)
                     var placement = gson.fromJson(resp.data!!.asJsonObject.get("placement"), Placement::class.java)
-                    val premisesLocal = Premises(placement.id, placement.name, placement.address, "", placement.consumer, placement.totalArea.toFloat(), placement.livingArea.toFloat(), IMAGE_MODE, value,false)
+                    val premisesLocal = Premises(placement.id, placement.name, placement.address, "", placement.consumer, placement.total_area.toFloat(), placement.living_area.toFloat(), IMAGE_MODE, value,false)
                     room.id = placement.id
                     room.firstSave = false
                     room.consumer = placement.consumer

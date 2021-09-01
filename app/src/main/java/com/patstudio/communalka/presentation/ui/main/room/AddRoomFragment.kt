@@ -178,8 +178,7 @@ class AddRoomFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     if (it) {
-                        val bundle = bundleOf("need_login" to false)
-                        findNavController().navigate(R.id.toWelcomePage, bundle)
+                        findNavController().navigate(R.id.toWelcomePage)
                     }
                 }
             }
@@ -191,7 +190,7 @@ class AddRoomFragment : Fragment() {
                     val addresses:List<String> = it.map { it.value }
                     val adapter = ArrayAdapter(
                         requireContext(),
-                        R.layout.spinner_dropdown_item,
+                        android.R.layout.simple_spinner_dropdown_item,
                         addresses
                     )
 

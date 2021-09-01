@@ -1,7 +1,9 @@
 package com.patstudio.communalka.presentation.ui.main.room
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
 import android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
@@ -17,18 +19,19 @@ import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import android.widget.ImageView
-import androidx.core.os.bundleOf
+import androidx.core.net.toUri
 import androidx.core.view.setPadding
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.patstudio.communalka.R
 import com.patstudio.communalka.data.model.Placement
-import com.patstudio.communalka.databinding.FragmentAddRoomBinding
 import com.patstudio.communalka.databinding.FragmentEditRoomBinding
 import gone
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import visible
 
@@ -38,7 +41,7 @@ class EditRoomFragment : Fragment() {
     private val IMAGE_PICK_CODE = 222
     private var _binding: FragmentEditRoomBinding? = null
     private val binding get() = _binding!!
-    private val viewModel by viewModel<EditRoomViewModel>()
+    private val viewModel by sharedViewModel<EditRoomViewModel>()
     lateinit var currentImage: ImageView
     private val REQUEST_READ_EXTERNAL = 111
     lateinit var res: Resources
@@ -55,6 +58,7 @@ class EditRoomFragment : Fragment() {
     }
 
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initObservers() {
         viewModel.getNameRoomError().observe(this) {
             if (!it.hasBeenHandled.get()) {
@@ -146,6 +150,46 @@ class EditRoomFragment : Fragment() {
                 }
             }
         }
+        viewModel.getOpenListPlacements().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    findNavController().navigate(R.id.toWelcomePage)
+                }
+            }
+        }
+        viewModel.getShowProgress().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    if (it) {
+                        binding.progress.visible(false)
+                        binding.saveRoom.gone(false)
+                    } else {
+                        binding.progress.gone(false)
+                        binding.saveRoom.visible(false)
+                    }
+                }
+            }
+        }
+        viewModel.getDeleteDialog().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val builder = AlertDialog.Builder(requireContext())
+                        .setTitle("Удалить помещение?")
+                    builder.setMessage("Вы действительно хотите удалить помещение '"+it.name+"'")
+                    builder.setPositiveButton("Удалить"){dialogInterface, which ->
+                        viewModel.confirmRemoveRoom()
+                        dialogInterface.dismiss()
+                    }
+                    builder.setNegativeButton("Отмена"){dialogInterface, which ->
+                        dialogInterface.dismiss()
+                    }
+                    val alertDialog: AlertDialog = builder.create()
+                    alertDialog.setCancelable(false)
+                    alertDialog.show()
+                }
+            }
+        }
+
         viewModel.getTotalLivingError().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
@@ -180,8 +224,7 @@ class EditRoomFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     if (it) {
-                        val bundle = bundleOf("need_login" to false)
-                        findNavController().navigate(R.id.toWelcomePage, bundle)
+                        findNavController().navigate(R.id.toWelcomePage)
                     }
                 }
             }
@@ -251,10 +294,10 @@ class EditRoomFragment : Fragment() {
                     Log.d("AddRoomFragment", "progress is "+it)
                     if (it) {
                         binding.saveRoom.gone(false)
-                        binding.progressCreate.visible(false)
+                        binding.progress.visible(false)
                     } else {
                         binding.saveRoom.visible(false)
-                        binding.progressCreate.gone(false)
+                        binding.progress.gone(false)
                     }
                 }
             }
@@ -271,10 +314,74 @@ class EditRoomFragment : Fragment() {
             }
         }
 
+        viewModel.getAvatarActionDialog().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val root = layoutInflater.inflate(R.layout.layout_action_avatar, null)
+                    val actionPhotoDialog = BottomSheetDialog(requireContext(), R.style.AppBottomSheetDialogTheme)
+                    actionPhotoDialog.setContentView(root)
+                    root.findViewById<View>(R.id.removePhotoPlacement).setOnClickListener {
+                        actionPhotoDialog.dismiss()
+                        viewModel.removeAvatar()
+                    }
+                    root.findViewById<View>(R.id.changePhotoPlacement).setOnClickListener {
+                        actionPhotoDialog.dismiss()
+                        viewModel.changeAvatar()
+                    }
+                    actionPhotoDialog.show()
+                }
+            }
+        }
+
         viewModel.getCurrentPlacement().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
+                    Log.d("EditRoomFragment", it.toString())
                     binding.model = it
+                    binding.totalAreaEdit.setText(it.total_area.toString())
+                    binding.livingSpaceEdit.setText(it.living_area.toString())
+
+                    when (it.imageType) {
+                        "DEFAULT" -> {
+                            binding.attachRoomImage.setPadding(value.toInt())
+                            when (it.path) {
+
+                                "HOME" -> {
+                                    binding.attachRoomImage.setImageDrawable(
+                                        binding.root.context.resources.getDrawable(
+                                            R.drawable.ic_home
+                                        )
+                                    )
+                                }
+                                "ROOM" -> {
+                                    binding.attachRoomImage.setImageDrawable(
+                                        binding.root.context.resources.getDrawable(
+                                            R.drawable.ic_room
+                                        )
+                                    )
+                                }
+                                "OFFICE" -> {
+                                    binding.attachRoomImage.setImageDrawable(
+                                        binding.root.context.resources.getDrawable(
+                                            R.drawable.ic_office
+                                        )
+                                    )
+                                }
+                                "HOUSE" -> {
+                                    binding.attachRoomImage.setImageDrawable(
+                                        binding.root.context.resources.getDrawable(
+                                            R.drawable.ic_country_house
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                        "STORAGE" -> {
+                            binding.attachRoomImage.setPadding(0)
+                            binding.attachRoomImage.setImageURI(it.path.toUri())
+                        }
+                    }
+
                 }
             }
         }

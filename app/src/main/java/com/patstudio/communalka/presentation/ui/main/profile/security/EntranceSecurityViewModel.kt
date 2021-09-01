@@ -28,11 +28,6 @@ class EntranceSecurityViewModel(private val userRepository: UserRepository, priv
     private val userFioError: MutableLiveData<Event<String>> = MutableLiveData()
     private val userMessage: MutableLiveData<Event<String>> = MutableLiveData()
 
-   fun setCurrentUser(user:User) {
-       this.user = user
-       userMutable.postValue(Event(user))
-
-   }
 
     fun initCurrentUser() {
         viewModelScope.launch(dispatcherProvider.io) {
@@ -43,7 +38,18 @@ class EntranceSecurityViewModel(private val userRepository: UserRepository, priv
         }
     }
 
+    fun setAutoSignIn(autoSignIn: Boolean) {
+        viewModelScope.launch(dispatcherProvider.io) {
+            userRepository.updateAuthSignIn(autoSignIn, user.id)
+        }
+    }
 
+    fun setFingerPrintAvailable(fingerPrintAvailable: Boolean) {
+        viewModelScope.launch(dispatcherProvider.io) {
+            userRepository.updateFingerPrintAvailable(fingerPrintAvailable, user.id)
+        }
+
+    }
 
     fun setUserFio(userFio: String) {
         this.userFio = userFio

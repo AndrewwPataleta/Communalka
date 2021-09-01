@@ -6,6 +6,8 @@ import com.patstudio.communalka.presentation.ui.main.ProfileViewModel
 import com.patstudio.communalka.presentation.ui.main.WelcomeViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.HistoryVersionViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.PersonalInfoViewModel
+import com.patstudio.communalka.presentation.ui.main.profile.security.EditPinCodeViewModel
+import com.patstudio.communalka.presentation.ui.main.profile.security.EmailEditViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.security.EntranceSecurityViewModel
 import com.patstudio.communalka.presentation.ui.main.room.EditRoomViewModel
 import com.patstudio.communalka.presentation.ui.splash.MainViewModel
@@ -29,5 +31,7 @@ val viewModelsModule = module {
     viewModel { HistoryVersionViewModel(get(), get()) }
     viewModel { EditRoomViewModel(get(), get(), get(),get(), get()) }
     viewModel { EntranceSecurityViewModel(get(), get()) }
+    viewModel { EmailEditViewModel(get(), get()) }
+    viewModel { EditPinCodeViewModel(get(), get()) }
 
 }

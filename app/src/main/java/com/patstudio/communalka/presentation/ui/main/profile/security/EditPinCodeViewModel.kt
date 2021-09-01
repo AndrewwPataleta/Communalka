@@ -1,4 +1,4 @@
-package com.patstudio.communalka.presentation.ui.auth
+package com.patstudio.communalka.presentation.ui.main.profile.security
 
 import android.util.Log
 import androidx.lifecycle.*
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class PinCodeViewModel(private val userRepository: UserRepository, private val dispatcherProvider: DispatcherProvider): ViewModel() {
+class EditPinCodeViewModel(private val userRepository: UserRepository, private val dispatcherProvider: DispatcherProvider): ViewModel() {
 
     private var pinCode: String = ""
     private var pinCodeRepeat: String = ""
@@ -23,6 +23,7 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
     private val availableFingerPrint: MutableLiveData<Boolean> = MutableLiveData()
     private val alertMessage: MutableLiveData<Event<String>> = MutableLiveData()
     private val accessBack: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    private val openSecurityPage: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val user: MutableLiveData<Event<User>> = MutableLiveData()
     private var enterMode = "INSTALL"
     private lateinit var savedUser: User
@@ -51,16 +52,14 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
 
         if (pinCodeRepeat.length == 4) {
             if (pinCodeRepeat.compareTo(pinCode) == 0) {
-                var userForSave = User(userForm.id,userForm.fio, userForm.phone, userForm.email, pinCode, userForm.token, userForm.refresh, true,
-                    "")
+
                 viewModelScope.launch(dispatcherProvider.io) {
                     try {
-                        userRepository.saveUser(userForSave)
-                        userRepository.updatePreviosAuthUser()
-                        userRepository.setLastLoginUser(userForSave)
+                        userRepository.updatePinCode(savedUser.id, pinCodeRepeat)
                         clearPinForm()
-                        alertMessage.postValue(Event("PIN-код  установлен"))
-                        user.postValue(Event(userForSave))
+                        alertMessage.postValue(Event("Новый PIN-код  установлен"))
+                        openSecurityPage.postValue(Event(true))
+
                     }catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -75,35 +74,22 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
     }
 
 
-    private fun checkForAuth(symbol: String) {
-        pinCode += symbol
-        pinCodeMutable.postValue(pinCode)
 
-        if (pinCode.length == 4 ) {
-            if (savedUser.pinCode.compareTo(pinCode) == 0) {
-                viewModelScope.launch(dispatcherProvider.io) {
-                    try {
-                        userRepository.updatePreviosAuthUser()
-                        userRepository.setLastLoginUser(savedUser)
-                        clearPinForm()
-                        user.postValue(Event(savedUser))
-                    }catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
-            } else {
-                alertMessage.postValue(Event("PIN-код введен неверно"))
-                pinCode = ""
-                pinCodeMutable.postValue(pinCode)
+
+    fun initCurrentUser() {
+        viewModelScope.launch(dispatcherProvider.io) {
+            val user = userRepository.getLastAuthUser()
+            if (user != null)  {
+                savedUser = user
             }
         }
     }
+
 
     fun clickDigital(symbol: String) {
         when (enterMode) {
             "INSTALL" -> checkForInstall(symbol)
             "REPEAT" -> checkForRepeat(symbol)
-            "AUTH" -> checkForAuth(symbol)
         }
 
     }
@@ -131,6 +117,11 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
     fun getPinCodeMode(): MutableLiveData<Event<String>> {
         return pinCodeMode
     }
+
+    fun getOpenSecurityPage(): MutableLiveData<Event<Boolean>> {
+        return openSecurityPage
+    }
+
 
     fun fingerPrintSuccess() {
         viewModelScope.launch(dispatcherProvider.io) {
@@ -179,73 +170,18 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
         }
     }
 
-    private fun removeLastWhenAuthPinCode() {
-        if (pinCode.length > 0)
-            pinCode = pinCode.subSequence(0, pinCode.length-1).toString()
-        pinCodeMutable.postValue(pinCode)
-    }
 
-    private fun checkEnterMode() {
-        when(enterMode) {
-            "INSTALL" -> availableFingerPrint.postValue(false)
-            "REPEAT" -> availableFingerPrint.postValue(false)
-            "AUTH" -> availableFingerPrint.postValue(true)
-        }
-        pinCodeMode.postValue((Event(enterMode)))
-    }
 
-     fun setUserForm(userForm: UserForm) {
-         this.userForm = userForm
-         enterMode = userForm.type
-         when (enterMode) {
-             "INSTALL" -> {
-
-                 pinCodeMode.postValue((Event(enterMode)))
-             }
-             "REPEAT" -> {
-                 availableFingerPrint.postValue(false)
-                 pinCodeMode.postValue((Event(enterMode)))
-             }
-             "AUTH" -> {
-                 Log.d("PinCodeViewMode", "set user form")
-                 availableFingerPrint.postValue(true)
-                 accessBack.postValue(Event(false))
-                 viewModelScope.launch(dispatcherProvider.io) {
-                     val user = userRepository.getUserById(userForm.id)
-                     if (user.pinCode.isNotEmpty()) {
-                         savedUser = user
-                         Log.d("PinCodeView", user.fingerPrintSignIn.toString())
-                         if (user.fingerPrintSignIn) {
-
-                             availableFingerPrint.postValue(true)
-                         } else {
-                             availableFingerPrint.postValue(false)
-                         }
-                         pinCodeMode.postValue((Event(enterMode)))
-                     } else {
-                         enterMode = "INSTALL"
-                         availableFingerPrint.postValue(false)
-                         pinCodeMode.postValue((Event(enterMode)))
-                     }
-                 }
-             }
-         }
+     fun init() {
+         initCurrentUser()
+         pinCodeMode.postValue((Event(enterMode)))
      }
 
-    fun removeAllPin() {
-        when (enterMode) {
-            "INSTALL" -> removeWhenInstallPinCode()
-            "REPEAT" -> removeWhenRepeatPinCode()
-            "AUTH" -> removeWhenAuthPinCode()
-        }
-
-    }
 
     fun removeLastItem() {
         when (enterMode) {
             "INSTALL" -> removeLastWhenInstallPinCode()
             "REPEAT" -> removeLastWhenRepeatPinCode()
-            "AUTH" -> removeLastWhenAuthPinCode()
         }
 
     }

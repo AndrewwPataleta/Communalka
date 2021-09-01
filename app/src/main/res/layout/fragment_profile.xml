@@ -26,8 +26,7 @@
             android:padding="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:tintMode="src_over"
-            android:tint="#F7F7F7"
+
             android:background="@drawable/circle_gray_background"
             android:src="@drawable/ic_profile"/>
 

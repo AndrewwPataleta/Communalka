@@ -49,8 +49,10 @@ class PersonalInfoFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     this.binding.fioEdit.setText(it.name)
-                    binding.mockAvatar.gone(false)
-                    binding.attachRoomImage.setImageURI(Uri.parse(it.photoPath))
+                    if (it.photoPath.length > 0) {
+                        binding.mockAvatar.gone(false)
+                        binding.attachRoomImage.setImageURI(Uri.parse(it.photoPath))
+                    }
                 }
             }
         }

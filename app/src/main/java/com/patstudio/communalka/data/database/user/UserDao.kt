@@ -23,6 +23,8 @@ interface UserDao {
     @Query("SELECT * FROM user WHERE lastAuth= :lastAuth")
     fun getLastAuth(lastAuth: Boolean = true): User
 
+
+
     @Transaction
     @Query("UPDATE user SET lastAuth = :lastAuth")
     fun updatePreviosAuth(lastAuth: Boolean = false)
@@ -30,6 +32,18 @@ interface UserDao {
     @Transaction
     @Query("UPDATE user SET token = :token, refresh = :refresh WHERE id = :userId")
     fun updateToken(token: String, refresh: String, userId: String)
+
+    @Transaction
+    @Query("UPDATE user SET pinCode = :pinCode WHERE id = :userId")
+    fun updatePinCode(pinCode: String,userId: String)
+
+    @Transaction
+    @Query("UPDATE user SET autoSignIn = :autoSignIn WHERE id = :userId")
+    fun updateAuthSignIn(autoSignIn: Boolean, userId: String)
+
+    @Transaction
+    @Query("UPDATE user SET fingerPrintSignIn = :fingerPrintAvailable WHERE id = :userId")
+    fun updateFingerPrintAvailable(fingerPrintAvailable: Boolean, userId: String)
 
     @Transaction
     @Query("UPDATE user SET lastAuth = :lastAuth WHERE id = :userId ")

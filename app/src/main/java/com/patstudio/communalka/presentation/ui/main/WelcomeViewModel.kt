@@ -26,7 +26,9 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
     private val editPlacement: MutableLiveData<Event<Placement>> = MutableLiveData()
 
     private val placementListMutable: MutableLiveData<Event<List<Placement>>> = MutableLiveData()
-    private var needEnterPin = true
+    private var needEnterPin: Boolean = true
+    private var typeAuthChanged: Boolean = false
+
     private lateinit var userPlacement: List<Placement>
 
    fun setCurrentUser(user:User) {
@@ -81,6 +83,7 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
 
     fun setNeedEnterPin(needPin: Boolean) {
         Log.d("WelcomeViewModel", "need pin: "+needPin)
+        this.typeAuthChanged = true
         this.needEnterPin = needPin
     }
 
@@ -88,12 +91,32 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
         viewModelScope.launch(dispatcherProvider.io) {
             val it = userRepository.getLastAuthUser()
             user = it
-            if (needEnterPin && user != null) {
-                var userForm = UserForm(it.id, it.name, it.phone, it.email, "AUTH", it.token, it.refresh)
-                pinForm.postValue(Event(userForm))
-            } else if (user != null) {
-                userMutable.postValue(Event(it))
-                getUserPremises()
+
+            if (user != null) {
+                Log.d("WelcomeViewModel", "need pin before" +needEnterPin+" user auto "+!user!!.autoSignIn)
+
+                needEnterPin = !user!!.autoSignIn
+
+                Log.d("WelcomeViewModel", "need pin after "+needEnterPin+" type auth chnafd "+typeAuthChanged)
+
+                if (needEnterPin && !typeAuthChanged) {
+
+                    var userForm = UserForm(
+                        it.id,
+                        it.name,
+                        it.phone,
+                        it.email,
+                        "AUTH",
+                        it.token,
+                        it.refresh,
+                        fingerPrintSignIn = it.fingerPrintSignIn,
+                        autoSignIn = it.autoSignIn
+                    )
+                    pinForm.postValue(Event(userForm))
+                } else {
+                    userMutable.postValue(Event(it))
+                    getUserPremises()
+                }
             } else {
                 withoutUser.postValue(Event(true))
             }

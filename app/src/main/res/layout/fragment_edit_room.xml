@@ -125,10 +125,12 @@
                     android:text="@{model.address}"
                     android:textColorHint="@color/gray_placeholder"
                     android:textSize="16sp"
+                    android:completionThreshold="0"
                     android:theme="@style/EditTextBottomLine"
                     android:inputType="text"
                     android:lines="3"
                     android:maxLines="4"
+                    android:ellipsize="end"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/address_text" />
@@ -217,7 +219,6 @@
                     android:id="@+id/total_area_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{Double.toString(model.totalArea)}"
                     android:textColorHint="@color/gray_placeholder"
                     android:textSize="16sp"
                     android:theme="@style/EditTextBottomLine"
@@ -244,7 +245,6 @@
                     android:id="@+id/living_space_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{Double.toString(model.livingArea)}"
                     android:textColorHint="@color/gray_placeholder"
                     android:textSize="16sp"
                     android:theme="@style/EditTextBottomLine"
@@ -255,7 +255,7 @@
                     app:layout_constraintTop_toBottomOf="@id/living_space_text" />
 
                 <ProgressBar
-                    android:id="@+id/progressCreate"
+                    android:id="@+id/progress"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="16dp"

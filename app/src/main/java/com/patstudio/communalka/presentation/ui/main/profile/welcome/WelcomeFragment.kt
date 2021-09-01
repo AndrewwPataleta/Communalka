@@ -35,7 +35,7 @@ class WelcomeFragment : Fragment() {
     private val REQUEST_READ_EXTERNAL: Int = 111
     private var _binding: FragmentWelcomeBinding? = null
     private val binding get() = _binding!!
-    private val viewModel by viewModel<WelcomeViewModel>()
+    private val viewModel by sharedViewModel<WelcomeViewModel>()
     private val mainViewModel by sharedViewModel<MainViewModel>()
     private lateinit var placementAdapter: PlacementAdapter
     private lateinit var balloonTransmit: Balloon
@@ -210,15 +210,7 @@ class WelcomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initObservers()
-
-        val needLogin = arguments?.getBoolean("need_login", true)
-        Log.d("WelcomeFragment", needLogin.toString())
-        if (needLogin != null) {
-            viewModel.setNeedEnterPin(needLogin)
-            viewModel.initCurrentUser()
-        } else {
-            viewModel.initCurrentUser()
-        }
+        viewModel.initCurrentUser()
         initTooltip()
     }
 

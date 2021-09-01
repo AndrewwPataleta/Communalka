@@ -1,4 +1,4 @@
-package com.patstudio.communalka.presentation.ui.auth
+package com.patstudio.communalka.presentation.ui.main.profile.security
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -17,6 +17,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.patstudio.communalka.R
 import com.patstudio.communalka.data.model.UserForm
+import com.patstudio.communalka.databinding.FragmentEditPinCodeBinding
 import com.patstudio.communalka.databinding.FragmentPinCodeBinding
 import com.patstudio.communalka.presentation.ui.MainActivity
 import com.patstudio.communalka.presentation.ui.main.WelcomeViewModel
@@ -27,11 +28,11 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import visible
 import java.util.concurrent.Executor
 
-class PinCodeFragment : Fragment() {
+class EditPinCodeFragment : Fragment() {
 
-    private var _binding: FragmentPinCodeBinding? = null
+    private var _binding: FragmentEditPinCodeBinding? = null
     private val binding get() = _binding!!
-    private val viewModel by viewModel<PinCodeViewModel>()
+    private val viewModel by viewModel<EditPinCodeViewModel>()
     private val welcomeViewModel by sharedViewModel<WelcomeViewModel>()
     private lateinit var executor: Executor
     private lateinit var biometricPrompt: BiometricPrompt
@@ -41,7 +42,7 @@ class PinCodeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentPinCodeBinding.inflate(inflater, container, false)
+        _binding = FragmentEditPinCodeBinding.inflate(inflater, container, false)
         return binding.root
 
     }
@@ -117,6 +118,16 @@ class PinCodeFragment : Fragment() {
             }
         }
 
+        viewModel.getOpenSecurityPage().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                  if (it) {
+                      findNavController().navigate(R.id.toEntrance)
+                  }
+                }
+            }
+        }
+
         viewModel.getAccessBack().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
@@ -175,9 +186,7 @@ class PinCodeFragment : Fragment() {
         binding.pinNine.setOnClickListener { viewModel.clickDigital(getString(R.string.nine)) }
         binding.pinZero.setOnClickListener { viewModel.clickDigital(getString(R.string.zero)) }
         binding.pinBack.setOnClickListener { viewModel.removeLastItem() }
-        binding.close.setOnClickListener {
-            startActivity(Intent(requireContext(),MainActivity::class.java))
-        }
+
         binding.forgotPassword.setOnClickListener {  findNavController().navigate(R.id.toRestore) }
 
         executor = ContextCompat.getMainExecutor(requireContext())
@@ -225,10 +234,8 @@ class PinCodeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initObservers()
-        arguments?.getParcelable<UserForm>("user")?.let {
-            viewModel.setUserForm(it)
-        }
 
+        viewModel.init()
         initListeners()
         initNavigationListeners()
     }

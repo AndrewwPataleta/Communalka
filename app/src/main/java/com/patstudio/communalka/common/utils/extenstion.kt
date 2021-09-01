@@ -5,6 +5,7 @@ import android.text.InputFilter
 import android.util.Patterns
 import android.view.View
 import android.widget.EditText
+import androidx.constraintlayout.widget.Group
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.reflect.TypeToken
@@ -26,6 +27,16 @@ val Int.px: Int
 
 fun CharSequence?.isEmailValid(): Boolean {
     return android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
+}
+
+fun Group.setAllOnClickListener(listener: View.OnClickListener?) {
+    referencedIds.forEach { id ->
+        rootView.findViewById<View>(id).setOnClickListener(listener)
+    }
+}
+
+fun maskEmail(email: String): String {
+    return email.replace(Regex("""((?:\.|^).)?.(?=.*@)"""), "$1*")
 }
 
 inline fun startCoroutineTimer(delayMillis: Long = 0, repeatMillis: Long = 0, crossinline action: () -> Unit) = GlobalScope.launch {

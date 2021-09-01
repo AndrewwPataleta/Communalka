@@ -1,5 +1,6 @@
 package com.patstudio.communalka.data.networking.user
 
+import android.util.Log
 import com.example.imagegallery.contextprovider.DispatcherProvider
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
@@ -39,6 +40,12 @@ class UserRemoteImpl(
         userService.confirmSms(body)
     }
 
+    override suspend fun updateEmail(email: String) = withContext(dispatcherProvider.default) {
+        val body = JsonObject()
+        body.addProperty("email",email)
+        userService.updateEmail(body)
+    }
+
     override suspend fun registrationWithCode(
         fio: String,
         phone: String,
@@ -52,6 +59,11 @@ class UserRemoteImpl(
             body.addProperty("email",email)
         body.addProperty("code",smsCode)
         userService.registrationWithCode(body)
+    }
+
+    override suspend fun removePlacement(placementId: String) = withContext(dispatcherProvider.default) {
+        Log.d("UserRepository", "remove "+placementId)
+        userService.removePlacement(placementId)
     }
 
 }

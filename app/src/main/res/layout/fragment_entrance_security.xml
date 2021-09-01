@@ -144,16 +144,23 @@
                 app:layout_constraintEnd_toStartOf="@id/emailValue"
                 app:layout_constraintBottom_toBottomOf="@id/emailIcon"/>
 
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/emailGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="emailIcon,emailValue,emailArrow,emailText"/>
+
             <TextView
                 android:id="@+id/emailValue"
                 style="@style/TextBody1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/robotobold"
-                android:text="iv...@gmail.com"
+
                 android:textColor="@android:color/darker_gray"
                 android:textSize="17sp"
                 android:padding="16dp"
+                android:maxLength="15"
                 app:layout_constraintVertical_bias="0.5"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintTop_toTopOf="@id/emailIcon"

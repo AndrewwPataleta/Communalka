@@ -15,70 +15,82 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
+import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.fragment.findNavController
 import com.patstudio.communalka.R
-import com.patstudio.communalka.common.utils.MaskFormatter
-import com.patstudio.communalka.databinding.FragmentAboutAppBinding
-import com.patstudio.communalka.databinding.FragmentEntranceSecurityBinding
+import com.patstudio.communalka.databinding.FragmentEmailEditBinding
 import com.patstudio.communalka.databinding.FragmentPersonalInfoBinding
 import com.patstudio.communalka.databinding.FragmentProfileBinding
 import com.patstudio.communalka.presentation.ui.main.ProfileViewModel
-import com.patstudio.communalka.presentation.ui.main.profile.HistoryVersionViewModel
-import com.skydoves.balloon.extensions.dp
 import gone
-import maskEmail
 import org.koin.android.viewmodel.ext.android.viewModel
-import setAllOnClickListener
 import visible
 
-class EntranceSecurityFragment : Fragment() {
+class EmailEditFragment : Fragment() {
 
-    private var _binding: FragmentEntranceSecurityBinding? = null
+    private var _binding: FragmentEmailEditBinding? = null
     private val binding get() = _binding!!
-    private val viewModel by viewModel<EntranceSecurityViewModel>()
+    private val viewModel by viewModel<EmailEditViewModel>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentEntranceSecurityBinding.inflate(inflater, container, false)
+        _binding = FragmentEmailEditBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
 
     private fun initObservers() {
-        viewModel.initCurrentUser()
         viewModel.getUser().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                    binding.model = it
-                    binding.emailValue.text = maskEmail(it.email)
-                    binding.phoneValue.text = it.phone
+                    this.binding.emailCurrentValue.setText(it.email)
                 }
             }
         }
+        viewModel.getEmailError().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    this.binding.emailCurrentValue.setError(it)
+                }
+            }
+        }
+        viewModel.getUserMessage().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val builder = AlertDialog.Builder(requireContext())
+                    builder.setMessage(it)
+                    builder.setPositiveButton("Ок"){dialogInterface, which ->
+                        dialogInterface.dismiss()
+                    }
+                    val alertDialog: AlertDialog = builder.create()
+                    alertDialog.setCancelable(false)
+                    alertDialog.show()
+                }
+            }
+
+        }
+
     }
 
     private fun initListeners() {
-        binding.switchAutoSignIn.setOnCheckedChangeListener { buttonView, isChecked ->
-            viewModel.setAutoSignIn(isChecked)
+        binding.editUserBtn.setOnClickListener {
+            viewModel.editUser()
         }
-        binding.switchSigninFingerprint.setOnCheckedChangeListener { buttonView, isChecked ->
-            viewModel.setFingerPrintAvailable(isChecked)
+        binding.emailValue.doAfterTextChanged {
+            viewModel.setUserEmail(it.toString())
         }
-        binding.emailGroup.setAllOnClickListener(){
-            findNavController().navigate(R.id.toEditEmail)
-        }
-        binding.pinCodeText.setOnClickListener(){
-            findNavController().navigate(R.id.toEditPinCode)
-        }
-    }
 
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initObservers()
+        viewModel.initCurrentUser()
         initListeners()
     }
 

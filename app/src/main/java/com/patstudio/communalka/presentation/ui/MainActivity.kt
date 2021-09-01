@@ -20,6 +20,8 @@ import gone
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.content_main.*
+
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import visible
 
@@ -29,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private val viewModel by viewModel<MainViewModel>()
+
     private val editRoomView by viewModel<EditRoomViewModel>()
 
     private fun initObservers() {
@@ -109,6 +112,21 @@ class MainActivity : AppCompatActivity() {
                 R.id.EditPlacement-> {
                     toolbar.visibility = View.VISIBLE
                     deleteRoom.visibility = View.VISIBLE
+                    bottomNavigationView.visibility = View.GONE
+                }
+                R.id.EntranceSecurity-> {
+                    toolbar.visibility = View.VISIBLE
+                    deleteRoom.visibility = View.GONE
+                    bottomNavigationView.visibility = View.GONE
+                }
+                R.id.EditEmail-> {
+                    toolbar.visibility = View.VISIBLE
+                    deleteRoom.visibility = View.GONE
+                    bottomNavigationView.visibility = View.GONE
+                }
+                R.id.EditPinCode-> {
+                    toolbar.visibility = View.VISIBLE
+                    deleteRoom.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
             }

@@ -24,8 +24,14 @@ interface UserService {
     @POST("auth/register/")
     suspend fun registrationWithCode(@Body target: JsonObject): APIResponse<JsonElement>
 
+    @PUT("consumer/")
+    suspend fun updateEmail(@Body target: JsonObject): APIResponse<JsonElement>
+
     @FormUrlEncoded
     @POST("auth/update_token/")
     fun refreshToken(@Field("refresh") refresh: String): retrofit2.Call<APIResponse<JsonElement>>
+
+    @HTTP(method = "DELETE", path = "placement/{id}/", hasBody = true)
+    suspend fun removePlacement(@Path("id") id: String): Response
 
 }

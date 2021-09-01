@@ -287,11 +287,33 @@
     </fragment>
 
     <fragment
+        android:id="@+id/EditEmail"
+        android:name="com.patstudio.communalka.presentation.ui.main.profile.security.EmailEditFragment"
+        android:label="Изменить почту"
+        tools:layout="@layout/fragment_email_edit">
+
+    </fragment>
+
+    <fragment
         android:id="@+id/EntranceSecurity"
         android:name="com.patstudio.communalka.presentation.ui.main.profile.security.EntranceSecurityFragment"
         android:label="Безопасность и вход"
         tools:layout="@layout/fragment_entrance_security">
+        <action
+            android:id="@+id/toEditEmail"
+            app:destination="@id/EditEmail"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
 
+        <action
+            android:id="@+id/toEditPinCode"
+            app:destination="@id/EditPinCode"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -300,6 +322,20 @@
         android:label="Личные данные"
         tools:layout="@layout/fragment_personal_info">
 
+    </fragment>
+
+    <fragment
+        android:id="@+id/EditPinCode"
+        android:name="com.patstudio.communalka.presentation.ui.main.profile.security.EditPinCodeFragment"
+        android:label="Изменить PIN-код"
+        tools:layout="@layout/fragment_edit_pin_code">
+        <action
+            android:id="@+id/toEntrance"
+            app:destination="@id/EntranceSecurity"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment

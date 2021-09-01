@@ -112,6 +112,10 @@ class UserRepository (
         return dao.updatePreviosAuth()
     }
 
+    suspend fun updatePinCode(userId: String, pincode: String) {
+        return dao.updatePinCode(userId, pincode)
+    }
+
     fun getUserById(userId: String): User  {
         return dao.getUserById(userId)
     }
@@ -125,10 +129,39 @@ class UserRepository (
         return dao.getLastAuth()
     }
 
+    fun updateAuthSignIn(available: Boolean, userId: String)  {
+         dao.updateAuthSignIn(available, userId)
+    }
+
+    fun updateFingerPrintAvailable(available: Boolean, userId: String)  {
+        dao.updateFingerPrintAvailable(available, userId)
+    }
+
     fun logoutAll()  {
         sharedPreferences.edit().putString("currentToken", null).apply()
         sharedPreferences.edit().putString("currentRefreshToken", null).apply()
         return dao.updatePreviosAuth(false)
+    }
+
+    fun updateEmail(email: String): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val user = remote.updateEmail(email)
+                emit(Result.success(user))
+            }
+        } catch (throwable: Exception) {
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
     }
 
     fun confirmSmsCode(phone: String, smsCode: String): Flow<Result<APIResponse<JsonElement>>> = flow {
@@ -139,6 +172,29 @@ class UserRepository (
                 emit(Result.success(user))
             }
         } catch (throwable: Exception) {
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
+
+    fun removeRoom(placementId: String): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val user = remote.removePlacement(placementId)
+                emit(Result.success(user))
+            }
+        } catch (throwable: Exception) {
+            throwable.printStackTrace()
             when (throwable) {
                 is IOException ->  emit(Result.error(throwable))
                 is HttpException -> {

@@ -41,7 +41,11 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
     private val imageURI: MutableLiveData<Event<Uri>> = MutableLiveData()
     private val progressSuggestions: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val listSuggestions: MutableLiveData<Event<List<Suggestion>>> = MutableLiveData()
+    private val deleteDialog: MutableLiveData<Event<Placement>> = MutableLiveData()
     private val imagesMutable: MutableLiveData<Event<HashMap<Int, String>>> = MutableLiveData()
+    private val showProgress: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    private val openListPlacement: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    private val avatarActionDialog: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private lateinit var currentPlacement: Placement
     private var roomName: String = ""
     private var addressRoom: String = ""
@@ -134,6 +138,33 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
 
     }
 
+    fun confirmRemoveRoom() {
+        viewModelScope.launch(dispatcherProvider.io) {
+            userRepository.removeRoom(currentPlacement.id)
+                .onStart { showProgress.postValue(Event(true)) }
+                .catch { it.localizedMessage }
+                .collect {
+                    Log.d("EditRoomViewModel", "sub")
+                    when (it) {
+                        is Result.Success -> {
+                            when(it.data.status) {
+                                "success" -> {
+                                    showProgress.postValue(Event(false))
+                                    openListPlacement.postValue(Event(true))
+                                }
+                            }
+                        }
+                        is Result.Error -> {
+
+                        }
+                        is Result.ErrorResponse -> {
+
+                        }
+                    }
+                }
+        }
+    }
+
     fun saveRoom() {
         if (validateRoomForm()) {
             viewModelScope.launch(dispatcherProvider.io) {
@@ -165,7 +196,7 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
                 if (it != null) {
                     val resp = roomRepository.updatePremises(room)
                     var placement = gson.fromJson(resp.data!!.asJsonObject.get("placement"), Placement::class.java)
-                    val premisesLocal = Premises(placement.id, placement.name, placement.address, "", placement.consumer, placement.totalArea.toFloat(), placement.livingArea.toFloat(), IMAGE_MODE, value,false)
+                    val premisesLocal = Premises(placement.id, placement.name, placement.address, "", placement.consumer, placement.total_area.toFloat(), placement.living_area.toFloat(), IMAGE_MODE, value,false)
                     room.id = placement.id
                     room.firstSave = false
                     room.consumer = placement.consumer
@@ -254,8 +285,29 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
         return userMutable
     }
 
+    fun changeAvatar() {
+        checkReadExternalPermission.postValue(Event(true))
+    }
+
+    fun removeAvatar() {
+        var value = ""
+        when(IMAGE_MODE) {
+            "DEFAULT" -> value = selectedImage.toString()
+            "STORAGE" -> value = currentPath.toString()
+        }
+
+        selectedImage = images.get(1)
+        currentPlacement.imageType = "DEFAULT"
+        currentPlacement.path = value
+        imagesMutable.postValue(Event(images))
+    }
+
     fun getCurrentPlacement(): MutableLiveData<Event<Placement>> {
         return placement
+    }
+
+    fun getAvatarActionDialog(): MutableLiveData<Event<Boolean>> {
+        return avatarActionDialog
     }
 
     fun getNameRoomError() : MutableLiveData<Event<String>> {
@@ -312,7 +364,7 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
     }
 
     fun selectFirstImage() {
-        checkReadExternalPermission.postValue(Event(true))
+        avatarActionDialog.postValue(Event(true))
     }
 
     fun selectSecondImage() {
@@ -352,11 +404,23 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
     }
 
     fun selectDelete() {
-       Log.d("EditRoom", "delete room")
+        deleteDialog.postValue(Event(currentPlacement))
     }
 
     fun getOpenMainPage() : MutableLiveData<Event<Boolean>> {
         return openMainPage
+    }
+
+    fun getDeleteDialog() : MutableLiveData<Event<Placement>> {
+        return deleteDialog
+    }
+
+    fun getShowProgress() : MutableLiveData<Event<Boolean>> {
+        return showProgress
+    }
+
+    fun getOpenListPlacements() : MutableLiveData<Event<Boolean>> {
+        return openListPlacement
     }
 
     fun setCurrentRoomImage(currentPath: Uri) {

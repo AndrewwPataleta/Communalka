@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <variable name="viewModel" type="com.patstudio.communalka.presentation.ui.main.profile.security.EmailEditViewModel"/>
+        <variable name="position" type="Integer"/>
+        <variable name="model" type="com.patstudio.communalka.data.model.User"/>
+    </data>
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:padding="16dp">
+
+
+            <TextView
+                android:id="@+id/email_current_text"
+                style="@style/TextBody1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/robotobold"
+                android:text="Текущая почта"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email_current_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{model.email}"
+                android:textColorHint="@color/gray_placeholder"
+                android:textSize="16sp"
+                android:enabled="false"
+                android:theme="@style/EditTextBottomLine"
+                android:inputType="textCapWords"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/email_current_text" />
+
+            <TextView
+                android:id="@+id/email_text"
+                style="@style/TextBody1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/robotobold"
+                android:text="Новая почта"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/email_current_value" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/gray_placeholder"
+                android:textSize="16sp"
+                android:theme="@style/EditTextBottomLine"
+                android:inputType="textCapWords"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/email_text" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/editUserBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/dark_blue"
+                android:fontFamily="@font/robotoregular"
+                android:padding="8dp"
+                app:cornerRadius="8dp"
+                android:text="Сохранить"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/email_value"
+                app:layout_constraintVertical_bias="1.0"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>
