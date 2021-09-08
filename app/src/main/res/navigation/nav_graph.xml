@@ -10,7 +10,13 @@
         android:name="com.patstudio.communalka.presentation.ui.main.profile.welcome.WelcomeFragment"
         android:label="Главная"
         tools:layout="@layout/fragment_welcome">
-
+        <action
+            android:id="@+id/toPersonalAccountPlacement"
+            app:destination="@id/PersonalAccountPlacement"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/loLoginPage"
             app:destination="@id/LoginFragment"
@@ -57,6 +63,47 @@
         <action
             android:id="@+id/toWelcomePage"
             app:destination="@id/WelcomeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/PersonalAccountPlacement"
+        android:name="com.patstudio.communalka.presentation.ui.main.room.PersonalAccountManagementFragment"
+        android:label="Управление л/с"
+        tools:layout="@layout/fragment_personal_account_management">
+        <action
+            android:id="@+id/toCreatePersonalAccount"
+            app:destination="@id/CreatePersonalAccount"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/CreatePersonalAccount"
+        android:name="com.patstudio.communalka.presentation.ui.main.room.CreatePersonalAccountFragment"
+
+        tools:layout="@layout/fragment_create_personal_account">
+        <action
+            android:id="@+id/toPersonalAccounts"
+            app:destination="@id/PersonalAccountPlacement"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/EditPersonalAccount"
+        android:name="com.patstudio.communalka.presentation.ui.main.room.EditPersonalAccountFragment"
+        tools:layout="@layout/fragment_edit_personal_account">
+        <action
+            android:id="@+id/toPersonalAccounts"
+            app:destination="@id/PersonalAccountPlacement"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"

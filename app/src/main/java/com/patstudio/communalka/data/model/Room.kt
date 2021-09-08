@@ -18,6 +18,7 @@ data class Room (
     @SerializedName("postal_code") var postalCode : String?= null,
     @SerializedName("country") var country : String?= null,
     @SerializedName("consumer") var consumer : String?= null,
+    @SerializedName("fio") var fio : String?= null,
     @SerializedName("country_iso_code") var countryIsoCode : String?= null,
     @SerializedName("federal_district") var federalDistrict : String?= null,
     @SerializedName("region_fias_id") var regionFiasId : String?= null,

@@ -1,15 +1,14 @@
 package com.patstudio.communalka.di
 
 import com.patstudio.communalka.presentation.ui.auth.*
-import com.patstudio.communalka.presentation.ui.main.room.AddRoomViewModel
 import com.patstudio.communalka.presentation.ui.main.ProfileViewModel
-import com.patstudio.communalka.presentation.ui.main.WelcomeViewModel
+import com.patstudio.communalka.presentation.ui.main.profile.welcome.WelcomeViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.HistoryVersionViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.PersonalInfoViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.security.EditPinCodeViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.security.EmailEditViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.security.EntranceSecurityViewModel
-import com.patstudio.communalka.presentation.ui.main.room.EditRoomViewModel
+import com.patstudio.communalka.presentation.ui.main.room.*
 import com.patstudio.communalka.presentation.ui.splash.MainViewModel
 import com.patstudio.communalka.presentation.ui.splash.SplashViewModel
 import org.koin.android.viewmodel.dsl.viewModel
@@ -33,5 +32,8 @@ val viewModelsModule = module {
     viewModel { EntranceSecurityViewModel(get(), get()) }
     viewModel { EmailEditViewModel(get(), get()) }
     viewModel { EditPinCodeViewModel(get(), get()) }
+    viewModel { PersonalAccountManagementViewModel(get(), get(), get(), get()) }
+    viewModel { CreatePersonalAccountViewModel(get(), get(), get(), get()) }
+    viewModel { EditPersonalAccountViewModel(get(), get(), get(), get()) }
 
 }

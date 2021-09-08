@@ -145,22 +145,8 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
                 .catch { it.localizedMessage }
                 .collect {
                     Log.d("EditRoomViewModel", "sub")
-                    when (it) {
-                        is Result.Success -> {
-                            when(it.data.status) {
-                                "success" -> {
-                                    showProgress.postValue(Event(false))
-                                    openListPlacement.postValue(Event(true))
-                                }
-                            }
-                        }
-                        is Result.Error -> {
-
-                        }
-                        is Result.ErrorResponse -> {
-
-                        }
-                    }
+                    showProgress.postValue(Event(false))
+                    openListPlacement.postValue(Event(true))
                 }
         }
     }

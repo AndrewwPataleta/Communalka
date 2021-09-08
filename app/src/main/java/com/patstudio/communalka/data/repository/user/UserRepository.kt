@@ -12,6 +12,7 @@ import com.patstudio.communalka.data.model.User
 import com.patstudio.communalka.data.networking.user.UserRemote
 import com.patstudio.data.common.utils.Connectivity
 import kotlinx.coroutines.flow.*
+import okhttp3.Response
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -54,6 +55,111 @@ class UserRepository (
             if (connectivity.hasNetworkAccess()) {
                 emit(Result.loading())
                 val user = remote.sendCode(value)
+                emit(Result.success(user))
+            }
+        } catch (throwable: Exception) {
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
+    fun getAccount(accountId: String): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val user = remote.getAccount(accountId)
+                emit(Result.success(user))
+            }
+        } catch (throwable: Exception) {
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
+    fun deleteAccount(accountId: String): Flow<Result<Any>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val user = remote.deleteAccount(accountId)
+                emit(Result.success(user))
+            }
+        } catch (throwable: Exception) {
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
+    fun createPersonalAccount(number: String, fio: String, supplier: String, service: String, placementId: String): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val user = remote.createPersonalAccount(number, fio, supplier, service, placementId)
+                emit(Result.success(user))
+            }
+        } catch (throwable: Exception) {
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
+    fun createMeter(title: String, serial_number: String, value: String, accountId: String): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val user = remote.createMeterForAccount(title, serial_number, value, accountId)
+                emit(Result.success(user))
+            }
+        } catch (throwable: Exception) {
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
+    fun getSuppliers(): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val user = remote.getSuppliers()
                 emit(Result.success(user))
             }
         } catch (throwable: Exception) {
@@ -186,7 +292,7 @@ class UserRepository (
     }
 
 
-    fun removeRoom(placementId: String): Flow<Result<APIResponse<JsonElement>>> = flow {
+    fun removeRoom(placementId: String): Flow<Result<Any>> = flow {
         try {
             if (connectivity.hasNetworkAccess()) {
                 emit(Result.loading())

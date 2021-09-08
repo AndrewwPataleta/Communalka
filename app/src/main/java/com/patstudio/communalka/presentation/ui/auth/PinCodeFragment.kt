@@ -12,14 +12,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.patstudio.communalka.R
 import com.patstudio.communalka.data.model.UserForm
 import com.patstudio.communalka.databinding.FragmentPinCodeBinding
 import com.patstudio.communalka.presentation.ui.MainActivity
-import com.patstudio.communalka.presentation.ui.main.WelcomeViewModel
+import com.patstudio.communalka.presentation.ui.main.profile.welcome.WelcomeViewModel
 import gone
 import invisible
 import org.koin.android.viewmodel.ext.android.sharedViewModel

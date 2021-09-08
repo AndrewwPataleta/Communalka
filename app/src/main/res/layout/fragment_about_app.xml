@@ -41,12 +41,14 @@
             android:layout_height="2dp"
             android:background="#EEF1F5"
             android:layout_marginTop="16dp"
+
             app:layout_constraintTop_toBottomOf="@id/versionAppText"/>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/historyVersionIcon"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:visibility="gone"
             android:src="@drawable/ic_app"
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -61,6 +63,7 @@
             android:text="История версий приложения"
             android:textColor="@android:color/black"
             android:textSize="17sp"
+            android:visibility="gone"
             android:padding="16dp"
             app:layout_constraintVertical_bias="0.5"
             app:layout_constraintHorizontal_bias="0.0"
@@ -75,6 +78,7 @@
             android:layout_height="24dp"
             android:src="@drawable/ic_down"
             app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="@id/historyVersionText"
             app:layout_constraintVertical_bias="0.5"
             app:layout_constraintBottom_toBottomOf="@id/historyVersionText"
@@ -85,6 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="#EEF1F5"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/historyVersionText"/>
 
 
@@ -92,7 +97,7 @@
             android:id="@+id/connectDeveloperIcon"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_mail"
+            android:src="@drawable/ic_envelope"
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/historyVersionDecorator"/>

@@ -1,4 +1,4 @@
-package com.patstudio.communalka.presentation.ui.main
+package com.patstudio.communalka.presentation.ui.main.profile.welcome
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -24,6 +24,7 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
     private val updateByPosition: MutableLiveData<Event<Int>> = MutableLiveData()
     private val editPlacementDialog: MutableLiveData<Event<Placement>> = MutableLiveData()
     private val editPlacement: MutableLiveData<Event<Placement>> = MutableLiveData()
+    private val selectPersonalAccountPlacement: MutableLiveData<Event<Placement>> = MutableLiveData()
 
     private val placementListMutable: MutableLiveData<Event<List<Placement>>> = MutableLiveData()
     private var needEnterPin: Boolean = true
@@ -179,6 +180,11 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
         editPlacement.postValue(Event(placement))
     }
 
+    fun selectPlacement(placement: Placement) {
+        selectPersonalAccountPlacement.postValue(Event(placement))
+    }
+
+
     fun clickArrow(position: Int) {
         userPlacement[position].isOpened = !userPlacement[position].isOpened
         updateByPosition.postValue(Event(position))
@@ -186,6 +192,10 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
 
     fun getNavigateTo(): MutableLiveData<Event<String>> {
         return navigateTo
+    }
+
+    fun getPersonalAccountPlacement(): MutableLiveData<Event<Placement>> {
+        return selectPersonalAccountPlacement
     }
 
     fun getUpdatePosition(): MutableLiveData<Event<Int>> {

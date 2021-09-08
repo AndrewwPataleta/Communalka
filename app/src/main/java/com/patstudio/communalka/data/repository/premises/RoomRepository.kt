@@ -5,10 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.reflect.TypeToken
 import com.patstudio.communalka.data.database.user.RoomDao
-import com.patstudio.communalka.data.model.APIResponse
-import com.patstudio.communalka.data.model.Premises
-import com.patstudio.communalka.data.model.Result
-import com.patstudio.communalka.data.model.Room
+import com.patstudio.communalka.data.model.*
 import com.patstudio.communalka.data.networking.premises.RoomRemote
 import com.patstudio.data.common.utils.Connectivity
 import kotlinx.coroutines.flow.Flow
@@ -49,6 +46,7 @@ class RoomRepository(
 
     suspend fun sendPremises(room: Room): APIResponse<JsonElement> {
         Log.d("RoomRepository", "sub send ")
+       
        return  roomRemote.sendRoom(room)
     }
 
@@ -71,6 +69,48 @@ class RoomRepository(
                 is HttpException -> {
                     val errorResponse = convertErrorBody(throwable)
                     Log.d("PremisesRepository", errorResponse.toString())
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
+    suspend fun getPlacementPersonalAccount(placement: Placement): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val premises = roomRemote.getPlacementPersonalAccount(placement)
+                emit(Result.success(premises))
+            }
+        } catch (throwable: Exception) {
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
+    suspend fun getServicesPlacement(placement: Placement): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val premises = roomRemote.getPlacementServices(placement)
+                emit(Result.success(premises))
+            }
+        } catch (throwable: Exception) {
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
                     emit(Result.errorResponse(errorResponse))
                 }
                 else -> {

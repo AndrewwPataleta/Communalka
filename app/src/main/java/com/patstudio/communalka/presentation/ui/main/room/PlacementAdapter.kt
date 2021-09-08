@@ -2,23 +2,19 @@ package com.patstudio.communalka.presentation.ui.main.room
 
 import android.content.Context
 import android.content.res.Resources
-import android.os.Build
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.setPadding
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.patstudio.communalka.R
 import com.patstudio.communalka.data.model.Placement
 import com.patstudio.communalka.databinding.ItemPlacementBinding
-import com.patstudio.communalka.presentation.ui.main.WelcomeViewModel
+import com.patstudio.communalka.presentation.ui.main.profile.welcome.WelcomeViewModel
 import com.skydoves.balloon.*
 import gone
-import it.sephiroth.android.library.xtooltip.Tooltip
 import visible
 
 class PlacementAdapter(private val placementList: List<Placement>,  val context: Context,  val viewModel: WelcomeViewModel) : RecyclerView.Adapter<PlacementAdapter.PlacementHolder>() {

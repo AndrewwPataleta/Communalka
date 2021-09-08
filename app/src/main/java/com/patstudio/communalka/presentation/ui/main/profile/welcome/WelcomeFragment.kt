@@ -19,15 +19,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.patstudio.communalka.R
 import com.patstudio.communalka.databinding.FragmentWelcomeBinding
-import com.patstudio.communalka.presentation.ui.main.WelcomeViewModel
 import com.patstudio.communalka.presentation.ui.main.room.PlacementAdapter
 import com.patstudio.communalka.presentation.ui.splash.MainViewModel
-import gone
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
 import visible
 import com.skydoves.balloon.*
 import com.skydoves.balloon.extensions.dp
+import gone
 
 
 class WelcomeFragment : Fragment() {
@@ -189,6 +187,15 @@ class WelcomeFragment : Fragment() {
                 }
             }
         }
+        viewModel.getPersonalAccountPlacement().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val bundle = bundleOf("placement" to it)
+                    findNavController().navigate(R.id.toPersonalAccountPlacement, bundle)
+                }
+            }
+        }
+
         viewModel.getEditPlacementDialog().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {

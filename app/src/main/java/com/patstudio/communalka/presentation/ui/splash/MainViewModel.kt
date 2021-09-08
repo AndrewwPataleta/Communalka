@@ -3,6 +3,7 @@ package com.patstudio.communalka.presentation.ui.splash
 import android.util.Log
 import androidx.lifecycle.*
 import com.patstudio.communalka.common.utils.Event
+import com.patstudio.communalka.data.model.PersonalAccount
 import com.patstudio.communalka.data.model.Result
 import com.patstudio.communalka.data.model.User
 import com.patstudio.communalka.data.repository.user.UserRepository
@@ -16,6 +17,7 @@ import okhttp3.Response
 class MainViewModel (private val userRepository: UserRepository): ViewModel() {
 
     private val _needShadow: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    private val toolbarName: MutableLiveData<Event<String>> = MutableLiveData()
 
     public fun needBackgroundShadow(needShadow: Boolean) {
         _needShadow.postValue(Event(needShadow))
@@ -23,5 +25,13 @@ class MainViewModel (private val userRepository: UserRepository): ViewModel() {
 
     public fun getNeedShadow():  MutableLiveData<Event<Boolean>> {
         return _needShadow
+    }
+
+    public fun currentPersonalAccountName(name: String) {
+        toolbarName.postValue(Event(name))
+    }
+
+    fun getToolbarName(): MutableLiveData<Event<String>> {
+        return toolbarName
     }
 }

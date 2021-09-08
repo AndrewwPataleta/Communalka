@@ -20,7 +20,17 @@ interface UserRemote {
 
     suspend fun registrationWithCode(fio: String,phone: String, email: String, smsCode: String): APIResponse<JsonElement>
 
-    suspend fun removePlacement(placementId: String): Response
+    suspend fun removePlacement(placementId: String): Any
+
+    suspend fun getAccount(accountId:  String): APIResponse<JsonElement>
+
+    suspend fun deleteAccount(accountId:  String): Any
+
+    suspend fun createPersonalAccount(number: String, fio: String, supplier: String, service: String,placementId: String): APIResponse<JsonElement>
+
+    suspend fun createMeterForAccount(title: String, serial_number: String, value: String, accountId: String): APIResponse<JsonElement>
+
+    suspend fun getSuppliers(): APIResponse<JsonElement>
 
 
 }

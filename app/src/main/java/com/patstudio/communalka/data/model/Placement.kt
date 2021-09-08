@@ -8,6 +8,7 @@ data class Placement (
     val id: String,
     val consumer: String,
     val name: String,
+    val fio: String,
     val total_area: Double,
     val living_area: Double,
     val address: String,

@@ -20,6 +20,12 @@ interface PremisesService {
     @PUT("placement/{id}/")
     suspend fun updatePlacement(@Body room: JsonObject, @Path("id") id: String): APIResponse<JsonElement>
 
+    @GET("placement/{id}/account/")
+    suspend fun getListAccountForPlacement(@Path("id") id: String): APIResponse<JsonElement>
+
+    @GET("placement/{id}/services/")
+    suspend fun getServicesForPlacement(@Path("id") id: String): APIResponse<JsonElement>
+
     @GET("api_keys/dadata/")
     suspend fun getDaDataApiKey(): APIResponse<JsonElement>
 

@@ -244,7 +244,7 @@
             android:id="@+id/notificationIcon"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_push"
+            android:src="@drawable/ic_bell"
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/securityDecorator"/>

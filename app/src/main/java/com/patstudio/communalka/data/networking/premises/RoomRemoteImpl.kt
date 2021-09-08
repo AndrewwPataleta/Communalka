@@ -4,6 +4,7 @@ import com.example.imagegallery.contextprovider.DispatcherProvider
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.patstudio.communalka.data.model.APIResponse
+import com.patstudio.communalka.data.model.Placement
 import com.patstudio.communalka.data.model.Room
 import kotlinx.coroutines.withContext
 
@@ -47,6 +48,14 @@ class RoomRemoteImpl(
 
     override suspend fun getActualApiKey() = withContext(dispatcherProvider.default) {
         premisesService.getDaDataApiKey()
+    }
+
+    override suspend fun getPlacementPersonalAccount(placement: Placement) = withContext(dispatcherProvider.default) {
+        premisesService.getListAccountForPlacement(placement.id)
+    }
+
+    override suspend fun getPlacementServices(placement: Placement) = withContext(dispatcherProvider.default) {
+        premisesService.getServicesForPlacement(placement.id)
     }
 
 }

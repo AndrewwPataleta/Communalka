@@ -13,6 +13,7 @@ import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.bumptech.glide.Glide
 import com.patstudio.communalka.R
 import com.patstudio.communalka.databinding.ActivityMainBinding
+import com.patstudio.communalka.presentation.ui.main.room.EditPersonalAccountViewModel
 import com.patstudio.communalka.presentation.ui.main.room.EditRoomViewModel
 import com.patstudio.communalka.presentation.ui.splash.MainViewModel
 import com.patstudio.communalka.presentation.ui.splash.SplashViewModel
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel by viewModel<MainViewModel>()
 
     private val editRoomView by viewModel<EditRoomViewModel>()
+    private val editPersonalAccountView by viewModel<EditPersonalAccountViewModel>()
 
     private fun initObservers() {
         viewModel.getNeedShadow().observe(this) {
@@ -46,11 +48,23 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        viewModel.getToolbarName().observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                   it?.let {
+                       binding.toolbar.title = it.toString()
+                   }
+                }
+            }
+        }
     }
 
     private fun initListeners() {
         binding.deleteRoom.setOnClickListener {
             editRoomView.selectDelete()
+        }
+        binding.deletePersonalAccount.setOnClickListener {
+            editPersonalAccountView.removeCurrentPersonalAccount()
         }
     }
 
@@ -59,6 +73,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
+
         initListeners()
         val navController = findNavController(R.id.nav_host_fragment_content)
         appBarConfiguration = AppBarConfiguration(navController.graph)
@@ -68,65 +83,96 @@ class MainActivity : AppCompatActivity() {
             onNavDestinationSelected(item, Navigation.findNavController(this, R.id.nav_host_fragment_content))
         }
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_left)
             when (destination.id) {
                 R.id.WelcomeFragment -> {
                     toolbar.visibility = View.GONE
                     deleteRoom.visibility = View.GONE
+                    deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.VISIBLE
                 }
                 R.id.LoginFragment-> {
                     toolbar.visibility = View.GONE
                     deleteRoom.visibility = View.GONE
+                    deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
                 R.id.Registration-> {
                     toolbar.visibility = View.GONE
                     deleteRoom.visibility = View.GONE
+                    deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
                 R.id.Profile-> {
                     toolbar.visibility = View.VISIBLE
                     deleteRoom.visibility = View.GONE
+                    deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.VISIBLE
                 }
                 R.id.AddRoom-> {
                     toolbar.visibility = View.VISIBLE
                     deleteRoom.visibility = View.GONE
+                    deletePersonalAccount.visibility = View.GONE
+                    bottomNavigationView.visibility = View.GONE
+                }
+                R.id.CreatePersonalAccount-> {
+                    toolbar.visibility = View.VISIBLE
+                    deleteRoom.visibility = View.GONE
+                    deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
                 R.id.ConfirmSms-> {
                     toolbar.visibility = View.GONE
                     deleteRoom.visibility = View.GONE
+                    deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
                 R.id.Request-> {
                     toolbar.visibility = View.VISIBLE
                     deleteRoom.visibility = View.GONE
+                    deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.VISIBLE
                 }
                 R.id.PinCode-> {
                     toolbar.visibility = View.GONE
                     deleteRoom.visibility = View.GONE
+                    deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
                 R.id.EditPlacement-> {
                     toolbar.visibility = View.VISIBLE
                     deleteRoom.visibility = View.VISIBLE
+                    deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
                 R.id.EntranceSecurity-> {
                     toolbar.visibility = View.VISIBLE
                     deleteRoom.visibility = View.GONE
+                    deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
                 R.id.EditEmail-> {
                     toolbar.visibility = View.VISIBLE
                     deleteRoom.visibility = View.GONE
+                    deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
                 R.id.EditPinCode-> {
                     toolbar.visibility = View.VISIBLE
                     deleteRoom.visibility = View.GONE
+                    deletePersonalAccount.visibility = View.GONE
+                    bottomNavigationView.visibility = View.GONE
+                }
+                R.id.EditPersonalAccount-> {
+                    toolbar.visibility = View.VISIBLE
+                    deleteRoom.visibility = View.GONE
+                    deletePersonalAccount.visibility = View.VISIBLE
+                    bottomNavigationView.visibility = View.GONE
+                }
+                R.id.PersonalAccountPlacement-> {
+                    toolbar.visibility = View.VISIBLE
+                    deleteRoom.visibility = View.GONE
+                    deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
             }

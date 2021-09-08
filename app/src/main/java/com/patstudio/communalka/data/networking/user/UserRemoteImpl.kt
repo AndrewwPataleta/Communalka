@@ -62,8 +62,47 @@ class UserRemoteImpl(
     }
 
     override suspend fun removePlacement(placementId: String) = withContext(dispatcherProvider.default) {
-        Log.d("UserRepository", "remove "+placementId)
         userService.removePlacement(placementId)
+    }
+
+    override suspend fun getAccount(accountId: String) = withContext(dispatcherProvider.default) {
+        userService.getAccount(accountId)
+    }
+
+    override suspend fun deleteAccount(accountId: String) = withContext(dispatcherProvider.default) {
+        userService.deleteAccount(accountId)
+    }
+
+    override suspend fun createPersonalAccount(
+        number: String,
+        fio: String,
+        supplier: String,
+        service: String,
+        placementId: String
+    ) = withContext(dispatcherProvider.default) {
+        val body = JsonObject()
+        body.addProperty("fio",fio)
+        body.addProperty("number",number)
+        body.addProperty("supplier",supplier)
+        body.addProperty("service",service)
+        userService.createAccount(body, placementId)
+    }
+
+    override suspend fun createMeterForAccount(
+        title: String,
+        serial_number: String,
+        value: String,
+        accountId: String
+    )  = withContext(dispatcherProvider.default)  {
+        val body = JsonObject()
+        body.addProperty("title",title)
+        body.addProperty("serial_number",serial_number)
+        body.addProperty("value",value)
+        userService.createMeter(body, accountId)
+    }
+
+    override suspend fun getSuppliers() = withContext(dispatcherProvider.default)  {
+        userService.getSuppliers()
     }
 
 }

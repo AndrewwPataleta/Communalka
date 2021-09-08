@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="viewModel" type="com.patstudio.communalka.presentation.ui.main.WelcomeViewModel"/>
+        <variable name="viewModel" type="com.patstudio.communalka.presentation.ui.main.profile.welcome.WelcomeViewModel"/>
         <variable name="position" type="Integer"/>
         <variable name="model" type="com.patstudio.communalka.data.model.Placement"/>
 
@@ -196,6 +196,7 @@
                     android:hint="Иванов Иван Иванович"
                     android:textColorHint="@color/gray_placeholder"
                     android:textSize="16sp"
+                    android:text="@{model.fio}"
                     android:theme="@style/EditTextBottomLine"
                     android:inputType="textCapWords"
                     app:layout_constraintEnd_toEndOf="parent"
