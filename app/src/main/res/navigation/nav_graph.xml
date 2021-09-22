@@ -12,44 +12,25 @@
         tools:layout="@layout/fragment_welcome">
         <action
             android:id="@+id/toPersonalAccountPlacement"
-            app:destination="@id/PersonalAccountPlacement"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:destination="@id/PersonalAccountPlacement" />
+        <action
+            android:id="@+id/toTransmissionReadings"
+            app:destination="@id/TransmissionReading" />
         <action
             android:id="@+id/loLoginPage"
-            app:destination="@id/LoginFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:destination="@id/LoginFragment" />
         <action
             android:id="@+id/toPinCode"
-
-            app:destination="@id/PinCode"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:destination="@id/PinCode" />
         <argument
             android:name="user"
             app:argType="com.patstudio.communalka.data.model.User" />
         <action
             android:id="@+id/toRegistration"
-            app:destination="@id/Registration"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:destination="@id/Registration" />
         <action
             android:id="@+id/toEditPlacement"
-            app:destination="@id/EditPlacement"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
-
+            app:destination="@id/EditPlacement" />
         <action
             android:id="@+id/action_WelcomeFragment_to_AddRoom"
             app:destination="@id/AddRoom" />
@@ -70,6 +51,16 @@
     </fragment>
 
     <fragment
+        android:id="@+id/TransmissionReading"
+        android:name="com.patstudio.communalka.presentation.ui.main.readings.TransmissionReadingListFragment"
+        android:label="Передача показаний"
+        tools:layout="@layout/fragment_transmission_reading_list">
+        <action
+            android:id="@+id/toTransmissionReadingCounter"
+            app:destination="@id/TransmissionReadingCounter"/>
+    </fragment>
+
+    <fragment
         android:id="@+id/PersonalAccountPlacement"
         android:name="com.patstudio.communalka.presentation.ui.main.room.PersonalAccountManagementFragment"
         android:label="Управление л/с"
@@ -81,6 +72,14 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/TransmissionReadingCounter"
+        android:name="com.patstudio.communalka.presentation.ui.main.readings.TransmissionReadingsFragment"
+        android:label="Передача показаний"
+        tools:layout="@layout/fragment_transmission_readings">
+
     </fragment>
 
     <fragment

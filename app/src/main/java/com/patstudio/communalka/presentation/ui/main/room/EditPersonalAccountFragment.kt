@@ -49,7 +49,7 @@ class EditPersonalAccountFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel by sharedViewModel<EditPersonalAccountViewModel>()
     private val mainViewModel by sharedViewModel<MainViewModel>()
-    private lateinit var personalCounterAdapter: PersonalCounterAdapter
+    private lateinit var personalCounterAdapter: EditPersonalCounterAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -118,9 +118,9 @@ class EditPersonalAccountFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     it?.let {
-//                        val adapter = PersonalCounterAdapter(it,requireActivity(), viewModel)
-//                        binding.personalCountersContainer.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL ,false)
-//                        binding.personalCountersContainer.adapter = adapter
+                        val adapter = EditPersonalCounterAdapter(it,requireActivity(), viewModel)
+                        binding.personalCountersContainer.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL ,false)
+                        binding.personalCountersContainer.adapter = adapter
                     }
                 }
             }

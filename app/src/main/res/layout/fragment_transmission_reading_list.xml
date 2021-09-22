@@ -4,15 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="viewModel" type="com.patstudio.communalka.presentation.ui.main.profile.welcome.WelcomeViewModel"/>
-        <variable name="position" type="Integer"/>
+
         <variable name="model" type="com.patstudio.communalka.data.model.Placement"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/placementRoot"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@drawable/rounded_gray_background"
         android:layout_marginTop="8dp"
         android:padding="16dp">
@@ -48,7 +47,7 @@
             android:layout_height="20dp"
             android:visibility="gone"
             android:src="@drawable/ic_edit"
-            android:onClick="@{() -> viewModel.selectEdit(model)}"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/ownerName"
             app:layout_constraintBottom_toBottomOf="@+id/ownerName"
@@ -61,11 +60,10 @@
             android:layout_height="wrap_content"
 
             android:text="@{model.address}"
-            android:visibility="gone"
+
             app:fontFamily="@font/robotoregular"
             android:textColor="@color/gray_dark"
-            android:textSize="15sp"
-            android:layout_marginTop="6dp"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="@id/placementName"
             app:layout_constraintBottom_toBottomOf="@id/placementImage"
             app:layout_constraintTop_toBottomOf="@id/placementName"
@@ -89,6 +87,7 @@
             android:text="@{model.fio}"
             android:textColor="@color/gray_dark"
             android:textSize="16sp"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@id/placementName"
             app:layout_constraintTop_toBottomOf="@id/addressBarrier" />
 
@@ -97,8 +96,8 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_down"
-            android:onClick="@{() -> viewModel.clickArrow(position)}"
             app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.constraintlayout.widget.Barrier
@@ -113,75 +112,19 @@
             android:layout_width="match_parent"
             android:layout_height="0.4dp"
             android:background="@color/gray_dark"
+            android:layout_marginBottom="16dp"
             app:layout_constraintTop_toBottomOf="@id/roomInfoBarrier"
             android:layout_marginTop="16dp"/>
 
-        <TextView
-            android:id="@+id/paymentNotFound"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            app:layout_constraintHorizontal_bias="0.0"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toStartOf="@id/paymentButton"
-            app:layout_constraintTop_toTopOf="@id/paymentButton"
-            app:layout_constraintBottom_toBottomOf="@id/paymentButton"
-            android:text="Оплата еще не начислена"/>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/paymentButton"
-            android:layout_width="110dp"
-            android:layout_height="wrap_content"
-            android:text="Оплатить"
-            android:textAllCaps="false"
-            android:fontFamily="@font/roboto_regular"
+        <include
+            android:id="@+id/counterContainer"
+            layout="@layout/item_personal_counter"
             app:layout_constraintTop_toBottomOf="@id/decorator"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp"
-            android:textColor="@color/white"
-            android:background="@drawable/gray_button_disable_background"/>
-
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/paymentInfoBarrier"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:constraint_referenced_ids="paymentButton, paymentNotFound "
-            app:barrierDirection="bottom"/>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/transmitTestimony"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Передать показания"
-            android:textAllCaps="false"
-            android:textSize="17sp"
-            android:onClick="@{() -> viewModel.selectTransmissionReading(model)}"
-            app:fontFamily="@font/roboto_regular"
-            app:layout_constraintTop_toBottomOf="@id/paymentInfoBarrier"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp"
-            android:textColor="@color/dark_blue"
-            android:background="@drawable/background_transmission_readings_btn"/>
-
-        <View
-            android:id="@+id/transmitBalloonTriger"
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            app:layout_constraintTop_toBottomOf="@id/transmitTestimony"
             app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="match_parent"
+            android:layout_marginTop="16dp"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"/>
-
-        <View
-            android:id="@+id/paymentBalloonTrigger"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            app:layout_constraintTop_toBottomOf="@id/paymentButton"
-            app:layout_constraintStart_toStartOf="@+id/paymentButton"
-            app:layout_constraintEnd_toEndOf="@+id/paymentButton"/>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -101,8 +101,28 @@ class UserRemoteImpl(
         userService.createMeter(body, accountId)
     }
 
+    override suspend fun editMeterForAccount(
+        title: String,
+        serial_number: String,
+        value: String,
+        accountId: String
+    ) = withContext(dispatcherProvider.default) {
+        val body = JsonObject()
+        body.addProperty("title",title)
+        body.addProperty("value",value)
+        userService.updateMeter(body, accountId)
+    }
+
     override suspend fun getSuppliers() = withContext(dispatcherProvider.default)  {
         userService.getSuppliers()
+    }
+
+    override suspend fun getMeters(accountId: String) = withContext(dispatcherProvider.default)  {
+        userService.getListMeter(accountId)
+    }
+
+    override suspend fun removeMeter(meterId: String) = withContext(dispatcherProvider.default)  {
+        userService.removeMeter(meterId)
     }
 
 }

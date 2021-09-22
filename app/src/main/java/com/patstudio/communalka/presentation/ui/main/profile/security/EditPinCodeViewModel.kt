@@ -55,7 +55,7 @@ class EditPinCodeViewModel(private val userRepository: UserRepository, private v
 
                 viewModelScope.launch(dispatcherProvider.io) {
                     try {
-                        userRepository.updatePinCode(savedUser.id, pinCodeRepeat)
+                        userRepository.setPinCode(pinCodeRepeat)
                         clearPinForm()
                         alertMessage.postValue(Event("Новый PIN-код  установлен"))
                         openSecurityPage.postValue(Event(true))

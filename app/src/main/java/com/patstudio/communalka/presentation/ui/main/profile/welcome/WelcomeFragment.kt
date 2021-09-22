@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.patstudio.communalka.R
 import com.patstudio.communalka.databinding.FragmentWelcomeBinding
+import com.patstudio.communalka.presentation.ui.MainActivity
 import com.patstudio.communalka.presentation.ui.main.room.PlacementAdapter
 import com.patstudio.communalka.presentation.ui.splash.MainViewModel
 import org.koin.android.viewmodel.ext.android.sharedViewModel
@@ -26,6 +27,8 @@ import visible
 import com.skydoves.balloon.*
 import com.skydoves.balloon.extensions.dp
 import gone
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.view.*
 
 
 class WelcomeFragment : Fragment() {
@@ -69,8 +72,10 @@ class WelcomeFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
 
                 it.getContentIfNotHandled {
+                    (requireActivity() as MainActivity).clearBackground()
+                    (requireActivity() as MainActivity).toolbar.visibility = View.GONE
+                    binding.userContainer.visible(false)
 
-                    this.binding.contentContainer.visible(true)
                     binding.login.gone(false)
                     binding.registration.gone(false)
                     val splitFio = it.name.split(" ")
@@ -95,7 +100,10 @@ class WelcomeFragment : Fragment() {
         viewModel.getWithoutUser().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                   this.binding.contentContainer.visible(true)
+                    (requireActivity() as MainActivity).clearBackground()
+                    requireActivity().toolbar.visibility = View.GONE
+                    binding.userContainer.visible(false)
+
                 }
             }
         }
@@ -128,13 +136,23 @@ class WelcomeFragment : Fragment() {
         viewModel.getPinForm().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                    Log.d("WelcomeFragment", "open pin form")
+                    (requireActivity() as MainActivity).clearBackground()
                     val bundle = bundleOf("user" to it)
                     findNavController().navigate(R.id.toPinCode, bundle)
                 }
 
             }
         }
+        viewModel.transmissionReadingPlacement.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    Log.d("placement", it.name)
+                    val bundle = bundleOf("placement" to it)
+                    findNavController().navigate(R.id.toTransmissionReadings, bundle)
+                }
+            }
+        }
+
         viewModel.getReadStoragePermission().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
@@ -157,24 +175,31 @@ class WelcomeFragment : Fragment() {
         viewModel.getPlacementList().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
+                    (requireActivity() as MainActivity).setWhiteRootBackground()
+
                     requireActivity().findViewById<Toolbar>(R.id.toolbar).visible(false)
 
                     binding.userContainer.gone(false)
                     binding.premisesContainer.visible(false)
-                    placementAdapter = PlacementAdapter(it, requireContext(), viewModel)
+                    placementAdapter = PlacementAdapter(it.first, requireContext(), viewModel)
                     binding.premisesList.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL ,false)
                     binding.premisesList.adapter = placementAdapter
-                    Handler().postDelayed({
-                        val position = (binding.premisesList.getLayoutManager() as LinearLayoutManager).findFirstVisibleItemPosition()
-                        var viewholder = binding.premisesList.findViewHolderForAdapterPosition(position)
 
-                        (viewholder!!.itemView as ConstraintLayout )?.let {
-                            val root = it;
-                            transmitAnchor = root.findViewById(R.id.transmitBalloonTriger)
-                            paymentAnchor = root.findViewById(R.id.paymentBalloonTrigger)
-                            showTransmitTooltip()
-                        }
-                    }, 200)
+                    if (it.second) {
+                        Handler().postDelayed({
+                            val position =
+                                (binding.premisesList.getLayoutManager() as LinearLayoutManager).findFirstVisibleItemPosition()
+                            var viewholder =
+                                binding.premisesList.findViewHolderForAdapterPosition(position)
+
+                            (viewholder!!.itemView as ConstraintLayout)?.let {
+                                val root = it;
+                                transmitAnchor = root.findViewById(R.id.transmitBalloonTriger)
+                                paymentAnchor = root.findViewById(R.id.paymentBalloonTrigger)
+                                showTransmitTooltip()
+                            }
+                        }, 200)
+                    }
                 }
             }
         }
@@ -207,6 +232,11 @@ class WelcomeFragment : Fragment() {
                         Log.d("WelcomeFragment", "edit placement")
                         editPlacementDialog.dismiss()
                         viewModel.selectEditPlacement(placement)
+                    }
+                    root.findViewById<View>(R.id.editpersonaBill).setOnClickListener {
+
+                        editPlacementDialog.dismiss()
+                        viewModel.selectPlacementForPersonalAccounts(placement)
                     }
                     editPlacementDialog.show()
                 }

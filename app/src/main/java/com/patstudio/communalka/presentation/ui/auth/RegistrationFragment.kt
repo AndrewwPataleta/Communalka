@@ -12,6 +12,7 @@ import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.patstudio.communalka.BuildConfig
 import com.patstudio.communalka.R
 import com.patstudio.communalka.databinding.FragmentRegistrationBinding
 import gone
@@ -56,7 +57,7 @@ class RegistrationFragment : Fragment() {
             binding.userLicenceCheck.isChecked = !binding.userLicenceCheck.isChecked
         }
         binding.userLicenceLink.setOnClickListener {
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://test.communalka.site/static/public_offer.pdf"))
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.API_HOST+"/public_offer/"))
             startActivity(browserIntent)
         }
         binding.close.setOnClickListener {

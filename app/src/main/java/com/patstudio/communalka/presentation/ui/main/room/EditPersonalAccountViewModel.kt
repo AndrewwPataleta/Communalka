@@ -48,6 +48,26 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
     private fun getListPersonalAccounts() {
         viewModelScope.launch(dispatcherProvider.io) {
 
+            userRepository.getMeters(currentPersonalAccount.account.id)
+                .catch { it.printStackTrace() }
+                .collect {
+                    when (it) {
+                        is Result.Success -> {
+                            val turnsType = object : TypeToken<List<PersonalCounter>>() {}.type
+                            personalCounters = gson.fromJson(it.data.data!!.asJsonObject.get("meters"), turnsType)
+                            personalCounter.postValue(Event(personalCounters))
+                        }
+                        is Result.Error -> {
+
+                        }
+                        is Result.ErrorResponse -> {
+
+                        }
+                    }
+
+                }
+          //  personalCounter.postValue(Event(currentPersonalAccount))
+
             userRepository.getSuppliers()
                 .catch { it.printStackTrace() }
                 .collect {
@@ -70,47 +90,117 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
         }
     }
 
+
+
     fun addNewCounter() {
-        personalCounters.add(PersonalCounter("",""))
+        personalCounters.add(PersonalCounter("","", ""))
         personalCounter.postValue(Event(personalCounters))
     }
 
-    fun removeCounter(personalCounter: PersonalCounter) {
-        personalCounters.remove(personalCounter)
-        this.personalCounter.postValue(Event(personalCounters))
+    fun removeCounter(selectedPersonalCounter: PersonalCounter) {
+
+        viewModelScope.launch(dispatcherProvider.io) {
+            userRepository.removeMeter(selectedPersonalCounter.id!!)
+                .catch { it.printStackTrace() }
+                .collect {
+                    personalCounters.remove(selectedPersonalCounter)
+                    personalCounter.postValue(Event(personalCounters))
+                }
+        }
     }
 
     fun removeCurrentPersonalAccount() {
         removePersonalAccountDialog.postValue(Event(currentPersonalAccount))
     }
 
-    fun connectPersonalNumber() {
-        if (validate()) {
+    private fun createMeter(personalCounter: PersonalCounter, accountId: String) {
+        if (personalCounter.serial_number.length == 0 || personalCounter.title.length == 0) {
+            if (personalCounters.size > 0) {
+                val personCounter = personalCounters.removeLast()
+                if (personCounter.id == null) {
+                    createMeter(personCounter, currentPersonalAccount.account.id)
+                } else {
+                    editMeter(personCounter, currentPersonalAccount.account.id)
+                }
+            } else {
+                openPersonalAccountsPage.postValue(Event(currentPlacement))
+            }
+        } else {
             viewModelScope.launch(dispatcherProvider.io) {
-                userRepository.createPersonalAccount(personalNumber,user.name,selectedSupplier.id,
-                    currentPersonalAccount.id, currentPlacement.id)
-                    .onStart { progressConnectPersonalNumber.postValue(Event(true)) }
+                userRepository.createMeter(personalCounter.title, personalCounter.serial_number, personalCounter.value, accountId)
                     .catch { it.printStackTrace() }
                     .collect {
                         when (it) {
                             is Result.Success -> {
-                                when(it.data.status) {
-                                    "success" -> {
-                                        progressConnectPersonalNumber.postValue(Event(false))
+                                if (personalCounters.size > 0) {
+                                    val personCounter = personalCounters.removeLast()
+                                    if (personCounter.id == null) {
+                                        createMeter(personCounter, currentPersonalAccount.account.id)
+                                    } else {
+                                        editMeter(personCounter, currentPersonalAccount.account.id)
                                     }
+                                } else {
+                                    openPersonalAccountsPage.postValue(Event(currentPlacement))
                                 }
                             }
-                            is Result.ErrorResponse -> {
-                                when(it.data.status) {
-                                    "fail" -> { }
-                                }
-                            }
-                            is Result.Error -> {
-
-                            }
+                            is Result.ErrorResponse -> { }
+                            is Result.Error -> { }
                         }
                     }
             }
+        }
+    }
+
+    private fun editMeter(personalCounter: PersonalCounter, accountId: String) {
+        if (personalCounter.serial_number.length == 0 || personalCounter.title.length == 0) {
+            if (personalCounters.size > 0) {
+                val personCounter = personalCounters.removeLast()
+                if (personCounter.id == null) {
+                    createMeter(personCounter, currentPersonalAccount.account.id)
+                } else {
+                    editMeter(personCounter, currentPersonalAccount.account.id)
+                }
+            } else {
+                openPersonalAccountsPage.postValue(Event(currentPlacement))
+            }
+        } else {
+            viewModelScope.launch(dispatcherProvider.io) {
+                userRepository.editMeter(personalCounter.title, personalCounter.serial_number, personalCounter.value, personalCounter.id!!)
+                    .catch { it.printStackTrace() }
+                    .collect {
+                        when (it) {
+                            is Result.Success -> {
+                                if (personalCounters.size > 0) {
+                                    val personCounter = personalCounters.removeLast()
+                                    if (personCounter.id == null) {
+                                        createMeter(personCounter, currentPersonalAccount.account.id)
+                                    } else {
+                                        editMeter(personCounter, currentPersonalAccount.account.id)
+                                    }
+                                } else {
+                                    openPersonalAccountsPage.postValue(Event(currentPlacement))
+                                }
+                            }
+                            is Result.ErrorResponse -> { }
+                            is Result.Error -> { }
+                        }
+                    }
+            }
+        }
+    }
+
+    fun connectPersonalNumber() {
+        if (personalCounters.size > 0) {
+            viewModelScope.launch(dispatcherProvider.io) {
+                val personCounter = personalCounters.removeLast()
+                    if (personCounter.id == null) {
+                        createMeter(personCounter, currentPersonalAccount.account.id)
+                    } else {
+                        editMeter(personCounter, currentPersonalAccount.account.id)
+                    }
+                }
+            } else {
+                openPersonalAccountsPage.postValue(Event(currentPlacement))
         }
     }
 

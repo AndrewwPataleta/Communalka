@@ -8,6 +8,8 @@ import com.patstudio.communalka.presentation.ui.main.profile.PersonalInfoViewMod
 import com.patstudio.communalka.presentation.ui.main.profile.security.EditPinCodeViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.security.EmailEditViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.security.EntranceSecurityViewModel
+import com.patstudio.communalka.presentation.ui.main.readings.TransmissionReadingListViewModel
+import com.patstudio.communalka.presentation.ui.main.readings.TransmissionReadingsViewModel
 import com.patstudio.communalka.presentation.ui.main.room.*
 import com.patstudio.communalka.presentation.ui.splash.MainViewModel
 import com.patstudio.communalka.presentation.ui.splash.SplashViewModel
@@ -35,5 +37,7 @@ val viewModelsModule = module {
     viewModel { PersonalAccountManagementViewModel(get(), get(), get(), get()) }
     viewModel { CreatePersonalAccountViewModel(get(), get(), get(), get()) }
     viewModel { EditPersonalAccountViewModel(get(), get(), get(), get()) }
+    viewModel { TransmissionReadingListViewModel(get(), get(), get(), get()) }
+    viewModel { TransmissionReadingsViewModel(get(), get(), get(), get()) }
 
 }

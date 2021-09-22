@@ -39,6 +39,9 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
 
     class PlacementHolder(private val itemBinding: ItemPlacementBinding, private val value: Float, private val context: Context, val viewModel: WelcomeViewModel) :
         RecyclerView.ViewHolder(itemBinding.root) {
+
+
+
         fun bind(placement: Placement, position: Int) {
 
             itemBinding.model = placement

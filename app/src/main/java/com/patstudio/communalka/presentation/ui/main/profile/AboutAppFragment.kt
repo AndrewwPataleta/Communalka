@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
 import androidx.navigation.fragment.findNavController
+import com.patstudio.communalka.BuildConfig
 import com.patstudio.communalka.R
 import com.patstudio.communalka.databinding.FragmentAboutAppBinding
 import com.patstudio.communalka.databinding.FragmentPersonalInfoBinding
@@ -48,7 +49,7 @@ class AboutAppFragment : Fragment() {
         binding.appLicenceText.setOnClickListener {
             val browserIntent = Intent(
                 Intent.ACTION_VIEW,
-                Uri.parse("http://test.communalka.site/static/public_offer.pdf")
+                Uri.parse(BuildConfig.API_HOST+"/public_offer/")
             )
             startActivity(browserIntent)
         }

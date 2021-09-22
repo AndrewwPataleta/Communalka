@@ -236,7 +236,8 @@ class EditRoomFragment : Fragment() {
                     val addresses:List<String> = it.map { it.value }
                     val adapter = ArrayAdapter(
                         requireContext(),
-                        android.R.layout.simple_spinner_dropdown_item,
+                        com.patstudio.communalka.R.layout.address_dropdown,
+                        com.patstudio.communalka.R.id.textview,
                         addresses
                     )
 

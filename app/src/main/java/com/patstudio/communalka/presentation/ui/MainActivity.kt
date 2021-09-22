@@ -1,5 +1,6 @@
 package com.patstudio.communalka.presentation.ui
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -59,6 +60,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun clearBackground() {
+        binding.content.contentContainer.setBackgroundColor(Color.TRANSPARENT)
+    }
+
+    fun setWhiteRootBackground() {
+        binding.content.contentContainer.setBackgroundColor(Color.WHITE)
+    }
+
     private fun initListeners() {
         binding.deleteRoom.setOnClickListener {
             editRoomView.selectDelete()
@@ -86,7 +95,7 @@ class MainActivity : AppCompatActivity() {
             supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_left)
             when (destination.id) {
                 R.id.WelcomeFragment -> {
-                    toolbar.visibility = View.GONE
+                    toolbar.visibility = View.VISIBLE
                     deleteRoom.visibility = View.GONE
                     deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.VISIBLE
@@ -139,6 +148,12 @@ class MainActivity : AppCompatActivity() {
                     deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
+                R.id.TransmissionReading-> {
+                    toolbar.visibility = View.VISIBLE
+                    deleteRoom.visibility = View.GONE
+                    deletePersonalAccount.visibility = View.GONE
+                    bottomNavigationView.visibility = View.GONE
+                }
                 R.id.EditPlacement-> {
                     toolbar.visibility = View.VISIBLE
                     deleteRoom.visibility = View.VISIBLE
@@ -167,6 +182,12 @@ class MainActivity : AppCompatActivity() {
                     toolbar.visibility = View.VISIBLE
                     deleteRoom.visibility = View.GONE
                     deletePersonalAccount.visibility = View.VISIBLE
+                    bottomNavigationView.visibility = View.GONE
+                }
+                R.id.TransmissionReadingCounter-> {
+                    toolbar.visibility = View.GONE
+                    deleteRoom.visibility = View.GONE
+                    deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
                 R.id.PersonalAccountPlacement-> {

@@ -155,6 +155,27 @@ class UserRepository (
         }
     }
 
+    fun editMeter(title: String, serial_number: String, value: String, meterId: String): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val user = remote.editMeterForAccount(title, serial_number, value, meterId)
+                emit(Result.success(user))
+            }
+        } catch (throwable: Exception) {
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
     fun getSuppliers(): Flow<Result<APIResponse<JsonElement>>> = flow {
         try {
             if (connectivity.hasNetworkAccess()) {
@@ -175,6 +196,49 @@ class UserRepository (
             }
         }
     }
+
+    fun getMeters(accountId: String): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val user = remote.getMeters(accountId)
+                emit(Result.success(user))
+            }
+        } catch (throwable: Exception) {
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
+    fun removeMeter(meterId: String): Flow<Result<Any>>  = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val user = remote.removeMeter(meterId)
+                emit(Result.success(user))
+            }
+        } catch (throwable: Exception) {
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
 
     fun registration(fio: String, phone: String, email: String): Flow<Result<APIResponse<JsonElement>>> = flow {
         try {
@@ -214,12 +278,25 @@ class UserRepository (
         return dao.setLastUpdateUser(user.id)
     }
 
+     fun setPinCode(pinCode: String) {
+        sharedPreferences.edit().putString("pinCode", pinCode).apply()
+    }
+
+
+     fun getCurrentPinCode(): String {
+        return sharedPreferences.getString("pinCode", "")!!
+    }
+
     suspend fun updatePreviosAuthUser() {
         return dao.updatePreviosAuth()
     }
 
     suspend fun updatePinCode(userId: String, pincode: String) {
         return dao.updatePinCode(userId, pincode)
+    }
+
+    suspend fun updateShowTooltip(userId: String, showPlacementTooltip: Boolean) {
+        return dao.updateShowPlacementTooltip(userId, showPlacementTooltip)
     }
 
     fun getUserById(userId: String): User  {

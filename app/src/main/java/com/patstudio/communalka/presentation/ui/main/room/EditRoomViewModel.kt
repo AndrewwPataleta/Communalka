@@ -100,23 +100,23 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
 
     private fun validateRoomForm(): Boolean {
         var isValidate = true
-        if (roomName.isNullOrEmpty()) {
+        if (roomName.trim().isNullOrEmpty()) {
             nameRoomError.postValue(Event("Поле не может быть пустым"))
             isValidate = false
         }
-        if (addressRoom.isNullOrEmpty()) {
+        if (addressRoom.trim().isNullOrEmpty()) {
             addressError.postValue(Event("Поле не может быть пустым"))
             isValidate = false
         }
-        if (fioOwner.isNullOrEmpty()) {
+        if (fioOwner.trim().isNullOrEmpty()) {
             fioOwnerError.postValue(Event("Поле не может быть пустым"))
             isValidate = false
         }
-        if (totalSpace.isNullOrEmpty()) {
+        if (totalSpace.trim().isNullOrEmpty()) {
             totalSpaceError.postValue(Event("Поле не может быть пустым"))
             isValidate = false
         }
-        if (livingSpace.isNullOrEmpty()) {
+        if (livingSpace.trim().isNullOrEmpty()) {
             totalLivingError.postValue(Event("Поле не может быть пустым"))
             isValidate = false
         }
@@ -164,7 +164,7 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
                 if (selectedSuggestion != null) {
                     val detailAddressInfo = selectedSuggestion!!.data
                     room = Room(currentPlacement.id,roomName,totalSpace.toDouble(), livingSpace.toDouble(),selectedSuggestion!!.value,
-                        detailAddressInfo.postalCode, detailAddressInfo.country, currentPlacement.consumer,detailAddressInfo.countryIsoCode,
+                        detailAddressInfo.postalCode, detailAddressInfo.country, currentPlacement.consumer, fioOwner,detailAddressInfo.countryIsoCode,
                         detailAddressInfo.federalDistrict,detailAddressInfo.regionFiasId,detailAddressInfo.regionKladrId,
                         detailAddressInfo.regionIsoCode,detailAddressInfo.regionWithType,detailAddressInfo.regionType,
                         detailAddressInfo.regionTypeFull,detailAddressInfo.region,detailAddressInfo.cityFiasId,
@@ -176,13 +176,12 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
                         detailAddressInfo.fiasId,detailAddressInfo.fiasLevel,detailAddressInfo.kladrId,detailAddressInfo.timezone,detailAddressInfo.geoLat,
                         detailAddressInfo.geoLon, imageType = IMAGE_MODE, imagePath = value, createdDate = currentPlacement.createdDate )
                 } else {
-                    room = Room(currentPlacement.id,roomName,totalSpace.toDouble(), livingSpace.toDouble(), addressRoom, imageType = IMAGE_MODE, imagePath = value)
+                    room = Room(currentPlacement.id,roomName,totalSpace.toDouble(), livingSpace.toDouble(), addressRoom, imageType = IMAGE_MODE,  fio = fioOwner,imagePath = value)
                 }
 
                 if (it != null) {
                     val resp = roomRepository.updatePremises(room)
                     var placement = gson.fromJson(resp.data!!.asJsonObject.get("placement"), Placement::class.java)
-                    val premisesLocal = Premises(placement.id, placement.name, placement.address, "", placement.consumer, placement.total_area.toFloat(), placement.living_area.toFloat(), IMAGE_MODE, value,false)
                     room.id = placement.id
                     room.firstSave = false
                     room.consumer = placement.consumer

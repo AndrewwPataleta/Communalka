@@ -1,7 +1,5 @@
 package com.patstudio.communalka.presentation.ui.main.room
 
-import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,19 +8,12 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.*
-import com.patstudio.communalka.data.model.auth.ConfirmFormError
-import com.patstudio.communalka.data.model.auth.ConfirmSmsWrapper
-import com.patstudio.communalka.data.model.auth.LoginFormError
-import com.patstudio.communalka.data.repository.premises.DaDataRepository
 import com.patstudio.communalka.data.repository.premises.RoomRepository
 import com.patstudio.communalka.data.repository.user.UserRepository
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class CreatePersonalAccountViewModel(private val userRepository: UserRepository, private val roomRepository: RoomRepository, private val dispatcherProvider: DispatcherProvider, private val gson: Gson): ViewModel() {
 
@@ -69,7 +60,7 @@ class CreatePersonalAccountViewModel(private val userRepository: UserRepository,
     }
 
     fun addNewCounter() {
-        personalCounters.add(PersonalCounter("",""))
+        personalCounters.add(PersonalCounter("","", ""))
         personalCounter.postValue(Event(personalCounters))
     }
 
@@ -79,7 +70,7 @@ class CreatePersonalAccountViewModel(private val userRepository: UserRepository,
     }
 
     private fun createMeter(personalCounter: PersonalCounter, accountId: String) {
-        if (personalCounter.counterNumber.length == 0 || personalCounter.name.length == 0) {
+        if (personalCounter.serial_number.length == 0 || personalCounter.title.length == 0) {
             if (personalCounters.size > 0) {
                 createMeter(personalCounters.removeLast(),accountId)
             } else {
@@ -87,7 +78,7 @@ class CreatePersonalAccountViewModel(private val userRepository: UserRepository,
             }
         } else {
             viewModelScope.launch(dispatcherProvider.io) {
-                userRepository.createMeter(personalCounter.name, personalCounter.counterNumber, "0", accountId)
+                userRepository.createMeter(personalCounter.title, personalCounter.serial_number, personalCounter.value, accountId)
                     .catch { it.printStackTrace() }
                     .collect {
                         when (it) {

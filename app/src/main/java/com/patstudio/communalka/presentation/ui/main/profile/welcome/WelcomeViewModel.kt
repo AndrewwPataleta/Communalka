@@ -1,6 +1,7 @@
 package com.patstudio.communalka.presentation.ui.main.profile.welcome
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,9 +25,13 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
     private val updateByPosition: MutableLiveData<Event<Int>> = MutableLiveData()
     private val editPlacementDialog: MutableLiveData<Event<Placement>> = MutableLiveData()
     private val editPlacement: MutableLiveData<Event<Placement>> = MutableLiveData()
+    
     private val selectPersonalAccountPlacement: MutableLiveData<Event<Placement>> = MutableLiveData()
 
-    private val placementListMutable: MutableLiveData<Event<List<Placement>>> = MutableLiveData()
+    private var _transmissionReadingPlacement: MutableLiveData<Event<Placement>> = MutableLiveData()
+    val transmissionReadingPlacement: LiveData<Event<Placement>> = _transmissionReadingPlacement
+
+    private val placementListMutable: MutableLiveData<Event<Pair<List<Placement>, Boolean>>> = MutableLiveData()
     private var needEnterPin: Boolean = true
     private var typeAuthChanged: Boolean = false
 
@@ -39,7 +44,14 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
 
     fun setReadStoragePermission(readStoragePermission: Boolean) {
         if (readStoragePermission) {
-            placementListMutable.postValue(Event(userPlacement))
+            placementListMutable.postValue(Event(Pair(userPlacement, user!!.showPlacementTooltip)))
+            updateUserTooltipSpawn()
+        }
+    }
+
+    private fun updateUserTooltipSpawn() {
+        viewModelScope.launch(dispatcherProvider.io) {
+            userRepository.updateShowTooltip(user!!.id, false)
         }
     }
 
@@ -50,7 +62,6 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
                     it.printStackTrace()
                 }
                 .collect {
-                    it?.let {
                         when (it) {
                             is Result.Success -> {
                                 var placementList: PlacementWrapper = gson.fromJson(it.data.data, PlacementWrapper::class.java)
@@ -77,7 +88,6 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
                             is Result.ErrorResponse -> { }
                             is Result.Error -> { }
                         }
-                    }
                 }
         }
     }
@@ -115,7 +125,7 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
                     )
                     pinForm.postValue(Event(userForm))
                 } else {
-                    userMutable.postValue(Event(it))
+
                     getUserPremises()
                 }
             } else {
@@ -134,7 +144,10 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
         }
     }
 
-
+    fun selectTransmissionReading(placement: Placement) {
+        _transmissionReadingPlacement.postValue(Event(placement))
+    }
+    
     fun checkAvailableToOpenAddRoom() {
         if (user != null) {
            navigateTo.postValue(Event("ADD_ROOM"))
@@ -155,7 +168,7 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
         return pinForm
     }
 
-    fun getPlacementList(): MutableLiveData<Event<List<Placement>>> {
+    fun getPlacementList(): MutableLiveData<Event<Pair<List<Placement>, Boolean>>> {
         return placementListMutable
     }
 
@@ -180,7 +193,7 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
         editPlacement.postValue(Event(placement))
     }
 
-    fun selectPlacement(placement: Placement) {
+    fun selectPlacementForPersonalAccounts(placement: Placement) {
         selectPersonalAccountPlacement.postValue(Event(placement))
     }
 

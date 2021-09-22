@@ -38,6 +38,7 @@ class RoomRemoteImpl(
         jsonObject.addProperty("total_area",room.totalArea)
         jsonObject.addProperty("living_area",room.livingArea)
         jsonObject.addProperty("address",room.address)
+        jsonObject.addProperty("fio",room.fio)
         jsonObject.addProperty("created_date",room.createdDate)
 
 

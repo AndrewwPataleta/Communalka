@@ -41,6 +41,8 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="8dp"
             android:hapticFeedbackEnabled="false"
+            android:clickable="false"
+            android:enabled="false"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/serviceProviderText" />
@@ -117,7 +119,7 @@
             android:fontFamily="@font/robotoregular"
             android:padding="8dp"
             app:cornerRadius="8dp"
-            android:text="Подключить лицевой счет"
+            android:text="Сохранить"
             android:textAllCaps="false"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"

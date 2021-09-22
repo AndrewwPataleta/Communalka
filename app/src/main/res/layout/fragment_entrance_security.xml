@@ -88,26 +88,17 @@
                 app:layout_constraintVertical_bias="0.5"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintTop_toTopOf="@id/phoneIcon"
-                app:layout_constraintEnd_toStartOf="@id/phoneArrow"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="@id/phoneIcon"/>
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/phoneArrow"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_down"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/phoneText"
-                app:layout_constraintVertical_bias="0.5"
-                app:layout_constraintBottom_toBottomOf="@id/phoneText"
-                android:rotation="270"/>
+
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/proneBarrier"
                 android:layout_width="wrap_content"
                 android:layout_height="1dp"
 
-                app:constraint_referenced_ids="phoneText,phoneArrow, phoneValue, phoneIcon"
+                app:constraint_referenced_ids="phoneText, phoneValue, phoneIcon"
                 app:barrierDirection="bottom" />
 
             <View
@@ -117,6 +108,18 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/proneBarrier"
                 android:background="#EEF1F5"/>
+
+            <androidx.constraintlayout.widget.Group
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="phoneIcon, phoneValue, phoneArrow, phoneText"
+    />
+
+            <androidx.constraintlayout.widget.Group
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="emailText, emailArrow, emailValue, emailIcon"
+                android:visibility="gone"/>
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/emailIcon"
@@ -156,7 +159,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/robotobold"
-
+                app:layout_constraintEnd_toEndOf="parent"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="17sp"
                 android:padding="16dp"
@@ -164,26 +167,16 @@
                 app:layout_constraintVertical_bias="0.5"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintTop_toTopOf="@id/emailIcon"
-                app:layout_constraintEnd_toStartOf="@id/emailArrow"
                 app:layout_constraintBottom_toBottomOf="@id/emailIcon"/>
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/emailArrow"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_down"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/emailText"
-                app:layout_constraintVertical_bias="0.5"
-                app:layout_constraintBottom_toBottomOf="@id/emailText"
-                android:rotation="270"/>
+
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/emailBarrier"
                 android:layout_width="wrap_content"
                 android:layout_height="1dp"
                 android:background="#EEF1F5"
-                app:constraint_referenced_ids="emailText,emailArrow, emailValue, emailIcon"
+                app:constraint_referenced_ids="emailText, emailValue, emailIcon"
                 app:barrierDirection="bottom" />
 
 

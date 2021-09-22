@@ -94,15 +94,15 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
 
     private fun validateRoomForm(): Boolean {
         var isValidate = true
-        if (roomName.isNullOrEmpty()) {
+        if (roomName.trim().isNullOrEmpty()) {
             nameRoomError.postValue(Event("Поле не может быть пустым"))
             isValidate = false
         }
-        if (addressRoom.isNullOrEmpty()) {
+        if (addressRoom.trim().isNullOrEmpty()) {
             addressError.postValue(Event("Поле не может быть пустым"))
             isValidate = false
         }
-        if (fioOwner.isNullOrEmpty()) {
+        if (fioOwner.trim().isNullOrEmpty()) {
             fioOwnerError.postValue(Event("Поле не может быть пустым"))
             isValidate = false
         }

@@ -35,6 +35,9 @@ interface UserService {
     @HTTP(method = "DELETE", path = "placement/{id}/", hasBody = true)
     suspend fun removePlacement(@Path("id") id: String): ResponseBody
 
+    @HTTP(method = "DELETE", path = "meter/{id}/", hasBody = true)
+    suspend fun removeMeter(@Path("id") id: String): ResponseBody
+
     @HTTP(method = "DELETE", path = "account/{id}/", hasBody = true)
     suspend fun deleteAccount(@Path("id") id: String): ResponseBody
 
@@ -49,4 +52,10 @@ interface UserService {
 
     @POST("account/{id}/meter/")
     suspend fun createMeter(@Body target: JsonObject, @Path("id") id: String): APIResponse<JsonElement>
+
+    @PUT("meter/{id}/")
+    suspend fun updateMeter(@Body target: JsonObject,@Path("id") id: String): APIResponse<JsonElement>
+
+    @GET("account/{id}/meter/")
+    suspend fun getListMeter(@Path("id") id: String): APIResponse<JsonElement>
 }

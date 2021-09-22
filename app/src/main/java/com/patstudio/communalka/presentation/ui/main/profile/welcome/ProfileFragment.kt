@@ -15,8 +15,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.patstudio.communalka.R
 import com.patstudio.communalka.databinding.FragmentProfileBinding
+import com.patstudio.communalka.presentation.ui.MainActivity
 import com.patstudio.communalka.presentation.ui.main.ProfileViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.SwitchProfileAdapter
+import com.patstudio.communalka.presentation.ui.splash.MainViewModel
 import com.skydoves.balloon.extensions.dp
 import gone
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -27,6 +29,7 @@ class   ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModel<ProfileViewModel>()
+    private val mainViewModel by viewModel<MainViewModel>()
     private lateinit var adapter: SwitchProfileAdapter
     private lateinit var switchUserBinding: BottomSheetDialog
 
@@ -124,6 +127,7 @@ class   ProfileFragment : Fragment() {
                     root.findViewById<RecyclerView>(R.id.profileList).adapter = adapter
                     root.findViewById<View>(R.id.login).setOnClickListener {
                         switchUserBinding.dismiss()
+                        (requireActivity() as MainActivity).clearBackground()
                         findNavController().navigate(R.id.toLogin)
                     }
                     switchUserBinding.show()

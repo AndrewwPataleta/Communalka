@@ -6,16 +6,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.patstudio.communalka.data.model.PersonalAccount
 import com.patstudio.communalka.data.model.PersonalCounter
-import com.patstudio.communalka.databinding.ItemCreatePersonalCounterBinding
+import com.patstudio.communalka.databinding.ItemEditPersonalCounterBinding
 import com.patstudio.communalka.databinding.ItemPersonalCounterBinding
 import com.patstudio.communalka.databinding.ItemUnconnectedPersonalAccountBinding
 
-class PersonalCounterAdapter(private val personalCounters: List<PersonalCounter>, val context: Context, val viewModel: CreatePersonalAccountViewModel) : RecyclerView.Adapter<PersonalCounterAdapter.PersonalCounterHolder>() {
+class EditPersonalCounterAdapter(private val personalCounters: List<PersonalCounter>, val context: Context, val viewModel: EditPersonalAccountViewModel) : RecyclerView.Adapter<EditPersonalCounterAdapter.PersonalCounterHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PersonalCounterHolder {
 
         val itemBinding =
-            ItemCreatePersonalCounterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemEditPersonalCounterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PersonalCounterHolder(itemBinding,  viewModel)
     }
 
@@ -26,7 +26,7 @@ class PersonalCounterAdapter(private val personalCounters: List<PersonalCounter>
 
     override fun getItemCount(): Int = personalCounters.size
 
-    class PersonalCounterHolder(private val itemBinding: ItemCreatePersonalCounterBinding, val viewModel: CreatePersonalAccountViewModel) :
+    class PersonalCounterHolder(private val itemBinding: ItemEditPersonalCounterBinding, val viewModel: EditPersonalAccountViewModel) :
         RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(personalCounter: PersonalCounter, position: Int) {
 
@@ -34,6 +34,7 @@ class PersonalCounterAdapter(private val personalCounters: List<PersonalCounter>
             itemBinding.viewModel = viewModel
             itemBinding.position = position
 
+            itemBinding.senderEdit.isEnabled = personalCounter.id == null
         }
     }
 }

@@ -11,8 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/userContainer"
             android:layout_width="0dp"
@@ -21,13 +19,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_margin="16dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/contentContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"
+
                 android:padding="16dp">
 
                 <ImageView
@@ -133,6 +132,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:visibility="gone"
+            android:background="@color/white"
             app:layout_constraintTop_toTopOf="parent"
 
             app:layout_constraintBottom_toBottomOf="parent">

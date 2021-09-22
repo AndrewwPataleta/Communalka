@@ -25,10 +25,14 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.patstudio.communalka.R
+
 import com.patstudio.communalka.databinding.FragmentAddRoomBinding
 import gone
 import org.koin.android.viewmodel.ext.android.viewModel
 import visible
+
+
+
 
 
 class AddRoomFragment : Fragment() {
@@ -190,7 +194,8 @@ class AddRoomFragment : Fragment() {
                     val addresses:List<String> = it.map { it.value }
                     val adapter = ArrayAdapter(
                         requireContext(),
-                        android.R.layout.simple_spinner_dropdown_item,
+                        com.patstudio.communalka.R.layout.address_dropdown,
+                        com.patstudio.communalka.R.id.textview,
                         addresses
                     )
 

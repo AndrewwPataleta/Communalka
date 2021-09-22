@@ -67,9 +67,9 @@ class EntranceSecurityFragment : Fragment() {
         binding.switchSigninFingerprint.setOnCheckedChangeListener { buttonView, isChecked ->
             viewModel.setFingerPrintAvailable(isChecked)
         }
-        binding.emailGroup.setAllOnClickListener(){
-            findNavController().navigate(R.id.toEditEmail)
-        }
+//        binding.emailGroup.setAllOnClickListener(){
+//            findNavController().navigate(R.id.toEditEmail)
+//        }
         binding.pinCodeText.setOnClickListener(){
             findNavController().navigate(R.id.toEditPinCode)
         }
