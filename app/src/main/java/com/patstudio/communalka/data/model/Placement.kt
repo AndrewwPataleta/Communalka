@@ -15,5 +15,6 @@ data class Placement (
     var imageType: String,
     var path: String,
     val createdDate: String,
-    var isOpened: Boolean = false
+    var isOpened: Boolean = false,
+    var accounts: ArrayList<PlacementAccount>
 ) : Parcelable

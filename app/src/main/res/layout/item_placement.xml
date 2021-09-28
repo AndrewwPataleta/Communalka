@@ -158,7 +158,6 @@
             android:text="Передать показания"
             android:textAllCaps="false"
             android:textSize="17sp"
-            android:onClick="@{() -> viewModel.selectTransmissionReading(model)}"
             app:fontFamily="@font/roboto_regular"
             app:layout_constraintTop_toBottomOf="@id/paymentInfoBarrier"
             app:layout_constraintEnd_toEndOf="parent"

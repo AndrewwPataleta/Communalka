@@ -5,7 +5,7 @@
 
     <data>
 
-        <variable name="model" type="com.patstudio.communalka.data.model.Placement"/>
+        <variable name="model" type="com.patstudio.communalka.data.model.PlacementMeter"/>
     </data>
 
     <ScrollView
@@ -36,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:fontFamily="@font/robotobold"
-                android:text="Электричество"
+                android:text="@{model.title}"
                 android:layout_marginStart="16dp"
                 android:textColor="@color/black"
                 android:textSize="17sp"
@@ -84,7 +84,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:fontFamily="@font/robotoregular"
-                android:text="987654"
+                android:text="@{model.serial_number}"
                 android:textColor="@color/black"
                 android:textSize="17sp"
                 android:layout_marginTop="16dp"
@@ -110,7 +110,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:fontFamily="@font/robotoregular"
-                android:text="145"
+                android:text="@{String.valueOf(model.value)}"
                 android:textColor="@color/black"
                 android:textSize="17sp"
                 android:layout_marginTop="8dp"
@@ -567,6 +567,19 @@
                 app:layout_constraintVertical_bias="1.0"
                 app:layout_constraintTop_toBottomOf="@id/decoratorRules"
                 app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/progressSendTransmissions"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintVertical_bias="1.0"
+                app:layout_constraintTop_toBottomOf="@id/decoratorRules"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

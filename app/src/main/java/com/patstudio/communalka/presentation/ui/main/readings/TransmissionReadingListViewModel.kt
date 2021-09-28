@@ -1,5 +1,6 @@
 package com.patstudio.communalka.presentation.ui.main.readings
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,15 +22,40 @@ class TransmissionReadingListViewModel(private val userRepository: UserRepositor
     private lateinit var user: User
     private lateinit var currentPersonalAccount: PersonalAccount
     private lateinit var currentPlacementModel: Placement
+    private lateinit var placementMetersList: ArrayList<PlacementMeter>
+
+    private var _placementMeters: MutableLiveData<Event<ArrayList<PlacementMeter>>> = MutableLiveData()
+    val placementMeters: LiveData<Event<ArrayList<PlacementMeter>>> = _placementMeters
 
     private var _currentPlacement: MutableLiveData<Event<Placement>> = MutableLiveData()
     val currentPlacement: LiveData<Event<Placement>> = _currentPlacement
 
-    public fun setCurrentPlacement(placement: Placement) {
-        viewModelScope.launch(dispatcherProvider.io) {
-            user = userRepository.getLastAuthUser()
-            currentPlacementModel = placement
-            _currentPlacement.postValue(Event(currentPlacementModel))
+    private var _transmissionPlacementMeter: MutableLiveData<Event<PlacementMeter>> = MutableLiveData()
+    val transmissionPlacementMeter: LiveData<Event<PlacementMeter>> = _transmissionPlacementMeter
+
+    fun setCurrentPlacement(placement: Placement) {
+        try {
+            viewModelScope.launch(dispatcherProvider.io) {
+                user = userRepository.getLastAuthUser()
+                currentPlacementModel = placement
+                Log.d("currentPlacementModel", "model ${currentPlacementModel}")
+                _currentPlacement.postValue(Event(currentPlacementModel))
+                placementMetersList = ArrayList()
+                Log.d("accounts", "size ${currentPlacementModel.accounts.size}")
+                currentPlacementModel.accounts.map {
+
+                        it.meters.map {
+                                placementMetersList.add(it)
+                        }
+                }
+                _placementMeters.postValue(Event(placementMetersList))
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
+    }
+
+    public fun selectMeterForTransmissionReading(placementMeter: PlacementMeter) {
+        _transmissionPlacementMeter.postValue(Event(placementMeter))
     }
 }

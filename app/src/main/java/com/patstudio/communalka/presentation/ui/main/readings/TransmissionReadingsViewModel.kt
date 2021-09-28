@@ -1,5 +1,6 @@
 package com.patstudio.communalka.presentation.ui.main.readings
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,16 +21,46 @@ class TransmissionReadingsViewModel(private val userRepository: UserRepository, 
 
     private lateinit var user: User
     private lateinit var currentPersonalAccount: PersonalAccount
-    private lateinit var currentPlacementModel: Placement
+    private lateinit var currentPlacementMeter: PlacementMeter
 
-    private var _currentPlacement: MutableLiveData<Event<Placement>> = MutableLiveData()
-    val currentPlacement: LiveData<Event<Placement>> = _currentPlacement
+    private var _currentPlacement: MutableLiveData<Event<PlacementMeter>> = MutableLiveData()
+    val currentPlacement: LiveData<Event<PlacementMeter>> = _currentPlacement
 
-    public fun setCurrentPlacement(placement: Placement) {
+    private var _isSendingTransmissions: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val isSendingTransmissions: LiveData<Event<Boolean>> = _isSendingTransmissions
+
+    public fun setCurrentMeter(placementMeter: PlacementMeter) {
         viewModelScope.launch(dispatcherProvider.io) {
             user = userRepository.getLastAuthUser()
-            currentPlacementModel = placement
-            _currentPlacement.postValue(Event(currentPlacementModel))
+            currentPlacementMeter = placementMeter
+            _currentPlacement.postValue(Event(currentPlacementMeter))
+        }
+    }
+
+    fun sendTransmissions(readings: String) {
+        if (!readings.isNullOrEmpty()) {
+            viewModelScope.launch(dispatcherProvider.io) {
+                userRepository.editMeter(currentPlacementMeter.title, currentPlacementMeter.serial_number, readings, currentPlacementMeter.id)
+                    .onStart { _isSendingTransmissions.postValue(Event(true)) }
+                    .catch { it.printStackTrace() }
+                    .collect {
+                        when (it) {
+                            is Result.Success -> {
+                                _isSendingTransmissions.postValue(Event(false))
+                            }
+                            is Result.Error -> {
+
+                            }
+                            is Result.ErrorResponse -> {
+
+                            }
+                        }
+
+                    }
+
+            }
+        } else {
+            Log.d("readings", " null ")
         }
     }
 }

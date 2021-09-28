@@ -78,6 +78,9 @@ class RoomRepository(
         }
     }
 
+
+
+
     suspend fun getPlacementPersonalAccount(placement: Placement): Flow<Result<APIResponse<JsonElement>>> = flow {
         try {
             if (connectivity.hasNetworkAccess()) {

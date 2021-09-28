@@ -12,11 +12,14 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import com.patstudio.communalka.R
 import com.patstudio.communalka.data.model.Placement
+import com.patstudio.communalka.data.model.PlacementMeter
 import com.patstudio.communalka.databinding.FragmentTransmissionReadingsBinding
 import com.patstudio.communalka.presentation.ui.splash.MainViewModel
+import gone
 import org.koin.android.ext.android.bind
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
+import visible
 
 
 class TransmissionReadingsFragment : Fragment() {
@@ -39,7 +42,26 @@ class TransmissionReadingsFragment : Fragment() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initObservers() {
-
+        viewModel.currentPlacement.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    binding.model = it
+                }
+            }
+        }
+        viewModel.isSendingTransmissions.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                  if (it) {
+                      binding.progressSendTransmissions.visible(false)
+                      binding.sendTransmissions.gone(false)
+                  } else {
+                      binding.progressSendTransmissions.gone(false)
+                      binding.sendTransmissions.visible(false)
+                  }
+                }
+            }
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -52,6 +74,15 @@ class TransmissionReadingsFragment : Fragment() {
         editTextList.add(binding.sixNumber)
         editTextList.add(binding.sevenNumber)
         editTextList.add(binding.eigthNumber)
+
+        binding.sendTransmissions.setOnClickListener {
+            var transmission = binding.firstNumber.text.toString()+binding.secondNumber.text.toString()+binding.thirdNumber.text.toString()+binding.fourNumber.text.toString()+binding.fiveNumber.text.toString()
+            if (!binding.sixNumber.text.toString().isNullOrEmpty() || !binding.sevenNumber.text.toString().isNullOrEmpty() || !binding.eigthNumber.text.toString().isNullOrEmpty()) {
+                transmission += ","+binding.sixNumber.text.toString()+binding.sevenNumber.text.toString()+binding.eigthNumber.text.toString()
+            }
+
+            viewModel.sendTransmissions(transmission)
+        }
 
         binding.back.setOnClickListener {
             requireActivity().onBackPressed()
@@ -113,41 +144,6 @@ class TransmissionReadingsFragment : Fragment() {
 
             }
         }
-
-//        binding.pinOne.doAfterTextChanged {
-//            setValueToCurrentFocus("1")
-//        }
-//
-//        binding.pinTwo.doAfterTextChanged {
-//            setValueToCurrentFocus("2")
-//        }
-//        binding.pinTree.doAfterTextChanged {
-//            setValueToCurrentFocus("3")
-//        }
-//        binding.pinFour.doAfterTextChanged {
-//            setValueToCurrentFocus("4")
-//        }
-//        binding.pinFive.doAfterTextChanged {
-//            setValueToCurrentFocus("5")
-//        }
-//        binding.pinSix.doAfterTextChanged {
-//            setValueToCurrentFocus("6")
-//        }
-//        binding.pinSeven.doAfterTextChanged {
-//            setValueToCurrentFocus("7")
-//        }
-//        binding.pinEight.doAfterTextChanged {
-//            setValueToCurrentFocus("8")
-//        }
-//        binding.pinNine.doAfterTextChanged {
-//            setValueToCurrentFocus("9")
-//        }
-//        binding.pinZero.doAfterTextChanged {
-//            setValueToCurrentFocus("0")
-//        }
-//        binding.pinBack.doAfterTextChanged {
-//            clearValueCurrentFocus()
-//        }
     }
 
     private fun clearValueCurrentFocus() {
@@ -168,8 +164,8 @@ class TransmissionReadingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.getParcelable<Placement>("placement")?.let {
-            viewModel.setCurrentPlacement(it)
+        arguments?.getParcelable<PlacementMeter>("meter")?.let {
+            viewModel.setCurrentMeter(it)
         }
         initObservers()
         initListeners()

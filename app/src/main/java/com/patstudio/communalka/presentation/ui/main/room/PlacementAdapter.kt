@@ -47,6 +47,22 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
             itemBinding.model = placement
             itemBinding.viewModel = viewModel
             itemBinding.position = position
+
+            var meterSize = 0
+            placement.accounts.map {
+               meterSize += it.meters.size
+            }
+
+            if (meterSize == 0) {
+                itemBinding.transmitTestimony.background = itemBinding.root.context.resources.getDrawable(R.drawable.background_transmission_readings_btn_disable)
+                itemBinding.transmitTestimony.setTextColor(itemBinding.root.context.resources.getColor(R.color.gray_placeholder))
+                itemBinding.transmitTestimony.setOnClickListener{}
+            } else {
+                itemBinding.transmitTestimony.background = itemBinding.root.context.resources.getDrawable(R.drawable.background_transmission_readings_btn)
+                itemBinding.transmitTestimony.setTextColor(itemBinding.root.context.resources.getColor(R.color.dark_blue))
+                itemBinding.transmitTestimony.setOnClickListener{viewModel.selectTransmissionReading(placement)}
+            }
+
             when (placement.imageType) {
                 "DEFAULT" -> {
                     itemBinding.placementImage.setPadding(value.toInt())

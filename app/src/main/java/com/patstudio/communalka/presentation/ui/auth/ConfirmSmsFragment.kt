@@ -146,9 +146,14 @@ class ConfirmSmsFragment : Fragment() {
         viewModel.getUserForm().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                    val bundle = bundleOf("user" to it)
-                    Log.d("ConfirmSmsFragment", "open Pin Code")
-                    findNavController().navigate(R.id.PinCode, bundle)
+                    if (it.second) {
+                        val bundle = bundleOf("user" to it.first)
+                        findNavController().navigate(R.id.PinCode, bundle)
+                    } else {
+                        val bundle = bundleOf("user" to it.first)
+                        findNavController().navigate(R.id.toWelcomePage, bundle)
+                    }
+
                 }
             }
         }

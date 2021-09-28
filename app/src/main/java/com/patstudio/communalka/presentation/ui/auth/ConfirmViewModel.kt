@@ -31,7 +31,7 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
     private val progressPhoneSending: MutableLiveData<Boolean> = MutableLiveData()
     private val clearSmsForm: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val loginByEmail: MutableLiveData<Event<Boolean>> = MutableLiveData()
-    private val userFormMutable: MutableLiveData<Event<UserForm>> = MutableLiveData()
+    private val userFormMutable: MutableLiveData<Event<Pair<UserForm, Boolean>>> = MutableLiveData()
     private val countDownTimer: MutableLiveData<Event<String>> = MutableLiveData()
     private val smsCodeMutable: MutableLiveData<Event<String>> = MutableLiveData()
     private val openDialogEmail: MutableLiveData<Event<Boolean>> = MutableLiveData()
@@ -133,30 +133,14 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
             var placement = gson.fromJson(resp.data!!.asJsonObject.get("placement"), Placement::class.java)
             roomRepository.updateFirstInitRoom(placement.id, placement.consumer)
             smsCodeMutable.postValue(Event(smsCode))
-            userFormMutable.postValue(Event(userForm.consumer))
-            progressPhoneSending.postValue(false)
+            var currentPinCode = userRepository.getCurrentPinCode()
+            if (currentPinCode.isNullOrEmpty()) {
+                userFormMutable.postValue(Event(Pair(userForm.consumer, true)))
+            } else {
+                userFormMutable.postValue(Event(Pair(userForm.consumer, false)))
+            }
 
-//                .catch {
-//                    it.printStackTrace()
-//                }
-//                .collect {
-//                    when (it) {
-//                        is Result.Success -> {
-//                            Log.d("ConfirmViewModel", "result "+it.toString())
-//                            var placement = gson.fromJson(it.data.data!!.asJsonObject.get("placement"), Placement::class.java)
-//                            roomRepository.updateFirstInitRoom(placement.id, placement.consumer)
-//                            smsCodeMutable.postValue(Event(smsCode))
-//                            userFormMutable.postValue(Event(userForm.consumer))
-//                            progressPhoneSending.postValue(false)
-//                        }
-//                        is Result.ErrorResponse -> {
-//
-//                        }
-//                        is Result.Error -> {
-//
-//                        }
-//                    }
-//                }
+            progressPhoneSending.postValue(false)
         }
 
     }
@@ -166,6 +150,18 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
         Log.d("ConfirmViewModel", "check exist "+userForm.consumer)
         viewModelScope.launch(dispatcherProvider.io) {
             val user = userRepository.getUserById(userForm.consumer.id)
+            var userForSave = User(
+                userForm.consumer.id,
+                userForm.consumer.fio,
+                userForm.consumer.phone,
+                userForm.consumer.email,
+                "",
+                userForm.consumer.token,
+                userForm.consumer.refresh,
+                true,
+                ""
+            )
+
             if (user != null) {
                 Log.d("ConfirmViewMode", user.toString())
                 withContext(dispatcherProvider.io) {
@@ -174,18 +170,6 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
                 smsCode = ""
                 destoyTimer()
             } else {
-                Log.d("ConfirmViewMode", "have no exist")
-                var userForSave = User(
-                    userForm.consumer.id,
-                    userForm.consumer.fio,
-                    userForm.consumer.phone,
-                    userForm.consumer.email,
-                    "",
-                    userForm.consumer.token,
-                    userForm.consumer.refresh,
-                    true,
-                    ""
-                )
                 userRepository.saveUser(userForSave)
                 userRepository.setLastLoginUser(userForSave)
                 destoyTimer()
@@ -197,7 +181,15 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
                     sendLocalRoom(room, userForm)
                 } else {
                     smsCodeMutable.postValue(Event(smsCode))
-                    userFormMutable.postValue(Event(userForm.consumer))
+                    val currentPinCode = userRepository.getCurrentPinCode()
+                    if (currentPinCode.isNullOrEmpty()) {
+                        userFormMutable.postValue(Event(Pair(userForm.consumer, true)))
+                    } else {
+                        userRepository.saveUser(userForSave)
+                        userRepository.updatePreviosAuthUser()
+                        userRepository.setLastLoginUser(userForSave)
+                        userFormMutable.postValue(Event(Pair(userForm.consumer, false)))
+                    }
                     progressPhoneSending.postValue(false)
                 }
             }
@@ -313,7 +305,7 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
         }
     }
 
-    fun getUserForm(): MutableLiveData<Event<UserForm>> {
+    fun getUserForm(): MutableLiveData<Event<Pair<UserForm, Boolean>>> {
         return userFormMutable
     }
 
