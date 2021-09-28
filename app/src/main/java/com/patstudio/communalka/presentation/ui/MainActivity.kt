@@ -96,42 +96,49 @@ class MainActivity : AppCompatActivity() {
             when (destination.id) {
                 R.id.WelcomeFragment -> {
                     toolbar.visibility = View.VISIBLE
+                    toolbar.subtitle = ""
                     deleteRoom.visibility = View.GONE
                     deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.VISIBLE
                 }
                 R.id.LoginFragment-> {
                     toolbar.visibility = View.GONE
+                    toolbar.subtitle = ""
                     deleteRoom.visibility = View.GONE
                     deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
                 R.id.Registration-> {
                     toolbar.visibility = View.GONE
+                    toolbar.subtitle = ""
                     deleteRoom.visibility = View.GONE
                     deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
                 R.id.Profile-> {
                     toolbar.visibility = View.VISIBLE
+                    toolbar.subtitle = ""
                     deleteRoom.visibility = View.GONE
                     deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.VISIBLE
                 }
                 R.id.AddRoom-> {
                     toolbar.visibility = View.VISIBLE
+                    toolbar.subtitle = ""
                     deleteRoom.visibility = View.GONE
                     deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
                 R.id.CreatePersonalAccount-> {
                     toolbar.visibility = View.VISIBLE
+                    toolbar.subtitle = ""
                     deleteRoom.visibility = View.GONE
                     deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
                 R.id.ConfirmSms-> {
                     toolbar.visibility = View.GONE
+                    toolbar.subtitle = ""
                     deleteRoom.visibility = View.GONE
                     deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
@@ -139,6 +146,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.Request-> {
                     toolbar.visibility = View.VISIBLE
                     deleteRoom.visibility = View.GONE
+                    toolbar.subtitle = ""
                     deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.VISIBLE
                 }
@@ -150,18 +158,21 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.TransmissionReading-> {
                     toolbar.visibility = View.VISIBLE
+                    toolbar.subtitle = ""
                     deleteRoom.visibility = View.GONE
                     deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
                 R.id.EditPlacement-> {
                     toolbar.visibility = View.VISIBLE
+                    toolbar.subtitle = ""
                     deleteRoom.visibility = View.VISIBLE
                     deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
                 R.id.EntranceSecurity-> {
                     toolbar.visibility = View.VISIBLE
+                    toolbar.subtitle = ""
                     deleteRoom.visibility = View.GONE
                     deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
@@ -169,17 +180,20 @@ class MainActivity : AppCompatActivity() {
                 R.id.EditEmail-> {
                     toolbar.visibility = View.VISIBLE
                     deleteRoom.visibility = View.GONE
+                    toolbar.subtitle = ""
                     deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
                 R.id.EditPinCode-> {
                     toolbar.visibility = View.VISIBLE
+                    toolbar.subtitle = ""
                     deleteRoom.visibility = View.GONE
                     deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
                 R.id.EditPersonalAccount-> {
                     toolbar.visibility = View.VISIBLE
+                    toolbar.subtitle = ""
                     deleteRoom.visibility = View.GONE
                     deletePersonalAccount.visibility = View.VISIBLE
                     bottomNavigationView.visibility = View.GONE
@@ -187,11 +201,13 @@ class MainActivity : AppCompatActivity() {
                 R.id.TransmissionReadingCounter-> {
                     toolbar.visibility = View.GONE
                     deleteRoom.visibility = View.GONE
+                    toolbar.subtitle = ""
                     deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
                 R.id.PersonalAccountPlacement-> {
                     toolbar.visibility = View.VISIBLE
+                    toolbar.subtitle = ""
                     deleteRoom.visibility = View.GONE
                     deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE

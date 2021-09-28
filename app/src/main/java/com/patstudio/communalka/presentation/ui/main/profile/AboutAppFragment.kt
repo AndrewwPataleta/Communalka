@@ -46,6 +46,7 @@ class AboutAppFragment : Fragment() {
     }
 
     private fun initListeners() {
+         binding.versionAppText.setText("Версия "+BuildConfig.VERSION_CODE)
         binding.appLicenceText.setOnClickListener {
             val browserIntent = Intent(
                 Intent.ACTION_VIEW,

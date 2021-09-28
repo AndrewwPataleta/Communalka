@@ -2,6 +2,7 @@ package com.patstudio.communalka.presentation.ui.main.room
 
 import android.net.Uri
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -31,6 +32,10 @@ class PersonalAccountManagementViewModel(private val userRepository: UserReposit
     private val personalAccountForConnect: MutableLiveData<Event<Pair<PersonalAccount,Placement>>> = MutableLiveData()
     private var unconnectedPersonalAccountList: ArrayList<PersonalAccount> = ArrayList()
     private var connectedPersonalAccountList: ArrayList<PersonalAccount> = ArrayList()
+
+    private var _subTitlePlacement: MutableLiveData<Event<String>> = MutableLiveData()
+    val subTitlePlacement: LiveData<Event<String>> = _subTitlePlacement
+
 
     private fun getListPersonalAccounts() {
         viewModelScope.launch(dispatcherProvider.io) {
@@ -85,6 +90,7 @@ class PersonalAccountManagementViewModel(private val userRepository: UserReposit
         viewModelScope.launch(dispatcherProvider.io) {
             user = userRepository.getLastAuthUser()
             currentPlacement = placement;
+            _subTitlePlacement.postValue(Event(currentPlacement.name))
             getListPersonalAccounts()
         }
     }

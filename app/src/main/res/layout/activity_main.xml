@@ -22,7 +22,6 @@
             app:elevation="0dp"
             app:popupTheme="@style/Theme.Communalka.PopupOverlay" >
 
-
             <ImageView
                 android:id="@+id/deleteRoom"
                 android:layout_width="28dp"

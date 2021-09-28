@@ -31,7 +31,9 @@ import com.patstudio.communalka.data.model.Room
 import com.patstudio.communalka.data.model.UserForm
 import com.patstudio.communalka.databinding.FragmentAddRoomBinding
 import com.patstudio.communalka.databinding.FragmentPersonalAccountManagementBinding
+import com.patstudio.communalka.presentation.ui.MainActivity
 import gone
+import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import visible
 
@@ -90,6 +92,13 @@ class PersonalAccountManagementFragment : Fragment() {
                         findNavController().navigate(R.id.CreatePersonalAccount, bundle)
                     }
 
+                }
+            }
+        }
+        viewModel.subTitlePlacement.observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    (activity as MainActivity).toolbar.subtitle = it
                 }
             }
         }

@@ -11,6 +11,7 @@ import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.*
 import com.patstudio.communalka.data.repository.premises.RoomRepository
 import com.patstudio.communalka.data.repository.user.UserRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -31,6 +32,9 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
     private var _transmissionReadingPlacement: MutableLiveData<Event<Placement>> = MutableLiveData()
     val transmissionReadingPlacement: LiveData<Event<Placement>> = _transmissionReadingPlacement
 
+    private var _loadingPlacement: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val loadingPlacement: LiveData<Event<Boolean>> = _loadingPlacement
+
     private val placementListMutable: MutableLiveData<Event<Pair<List<Placement>, Boolean>>> = MutableLiveData()
     private var needEnterPin: Boolean = true
     private var typeAuthChanged: Boolean = false
@@ -44,8 +48,11 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
 
     fun setReadStoragePermission(readStoragePermission: Boolean) {
         if (readStoragePermission) {
-            placementListMutable.postValue(Event(Pair(userPlacement, user!!.showPlacementTooltip)))
-            updateUserTooltipSpawn()
+            viewModelScope.launch(dispatcherProvider.io) {
+                delay(1000)
+                placementListMutable.postValue(Event(Pair(userPlacement, user!!.showPlacementTooltip)))
+                updateUserTooltipSpawn()
+            }
         }
     }
 
@@ -58,6 +65,7 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
     private fun getUserPremises() {
         viewModelScope.launch(dispatcherProvider.io) {
             roomRepository.getUserPremises()
+                .onStart { _loadingPlacement.postValue(Event(true)) }
                 .catch {
                     it.printStackTrace()
                 }

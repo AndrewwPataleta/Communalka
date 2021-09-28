@@ -67,6 +67,11 @@ class WelcomeFragment : Fragment() {
     }
 
 
+    override fun onResume() {
+        super.onResume()
+
+    }
+
     private fun initObservers() {
         viewModel.getUser().observe(this) {
             if (!it.hasBeenHandled.get()) {
@@ -94,6 +99,8 @@ class WelcomeFragment : Fragment() {
                     }
 
                     binding.welcomeText.text = getString(R.string.welcome_user, fio)
+                    binding.shimmerFrameLayout.stopShimmerAnimation()
+                    binding.shimmerFrameLayout.gone(false)
                 }
             }
         }
@@ -103,7 +110,20 @@ class WelcomeFragment : Fragment() {
                     (requireActivity() as MainActivity).clearBackground()
                     requireActivity().toolbar.visibility = View.GONE
                     binding.userContainer.visible(false)
+                    binding.shimmerFrameLayout.stopShimmerAnimation()
+                    binding.shimmerFrameLayout.gone(false)
+                }
+            }
+        }
 
+        viewModel.loadingPlacement.observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                  if (it) {
+                      (requireActivity() as MainActivity).setWhiteRootBackground()
+                      binding.shimmerFrameLayout.visible(false)
+                      binding.shimmerFrameLayout.startShimmerAnimation()
+                  }
                 }
             }
         }
@@ -200,6 +220,8 @@ class WelcomeFragment : Fragment() {
                             }
                         }, 200)
                     }
+                    binding.shimmerFrameLayout.stopShimmerAnimation()
+                    binding.shimmerFrameLayout.gone(false)
                 }
             }
         }
