@@ -44,8 +44,9 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/edit"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:padding="10dp"
             android:visibility="gone"
             android:src="@drawable/ic_edit"
             android:onClick="@{() -> viewModel.selectEdit(model)}"
@@ -94,9 +95,10 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/arrow"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:src="@drawable/ic_down"
+            android:padding="4dp"
             android:onClick="@{() -> viewModel.clickArrow(position)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -151,19 +153,45 @@
             app:constraint_referenced_ids="paymentButton, paymentNotFound "
             app:barrierDirection="bottom"/>
 
-        <androidx.appcompat.widget.AppCompatButton
+        <LinearLayout
             android:id="@+id/transmitTestimony"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Передать показания"
             android:textAllCaps="false"
-            android:textSize="17sp"
-            app:fontFamily="@font/roboto_regular"
+            android:gravity="center"
             app:layout_constraintTop_toBottomOf="@id/paymentInfoBarrier"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="16dp"
-            android:textColor="@color/dark_blue"
-            android:background="@drawable/background_transmission_readings_btn"/>
+            android:background="@drawable/background_transmission_readings_btn"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_union"
+                android:layout_marginEnd="8dp"
+                app:tint="@color/dark_blue" />
+
+            <TextView
+                android:id="@+id/transmissioReadingText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+
+                android:textColor="@color/dark_blue"
+                app:layout_constraintHorizontal_bias="0.0"
+                android:layout_marginEnd="8dp"
+                android:textSize="17sp"
+                app:fontFamily="@font/roboto_regular"
+                app:layout_constraintEnd_toStartOf="@id/paymentButton"
+                app:layout_constraintTop_toTopOf="@id/paymentButton"
+                app:layout_constraintBottom_toBottomOf="@id/paymentButton"
+                android:text="Передача показаний"/>
+
+
+        </LinearLayout>
 
         <View
             android:id="@+id/transmitBalloonTriger"

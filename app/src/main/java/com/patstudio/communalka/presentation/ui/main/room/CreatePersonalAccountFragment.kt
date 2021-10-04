@@ -2,6 +2,7 @@ package com.patstudio.communalka.presentation.ui.main.room
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
 import android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
@@ -94,6 +95,18 @@ class CreatePersonalAccountFragment : Fragment() {
                 }
             }
         }
+
+        viewModel.userMessage.observe(viewLifecycleOwner) {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setMessage(it)
+            builder.setPositiveButton("Ок"){dialogInterface, which ->
+                dialogInterface.dismiss()
+            }
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.setCancelable(false)
+            alertDialog.show()
+        }
+
         viewModel.getProgressConnectPersonalNumber().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
@@ -122,7 +135,22 @@ class CreatePersonalAccountFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     it?.let {
-                        val bundle = bundleOf("placement" to it)
+                        it.second?.let {
+                            val builder = AlertDialog.Builder(requireContext())
+                            builder.setTitle("Услуга '${it}' добавлена")
+                            builder.setMessage("Номер лицевого счета отправлен на подтверждение поставщику. \n" +
+                                    "\n" +
+                                    "Время подтверждения от 2 часов до 3 дней.")
+                            builder.setPositiveButton("Ок"){dialogInterface, which ->
+                                dialogInterface.dismiss()
+                            }
+                            val alertDialog: AlertDialog = builder.create()
+                            alertDialog.setCancelable(false)
+                            alertDialog.show()
+                        }
+
+
+                        val bundle = bundleOf("placement" to it.first)
                         findNavController().navigate(R.id.toPersonalAccounts, bundle)
                     }
                 }

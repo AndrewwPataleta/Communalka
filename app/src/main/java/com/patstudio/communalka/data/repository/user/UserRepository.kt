@@ -176,7 +176,7 @@ class UserRepository (
         }
     }
 
-    fun getSuppliers(): Flow<Result<APIResponse<JsonElement>>> = flow {
+    fun getSuppliers(service: String): Flow<Result<APIResponse<JsonElement>>> = flow {
         try {
             if (connectivity.hasNetworkAccess()) {
                 emit(Result.loading())
@@ -264,6 +264,7 @@ class UserRepository (
     }
 
     suspend fun saveUser(user: User): Long {
+        remote.updateFio(user.name)
         return dao.saveUser(user)
     }
 

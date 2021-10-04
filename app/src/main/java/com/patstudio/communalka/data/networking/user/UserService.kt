@@ -22,11 +22,16 @@ interface UserService {
     @POST("auth/register/")
     suspend fun registration(@Body target: JsonObject): APIResponse<JsonElement>
 
+
+
     @POST("auth/register/")
     suspend fun registrationWithCode(@Body target: JsonObject): APIResponse<JsonElement>
 
     @PUT("consumer/")
     suspend fun updateEmail(@Body target: JsonObject): APIResponse<JsonElement>
+
+    @PUT("consumer/")
+    suspend fun updateFio(@Body fio: JsonObject)
 
     @FormUrlEncoded
     @POST("auth/update_token/")

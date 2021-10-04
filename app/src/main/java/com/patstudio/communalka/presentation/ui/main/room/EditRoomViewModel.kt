@@ -2,11 +2,14 @@ package com.patstudio.communalka.presentation.ui.main.room
 
 import android.net.Uri
 import android.util.Log
+import androidx.core.net.toUri
+import androidx.core.view.setPadding
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.imagegallery.contextprovider.DispatcherProvider
 import com.google.gson.Gson
+import com.patstudio.communalka.R
 import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.*
 import com.patstudio.communalka.data.repository.premises.DaDataRepository
@@ -256,6 +259,15 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
     fun setCurrentPlacement(placement: Placement) {
         this.currentPlacement = placement
         this.placement.postValue(Event(currentPlacement))
+
+        when (placement.imageType) {
+            "DEFAULT" -> {
+                selectedImage = placement.path
+            }
+            "STORAGE" -> {
+                currentPath = placement.path.toUri()
+            }
+        }
     }
 
     fun setTotalSpace(totalSpace: String) {

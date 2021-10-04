@@ -73,16 +73,6 @@ class PersonalAccountManagementViewModel(private val userRepository: UserReposit
                         }
                     }
                 }
-            userRepository.getAccount(user.id)
-                .catch { it.printStackTrace() }
-                .collect(
-
-                )
-            userRepository.getSuppliers()
-                .catch { it.printStackTrace() }
-                .collect(
-
-                )
         }
     }
 

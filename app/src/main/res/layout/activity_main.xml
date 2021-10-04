@@ -20,6 +20,8 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@android:color/transparent"
             app:elevation="0dp"
+
+            app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
             app:popupTheme="@style/Theme.Communalka.PopupOverlay" >
 
             <ImageView

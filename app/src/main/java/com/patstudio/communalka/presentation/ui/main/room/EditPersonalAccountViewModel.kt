@@ -68,24 +68,7 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
                 }
           //  personalCounter.postValue(Event(currentPersonalAccount))
 
-            userRepository.getSuppliers()
-                .catch { it.printStackTrace() }
-                .collect {
-                    when (it) {
-                        is Result.Success -> {
-                            val turnsType = object : TypeToken<List<Supplier>>() {}.type
-                            suppliers = gson.fromJson(it.data.data!!.asJsonObject.get("suppliers"), turnsType)
-                            supplierList.postValue(Event(suppliers))
-                        }
-                        is Result.Error -> {
 
-                        }
-                        is Result.ErrorResponse -> {
-
-                        }
-                    }
-
-                }
             personalAccount.postValue(Event(currentPersonalAccount))
         }
     }
@@ -100,12 +83,16 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
     fun removeCounter(selectedPersonalCounter: PersonalCounter) {
 
         viewModelScope.launch(dispatcherProvider.io) {
-            userRepository.removeMeter(selectedPersonalCounter.id!!)
-                .catch { it.printStackTrace() }
-                .collect {
-                    personalCounters.remove(selectedPersonalCounter)
-                    personalCounter.postValue(Event(personalCounters))
-                }
+
+            if (selectedPersonalCounter.id != null) {
+                userRepository.removeMeter(selectedPersonalCounter.id!!)
+                    .catch { it.printStackTrace() }
+                    .collect {
+
+                    }
+            }
+            personalCounters.remove(selectedPersonalCounter)
+            personalCounter.postValue(Event(personalCounters))
         }
     }
 

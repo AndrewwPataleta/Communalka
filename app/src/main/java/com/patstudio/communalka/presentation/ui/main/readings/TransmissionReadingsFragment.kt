@@ -71,9 +71,9 @@ class TransmissionReadingsFragment : Fragment() {
         editTextList.add(binding.thirdNumber)
         editTextList.add(binding.fourNumber)
         editTextList.add(binding.fiveNumber)
-        editTextList.add(binding.sixNumber)
-        editTextList.add(binding.sevenNumber)
-        editTextList.add(binding.eigthNumber)
+//        editTextList.add(binding.sixNumber)
+//        editTextList.add(binding.sevenNumber)
+//        editTextList.add(binding.eigthNumber)
 
         binding.sendTransmissions.setOnClickListener {
             var transmission = binding.firstNumber.text.toString()+binding.secondNumber.text.toString()+binding.thirdNumber.text.toString()+binding.fourNumber.text.toString()+binding.fiveNumber.text.toString()
@@ -133,17 +133,17 @@ class TransmissionReadingsFragment : Fragment() {
                 if (it.length == 1) binding.sixNumber.requestFocus()
             }
         }
-        binding.sixNumber.doAfterTextChanged {
-            it?.let {
-                if (it.length == 1) binding.sevenNumber.requestFocus()
-            }
-        }
-        binding.sevenNumber.doAfterTextChanged {
-            it?.let {
-                if (it.length == 1) binding.eigthNumber.requestFocus()
-
-            }
-        }
+//        binding.sixNumber.doAfterTextChanged {
+//            it?.let {
+//                if (it.length == 1) binding.sevenNumber.requestFocus()
+//            }
+//        }
+//        binding.sevenNumber.doAfterTextChanged {
+//            it?.let {
+//                if (it.length == 1) binding.eigthNumber.requestFocus()
+//
+//            }
+//        }
     }
 
     private fun clearValueCurrentFocus() {

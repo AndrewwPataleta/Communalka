@@ -251,9 +251,9 @@ class WelcomeFragment : Fragment() {
                     val editPlacementDialog = BottomSheetDialog(requireContext(), R.style.AppBottomSheetDialogTheme)
                     editPlacementDialog.setContentView(root)
                     root.findViewById<View>(R.id.editPlacement).setOnClickListener {
-                        Log.d("WelcomeFragment", "edit placement")
-                        editPlacementDialog.dismiss()
                         viewModel.selectEditPlacement(placement)
+                        editPlacementDialog.dismiss()
+
                     }
                     root.findViewById<View>(R.id.editpersonaBill).setOnClickListener {
 

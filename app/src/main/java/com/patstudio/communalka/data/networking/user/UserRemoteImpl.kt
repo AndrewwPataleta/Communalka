@@ -33,6 +33,12 @@ class UserRemoteImpl(
         userService.registration(body)
     }
 
+    override suspend fun updateFio(fio: String) {
+        val body = JsonObject()
+        body.addProperty("fio",fio)
+        userService.updateFio(body)
+    }
+
     override suspend fun confirmSmsCode(phone: String, smsCode: String) = withContext(dispatcherProvider.default) {
         val body = JsonObject()
         body.addProperty("target",phone)
@@ -114,6 +120,9 @@ class UserRemoteImpl(
     }
 
     override suspend fun getSuppliers() = withContext(dispatcherProvider.default)  {
+        val body = JsonObject()
+
+        body.addProperty("service","")
         userService.getSuppliers()
     }
 

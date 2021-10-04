@@ -14,6 +14,8 @@ interface UserRemote {
 
     suspend fun registration(fio: String, phone: String, email: String): APIResponse<JsonElement>
 
+    suspend fun updateFio(fio: String)
+
     suspend fun confirmSmsCode(phone: String, smsCode: String): APIResponse<JsonElement>
 
     suspend fun updateEmail(email: String): APIResponse<JsonElement>

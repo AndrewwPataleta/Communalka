@@ -1,5 +1,6 @@
 package com.patstudio.communalka.presentation.ui.main.room
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,9 +28,13 @@ class CreatePersonalAccountViewModel(private val userRepository: UserRepository,
     private val personalAccount: MutableLiveData<Event<PersonalAccount>> = MutableLiveData()
     private val supplierList: MutableLiveData<Event<List<Supplier>>> = MutableLiveData()
     private var personalCounter: MutableLiveData<Event<List<PersonalCounter>>> = MutableLiveData()
+
+    private var _userMessage: MutableLiveData<String> = MutableLiveData()
+    val userMessage: LiveData<String> = _userMessage
+
     private lateinit var selectedSupplier: Supplier
     private var personalNumber: String = ""
-    private val openPersonalAccountsPage: MutableLiveData<Event<Placement>> = MutableLiveData()
+    private val openPersonalAccountsPage: MutableLiveData<Event<Pair<Placement?, String>>> = MutableLiveData()
     fun setSelectedPosition(position: Int) {
         selectedSupplier = suppliers.get(position)
     }
@@ -37,14 +42,23 @@ class CreatePersonalAccountViewModel(private val userRepository: UserRepository,
     private fun getListPersonalAccounts() {
         viewModelScope.launch(dispatcherProvider.io) {
 
-            userRepository.getSuppliers()
+            userRepository.getSuppliers(currentPersonalAccount.id)
                 .catch { it.printStackTrace() }
                 .collect {
                     when (it) {
                         is Result.Success -> {
+
                             val turnsType = object : TypeToken<List<Supplier>>() {}.type
                             suppliers = gson.fromJson(it.data.data!!.asJsonObject.get("suppliers"), turnsType)
-                            supplierList.postValue(Event(suppliers))
+
+                            var filtred: ArrayList<Supplier> = ArrayList()
+
+                                suppliers.map {
+                                    if (it.service.compareTo(currentPersonalAccount.id) == 0)
+                                        filtred.add(it)
+                                }
+
+                            supplierList.postValue(Event(filtred))
                         }
                         is Result.Error -> {
 
@@ -74,7 +88,7 @@ class CreatePersonalAccountViewModel(private val userRepository: UserRepository,
             if (personalCounters.size > 0) {
                 createMeter(personalCounters.removeLast(),accountId)
             } else {
-                openPersonalAccountsPage.postValue(Event(currentPlacement))
+                openPersonalAccountsPage.postValue(Event(Pair(currentPlacement, currentPersonalAccount.name)))
             }
         } else {
             viewModelScope.launch(dispatcherProvider.io) {
@@ -86,7 +100,7 @@ class CreatePersonalAccountViewModel(private val userRepository: UserRepository,
                                 if (personalCounters.size > 0) {
                                     createMeter(personalCounters.removeLast(),accountId)
                                 } else {
-                                    openPersonalAccountsPage.postValue(Event(currentPlacement))
+                                    openPersonalAccountsPage.postValue(Event(Pair(currentPlacement, currentPersonalAccount.name)))
                                 }
                             }
                             is Result.ErrorResponse -> { }
@@ -108,17 +122,32 @@ class CreatePersonalAccountViewModel(private val userRepository: UserRepository,
                         when (it) {
                             is Result.Success -> {
                                 var account = gson.fromJson(it.data.data!!.asJsonObject.get("account"), Account::class.java)
-                                progressConnectPersonalNumber.postValue(Event(false))
-                                if (personalCounters.size > 0) {
-                                    createMeter(personalCounters.removeLast(),account.id)
-                                } else {
-                                    openPersonalAccountsPage.postValue(Event(currentPlacement))
+
+                                account.active?.let {
+                                    if (it) {
+
+                                        if (personalCounters.size > 0) {
+                                            createMeter(personalCounters.removeLast(),account.id)
+                                        } else {
+                                            openPersonalAccountsPage.postValue(Event(Pair(currentPlacement, currentPersonalAccount.name)))
+                                        }
+                                    } else if (!it && account.message.isNotEmpty()) {
+                                        if (personalCounters.size > 0) {
+                                            createMeter(personalCounters.removeLast(),account.id)
+                                        } else {
+                                            openPersonalAccountsPage.postValue(Event(Pair(null, currentPersonalAccount.name)))
+                                        }
+                                        _userMessage.postValue(account.message)
+                                    } else if (!it) {
+                                        _userMessage.postValue("Такой лицевой счет не найден")
+                                    }
                                 }
+                                progressConnectPersonalNumber.postValue(Event(false))
+
                             }
                             is Result.ErrorResponse -> {
-                                when(it.data.status) {
-                                    "fail" -> { }
-                                }
+                                _userMessage.postValue(it.data.message)
+                                progressConnectPersonalNumber.postValue(Event(false))
                             }
                             is Result.Error -> {
 
@@ -129,7 +158,7 @@ class CreatePersonalAccountViewModel(private val userRepository: UserRepository,
         }
     }
 
-    fun getOpenPersonalAccountsPage(): MutableLiveData<Event<Placement>> {
+    fun getOpenPersonalAccountsPage(): MutableLiveData<Event<Pair<Placement?, String>>> {
         return openPersonalAccountsPage
     }
 

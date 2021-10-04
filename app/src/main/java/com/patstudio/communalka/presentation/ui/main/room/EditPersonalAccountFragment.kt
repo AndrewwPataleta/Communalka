@@ -66,22 +66,14 @@ class EditPersonalAccountFragment : Fragment() {
                 it.getContentIfNotHandled {
                     it?.let {
                         mainViewModel.currentPersonalAccountName(it.name)
+                        binding.serviceProviderValue.setText(it.name)
+                        binding.personalNumberValue.setText(it.account.number)
                     }
                 }
             }
         }
 
-        viewModel.getSupplierList().observe(viewLifecycleOwner) {
-            if (!it.hasBeenHandled.get()) {
-                it.getContentIfNotHandled {
-                    it?.let {
-                        val adapter = ArrayAdapter(requireContext(),
-                            R.layout.spinner_dropdown_item, R.id.nameSupplier, it.map { it.name })
-                        binding.serviceProviderValue.adapter = adapter
-                    }
-                }
-            }
-        }
+
 
         viewModel.getRemovePersonalAccountDialog().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
@@ -152,15 +144,7 @@ class EditPersonalAccountFragment : Fragment() {
     }
 
     private fun initListeners() {
-        binding.serviceProviderValue.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
 
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                viewModel.setSelectedPosition(position)
-            }
-
-        }
         binding.addCounter.setOnClickListener {
             viewModel.addNewCounter()
         }
