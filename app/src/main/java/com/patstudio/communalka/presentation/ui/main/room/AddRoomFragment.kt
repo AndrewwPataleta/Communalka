@@ -30,6 +30,12 @@ import com.patstudio.communalka.databinding.FragmentAddRoomBinding
 import gone
 import org.koin.android.viewmodel.ext.android.viewModel
 import visible
+import android.text.Editable
+
+import android.text.TextWatcher
+
+
+
 
 
 
@@ -278,9 +284,7 @@ class AddRoomFragment : Fragment() {
         binding.roomNameEdit.doAfterTextChanged {
             viewModel.setRoomName(it.toString())
         }
-        binding.addressEdit.doAfterTextChanged {
-            viewModel.setAddressName(it.toString())
-        }
+
         binding.fioEdit.doAfterTextChanged {
             viewModel.setFioOwner(it.toString())
         }
@@ -309,8 +313,20 @@ class AddRoomFragment : Fragment() {
         binding.saveRoom.setOnClickListener {
             viewModel.saveRoom()
         }
+        binding.addressEdit.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                if (binding.addressEdit.isPerformingCompletion()) {
+                    // An item has been selected from the list. Ignore.
+                } else {
+                    viewModel.setAddressName(charSequence.toString())
+                }
+            }
+            override fun afterTextChanged(editable: Editable) {}
+        })
+
         binding.addressEdit.setOnItemClickListener(OnItemClickListener { parent, arg1, pos, id ->
-           viewModel.selectSuggest(pos)
+            viewModel.selectSuggest(pos)
         })
     }
 

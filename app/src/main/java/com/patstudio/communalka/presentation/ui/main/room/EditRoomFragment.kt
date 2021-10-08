@@ -11,6 +11,8 @@ import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -233,7 +235,7 @@ class EditRoomFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
 
-                    val addresses:List<String> = it.map { it.value }
+                    val addresses:List<String> = it.second.map { it.value }
                     val adapter = ArrayAdapter(
                         requireContext(),
                         com.patstudio.communalka.R.layout.address_dropdown,
@@ -242,7 +244,8 @@ class EditRoomFragment : Fragment() {
                     )
 
                     binding.addressEdit.setAdapter(adapter)
-                    binding.addressEdit.showDropDown()
+                    if (!it.first)
+                        binding.addressEdit.showDropDown()
                 }
             }
         }
@@ -423,6 +426,18 @@ class EditRoomFragment : Fragment() {
         binding.saveRoom.setOnClickListener {
             viewModel.saveRoom()
         }
+        binding.addressEdit.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                if (binding.addressEdit.isPerformingCompletion()) {
+                    // An item has been selected from the list. Ignore.
+                } else {
+                    viewModel.setAddressName(charSequence.toString())
+                }
+            }
+            override fun afterTextChanged(editable: Editable) {}
+        })
+
         binding.addressEdit.setOnItemClickListener(OnItemClickListener { parent, arg1, pos, id ->
            viewModel.selectSuggest(pos)
         })

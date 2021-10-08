@@ -44,7 +44,7 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
     private val openRegistration: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val imageURI: MutableLiveData<Event<Uri>> = MutableLiveData()
     private val progressSuggestions: MutableLiveData<Event<Boolean>> = MutableLiveData()
-    private val listSuggestions: MutableLiveData<Event<List<Suggestion>>> = MutableLiveData()
+    private val listSuggestions: MutableLiveData<Event<Pair<Boolean,List<Suggestion>>>> = MutableLiveData()
     private val deleteDialog: MutableLiveData<Event<Placement>> = MutableLiveData()
     private val imagesMutable: MutableLiveData<Event<HashMap<Int, String>>> = MutableLiveData()
     private val showProgress: MutableLiveData<Event<Boolean>> = MutableLiveData()
@@ -64,6 +64,7 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
     private var selectedImage = images.get(1)
     private lateinit var currentPath: Uri
     private var IMAGE_MODE = "DEFAULT"
+    private var firstShow = true
 
     fun initApiKey() {
         imagesMutable.postValue(Event(images))
@@ -241,7 +242,7 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
                             is Result.Success -> {
                                 var suggestions = gson.fromJson(it.data, SuggestionWrapper::class.java)
                                 lastListSuggestions = suggestions.suggestions
-                                listSuggestions.postValue(Event(lastListSuggestions))
+                                listSuggestions.postValue(Event(Pair(firstShow,lastListSuggestions)))
                                 progressSuggestions.postValue(Event(false))
                             }
                             is Result.Error -> {
@@ -266,6 +267,7 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
         searchJob = viewModelScope.launch {
             Log.d("AddRoomViewMode", "search "+addressRoom)
             delay(500)
+            firstShow = false
             searchAddress()
         }
     }
@@ -340,7 +342,7 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
     }
 
 
-    fun getListSuggestions() : MutableLiveData<Event<List<Suggestion>>> {
+    fun getListSuggestions() : MutableLiveData<Event<Pair<Boolean,List<Suggestion>>>> {
         return listSuggestions
     }
 
