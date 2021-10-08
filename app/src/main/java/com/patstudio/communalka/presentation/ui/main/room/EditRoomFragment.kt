@@ -60,28 +60,28 @@ class EditRoomFragment : Fragment() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initObservers() {
-        viewModel.getNameRoomError().observe(this) {
+        viewModel.getNameRoomError().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     binding.roomNameEdit.setError(it)
                 }
             }
         }
-        viewModel.getFioOwnerError().observe(this) {
+        viewModel.getFioOwnerError().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     binding.fioEdit.setError(it)
                 }
             }
         }
-        viewModel.getAddressError().observe(this) {
+        viewModel.getAddressError().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     binding.addressEdit.setError(it)
                 }
             }
         }
-        viewModel.getOpenExternalPermission().observe(this) {
+        viewModel.getOpenExternalPermission().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                   if (it) {
@@ -95,7 +95,7 @@ class EditRoomFragment : Fragment() {
             }
         }
 
-        viewModel.getShowAddressLocation().observe(this) {
+        viewModel.getShowAddressLocation().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     if (it) {
@@ -106,7 +106,7 @@ class EditRoomFragment : Fragment() {
                 }
             }
         }
-        viewModel.getImages().observe(this) {
+        viewModel.getImages().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     it.forEach {
@@ -143,21 +143,21 @@ class EditRoomFragment : Fragment() {
                 }
             }
         }
-        viewModel.getTotalSpaceError().observe(this) {
+        viewModel.getTotalSpaceError().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     binding.totalAreaEdit.setError(it)
                 }
             }
         }
-        viewModel.getOpenListPlacements().observe(this) {
+        viewModel.getOpenListPlacements().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     findNavController().navigate(R.id.toWelcomePage)
                 }
             }
         }
-        viewModel.getShowProgress().observe(this) {
+        viewModel.getShowProgress().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     if (it) {
@@ -170,7 +170,7 @@ class EditRoomFragment : Fragment() {
                 }
             }
         }
-        viewModel.getDeleteDialog().observe(this) {
+        viewModel.getDeleteDialog().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     val builder = AlertDialog.Builder(requireContext())
@@ -190,14 +190,14 @@ class EditRoomFragment : Fragment() {
             }
         }
 
-        viewModel.getTotalLivingError().observe(this) {
+        viewModel.getTotalLivingError().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     binding.livingSpaceEdit.setError(it)
                 }
             }
         }
-        viewModel.getOpenRegistration().observe(this) {
+        viewModel.getOpenRegistration().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     if (it) {
@@ -206,7 +206,7 @@ class EditRoomFragment : Fragment() {
                 }
             }
         }
-        viewModel.getUserMessage().observe(this) {
+        viewModel.getUserMessage().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     val builder = MaterialAlertDialogBuilder(requireContext())
@@ -220,7 +220,7 @@ class EditRoomFragment : Fragment() {
             }
         }
 
-        viewModel.getOpenMainPage().observe(this) {
+        viewModel.getOpenMainPage().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     if (it) {
@@ -229,7 +229,7 @@ class EditRoomFragment : Fragment() {
                 }
             }
         }
-        viewModel.getListSuggestions().observe(this) {
+        viewModel.getListSuggestions().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
 
@@ -246,7 +246,7 @@ class EditRoomFragment : Fragment() {
                 }
             }
         }
-        viewModel.getProgressSuggestions().observe(this) {
+        viewModel.getProgressSuggestions().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                      if (it) {
@@ -259,7 +259,7 @@ class EditRoomFragment : Fragment() {
             }
         }
 
-        viewModel.getCheckExternalPermission().observe(this) {
+        viewModel.getCheckExternalPermission().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -279,7 +279,7 @@ class EditRoomFragment : Fragment() {
             }
         }
 
-        viewModel.getStaticAddressImage().observe(this) {
+        viewModel.getStaticAddressImage().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     val path = getString(R.string.static_address_url, it.first, it.second)
@@ -289,7 +289,7 @@ class EditRoomFragment : Fragment() {
             }
         }
 
-        viewModel.getProgressCreateRoom().observe(this) {
+        viewModel.getProgressCreateRoom().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     Log.d("AddRoomFragment", "progress is "+it)
@@ -304,7 +304,7 @@ class EditRoomFragment : Fragment() {
             }
         }
 
-        viewModel.getImageURI().observe(this) {
+        viewModel.getImageURI().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     binding.attachRoomImage.setPadding(0)
@@ -315,7 +315,7 @@ class EditRoomFragment : Fragment() {
             }
         }
 
-        viewModel.getAvatarActionDialog().observe(this) {
+        viewModel.getAvatarActionDialog().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     val root = layoutInflater.inflate(R.layout.layout_action_avatar, null)
@@ -334,7 +334,7 @@ class EditRoomFragment : Fragment() {
             }
         }
 
-        viewModel.getCurrentPlacement().observe(this) {
+        viewModel.getCurrentPlacement().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     Log.d("EditRoomFragment", it.toString())

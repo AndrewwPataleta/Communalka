@@ -2,6 +2,7 @@ package com.patstudio.communalka.presentation.ui.main.room
 
 import android.net.Uri
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -41,6 +42,9 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
     private lateinit var selectedSupplier: Supplier
     private var personalNumber: String = ""
 
+    private var _supplierName: MutableLiveData<String> = MutableLiveData()
+    val supplierName: LiveData<String> = _supplierName
+
     fun setSelectedPosition(position: Int) {
         selectedSupplier = suppliers.get(position)
     }
@@ -64,10 +68,30 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
 
                         }
                     }
-
                 }
-          //  personalCounter.postValue(Event(currentPersonalAccount))
 
+            userRepository.getSuppliers("")
+                .catch { it.printStackTrace() }
+                .collect {
+                    when (it) {
+                        is Result.Success -> {
+
+                            val turnsType = object : TypeToken<List<Supplier>>() {}.type
+                            var suppliers: ArrayList<Supplier> = gson.fromJson(it.data.data!!.asJsonObject.get("suppliers"), turnsType)
+                            suppliers.map {
+                                if (currentPersonalAccount.account.supplier!!.compareTo(it.id) == 0) {
+                                    _supplierName.postValue(it.name)
+                                }
+                            }
+                        }
+                        is Result.Error -> {
+
+                        }
+                        is Result.ErrorResponse -> {
+
+                        }
+                    }
+                }
 
             personalAccount.postValue(Event(currentPersonalAccount))
         }
@@ -100,21 +124,21 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
         removePersonalAccountDialog.postValue(Event(currentPersonalAccount))
     }
 
-    private fun createMeter(personalCounter: PersonalCounter, accountId: String) {
-        if (personalCounter.serial_number.length == 0 || personalCounter.title.length == 0) {
+    private fun createMeter(personalCounter: PersonalCounter, accountId: String,  serviceName: String?) {
+        if (personalCounter.serial_number?.length == 0 || personalCounter.title.length == 0) {
             if (personalCounters.size > 0) {
                 val personCounter = personalCounters.removeLast()
                 if (personCounter.id == null) {
-                    createMeter(personCounter, currentPersonalAccount.account.id)
+                    createMeter(personCounter, currentPersonalAccount.account.id,serviceName)
                 } else {
-                    editMeter(personCounter, currentPersonalAccount.account.id)
+                    editMeter(personCounter, currentPersonalAccount.account.id, serviceName)
                 }
             } else {
                 openPersonalAccountsPage.postValue(Event(currentPlacement))
             }
         } else {
             viewModelScope.launch(dispatcherProvider.io) {
-                userRepository.createMeter(personalCounter.title, personalCounter.serial_number, personalCounter.value, accountId)
+                userRepository.createMeter(personalCounter.title, personalCounter.serial_number!!, personalCounter.value, accountId)
                     .catch { it.printStackTrace() }
                     .collect {
                         when (it) {
@@ -122,9 +146,9 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
                                 if (personalCounters.size > 0) {
                                     val personCounter = personalCounters.removeLast()
                                     if (personCounter.id == null) {
-                                        createMeter(personCounter, currentPersonalAccount.account.id)
+                                        createMeter(personCounter, currentPersonalAccount.account.id, serviceName)
                                     } else {
-                                        editMeter(personCounter, currentPersonalAccount.account.id)
+                                        editMeter(personCounter, currentPersonalAccount.account.id, serviceName)
                                     }
                                 } else {
                                     openPersonalAccountsPage.postValue(Event(currentPlacement))
@@ -138,21 +162,25 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
         }
     }
 
-    private fun editMeter(personalCounter: PersonalCounter, accountId: String) {
-        if (personalCounter.serial_number.length == 0 || personalCounter.title.length == 0) {
+    private fun editMeter(personalCounter: PersonalCounter, accountId: String, serviceName: String?) {
+        if (personalCounter.serial_number?.length == 0 || personalCounter.title.length == 0) {
             if (personalCounters.size > 0) {
                 val personCounter = personalCounters.removeLast()
                 if (personCounter.id == null) {
-                    createMeter(personCounter, currentPersonalAccount.account.id)
+                    createMeter(personCounter, currentPersonalAccount.account.id,serviceName)
                 } else {
-                    editMeter(personCounter, currentPersonalAccount.account.id)
+                    editMeter(personCounter, currentPersonalAccount.account.id,serviceName)
                 }
             } else {
                 openPersonalAccountsPage.postValue(Event(currentPlacement))
             }
         } else {
             viewModelScope.launch(dispatcherProvider.io) {
-                userRepository.editMeter(personalCounter.title, personalCounter.serial_number, personalCounter.value, personalCounter.id!!)
+                var serialNumber = ""
+                if (personalCounter.serial_number != null) {
+                    serialNumber = personalCounter.serial_number!!
+                }
+                userRepository.editMeter(personalCounter.title, serialNumber, personalCounter.value, personalCounter.id!!)
                     .catch { it.printStackTrace() }
                     .collect {
                         when (it) {
@@ -160,9 +188,9 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
                                 if (personalCounters.size > 0) {
                                     val personCounter = personalCounters.removeLast()
                                     if (personCounter.id == null) {
-                                        createMeter(personCounter, currentPersonalAccount.account.id)
+                                        createMeter(personCounter, currentPersonalAccount.account.id,serviceName)
                                     } else {
-                                        editMeter(personCounter, currentPersonalAccount.account.id)
+                                        editMeter(personCounter, currentPersonalAccount.account.id,serviceName )
                                     }
                                 } else {
                                     openPersonalAccountsPage.postValue(Event(currentPlacement))
@@ -181,9 +209,9 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
             viewModelScope.launch(dispatcherProvider.io) {
                 val personCounter = personalCounters.removeLast()
                     if (personCounter.id == null) {
-                        createMeter(personCounter, currentPersonalAccount.account.id)
+                        createMeter(personCounter, currentPersonalAccount.account.id, "")
                     } else {
-                        editMeter(personCounter, currentPersonalAccount.account.id)
+                        editMeter(personCounter, currentPersonalAccount.account.id, "")
                     }
                 }
             } else {

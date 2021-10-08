@@ -43,11 +43,7 @@
         tools:layout="@layout/fragment_edit_room">
         <action
             android:id="@+id/toWelcomePage"
-            app:destination="@id/WelcomeFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:destination="@id/WelcomeFragment" />
     </fragment>
 
     <fragment
@@ -68,6 +64,8 @@
         <action
             android:id="@+id/toCreatePersonalAccount"
             app:destination="@id/CreatePersonalAccount"
+            app:popUpTo="@id/WelcomeFragment"
+            app:popUpToInclusive="false"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -78,6 +76,8 @@
         android:id="@+id/TransmissionReadingCounter"
         android:name="com.patstudio.communalka.presentation.ui.main.readings.TransmissionReadingsFragment"
         android:label="Передача показаний"
+        app:popUpTo="@id/WelcomeFragment"
+        app:popUpToInclusive="false"
         tools:layout="@layout/fragment_transmission_readings">
 
     </fragment>
@@ -85,11 +85,13 @@
     <fragment
         android:id="@+id/CreatePersonalAccount"
         android:name="com.patstudio.communalka.presentation.ui.main.room.CreatePersonalAccountFragment"
-
         tools:layout="@layout/fragment_create_personal_account">
+
         <action
             android:id="@+id/toPersonalAccounts"
             app:destination="@id/PersonalAccountPlacement"
+            app:popUpTo="@id/WelcomeFragment"
+            app:popUpToInclusive="false"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -103,6 +105,8 @@
         <action
             android:id="@+id/toPersonalAccounts"
             app:destination="@id/PersonalAccountPlacement"
+            app:popUpTo="@id/WelcomeFragment"
+            app:popUpToInclusive="false"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"

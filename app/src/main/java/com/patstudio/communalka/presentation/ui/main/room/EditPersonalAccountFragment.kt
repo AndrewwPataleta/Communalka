@@ -66,14 +66,14 @@ class EditPersonalAccountFragment : Fragment() {
                 it.getContentIfNotHandled {
                     it?.let {
                         mainViewModel.currentPersonalAccountName(it.name)
-                        binding.serviceProviderValue.setText(it.name)
                         binding.personalNumberValue.setText(it.account.number)
                     }
                 }
             }
         }
-
-
+        viewModel.supplierName.observe(viewLifecycleOwner) {
+            binding.serviceProviderValue.setText(it)
+        }
 
         viewModel.getRemovePersonalAccountDialog().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {

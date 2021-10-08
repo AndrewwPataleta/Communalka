@@ -2,7 +2,6 @@ package com.patstudio.communalka.presentation.ui.main.profile
 
 import android.net.Uri
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,11 +9,7 @@ import com.example.imagegallery.contextprovider.DispatcherProvider
 import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.User
 import com.patstudio.communalka.data.repository.user.UserRepository
-import isEmailValid
-import isValidPhoneNumber
-import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class PersonalInfoViewModel(private val userRepository: UserRepository, private val dispatcherProvider: DispatcherProvider): ViewModel() {
 
@@ -77,7 +72,7 @@ class PersonalInfoViewModel(private val userRepository: UserRepository, private 
             user.name = userFio
             if (currentPath.length > 0) user.photoPath = currentPath
             viewModelScope.launch(dispatcherProvider.io) {
-                userRepository.saveUser(user)
+                userRepository.saveUserLocalWithRemote(user)
                 userMessage.postValue(Event("Изменения сохранены"))
             }
 

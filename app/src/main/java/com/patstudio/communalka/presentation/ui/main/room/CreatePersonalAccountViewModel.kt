@@ -1,5 +1,6 @@
 package com.patstudio.communalka.presentation.ui.main.room
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,7 +21,8 @@ class CreatePersonalAccountViewModel(private val userRepository: UserRepository,
 
     private lateinit var user: User
     private lateinit var currentPersonalAccount: PersonalAccount
-    private lateinit var suppliers: List<Supplier>
+    private lateinit var suppliers: ArrayList<Supplier>
+    private lateinit var filtred: ArrayList<Supplier>
     private lateinit var currentPlacement: Placement
     private  var personalCounters: ArrayList<PersonalCounter> = java.util.ArrayList()
     private  var personalNumberError:  MutableLiveData<Event<String>> = MutableLiveData()
@@ -32,11 +34,15 @@ class CreatePersonalAccountViewModel(private val userRepository: UserRepository,
     private var _userMessage: MutableLiveData<String> = MutableLiveData()
     val userMessage: LiveData<String> = _userMessage
 
+    private var _disableCreate: MutableLiveData<Boolean> = MutableLiveData()
+    val disableCreate: LiveData<Boolean> = _disableCreate
+
     private lateinit var selectedSupplier: Supplier
     private var personalNumber: String = ""
-    private val openPersonalAccountsPage: MutableLiveData<Event<Pair<Placement?, String>>> = MutableLiveData()
+    private val openPersonalAccountsPage: MutableLiveData<Event<Pair<Placement?, String?>>> = MutableLiveData()
     fun setSelectedPosition(position: Int) {
         selectedSupplier = suppliers.get(position)
+        Log.d("CreatePersonal", "selected ${selectedSupplier.name} id ${selectedSupplier.id}")
     }
 
     private fun getListPersonalAccounts() {
@@ -57,8 +63,13 @@ class CreatePersonalAccountViewModel(private val userRepository: UserRepository,
                                     if (it.service.compareTo(currentPersonalAccount.id) == 0)
                                         filtred.add(it)
                                 }
-
-                            supplierList.postValue(Event(filtred))
+                            suppliers = ArrayList()
+                            suppliers.addAll(filtred)
+                            if (filtred.size > 0) {
+                                supplierList.postValue(Event(filtred))
+                            } else {
+                                _disableCreate.postValue(true)
+                            }
                         }
                         is Result.Error -> {
 
@@ -83,24 +94,24 @@ class CreatePersonalAccountViewModel(private val userRepository: UserRepository,
         this.personalCounter.postValue(Event(personalCounters))
     }
 
-    private fun createMeter(personalCounter: PersonalCounter, accountId: String) {
-        if (personalCounter.serial_number.length == 0 || personalCounter.title.length == 0) {
+    private fun createMeter(personalCounter: PersonalCounter, accountId: String, serviceName: String?) {
+        if (personalCounter.serial_number?.length == 0 || personalCounter.title.length == 0) {
             if (personalCounters.size > 0) {
-                createMeter(personalCounters.removeLast(),accountId)
+                createMeter(personalCounters.removeLast(),accountId, serviceName)
             } else {
-                openPersonalAccountsPage.postValue(Event(Pair(currentPlacement, currentPersonalAccount.name)))
+                openPersonalAccountsPage.postValue(Event(Pair(currentPlacement, serviceName)))
             }
         } else {
             viewModelScope.launch(dispatcherProvider.io) {
-                userRepository.createMeter(personalCounter.title, personalCounter.serial_number, personalCounter.value, accountId)
+                userRepository.createMeter(personalCounter.title, personalCounter.serial_number!!, personalCounter.value, accountId)
                     .catch { it.printStackTrace() }
                     .collect {
                         when (it) {
                             is Result.Success -> {
                                 if (personalCounters.size > 0) {
-                                    createMeter(personalCounters.removeLast(),accountId)
+                                    createMeter(personalCounters.removeLast(),accountId, serviceName)
                                 } else {
-                                    openPersonalAccountsPage.postValue(Event(Pair(currentPlacement, currentPersonalAccount.name)))
+                                    openPersonalAccountsPage.postValue(Event(Pair(currentPlacement, serviceName)))
                                 }
                             }
                             is Result.ErrorResponse -> { }
@@ -127,19 +138,20 @@ class CreatePersonalAccountViewModel(private val userRepository: UserRepository,
                                     if (it) {
 
                                         if (personalCounters.size > 0) {
-                                            createMeter(personalCounters.removeLast(),account.id)
+                                            createMeter(personalCounters.removeLast(),account.id, currentPersonalAccount.name)
                                         } else {
                                             openPersonalAccountsPage.postValue(Event(Pair(currentPlacement, currentPersonalAccount.name)))
                                         }
                                     } else if (!it && account.message.isNotEmpty()) {
                                         if (personalCounters.size > 0) {
-                                            createMeter(personalCounters.removeLast(),account.id)
+                                            createMeter(personalCounters.removeLast(),account.id, null)
                                         } else {
-                                            openPersonalAccountsPage.postValue(Event(Pair(null, currentPersonalAccount.name)))
+                                            openPersonalAccountsPage.postValue(Event(Pair(currentPlacement, null)))
                                         }
                                         _userMessage.postValue(account.message)
                                     } else if (!it) {
                                         _userMessage.postValue("Такой лицевой счет не найден")
+                                        openPersonalAccountsPage.postValue(Event(Pair(currentPlacement, null)))
                                     }
                                 }
                                 progressConnectPersonalNumber.postValue(Event(false))
@@ -158,7 +170,7 @@ class CreatePersonalAccountViewModel(private val userRepository: UserRepository,
         }
     }
 
-    fun getOpenPersonalAccountsPage(): MutableLiveData<Event<Pair<Placement?, String>>> {
+    fun getOpenPersonalAccountsPage(): MutableLiveData<Event<Pair<Placement?, String?>>> {
         return openPersonalAccountsPage
     }
 

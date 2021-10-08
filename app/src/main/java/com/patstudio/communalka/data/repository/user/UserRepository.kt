@@ -191,6 +191,7 @@ class UserRepository (
                     emit(Result.errorResponse(errorResponse))
                 }
                 else -> {
+                    throwable.printStackTrace()
                     emit(Result.Error(throwable))
                 }
             }
@@ -263,7 +264,11 @@ class UserRepository (
         }
     }
 
-    suspend fun saveUser(user: User): Long {
+    suspend fun saveUserLocal(user: User): Long {
+        return dao.saveUser(user)
+    }
+
+    suspend fun saveUserLocalWithRemote(user: User): Long {
         remote.updateFio(user.name)
         return dao.saveUser(user)
     }

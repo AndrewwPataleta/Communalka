@@ -131,6 +131,10 @@ class CreatePersonalAccountFragment : Fragment() {
                 }
             }
         }
+
+        viewModel.disableCreate.observe(viewLifecycleOwner) {
+            binding.connectPersonalAccount.isEnabled = !it
+        }
         viewModel.getOpenPersonalAccountsPage().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
@@ -161,6 +165,7 @@ class CreatePersonalAccountFragment : Fragment() {
     private fun initListeners() {
         binding.serviceProviderValue.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
+
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

@@ -6,7 +6,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class PlacementMeter (
     val id: String,
-    val serial_number: String,
+    val serial_number: String?,
     val title: String,
     val model: String,
     val prev_verification: String,

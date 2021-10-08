@@ -8,7 +8,7 @@ data class PersonalCounter (
 
    var title: String,
    var value: String,
-   var serial_number: String,
+   var serial_number: String? = "",
    var id: String? = null,
    var account: String? = null,
    var active: Boolean? = null,

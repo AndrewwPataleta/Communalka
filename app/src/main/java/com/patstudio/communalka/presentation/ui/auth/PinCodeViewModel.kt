@@ -4,14 +4,10 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.example.imagegallery.contextprovider.DispatcherProvider
 import com.patstudio.communalka.common.utils.Event
-import com.patstudio.communalka.data.model.Result
 import com.patstudio.communalka.data.model.User
 import com.patstudio.communalka.data.model.UserForm
 import com.patstudio.communalka.data.repository.user.UserRepository
-import isValidPhoneNumber
-import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class PinCodeViewModel(private val userRepository: UserRepository, private val dispatcherProvider: DispatcherProvider): ViewModel() {
 
@@ -57,7 +53,7 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
                 userRepository.setPinCode(pinCodeRepeat)
                 viewModelScope.launch(dispatcherProvider.io) {
                     try {
-                        userRepository.saveUser(userForSave)
+                        userRepository.saveUserLocal(userForSave)
                         userRepository.updatePreviosAuthUser()
                         userRepository.setLastLoginUser(userForSave)
                         clearPinForm()

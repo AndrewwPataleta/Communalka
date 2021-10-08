@@ -12,9 +12,9 @@ class AuthInterceptor (private val sharedPreferences: SharedPreferences,
 ) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        Log.d("AuthInterceptor ",chain.request().body().toString())
+
         val token = getUserCredentials()
-        Log.d("AuthInterceptor", token.toString())
+
         if (token != null) {
             val request = newRequestWithAccessToken(chain.request(), token)
             return chain.proceed(request)

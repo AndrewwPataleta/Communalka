@@ -8,4 +8,5 @@ data class PersonalAccount (
    val id: String,
    val name: String,
    val account: Account,
+
 ) : Parcelable

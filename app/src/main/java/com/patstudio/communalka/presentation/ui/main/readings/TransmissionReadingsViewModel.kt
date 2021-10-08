@@ -40,7 +40,11 @@ class TransmissionReadingsViewModel(private val userRepository: UserRepository, 
     fun sendTransmissions(readings: String) {
         if (!readings.isNullOrEmpty()) {
             viewModelScope.launch(dispatcherProvider.io) {
-                userRepository.editMeter(currentPlacementMeter.title, currentPlacementMeter.serial_number, readings, currentPlacementMeter.id)
+                var serialNumber = ""
+                if (currentPlacementMeter.serial_number != null) {
+                    serialNumber = currentPlacementMeter.serial_number!!
+                }
+                userRepository.editMeter(currentPlacementMeter.title, serialNumber, readings, currentPlacementMeter.id)
                     .onStart { _isSendingTransmissions.postValue(Event(true)) }
                     .catch { it.printStackTrace() }
                     .collect {

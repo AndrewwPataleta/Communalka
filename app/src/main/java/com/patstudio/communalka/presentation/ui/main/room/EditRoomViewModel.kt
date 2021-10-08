@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.imagegallery.contextprovider.DispatcherProvider
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.patstudio.communalka.R
 import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.*
@@ -92,6 +93,8 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
                         }
                     }
                 }
+
+
         }
     }
 
@@ -144,12 +147,25 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
     fun confirmRemoveRoom() {
         viewModelScope.launch(dispatcherProvider.io) {
             userRepository.removeRoom(currentPlacement.id)
-                .onStart { showProgress.postValue(Event(true)) }
-                .catch { it.localizedMessage }
+                .onStart {  }
+                .catch {
+                    it.localizedMessage
+                }
                 .collect {
-                    Log.d("EditRoomViewModel", "sub")
-                    showProgress.postValue(Event(false))
-                    openListPlacement.postValue(Event(true))
+                    when (it) {
+                        is Result.Loading -> {
+                            showProgress.postValue(Event(true))
+                        }
+                        is Result.Success -> { }
+                        is Result.ErrorResponse -> { }
+                        is Result.Error -> {
+                            showProgress.postValue(Event(false))
+                            openMainPage.postValue(Event(true))
+                        }
+                    }
+
+                    Log.d("EditRoomViewModel", "it result ${it}")
+
                 }
         }
     }
@@ -164,6 +180,8 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
                     "DEFAULT" -> value = selectedImage.toString()
                     "STORAGE" -> value = currentPath.toString()
                 }
+
+                Log.d("imageValue", "value ${value}")
                 if (selectedSuggestion != null) {
                     val detailAddressInfo = selectedSuggestion!!.data
                     room = Room(currentPlacement.id,roomName,totalSpace.toDouble(), livingSpace.toDouble(),selectedSuggestion!!.value,
@@ -262,9 +280,11 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
 
         when (placement.imageType) {
             "DEFAULT" -> {
+                IMAGE_MODE = "DEFAULT"
                 selectedImage = placement.path
             }
             "STORAGE" -> {
+                IMAGE_MODE = "STORAGE"
                 currentPath = placement.path.toUri()
             }
         }

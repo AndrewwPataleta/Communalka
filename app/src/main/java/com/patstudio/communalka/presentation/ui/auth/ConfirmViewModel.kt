@@ -170,7 +170,7 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
                 smsCode = ""
                 destoyTimer()
             } else {
-                userRepository.saveUser(userForSave)
+                userRepository.saveUserLocal(userForSave)
                 userRepository.setLastLoginUser(userForSave)
                 destoyTimer()
                 smsCode = ""
@@ -185,7 +185,7 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
                     if (currentPinCode.isNullOrEmpty()) {
                         userFormMutable.postValue(Event(Pair(userForm.consumer, true)))
                     } else {
-                        userRepository.saveUser(userForSave)
+                        userRepository.saveUserLocal(userForSave)
                         userRepository.updatePreviosAuthUser()
                         userRepository.setLastLoginUser(userForSave)
                         userFormMutable.postValue(Event(Pair(userForm.consumer, false)))
