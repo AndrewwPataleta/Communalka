@@ -3,14 +3,11 @@ package com.patstudio.communalka.presentation.ui.main.room
 import android.net.Uri
 import android.util.Log
 import androidx.core.net.toUri
-import androidx.core.view.setPadding
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.imagegallery.contextprovider.DispatcherProvider
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.patstudio.communalka.R
 import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.*
 import com.patstudio.communalka.data.repository.premises.DaDataRepository
@@ -64,7 +61,8 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
     private var selectedImage = images.get(1)
     private lateinit var currentPath: Uri
     private var IMAGE_MODE = "DEFAULT"
-    private var firstShow = true
+    private var needDrop = false
+    private var firstInput = true
 
     fun initApiKey() {
         imagesMutable.postValue(Event(images))
@@ -100,6 +98,7 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
     }
 
     fun selectSuggest(position: Int) {
+        needDrop = false
         selectedSuggestion = lastListSuggestions.get(position)
         showAddressLocation.postValue(Event(true))
         staticAddressImage.postValue(Event(Pair(selectedSuggestion!!.data.geoLat, selectedSuggestion!!.data.geoLon)))
@@ -242,7 +241,7 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
                             is Result.Success -> {
                                 var suggestions = gson.fromJson(it.data, SuggestionWrapper::class.java)
                                 lastListSuggestions = suggestions.suggestions
-                                listSuggestions.postValue(Event(Pair(firstShow,lastListSuggestions)))
+                                listSuggestions.postValue(Event(Pair(needDrop,lastListSuggestions)))
                                 progressSuggestions.postValue(Event(false))
                             }
                             is Result.Error -> {
@@ -262,12 +261,21 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
     fun setAddressName(addressRoom: String) {
         this.addressRoom = addressRoom
         showAddressLocation.postValue(Event(false))
+        Log.d("EditRoom", " first run first input "+firstInput)
+        if (firstInput) {
+
+            firstInput = false
+            needDrop = false
+        } else {
+            needDrop = true
+        }
+
+        showAddressLocation.postValue(Event(false))
         Log.d("AddRoomViewMode", addressRoom)
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             Log.d("AddRoomViewMode", "search "+addressRoom)
             delay(500)
-            firstShow = false
             searchAddress()
         }
     }
@@ -278,6 +286,7 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
 
     fun setCurrentPlacement(placement: Placement) {
         this.currentPlacement = placement
+        firstInput = true
         this.placement.postValue(Event(currentPlacement))
 
         when (placement.imageType) {

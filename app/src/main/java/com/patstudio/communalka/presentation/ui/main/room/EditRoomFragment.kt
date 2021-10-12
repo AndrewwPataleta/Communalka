@@ -244,8 +244,11 @@ class EditRoomFragment : Fragment() {
                     )
 
                     binding.addressEdit.setAdapter(adapter)
-                    if (!it.first)
+                    if (it.first) {
+                        Log.d("EditRoom", "first drop ")
                         binding.addressEdit.showDropDown()
+                    }
+
                 }
             }
         }
@@ -395,9 +398,7 @@ class EditRoomFragment : Fragment() {
         binding.roomNameEdit.doAfterTextChanged {
             viewModel.setRoomName(it.toString())
         }
-        binding.addressEdit.doAfterTextChanged {
-            viewModel.setAddressName(it.toString())
-        }
+
         binding.fioEdit.doAfterTextChanged {
             viewModel.setFioOwner(it.toString())
         }
@@ -430,8 +431,9 @@ class EditRoomFragment : Fragment() {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
                 if (binding.addressEdit.isPerformingCompletion()) {
-                    // An item has been selected from the list. Ignore.
+
                 } else {
+                    Log.d("EditRoom","Change to "+charSequence.toString())
                     viewModel.setAddressName(charSequence.toString())
                 }
             }
@@ -481,6 +483,7 @@ class EditRoomFragment : Fragment() {
         arguments?.getParcelable<Placement>("placement")?.let {
             viewModel.setCurrentPlacement(it)
         }
+
         initObservers()
         initBindingListeners()
     }

@@ -197,7 +197,7 @@ class AddRoomFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
 
-                    val addresses:List<String> = it.map { it.value }
+                    val addresses:List<String> = it.second.map { it.value }
                     val adapter = ArrayAdapter(
                         requireContext(),
                         com.patstudio.communalka.R.layout.address_dropdown,
@@ -206,7 +206,11 @@ class AddRoomFragment : Fragment() {
                     )
 
                     binding.addressEdit.setAdapter(adapter)
-                    binding.addressEdit.showDropDown()
+                    if (it.first) {
+
+                        binding.addressEdit.showDropDown()
+                    }
+
                 }
             }
         }

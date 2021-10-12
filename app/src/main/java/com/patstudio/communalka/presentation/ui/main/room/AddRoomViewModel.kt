@@ -39,7 +39,7 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
     private val openRegistration: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val imageURI: MutableLiveData<Event<Uri>> = MutableLiveData()
     private val progressSuggestions: MutableLiveData<Event<Boolean>> = MutableLiveData()
-    private val listSuggestions: MutableLiveData<Event<List<Suggestion>>> = MutableLiveData()
+    private val listSuggestions: MutableLiveData<Event<Pair<Boolean,List<Suggestion>>>> = MutableLiveData()
     private val imagesMutable: MutableLiveData<Event<HashMap<Int, String>>> = MutableLiveData()
     private var roomName: String = ""
     private var addressRoom: String = ""
@@ -54,6 +54,8 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
     private var selectedImage = images.get(1)
     private lateinit var currentPath: Uri
     private var IMAGE_MODE = "DEFAULT"
+    private var needDrop = false
+    private var firstInput = true
 
     fun initApiKey() {
         imagesMutable.postValue(Event(images))
@@ -87,6 +89,7 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
     }
 
     fun selectSuggest(position: Int) {
+        needDrop = false
         selectedSuggestion = lastListSuggestions.get(position)
         showAddressLocation.postValue(Event(true))
         staticAddressImage.postValue(Event(Pair(selectedSuggestion!!.data.geoLat, selectedSuggestion!!.data.geoLon)))
@@ -208,7 +211,7 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
                             is Result.Success -> {
                                 var suggestions = gson.fromJson(it.data, SuggestionWrapper::class.java)
                                 lastListSuggestions = suggestions.suggestions
-                                listSuggestions.postValue(Event(lastListSuggestions))
+                                listSuggestions.postValue(Event(Pair(needDrop,lastListSuggestions)))
                                 progressSuggestions.postValue(Event(false))
                             }
                             is Result.Error -> {
@@ -229,6 +232,14 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
         this.addressRoom = addressRoom
         showAddressLocation.postValue(Event(false))
         Log.d("AddRoomViewMode", addressRoom)
+        if (firstInput) {
+
+            firstInput = false
+            needDrop = false
+        } else {
+            needDrop = true
+        }
+
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             Log.d("AddRoomViewMode", "search "+addressRoom)
@@ -266,7 +277,7 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
     }
 
 
-    fun getListSuggestions() : MutableLiveData<Event<List<Suggestion>>> {
+    fun getListSuggestions() : MutableLiveData<Event<Pair<Boolean,List<Suggestion>>>> {
         return listSuggestions
     }
 

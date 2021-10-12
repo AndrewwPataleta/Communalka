@@ -41,6 +41,7 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
     private var timerSms: CountDownTimer? = null
     private var timerEmail: CountDownTimer? = null
     private var repeatCount = 1
+    private var onlyEmail = false
 
     private fun startTimer() {
 
@@ -331,9 +332,10 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
     fun setUserForm(userForm: UserForm) {
         this.phone = userForm.phone
         this.userForm = userForm
+        repeatSmsLogin()
         availableSendSms.postValue(Event(false))
         congratulation.postValue(Event(userForm.fio))
-        startTimer()
+
     }
 
     fun setFormType(formType: String) {
@@ -379,6 +381,7 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
             }
 
             override fun onFinish() {
+                onlyEmail = true
                 availableEmailSendSms.postValue(Event(true))
             }
         }
@@ -391,7 +394,7 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
 
     fun setEmailFromDialog(email: String) {
          if (email.isEmailValid()) {
-            userForm.email = email
+             userForm.email = email
              selectSentByEmail()
         } else {
            userMessageWithoutButton.postValue(Event("Вы неправильно указали адрес электронной почты!"))
@@ -425,7 +428,7 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
                         is Result.ErrorResponse -> {
                             var smsError = gson.fromJson(it.data.data, APIResponse::class.java)
                             Log.d("ConfirmViewModel", "error response "+smsError)
-                           // userMessage.postValue(Event(smsError.message))
+                            onlyEmail = true
                             availableEmailSendSms.postValue(Event(true))
                         }
                     }
@@ -452,6 +455,7 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
                        //     var smsError = gson.fromJson(it.data.data, APIResponse::class.java)
 
                             // userMessage.postValue(Event(smsError.message))
+                            onlyEmail = true
                             availableEmailSendSms.postValue(Event(true))
                         }
                     }
@@ -461,9 +465,17 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
 
     fun repeatSendSms() {
 
-        when (formType) {
-            "Login" -> repeatSmsLogin()
-            "Registration" -> repeatSmsRegistration()
+        if (onlyEmail) {
+            if (userForm.email.length == 0) {
+                getOpenDialogEmail().postValue(Event(true))
+            } else {
+                repeatSmsLoginByEmail()
+            }
+        } else {
+            when (formType) {
+                "Login" -> repeatSmsLogin()
+                "Registration" -> repeatSmsRegistration()
+            }
         }
     }
 

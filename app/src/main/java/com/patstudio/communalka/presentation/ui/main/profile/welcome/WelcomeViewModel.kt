@@ -47,13 +47,13 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
    }
 
     fun setReadStoragePermission(readStoragePermission: Boolean) {
-        if (readStoragePermission) {
+
             viewModelScope.launch(dispatcherProvider.io) {
                 delay(1000)
                 placementListMutable.postValue(Event(Pair(userPlacement, user!!.showPlacementTooltip)))
                 updateUserTooltipSpawn()
             }
-        }
+
     }
 
     private fun updateUserTooltipSpawn() {

@@ -233,7 +233,15 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
             userRepository.deleteAccount(currentPersonalAccount.account.id)
                 .catch { it.printStackTrace() }
                 .collect {
-                    openPersonalAccountsPage.postValue(Event(currentPlacement))
+                    when (it) {
+                        is Result.Loading -> { }
+                        is Result.Success -> { }
+                        is Result.ErrorResponse -> { }
+                        is Result.Error -> {
+                            openPersonalAccountsPage.postValue(Event(currentPlacement))
+                        }
+                    }
+
                 }
         }
     }
