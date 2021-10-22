@@ -34,32 +34,27 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
         android:textColor="@color/black"
         android:textSize="17sp"
         android:paddingTop="16dp"
-
+        app:layout_goneMarginBottom="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:paddingBottom="16dp"
-        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintBottom_toTopOf="@id/accountMessage"
         app:layout_constraintHorizontal_bias="0.0" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/accountMessage"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:fontFamily="@font/robotoregular"-->
-<!--        android:text="@{account.message}"-->
-<!--        android:textColor="@color/gray_dark"-->
-<!--        android:textSize="13sp"-->
-<!--        android:paddingBottom="16dp"-->
-<!--        -->
-<!--        android:visibility="gone"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/personalAccountName"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/personalAccountName"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.5"-->
-<!--        app:layout_constraintHorizontal_bias="0.0" />-->
+    <TextView
+        android:id="@+id/accountMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/robotoregular"
+        android:text="@{account.message}"
+        android:textColor="@color/gray_dark"
+        android:textSize="13sp"
+        android:paddingBottom="16dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/personalAccountName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/personalAccountName"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <ImageView
         android:id="@+id/plus"
@@ -68,8 +63,8 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
         android:src="@drawable/ic_left"
         android:rotation="180"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/personalAccountName"
-        app:layout_constraintBottom_toBottomOf="@+id/personalAccountName"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="0.5"
         app:tint="@color/dark_blue" />
 

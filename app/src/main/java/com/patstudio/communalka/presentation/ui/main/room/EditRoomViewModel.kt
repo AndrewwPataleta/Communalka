@@ -3,6 +3,7 @@ package com.patstudio.communalka.presentation.ui.main.room
 import android.net.Uri
 import android.util.Log
 import androidx.core.net.toUri
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -38,6 +39,10 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
     private val showAddressLocation: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val checkReadExternalPermission: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val openExternalPermission: MutableLiveData<Event<Boolean>> = MutableLiveData()
+
+    private var _openPermissionSettings: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val openPermissionSettings: LiveData<Event<Boolean>> = _openPermissionSettings
+
     private val openRegistration: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val imageURI: MutableLiveData<Event<Uri>> = MutableLiveData()
     private val progressSuggestions: MutableLiveData<Event<Boolean>> = MutableLiveData()
@@ -459,7 +464,11 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
     }
 
     fun haveReadExternalPermission(havePermission: Boolean) {
-        if (havePermission)
+
+        if (havePermission) {
             openExternalPermission.postValue(Event(true))
+        } else {
+            _openPermissionSettings.postValue(Event(true))
+        }
     }
 }

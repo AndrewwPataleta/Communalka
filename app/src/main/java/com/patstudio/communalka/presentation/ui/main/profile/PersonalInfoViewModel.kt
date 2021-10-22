@@ -2,6 +2,7 @@ package com.patstudio.communalka.presentation.ui.main.profile
 
 import android.net.Uri
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,6 +23,8 @@ class PersonalInfoViewModel(private val userRepository: UserRepository, private 
     private var userFio: String = ""
     private val userFioError: MutableLiveData<Event<String>> = MutableLiveData()
     private val userMessage: MutableLiveData<Event<String>> = MutableLiveData()
+    private var _openPermissionSettings: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val openPermissionSettings: LiveData<Event<Boolean>> = _openPermissionSettings
 
    fun setCurrentUser(user:User) {
        this.user = user
@@ -39,8 +42,11 @@ class PersonalInfoViewModel(private val userRepository: UserRepository, private 
     }
 
     fun haveReadExternalPermission(havePermission: Boolean) {
-        if (havePermission)
+        if (havePermission) {
             openExternalPermission.postValue(Event(true))
+        } else {
+           _openPermissionSettings.postValue(Event(true))
+        }
     }
 
     fun setUserAvatar(currentPath: Uri) {

@@ -180,6 +180,7 @@ class WelcomeFragment : Fragment() {
                         requestPermissions(
                             arrayOf(
                                 Manifest.permission.ACCESS_MEDIA_LOCATION,
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
                             ), REQUEST_READ_EXTERNAL
                         )
                     } else {

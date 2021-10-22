@@ -9,8 +9,10 @@ import android.content.Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
 import android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -69,6 +71,29 @@ class EditRoomFragment : Fragment() {
                 }
             }
         }
+        viewModel.openPermissionSettings.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val builder = AlertDialog.Builder(requireContext())
+                    builder.setMessage("Для доступа к фото измените разрешения")
+                    builder.setPositiveButton("Изменить"){dialogInterface, which ->
+                        Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:${requireActivity().packageName}")).apply {
+                            addCategory(Intent.CATEGORY_DEFAULT)
+                            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            startActivity(this)
+                        }
+                        dialogInterface.dismiss()
+                    }
+                    builder.setNegativeButton("Отмена"){dialogInterface, which ->
+                        dialogInterface.dismiss()
+                    }
+                    val alertDialog: AlertDialog = builder.create()
+                    alertDialog.setCancelable(false)
+                    alertDialog.show()
+                }
+            }
+        }
+
         viewModel.getFioOwnerError().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
@@ -272,6 +297,7 @@ class EditRoomFragment : Fragment() {
                         requestPermissions(
                             arrayOf(
                                 Manifest.permission.ACCESS_MEDIA_LOCATION,
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
                             ), REQUEST_READ_EXTERNAL
                         )
                     } else {
@@ -453,6 +479,7 @@ class EditRoomFragment : Fragment() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        Log.d("EditRoom","req code ${requestCode} permis ${permissions} reslt ${grantResults}")
         when(requestCode) {
             REQUEST_READ_EXTERNAL -> {
                 viewModel.haveReadExternalPermission(grantResults[0] == PackageManager.PERMISSION_GRANTED)

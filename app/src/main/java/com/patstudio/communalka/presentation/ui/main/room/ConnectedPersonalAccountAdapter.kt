@@ -33,10 +33,12 @@ class ConnectedPersonalAccountAdapter(private val accountList: List<PersonalAcco
             itemBinding.account = personalAccount.account
             itemBinding.viewModel = viewModel
             itemBinding.position = position
-//            if (personalAccount.account.message.length > 0 )
-//                itemBinding.accountMessage.visible(false)
-//            else
-//                itemBinding.accountMessage.gone(false)
+            itemBinding.accountMessage.gone(false)
+            personalAccount.account?.message?.let {
+                if (it.length > 0) {
+                    itemBinding.accountMessage.visible(false)
+                }
+            }
         }
     }
 }

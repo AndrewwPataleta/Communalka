@@ -2,13 +2,16 @@ package com.patstudio.communalka.presentation.ui.main.room
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
 import android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -234,6 +237,7 @@ class AddRoomFragment : Fragment() {
                         requestPermissions(
                             arrayOf(
                                 Manifest.permission.ACCESS_MEDIA_LOCATION,
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
                             ), REQUEST_READ_EXTERNAL
                         )
                     } else {
@@ -279,6 +283,28 @@ class AddRoomFragment : Fragment() {
                     binding.attachRoomImage.setImageURI(it)
                     Log.d("AddRoomFragment", "URI "+it.toString())
                   //  Glide.with(requireActivity()).load(it).into(binding.attachRoomImage);
+                }
+            }
+        }
+        viewModel.openPermissionSettings.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val builder = AlertDialog.Builder(requireContext())
+                    builder.setMessage("Для доступа к фото измените разрешения")
+                    builder.setPositiveButton("Изменить"){dialogInterface, which ->
+                        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:${requireActivity().packageName}")).apply {
+                            addCategory(Intent.CATEGORY_DEFAULT)
+                            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            startActivity(this)
+                        }
+                        dialogInterface.dismiss()
+                    }
+                    builder.setNegativeButton("Отмена"){dialogInterface, which ->
+                        dialogInterface.dismiss()
+                    }
+                    val alertDialog: AlertDialog = builder.create()
+                    alertDialog.setCancelable(false)
+                    alertDialog.show()
                 }
             }
         }

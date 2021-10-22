@@ -2,6 +2,7 @@ package com.patstudio.communalka.presentation.ui.main.room
 
 import android.net.Uri
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -41,6 +42,8 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
     private val progressSuggestions: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val listSuggestions: MutableLiveData<Event<Pair<Boolean,List<Suggestion>>>> = MutableLiveData()
     private val imagesMutable: MutableLiveData<Event<HashMap<Int, String>>> = MutableLiveData()
+    private var _openPermissionSettings: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val openPermissionSettings: LiveData<Event<Boolean>> = _openPermissionSettings
     private var roomName: String = ""
     private var addressRoom: String = ""
     private var fioOwner: String = ""
@@ -369,7 +372,10 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
     }
 
     fun haveReadExternalPermission(havePermission: Boolean) {
-        if (havePermission)
+        if (havePermission) {
             openExternalPermission.postValue(Event(true))
+        } else {
+            _openPermissionSettings.postValue(Event(true))
+        }
     }
 }
