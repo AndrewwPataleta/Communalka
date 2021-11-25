@@ -63,4 +63,8 @@ interface UserService {
 
     @GET("account/{id}/meter/")
     suspend fun getListMeter(@Path("id") id: String): APIResponse<JsonElement>
+
+    @GET("services/")
+    suspend fun getServices(): APIResponse<JsonElement>
+
 }

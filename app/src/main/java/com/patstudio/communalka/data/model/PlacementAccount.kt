@@ -8,6 +8,8 @@ data class  PlacementAccount (
     val id: String,
     val consumer: String,
     val service: String,
+    val serviceName: String,
+    val debtOfMoney: Float = 5100.5f,
     val supplierName: String,
     val placement: String,
     val number: String,

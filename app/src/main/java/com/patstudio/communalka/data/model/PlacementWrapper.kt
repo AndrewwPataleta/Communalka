@@ -5,5 +5,5 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class PlacementWrapper (
-    val placements: List<Placement>,
+    val placements: ArrayList<Placement>,
 ) : Parcelable

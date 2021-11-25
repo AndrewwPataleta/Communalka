@@ -25,7 +25,7 @@ class DaDataRepository(
 ) {
 
     fun setCurrentDaDataToken(token: String) {
-        Log.d("DaDataRepository", "save dadata token "+token)
+
         sharedPreferences.edit().putString("currentDaDataToken", token).apply()
     }
 

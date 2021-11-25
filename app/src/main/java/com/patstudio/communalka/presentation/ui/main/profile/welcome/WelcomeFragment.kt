@@ -265,6 +265,16 @@ class WelcomeFragment : Fragment() {
                 }
             }
         }
+
+        viewModel.placementForPayment.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val bundle = bundleOf("placement" to it)
+                    findNavController().navigate(R.id.toPlacementPayment, bundle)
+                }
+            }
+        }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

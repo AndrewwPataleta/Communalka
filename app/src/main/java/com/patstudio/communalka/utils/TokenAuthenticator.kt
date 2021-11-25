@@ -32,15 +32,56 @@ class TokenAuthenticator(private val sharedPreferences: SharedPreferences): Auth
     val service = retrofit.create(UserService::class.java)
 
     override fun authenticate(route: Route?, response: Response): Request? {
-        Log.d("TokenAuthenticator", "response "+response.request().toString())
-
-        val refreshToken = sharedPreferences.getString("currentRefreshToken", "")
-        val updatedToken = getNewToken(refreshToken!!)
-        return updatedToken?.let {
-            Log.d("TokenAuthenticator ", "new token " + updatedToken)
-            response.request().newBuilder().header("Authorization", "Bearer " + it.toString())
-                .build()
+        return if (isRequestRequiresAuth(response)) {
+            val request = response.request()
+            authenticateRequestUsingFreshAccessToken(request, retryCount(request) + 1)
+        } else {
+            Log.d("TokenAuthenticator", "null return")
+            null
         }
+    }
+
+    private fun retryCount(request: Request): Int =
+        request.header("RetryCount")?.toInt() ?: 0
+
+    @Synchronized
+    private fun authenticateRequestUsingFreshAccessToken(
+        request: Request,
+        retryCount: Int
+    ): Request? {
+        if (retryCount > 2) return null
+
+        sharedPreferences.getString("currentRefreshToken", "")?.let { lastSavedAccessToken ->
+
+            val resp = service.refreshToken(sharedPreferences.getString("currentRefreshToken", "")!!).execute()
+
+            if (resp.isSuccessful) {
+
+                val tokens = resp?.body()?.data?.asJsonObject?.get("tokens")
+
+                sharedPreferences.edit().putString("currentToken", tokens?.asJsonObject?.get("access")!!.asString).apply()
+                sharedPreferences.edit().putString("currentRefreshToken", tokens?.asJsonObject?.get("refresh")!!.asString).apply()
+                if (tokens?.asJsonObject?.get("access")!!.asString != lastSavedAccessToken) {
+                    return getNewRequest(request, retryCount, lastSavedAccessToken)
+                }
+            } else {
+                return null
+            }
+        }
+
+        return null
+    }
+
+    private fun getNewRequest(request: Request, retryCount: Int, accessToken: String): Request {
+        return request.newBuilder()
+            .header("Authorization", "Bearer " + accessToken)
+            .header("RetryCount", "$retryCount")
+            .build()
+    }
+
+    private fun isRequestRequiresAuth(response: Response): Boolean {
+        val header = response.request().header("Authorization")
+        return header != null && header.startsWith("Bearer ")
     }
 
     private fun getNewToken( refreshToken: String): String? {

@@ -4,9 +4,9 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class PersonalAccount (
+data class Service (
    val id: String,
-   val name: String,
+   var name: String,
    val account: Account,
-
+   var selected: Boolean = false
 ) : Parcelable

@@ -20,14 +20,14 @@ import kotlinx.coroutines.launch
 class CreatePersonalAccountViewModel(private val userRepository: UserRepository, private val roomRepository: RoomRepository, private val dispatcherProvider: DispatcherProvider, private val gson: Gson): ViewModel() {
 
     private lateinit var user: User
-    private lateinit var currentPersonalAccount: PersonalAccount
+    private lateinit var currentService: Service
     private lateinit var suppliers: ArrayList<Supplier>
     private lateinit var filtred: ArrayList<Supplier>
     private lateinit var currentPlacement: Placement
     private  var personalCounters: ArrayList<PersonalCounter> = java.util.ArrayList()
     private  var personalNumberError:  MutableLiveData<Event<String>> = MutableLiveData()
     private val progressConnectPersonalNumber: MutableLiveData<Event<Boolean>> = MutableLiveData()
-    private val personalAccount: MutableLiveData<Event<PersonalAccount>> = MutableLiveData()
+    private val service: MutableLiveData<Event<Service>> = MutableLiveData()
     private val supplierList: MutableLiveData<Event<List<Supplier>>> = MutableLiveData()
     private var personalCounter: MutableLiveData<Event<List<PersonalCounter>>> = MutableLiveData()
 
@@ -48,7 +48,7 @@ class CreatePersonalAccountViewModel(private val userRepository: UserRepository,
     private fun getListPersonalAccounts() {
         viewModelScope.launch(dispatcherProvider.io) {
 
-            userRepository.getSuppliers(currentPersonalAccount.id)
+            userRepository.getSuppliers(currentService.id)
                 .catch { it.printStackTrace() }
                 .collect {
                     when (it) {
@@ -60,7 +60,7 @@ class CreatePersonalAccountViewModel(private val userRepository: UserRepository,
                             var filtred: ArrayList<Supplier> = ArrayList()
 
                                 suppliers.map {
-                                    if (it.service.compareTo(currentPersonalAccount.id) == 0)
+                                    if (it.service.compareTo(currentService.id) == 0)
                                         filtred.add(it)
                                 }
                             suppliers = ArrayList()
@@ -80,7 +80,7 @@ class CreatePersonalAccountViewModel(private val userRepository: UserRepository,
                     }
 
                 }
-            personalAccount.postValue(Event(currentPersonalAccount))
+            service.postValue(Event(currentService))
         }
     }
 
@@ -126,7 +126,7 @@ class CreatePersonalAccountViewModel(private val userRepository: UserRepository,
         if (validate()) {
             viewModelScope.launch(dispatcherProvider.io) {
                 userRepository.createPersonalAccount(personalNumber,user.name,selectedSupplier.id,
-                    currentPersonalAccount.id, currentPlacement.id)
+                    currentService.id, currentPlacement.id)
                     .onStart { progressConnectPersonalNumber.postValue(Event(true)) }
                     .catch { it.printStackTrace() }
                     .collect {
@@ -138,9 +138,9 @@ class CreatePersonalAccountViewModel(private val userRepository: UserRepository,
                                     if (it) {
 
                                         if (personalCounters.size > 0) {
-                                            createMeter(personalCounters.removeLast(),account.id, currentPersonalAccount.name)
+                                            createMeter(personalCounters.removeLast(),account.id, currentService.name)
                                         } else {
-                                            openPersonalAccountsPage.postValue(Event(Pair(currentPlacement, currentPersonalAccount.name)))
+                                            openPersonalAccountsPage.postValue(Event(Pair(currentPlacement, currentService.name)))
                                         }
                                     } else if (!it && account.message.isNotEmpty()) {
                                         if (personalCounters.size > 0) {
@@ -183,8 +183,8 @@ class CreatePersonalAccountViewModel(private val userRepository: UserRepository,
         return isValidate
     }
 
-    fun getPersonalAccount(): MutableLiveData<Event<PersonalAccount>> {
-        return personalAccount
+    fun getPersonalAccount(): MutableLiveData<Event<Service>> {
+        return service
     }
 
     fun getSupplierList(): MutableLiveData<Event<List<Supplier>>> {
@@ -215,8 +215,8 @@ class CreatePersonalAccountViewModel(private val userRepository: UserRepository,
         }
     }
 
-    public fun setPersonalAccount(personalAccount: PersonalAccount) {
-        currentPersonalAccount = personalAccount;
+    public fun setPersonalAccount(service: Service) {
+        currentService = service;
     }
 
 

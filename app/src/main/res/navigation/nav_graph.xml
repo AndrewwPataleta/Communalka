@@ -28,6 +28,10 @@
         <action
             android:id="@+id/toRegistration"
             app:destination="@id/Registration" />
+
+        <action
+            android:id="@+id/toPlacementPayment"
+            app:destination="@id/PaymentPlacement" />
         <action
             android:id="@+id/toEditPlacement"
             app:destination="@id/EditPlacement" />
@@ -55,6 +59,14 @@
             android:id="@+id/toTransmissionReadingCounter"
             app:destination="@id/TransmissionReadingCounter"/>
     </fragment>
+
+    <fragment
+        android:id="@+id/FilterOrderFragment"
+        android:name="com.patstudio.communalka.presentation.ui.main.payment.FilterOrderFragment"
+        android:label="Фильтр"
+        tools:layout="@layout/fragment_filter_payments">
+    </fragment>
+
 
     <fragment
         android:id="@+id/PersonalAccountPlacement"
@@ -174,6 +186,24 @@
         android:name="com.patstudio.communalka.presentation.ui.main.profile.welcome.RequestFragment"
         android:label="Заявки"
         tools:layout="@layout/fragment_request">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/Payments"
+        android:name="com.patstudio.communalka.presentation.ui.main.payment.PaymentsFragment"
+        android:label="Оплаты"
+        tools:layout="@layout/fragment_payments">
+        <action
+            android:id="@+id/toFilter"
+            app:destination="@id/FilterOrderFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/PaymentPlacement"
+        android:name="com.patstudio.communalka.presentation.ui.main.payment.PaymentPlacementFragment"
+        android:label="Оплата услуг"
+        tools:layout="@layout/fragment_payment_placement">
 
     </fragment>
 

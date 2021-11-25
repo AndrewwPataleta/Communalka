@@ -10,6 +10,7 @@ import com.patstudio.communalka.di.repositoryModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.logger.Level
+import ru.tinkoff.acquiring.sdk.AcquiringSdk
 
 
 class CommunalkaApp: Application() {
@@ -23,6 +24,8 @@ class CommunalkaApp: Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+        AcquiringSdk.isDeveloperMode = true
+        AcquiringSdk.isDebug = true
         startKoin()
         AppCenter.start(
             this, "c5f90f73-8481-41e1-bfdf-64e512963f54",

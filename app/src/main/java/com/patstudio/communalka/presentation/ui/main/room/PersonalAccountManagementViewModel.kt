@@ -1,7 +1,5 @@
 package com.patstudio.communalka.presentation.ui.main.room
 
-import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,27 +9,21 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.*
-import com.patstudio.communalka.data.model.auth.ConfirmSmsWrapper
-import com.patstudio.communalka.data.repository.premises.DaDataRepository
 import com.patstudio.communalka.data.repository.premises.RoomRepository
 import com.patstudio.communalka.data.repository.user.UserRepository
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class PersonalAccountManagementViewModel(private val userRepository: UserRepository, private val roomRepository: RoomRepository,  private val dispatcherProvider: DispatcherProvider, private val gson: Gson): ViewModel() {
 
     private lateinit var user: User
     private lateinit var currentPlacement: Placement
-    private val unconnectedPersonalAccount: MutableLiveData<Event<List<PersonalAccount>>> = MutableLiveData()
-    private val connectedPersonalAccount: MutableLiveData<Event<List<PersonalAccount>>> = MutableLiveData()
-    private val personalAccountForConnect: MutableLiveData<Event<Pair<PersonalAccount,Placement>>> = MutableLiveData()
-    private var unconnectedPersonalAccountList: ArrayList<PersonalAccount> = ArrayList()
-    private var connectedPersonalAccountList: ArrayList<PersonalAccount> = ArrayList()
+    private val unconnectedService: MutableLiveData<Event<List<Service>>> = MutableLiveData()
+    private val connectedService: MutableLiveData<Event<List<Service>>> = MutableLiveData()
+    private val serviceForConnect: MutableLiveData<Event<Pair<Service,Placement>>> = MutableLiveData()
+    private var unconnectedServiceList: ArrayList<Service> = ArrayList()
+    private var connectedServiceList: ArrayList<Service> = ArrayList()
 
     private var _subTitlePlacement: MutableLiveData<Event<String>> = MutableLiveData()
     val subTitlePlacement: LiveData<Event<String>> = _subTitlePlacement
@@ -49,21 +41,21 @@ class PersonalAccountManagementViewModel(private val userRepository: UserReposit
                 .collect {
                     when (it) {
                         is Result.Success -> {
-                            unconnectedPersonalAccountList = ArrayList()
-                            connectedPersonalAccountList = ArrayList()
-                            val turnsType = object : TypeToken<List<PersonalAccount>>() {}.type
-                            var personalAccounts: List<PersonalAccount> = gson.fromJson(it.data.data!!.asJsonObject.get("services"), turnsType)
-                            personalAccounts.map {
+                            unconnectedServiceList = ArrayList()
+                            connectedServiceList = ArrayList()
+                            val turnsType = object : TypeToken<List<Service>>() {}.type
+                            var services: List<Service> = gson.fromJson(it.data.data!!.asJsonObject.get("services"), turnsType)
+                            services.map {
                                 if (it.account != null) {
-                                    connectedPersonalAccountList.add(it)
+                                    connectedServiceList.add(it)
                                 } else {
-                                    unconnectedPersonalAccountList.add(it)
+                                    unconnectedServiceList.add(it)
                                 }
                             }
-                            if (unconnectedPersonalAccountList.size > 0)
-                                unconnectedPersonalAccount.postValue(Event(unconnectedPersonalAccountList))
-                            if (connectedPersonalAccountList.size > 0)
-                                connectedPersonalAccount.postValue(Event(connectedPersonalAccountList))
+                            if (unconnectedServiceList.size > 0)
+                                unconnectedService.postValue(Event(unconnectedServiceList))
+                            if (connectedServiceList.size > 0)
+                                connectedService.postValue(Event(connectedServiceList))
                         }
                         is Result.Error -> {
 
@@ -85,20 +77,20 @@ class PersonalAccountManagementViewModel(private val userRepository: UserReposit
         }
     }
 
-    fun selectConnectPersonalAccount(model: PersonalAccount) {
+    fun selectConnectPersonalAccount(model: Service) {
 
-        personalAccountForConnect.postValue(Event(Pair(model,currentPlacement)))
+        serviceForConnect.postValue(Event(Pair(model,currentPlacement)))
     }
 
-    fun getUnconnectedPersonalAccount(): MutableLiveData<Event<List<PersonalAccount>>> {
-        return unconnectedPersonalAccount
+    fun getUnconnectedPersonalAccount(): MutableLiveData<Event<List<Service>>> {
+        return unconnectedService
     }
 
-    fun getConnectedPersonalAccount(): MutableLiveData<Event<List<PersonalAccount>>> {
-        return connectedPersonalAccount
+    fun getConnectedPersonalAccount(): MutableLiveData<Event<List<Service>>> {
+        return connectedService
     }
 
-    fun getPersonalAccountForConnect(): MutableLiveData<Event<Pair<PersonalAccount,Placement>>> {
-        return personalAccountForConnect
+    fun getPersonalAccountForConnect(): MutableLiveData<Event<Pair<Service,Placement>>> {
+        return serviceForConnect
     }
 }

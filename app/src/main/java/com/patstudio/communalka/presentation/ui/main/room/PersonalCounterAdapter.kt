@@ -4,11 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.patstudio.communalka.data.model.PersonalAccount
 import com.patstudio.communalka.data.model.PersonalCounter
 import com.patstudio.communalka.databinding.ItemCreatePersonalCounterBinding
-import com.patstudio.communalka.databinding.ItemPersonalCounterBinding
-import com.patstudio.communalka.databinding.ItemUnconnectedPersonalAccountBinding
 
 class PersonalCounterAdapter(private val personalCounters: List<PersonalCounter>, val context: Context, val viewModel: CreatePersonalAccountViewModel) : RecyclerView.Adapter<PersonalCounterAdapter.PersonalCounterHolder>() {
 

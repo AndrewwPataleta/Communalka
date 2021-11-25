@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 data class Placement (
     val id: String,
     val consumer: String,
-    val name: String,
+    var name: String,
     val fio: String,
     val total_area: Double,
     val living_area: Double,
@@ -16,5 +16,7 @@ data class Placement (
     var path: String,
     val createdDate: String,
     var isOpened: Boolean = false,
-    var accounts: ArrayList<PlacementAccount>
+    var selected: Boolean = false,
+    var accounts: ArrayList<PlacementAccount>,
+    var invoices: ArrayList<Invoice>? = null
 ) : Parcelable

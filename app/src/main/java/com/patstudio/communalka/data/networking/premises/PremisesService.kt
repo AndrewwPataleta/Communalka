@@ -14,17 +14,27 @@ interface PremisesService {
     @GET("placement/")
     suspend fun getPremises(): APIResponse<JsonElement>
 
+
+
     @POST("placement/")
     suspend fun addPlacement(@Body room: Room): APIResponse<JsonElement>
 
     @PUT("placement/{id}/")
     suspend fun updatePlacement(@Body room: JsonObject, @Path("id") id: String): APIResponse<JsonElement>
 
+    @GET("placement/{id}/invoices/")
+    suspend fun getPlacementInvoice(@Path("id") id: String): APIResponse<JsonElement>
+
     @GET("placement/{id}/account/")
     suspend fun getListAccountForPlacement(@Path("id") id: String): APIResponse<JsonElement>
 
     @GET("placement/{id}/services/")
     suspend fun getServicesForPlacement(@Path("id") id: String): APIResponse<JsonElement>
+
+
+
+    @GET("order/")
+    suspend fun getListOrder(@Query("date__gte") dateGte: String?, @Query("date__lte") dateLte: String?, @Query("payments__account__placements") placement: String?): APIResponse<JsonElement>
 
     @GET("api_keys/dadata/")
     suspend fun getDaDataApiKey(): APIResponse<JsonElement>

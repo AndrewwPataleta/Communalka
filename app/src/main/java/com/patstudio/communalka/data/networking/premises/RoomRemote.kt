@@ -5,6 +5,7 @@ import com.patstudio.communalka.data.model.APIResponse
 import com.patstudio.communalka.data.model.Placement
 import com.patstudio.communalka.data.model.Premises
 import com.patstudio.communalka.data.model.Room
+import retrofit2.http.Query
 
 interface RoomRemote {
 
@@ -12,9 +13,13 @@ interface RoomRemote {
 
     suspend fun getRooms(): APIResponse<JsonElement>
 
+    suspend fun getPlacementInvoice(placement: Placement): APIResponse<JsonElement>
+
     suspend fun sendRoom(room: Room): APIResponse<JsonElement>
 
     suspend fun updateRoom(room: Room): APIResponse<JsonElement>
+
+    suspend fun getOrderList(dateGte: String?,  dateLte: String?, placement: String?): APIResponse<JsonElement>
 
     suspend fun getActualApiKey(): APIResponse<JsonElement>
 

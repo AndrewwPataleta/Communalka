@@ -38,6 +38,8 @@ interface UserRemote {
 
     suspend fun getMeters(accountId: String): APIResponse<JsonElement>
 
+    suspend fun getServices(): APIResponse<JsonElement>
+
     suspend fun removeMeter(meterId: String): Any
 
 

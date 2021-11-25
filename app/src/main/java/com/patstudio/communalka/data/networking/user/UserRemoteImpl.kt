@@ -130,6 +130,10 @@ class UserRemoteImpl(
         userService.getListMeter(accountId)
     }
 
+    override suspend fun getServices() = withContext(dispatcherProvider.default)  {
+        userService.getServices()
+    }
+
     override suspend fun removeMeter(meterId: String) = withContext(dispatcherProvider.default)  {
         userService.removeMeter(meterId)
     }

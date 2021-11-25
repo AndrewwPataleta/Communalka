@@ -4,10 +4,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.patstudio.communalka.data.model.PersonalAccount
+import com.patstudio.communalka.data.model.Service
 import com.patstudio.communalka.databinding.ItemUnconnectedPersonalAccountBinding
 
-class UnconnectedPersonalAccountAdapter(private val accountList: List<PersonalAccount>, val context: Context, val viewModel: PersonalAccountManagementViewModel) : RecyclerView.Adapter<UnconnectedPersonalAccountAdapter.UnconnectedPersonalAccountHolder>() {
+class UnconnectedPersonalAccountAdapter(private val accountList: List<Service>, val context: Context, val viewModel: PersonalAccountManagementViewModel) : RecyclerView.Adapter<UnconnectedPersonalAccountAdapter.UnconnectedPersonalAccountHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UnconnectedPersonalAccountHolder {
 
@@ -17,17 +17,17 @@ class UnconnectedPersonalAccountAdapter(private val accountList: List<PersonalAc
     }
 
     override fun onBindViewHolder(holder: UnconnectedPersonalAccountHolder, position: Int) {
-        val personalAccount: PersonalAccount = accountList[position]
-        holder.bind(personalAccount, position)
+        val service: Service = accountList[position]
+        holder.bind(service, position)
     }
 
     override fun getItemCount(): Int = accountList.size
 
     class UnconnectedPersonalAccountHolder(private val itemBinding: ItemUnconnectedPersonalAccountBinding, val viewModel: PersonalAccountManagementViewModel) :
         RecyclerView.ViewHolder(itemBinding.root) {
-        fun bind(personalAccount: PersonalAccount, position: Int) {
+        fun bind(service: Service, position: Int) {
 
-            itemBinding.model = personalAccount
+            itemBinding.model = service
             itemBinding.viewModel = viewModel
             itemBinding.position = position
 

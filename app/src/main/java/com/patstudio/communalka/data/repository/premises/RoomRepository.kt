@@ -55,6 +55,7 @@ class RoomRepository(
         Log.d("RoomRepository", "sub send ")
         return  roomRemote.updateRoom(room)
     }
+
     suspend fun getUserPremises(): Flow<Result<APIResponse<JsonElement>>> = flow {
         try {
             if (connectivity.hasNetworkAccess()) {
@@ -78,7 +79,54 @@ class RoomRepository(
         }
     }
 
+    suspend fun getPlacementInvoice(placement: Placement): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val premises = roomRemote.getPlacementInvoice(placement)
+                emit(Result.success(premises))
+            }
+        } catch (throwable: Exception) {
+            Log.d("PremisesRepository", (throwable is HttpException).toString())
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    Log.d("PremisesRepository", errorResponse.toString())
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
 
+
+
+    suspend fun getPaymentsHistory(dateGte: String?,  dateLte: String?, placement: String?): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+
+                val premises = roomRemote.getOrderList(dateGte, dateLte, placement)
+                emit(Result.success(premises))
+            }
+        } catch (throwable: Exception) {
+            Log.d("PremisesRepository", (throwable is HttpException).toString())
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    Log.d("PremisesRepository", errorResponse.toString())
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
 
 
     suspend fun getPlacementPersonalAccount(placement: Placement): Flow<Result<APIResponse<JsonElement>>> = flow {

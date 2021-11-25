@@ -1,7 +1,5 @@
 package com.patstudio.communalka.presentation.ui.main.room
 
-import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,32 +9,24 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.*
-import com.patstudio.communalka.data.model.auth.ConfirmFormError
-import com.patstudio.communalka.data.model.auth.ConfirmSmsWrapper
-import com.patstudio.communalka.data.model.auth.LoginFormError
-import com.patstudio.communalka.data.repository.premises.DaDataRepository
 import com.patstudio.communalka.data.repository.premises.RoomRepository
 import com.patstudio.communalka.data.repository.user.UserRepository
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class EditPersonalAccountViewModel(private val userRepository: UserRepository, private val roomRepository: RoomRepository, private val dispatcherProvider: DispatcherProvider, private val gson: Gson): ViewModel() {
 
     private lateinit var user: User
-    private lateinit var currentPersonalAccount: PersonalAccount
+    private lateinit var currentService: Service
     private lateinit var suppliers: List<Supplier>
     private lateinit var currentPlacement: Placement
     private  var personalCounters: ArrayList<PersonalCounter> = java.util.ArrayList()
     private  var personalNumberError:  MutableLiveData<Event<String>> = MutableLiveData()
     private val progressConnectPersonalNumber: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val openPersonalAccountsPage: MutableLiveData<Event<Placement>> = MutableLiveData()
-    private val removePersonalAccountDialog: MutableLiveData<Event<PersonalAccount>> = MutableLiveData()
-    private val personalAccount: MutableLiveData<Event<PersonalAccount>> = MutableLiveData()
+    private val removeServiceDialog: MutableLiveData<Event<Service>> = MutableLiveData()
+    private val service: MutableLiveData<Event<Service>> = MutableLiveData()
     private val supplierList: MutableLiveData<Event<List<Supplier>>> = MutableLiveData()
     private var personalCounter: MutableLiveData<Event<List<PersonalCounter>>> = MutableLiveData()
     private lateinit var selectedSupplier: Supplier
@@ -52,7 +42,7 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
     private fun getListPersonalAccounts() {
         viewModelScope.launch(dispatcherProvider.io) {
 
-            userRepository.getMeters(currentPersonalAccount.account.id)
+            userRepository.getMeters(currentService.account.id)
                 .catch { it.printStackTrace() }
                 .collect {
                     when (it) {
@@ -79,7 +69,7 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
                             val turnsType = object : TypeToken<List<Supplier>>() {}.type
                             var suppliers: ArrayList<Supplier> = gson.fromJson(it.data.data!!.asJsonObject.get("suppliers"), turnsType)
                             suppliers.map {
-                                if (currentPersonalAccount.account.supplier!!.compareTo(it.id) == 0) {
+                                if (currentService.account.supplier!!.compareTo(it.id) == 0) {
                                     _supplierName.postValue(it.name)
                                 }
                             }
@@ -93,7 +83,7 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
                     }
                 }
 
-            personalAccount.postValue(Event(currentPersonalAccount))
+            service.postValue(Event(currentService))
         }
     }
 
@@ -121,7 +111,7 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
     }
 
     fun removeCurrentPersonalAccount() {
-        removePersonalAccountDialog.postValue(Event(currentPersonalAccount))
+        removeServiceDialog.postValue(Event(currentService))
     }
 
     private fun createMeter(personalCounter: PersonalCounter, accountId: String,  serviceName: String?) {
@@ -129,9 +119,9 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
             if (personalCounters.size > 0) {
                 val personCounter = personalCounters.removeLast()
                 if (personCounter.id == null) {
-                    createMeter(personCounter, currentPersonalAccount.account.id,serviceName)
+                    createMeter(personCounter, currentService.account.id,serviceName)
                 } else {
-                    editMeter(personCounter, currentPersonalAccount.account.id, serviceName)
+                    editMeter(personCounter, currentService.account.id, serviceName)
                 }
             } else {
                 openPersonalAccountsPage.postValue(Event(currentPlacement))
@@ -146,9 +136,9 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
                                 if (personalCounters.size > 0) {
                                     val personCounter = personalCounters.removeLast()
                                     if (personCounter.id == null) {
-                                        createMeter(personCounter, currentPersonalAccount.account.id, serviceName)
+                                        createMeter(personCounter, currentService.account.id, serviceName)
                                     } else {
-                                        editMeter(personCounter, currentPersonalAccount.account.id, serviceName)
+                                        editMeter(personCounter, currentService.account.id, serviceName)
                                     }
                                 } else {
                                     openPersonalAccountsPage.postValue(Event(currentPlacement))
@@ -167,9 +157,9 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
             if (personalCounters.size > 0) {
                 val personCounter = personalCounters.removeLast()
                 if (personCounter.id == null) {
-                    createMeter(personCounter, currentPersonalAccount.account.id,serviceName)
+                    createMeter(personCounter, currentService.account.id,serviceName)
                 } else {
-                    editMeter(personCounter, currentPersonalAccount.account.id,serviceName)
+                    editMeter(personCounter, currentService.account.id,serviceName)
                 }
             } else {
                 openPersonalAccountsPage.postValue(Event(currentPlacement))
@@ -188,9 +178,9 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
                                 if (personalCounters.size > 0) {
                                     val personCounter = personalCounters.removeLast()
                                     if (personCounter.id == null) {
-                                        createMeter(personCounter, currentPersonalAccount.account.id,serviceName)
+                                        createMeter(personCounter, currentService.account.id,serviceName)
                                     } else {
-                                        editMeter(personCounter, currentPersonalAccount.account.id,serviceName )
+                                        editMeter(personCounter, currentService.account.id,serviceName )
                                     }
                                 } else {
                                     openPersonalAccountsPage.postValue(Event(currentPlacement))
@@ -209,9 +199,9 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
             viewModelScope.launch(dispatcherProvider.io) {
                 val personCounter = personalCounters.removeLast()
                     if (personCounter.id == null) {
-                        createMeter(personCounter, currentPersonalAccount.account.id, "")
+                        createMeter(personCounter, currentService.account.id, "")
                     } else {
-                        editMeter(personCounter, currentPersonalAccount.account.id, "")
+                        editMeter(personCounter, currentService.account.id, "")
                     }
                 }
             } else {
@@ -230,7 +220,7 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
 
     fun confirmRemovePersonalAccount() {
         viewModelScope.launch(dispatcherProvider.io) {
-            userRepository.deleteAccount(currentPersonalAccount.account.id)
+            userRepository.deleteAccount(currentService.account.id)
                 .catch { it.printStackTrace() }
                 .collect {
                     when (it) {
@@ -246,8 +236,8 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
         }
     }
 
-    fun getPersonalAccount(): MutableLiveData<Event<PersonalAccount>> {
-        return personalAccount
+    fun getPersonalAccount(): MutableLiveData<Event<Service>> {
+        return service
     }
 
     fun getOpenPersonalAccountsPage(): MutableLiveData<Event<Placement>> {
@@ -274,8 +264,8 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
         return progressConnectPersonalNumber
     }
 
-    fun getRemovePersonalAccountDialog(): MutableLiveData<Event<PersonalAccount>> {
-        return removePersonalAccountDialog
+    fun getRemovePersonalAccountDialog(): MutableLiveData<Event<Service>> {
+        return removeServiceDialog
     }
 
     public fun setCurrentPlacement(placement: Placement) {
@@ -286,8 +276,8 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
         }
     }
 
-    public fun setPersonalAccount(personalAccount: PersonalAccount) {
-        currentPersonalAccount = personalAccount;
+    public fun setPersonalAccount(service: Service) {
+        currentService = service;
     }
 
 

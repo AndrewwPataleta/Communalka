@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.imagegallery.contextprovider.DispatcherProvider
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.*
 import com.patstudio.communalka.data.repository.premises.RoomRepository
@@ -26,18 +27,18 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
     private val updateByPosition: MutableLiveData<Event<Int>> = MutableLiveData()
     private val editPlacementDialog: MutableLiveData<Event<Placement>> = MutableLiveData()
     private val editPlacement: MutableLiveData<Event<Placement>> = MutableLiveData()
-    
     private val selectPersonalAccountPlacement: MutableLiveData<Event<Placement>> = MutableLiveData()
-
     private var _transmissionReadingPlacement: MutableLiveData<Event<Placement>> = MutableLiveData()
     val transmissionReadingPlacement: LiveData<Event<Placement>> = _transmissionReadingPlacement
-
     private var _loadingPlacement: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val loadingPlacement: LiveData<Event<Boolean>> = _loadingPlacement
-
     private val placementListMutable: MutableLiveData<Event<Pair<List<Placement>, Boolean>>> = MutableLiveData()
     private var needEnterPin: Boolean = true
     private var typeAuthChanged: Boolean = false
+
+    private var _placementForPayment: MutableLiveData<Event<Placement>> = MutableLiveData()
+    val placementForPayment: LiveData<Event<Placement>> = _placementForPayment
+
 
     private lateinit var userPlacement: List<Placement>
 
@@ -62,6 +63,25 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
         }
     }
 
+    private suspend fun updateInvoicesForPlacement(placements: ArrayList<Placement>, pos: Int) {
+        if (pos <= placements.size-1) {
+            var placement = placements.get(pos)
+            roomRepository.getPlacementInvoice(placement)
+                .collect {
+                    when (it) {
+                        is Result.Success -> {
+                            val turnsType = object : TypeToken<ArrayList<Invoice>>() {}.type
+                            var invoices: ArrayList<Invoice> = gson.fromJson(it.data.data, turnsType)
+                            placement.invoices = invoices
+                            updateInvoicesForPlacement(placements, pos+1)
+                        }
+                    }
+                }
+        } else {
+            readStoragePermissionMutable.postValue(Event(true))
+        }
+    }
+
     private fun getUserPremises() {
         viewModelScope.launch(dispatcherProvider.io) {
             roomRepository.getUserPremises()
@@ -75,6 +95,7 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
                                 var placementList: PlacementWrapper = gson.fromJson(it.data.data, PlacementWrapper::class.java)
                                 if (placementList.placements.count() > 0) {
                                     var placementLocal = roomRepository.getUserPremises(user!!.id)
+                                    userPlacement = placementList.placements
                                     placementList.placements.map { parent ->
                                         placementLocal.map { child ->
                                             if (parent.id.compareTo(child.id) == 0) {
@@ -83,8 +104,8 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
                                             }
                                         }
                                     }
-                                    userPlacement = placementList.placements
-                                    readStoragePermissionMutable.postValue(Event(true))
+
+                                    updateInvoicesForPlacement(placementList.placements, 0)
                                 } else {
                                     userMutable.postValue(Event(user!!))
                                 }
@@ -97,7 +118,6 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
     }
 
     fun setNeedEnterPin(needPin: Boolean) {
-        Log.d("WelcomeViewModel", "need pin: "+needPin)
         this.typeAuthChanged = true
         this.needEnterPin = needPin
     }
@@ -150,6 +170,10 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
 
     fun selectTransmissionReading(placement: Placement) {
         _transmissionReadingPlacement.postValue(Event(placement))
+    }
+
+    fun selectPayment(placement: Placement) {
+       _placementForPayment.postValue(Event(placement))
     }
     
     fun checkAvailableToOpenAddRoom() {

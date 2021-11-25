@@ -14,6 +14,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 fun CharSequence?.isValidPhoneNumber():Boolean{
@@ -33,6 +35,12 @@ fun Group.setAllOnClickListener(listener: View.OnClickListener?) {
     referencedIds.forEach { id ->
         rootView.findViewById<View>(id).setOnClickListener(listener)
     }
+}
+
+ fun convertLongToTime(time: Long): String {
+    val date = Date(time)
+    val format = SimpleDateFormat("dd.MM.yyyy")
+    return format.format(date)
 }
 
 fun maskEmail(email: String): String {

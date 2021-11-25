@@ -98,7 +98,7 @@
             android:layout_marginTop="16dp"/>
 
         <TextView
-            android:id="@+id/paymentNotFound"
+            android:id="@+id/paymentStatus"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -129,7 +129,7 @@
             android:id="@+id/paymentInfoBarrier"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="paymentButton, paymentNotFound "
+            app:constraint_referenced_ids="paymentButton, paymentStatus "
             app:barrierDirection="bottom"/>
 
         <androidx.appcompat.widget.AppCompatButton

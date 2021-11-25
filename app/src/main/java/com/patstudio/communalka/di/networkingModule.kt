@@ -44,7 +44,7 @@ val networkingModule = module {
            .callTimeout(30, TimeUnit.SECONDS)
            .followRedirects(false)
            .followSslRedirects(false)
-            addInterceptor(AuthInterceptor(get(named("securePrefs"))))
+            addInterceptor(AuthInterceptor(get(named("securePrefs")), get(), get()))
            .authenticator(TokenAuthenticator(get(named("securePrefs"))))
           .addInterceptor(ChuckerInterceptor(get()))
     }.build()

@@ -5,7 +5,7 @@
         android:title="Главная"
         android:icon="@drawable/ic_home"/>
     <item
-        android:id="@+id/payment"
+        android:id="@+id/Payments"
         android:title="Оплаты"
         android:icon="@drawable/ic_payment"/>
     <item

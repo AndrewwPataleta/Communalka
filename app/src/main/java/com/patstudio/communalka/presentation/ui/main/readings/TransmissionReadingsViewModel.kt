@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.imagegallery.contextprovider.DispatcherProvider
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.*
 import com.patstudio.communalka.data.repository.premises.RoomRepository
@@ -20,7 +19,7 @@ import kotlinx.coroutines.launch
 class TransmissionReadingsViewModel(private val userRepository: UserRepository, private val roomRepository: RoomRepository, private val dispatcherProvider: DispatcherProvider, private val gson: Gson): ViewModel() {
 
     private lateinit var user: User
-    private lateinit var currentPersonalAccount: PersonalAccount
+    private lateinit var currentService: Service
     private lateinit var currentPlacementMeter: PlacementMeter
 
     private var _currentPlacement: MutableLiveData<Event<PlacementMeter>> = MutableLiveData()

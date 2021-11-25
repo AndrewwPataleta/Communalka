@@ -24,6 +24,10 @@ class RoomRemoteImpl(
         premisesService.getPremises()
     }
 
+    override suspend fun getPlacementInvoice(placement: Placement)= withContext(dispatcherProvider.io) {
+        premisesService.getPlacementInvoice(placement.id)
+    }
+
     override suspend fun sendRoom(room: Room) = withContext(dispatcherProvider.io) {
         val body = JsonObject()
 
@@ -40,10 +44,15 @@ class RoomRemoteImpl(
         jsonObject.addProperty("address",room.address)
         jsonObject.addProperty("fio",room.fio)
         jsonObject.addProperty("created_date",room.createdDate)
-
-
-
         premisesService.updatePlacement(jsonObject, room.id)
+    }
+
+    override suspend fun getOrderList(
+        dateGte: String?,
+        dateLte: String?,
+        placement: String?
+    ) = withContext(dispatcherProvider.io) {
+        premisesService.getListOrder(dateGte, dateLte, placement)
     }
 
 

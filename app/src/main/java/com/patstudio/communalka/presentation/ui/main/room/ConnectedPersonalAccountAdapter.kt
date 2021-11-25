@@ -4,12 +4,12 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.patstudio.communalka.data.model.PersonalAccount
+import com.patstudio.communalka.data.model.Service
 import com.patstudio.communalka.databinding.ItemConnectedPersonalAccountBinding
 import gone
 import visible
 
-class ConnectedPersonalAccountAdapter(private val accountList: List<PersonalAccount>, val context: Context, val viewModel: PersonalAccountManagementViewModel) : RecyclerView.Adapter<ConnectedPersonalAccountAdapter.ConnectedPersonalAccountHolder>() {
+class ConnectedPersonalAccountAdapter(private val accountList: List<Service>, val context: Context, val viewModel: PersonalAccountManagementViewModel) : RecyclerView.Adapter<ConnectedPersonalAccountAdapter.ConnectedPersonalAccountHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConnectedPersonalAccountHolder {
 
@@ -19,22 +19,22 @@ class ConnectedPersonalAccountAdapter(private val accountList: List<PersonalAcco
     }
 
     override fun onBindViewHolder(holder: ConnectedPersonalAccountHolder, position: Int) {
-        val personalAccount: PersonalAccount = accountList[position]
-        holder.bind(personalAccount, position)
+        val service: Service = accountList[position]
+        holder.bind(service, position)
     }
 
     override fun getItemCount(): Int = accountList.size
 
     class ConnectedPersonalAccountHolder(private val itemBinding: ItemConnectedPersonalAccountBinding, val viewModel: PersonalAccountManagementViewModel) :
         RecyclerView.ViewHolder(itemBinding.root) {
-        fun bind(personalAccount: PersonalAccount, position: Int) {
+        fun bind(service: Service, position: Int) {
 
-            itemBinding.model = personalAccount
-            itemBinding.account = personalAccount.account
+            itemBinding.model = service
+            itemBinding.account = service.account
             itemBinding.viewModel = viewModel
             itemBinding.position = position
             itemBinding.accountMessage.gone(false)
-            personalAccount.account?.message?.let {
+            service.account?.message?.let {
                 if (it.length > 0) {
                     itemBinding.accountMessage.visible(false)
                 }

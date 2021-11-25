@@ -6,7 +6,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
 <data>
     <variable name="viewModel" type="com.patstudio.communalka.presentation.ui.main.room.PersonalAccountManagementViewModel"/>
     <variable name="position" type="Integer"/>
-    <variable name="model" type="com.patstudio.communalka.data.model.PersonalAccount"/>
+    <variable name="model" type="com.patstudio.communalka.data.model.Service"/>
     <variable name="account" type="com.patstudio.communalka.data.model.Account"/>
 </data>
 
