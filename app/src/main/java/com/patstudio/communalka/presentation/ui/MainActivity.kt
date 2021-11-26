@@ -1,5 +1,6 @@
 package com.patstudio.communalka.presentation.ui
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -261,6 +262,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
         initObservers()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d("Result", data.toString())
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -5,6 +5,7 @@ import com.example.imagegallery.contextprovider.DispatcherProvider
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.patstudio.communalka.data.model.APIResponse
+import com.patstudio.communalka.data.model.OrderCreator
 import kotlinx.coroutines.withContext
 
 class UserRemoteImpl(
@@ -50,6 +51,10 @@ class UserRemoteImpl(
         val body = JsonObject()
         body.addProperty("email",email)
         userService.updateEmail(body)
+    }
+
+    override suspend fun createOrder(orderCreator: OrderCreator) = withContext(dispatcherProvider.default){
+        userService.createOrderPayment(orderCreator)
     }
 
     override suspend fun registrationWithCode(

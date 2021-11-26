@@ -1,6 +1,7 @@
 package com.patstudio.communalka.presentation.ui.main.payment
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
@@ -31,7 +32,9 @@ import com.patstudio.communalka.presentation.ui.main.profile.HistoryVersionViewM
 import com.patstudio.communalka.presentation.ui.main.room.PlacementAdapter
 import gone
 import org.koin.android.viewmodel.ext.android.viewModel
+import roundOffTo2DecPlaces
 import ru.tinkoff.acquiring.sdk.TinkoffAcquiring
+import ru.tinkoff.acquiring.sdk.models.Shop
 import ru.tinkoff.acquiring.sdk.models.enums.CheckType
 import ru.tinkoff.acquiring.sdk.models.options.screen.PaymentOptions
 import ru.tinkoff.acquiring.sdk.utils.Money
@@ -42,7 +45,7 @@ class PaymentPlacementFragment : Fragment() {
     private var _binding: FragmentPaymentPlacementBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModel<PaymentPlacementViewModel>()
-    private lateinit var paymentsAdapter: PaymentHistoryAdapter
+    private lateinit var paymentsAdapter: PaymentPlacementAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,37 +57,74 @@ class PaymentPlacementFragment : Fragment() {
     }
 
 
+    @SuppressLint("SetTextI18n")
     private fun initObservers() {
         viewModel.placement.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     this.binding.model = it
+                    paymentsAdapter = PaymentPlacementAdapter(it.invoices!!, viewModel)
+                    binding.paymentPlacementContainer.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL ,false)
+                    binding.paymentPlacementContainer.adapter = paymentsAdapter
+                }
+            }
+        }
+
+        viewModel.totalPrice.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                   if (it > 0) {
+                       binding.payment.isEnabled = true
+                       binding.payment.text = "Оплатить: ${roundOffTo2DecPlaces(it.toFloat())} ₽"
+
+                   } else {
+                       binding.payment.text = "Оплатить"
+                       binding.payment.isEnabled = false
+                   }
+                }
+            }
+        }
+
+        viewModel.paymentOrder.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val paymentOptions =
+                    PaymentOptions().setOptions {
+                        orderOptions {
+
+                            Log.d("PaymentPlacement", "money ${Money.ofRubles(it.amount)}")
+                            Log.d("PaymentPlacement", "amount ${it.amount}")
+
+                            orderId = it.orderNumber.toString()
+                            amount = Money.ofRubles(it.amount)
+                            title = "Оплата коммунальных услуг"
+                            recurrentPayment = false
+                            shops = it.shops
+                        }
+                        customerOptions {
+                            checkType = CheckType.NO.toString()
+                        }
+                    }
+
+                    val tinkoffAcquiring = TinkoffAcquiring(BuildConfig.TERMINAL_KEY, BuildConfig.PUBLIC_KEY)
+                    tinkoffAcquiring.openPaymentScreen(this, paymentOptions, 123)
                 }
             }
         }
     }
 
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        Log.d("Result", data.toString())
+    }
+
     private fun initListeners() {
         binding.payment.setOnClickListener {
-            val paymentOptions =
-                PaymentOptions().setOptions {
-                    orderOptions {
-                        orderId = "1234"
-                        amount = Money.ofRubles(1000)
-                        title = "НАЗВАНИЕ ПЛАТЕЖА"
-                        description = "ОПИСАНИЕ ПЛАТЕЖА"
-                        recurrentPayment = false
-                    }
-                    customerOptions {
-                        checkType = CheckType.NO.toString()
-                        customerKey = "CUSTOMER_KEY"
-                        email = "batman@gotham.co"
-                    }
+            viewModel.createPayment()
 
-                }
-
-            val tinkoffAcquiring = TinkoffAcquiring("", "")
-            tinkoffAcquiring.openPaymentScreen(this, paymentOptions, 123)
+//
         }
     }
 

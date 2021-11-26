@@ -2,6 +2,7 @@ package com.patstudio.communalka.data.networking.user
 
 import com.google.gson.JsonElement
 import com.patstudio.communalka.data.model.APIResponse
+import com.patstudio.communalka.data.model.OrderCreator
 import com.patstudio.communalka.data.model.User
 import kotlinx.coroutines.flow.Flow
 import okhttp3.Response
@@ -19,6 +20,8 @@ interface UserRemote {
     suspend fun confirmSmsCode(phone: String, smsCode: String): APIResponse<JsonElement>
 
     suspend fun updateEmail(email: String): APIResponse<JsonElement>
+
+    suspend fun createOrder(orderCreator: OrderCreator): APIResponse<JsonElement>
 
     suspend fun registrationWithCode(fio: String,phone: String, email: String, smsCode: String): APIResponse<JsonElement>
 

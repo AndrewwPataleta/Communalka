@@ -59,6 +59,8 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
                meterSize += it.meters.size
             }
 
+
+
             if (meterSize == 0) {
                 itemBinding.transmitTestimony.background = itemBinding.root.context.resources.getDrawable(R.drawable.background_transmission_readings_btn_disable)
                 itemBinding.transmissioReadingText.setTextColor(itemBinding.root.context.resources.getColor(R.color.gray_placeholder))
@@ -108,26 +110,30 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
             }
 
             itemBinding.servicePaymentsContainer.removeAllViews()
-            var paymentSum = 0f
-            placement.accounts.map {
-                paymentSum += it.debtOfMoney
-                Log.d("PlacementAdapter", "debt "+ it.debtOfMoney.toString().plus(" ₽"))
+
+
+            placement.invoices?.map {
+
                 val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                 val servicePaymentBinding: View = inflater.inflate(R.layout.item_service_payment, null)
-                servicePaymentBinding.findViewById<TextView>(R.id.serviceName).text = it.serviceName
-                servicePaymentBinding.findViewById<TextView>(R.id.message).text = it.message
-                servicePaymentBinding.findViewById<TextView>(R.id.payment).text = it.debtOfMoney.toString().plus(" ₽")
-                Log.d("PlacementAdapter", "debt "+ it.debtOfMoney.toString().plus(" ₽"))
+                servicePaymentBinding.findViewById<TextView>(R.id.serviceName).text = it.service
+                servicePaymentBinding.findViewById<TextView>(R.id.message).text = ""
+                servicePaymentBinding.findViewById<TextView>(R.id.payment).text = it.penalty.toString().plus(" ₽")
+
                 itemBinding.servicePaymentsContainer.addView(servicePaymentBinding)
             }
 
+            var penaltySum = 0.0
 
-             paymentSum = 1f
+            placement.invoices?.map {
+                penaltySum += it.penalty
+            }
 
-            if (paymentSum > 0f) {
+            if (penaltySum > 0) {
                 itemBinding.paymentButton.background = itemBinding.root.context.resources.getDrawable(R.drawable.background_rounded_blue)
                 itemBinding.paymentAmount.visible(false)
-                itemBinding.paymentAmount.text = paymentSum.toString().plus(" ₽")
+                itemBinding.paymentStatus.gone(false)
+                itemBinding.paymentAmount.text = penaltySum.toString().plus(" ₽")
                 itemBinding.paymentButton.setOnClickListener {
                     viewModel.selectPayment(placement)
                 }
@@ -137,6 +143,7 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
                 itemBinding.paymentButton.setOnClickListener {
                 }
             }
+
 
         }
     }

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="viewModel" type="com.patstudio.communalka.presentation.ui.main.payment.PaymentPlacementViewModel"/>
+        <variable name="position" type="Integer"/>
+        <variable name="model" type="com.patstudio.communalka.data.model.Invoice"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/placementRoot"
+        android:layout_width="match_parent"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_gray_background"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:id="@+id/selectedPayment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/service"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/selectedPayment"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:fontFamily="@font/robotomedium"
+            app:layout_constraintTop_toTopOf="@id/selectedPayment"
+            app:layout_constraintBottom_toBottomOf="@id/selectedPayment"
+            android:text="@{model.service}"/>
+
+        <TextView
+            android:id="@+id/supplier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/service"
+            app:layout_constraintStart_toStartOf="@id/service"
+            android:text="@{model.supplier}"/>
+
+        <TextView
+            android:id="@+id/penaltyTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/supplier"
+            android:layout_marginTop="16dp"
+            android:text="Начисление за месяц, ₽"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:fontFamily="@font/roboto_regular"/>
+
+
+        <TextView
+            android:id="@+id/penaltyValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/penaltyTxt"
+            android:text="@{String.valueOf(model.penalty)}"
+            app:layout_constraintBottom_toBottomOf="@id/penaltyTxt"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/penaltyTxt"
+            app:layout_constraintHorizontal_bias="1.0"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:fontFamily="@font/roboto_regular"/>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/penaltyPaymentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/penaltyTxt"
+            android:layout_marginTop="8dp"
+            android:background="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:placeholderTextColor="@color/gray_dark"
+            android:hint="Сумма на оплату, ₽">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/penaltyPaymentValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:background="@color/white"
+                android:inputType="numberDecimal" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/penaltyPercent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/penaltyPaymentContainer"
+            android:text="Размер комиссии появится после ввода суммы"
+            android:textColor="@color/black"
+            android:layout_marginTop="8dp"
+            app:layout_constraintHorizontal_bias="1.0"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:fontFamily="@font/roboto_regular"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

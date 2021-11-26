@@ -7,9 +7,13 @@ import kotlinx.android.parcel.Parcelize
 data class Invoice (
   var balance: Double,
   var penalty: Double,
+  var penaltyValue: Double? = null,
   var supplier: String,
   var service: String,
   var percentTax: Double,
-  var shopId: String
+  var currentTax: Double? = null,
+
+  var shopId: String,
+  var selected: Boolean = false
 ) : Parcelable
 

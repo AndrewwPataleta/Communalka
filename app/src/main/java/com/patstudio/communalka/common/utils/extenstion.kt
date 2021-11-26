@@ -31,6 +31,11 @@ fun CharSequence?.isEmailValid(): Boolean {
     return android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
 }
 
+
+fun roundOffTo2DecPlaces(value: Float): String? {
+    return String.format("%.2f", value)
+}
+
 fun Group.setAllOnClickListener(listener: View.OnClickListener?) {
     referencedIds.forEach { id ->
         rootView.findViewById<View>(id).setOnClickListener(listener)

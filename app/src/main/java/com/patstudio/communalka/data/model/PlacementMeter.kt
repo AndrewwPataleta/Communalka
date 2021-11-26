@@ -13,5 +13,6 @@ data class PlacementMeter (
     val next_verification: String,
     val value: Double,
     val account: String,
-    val active: Boolean
+    val active: Boolean,
+    var last_values: MeterHistory
 ) : Parcelable

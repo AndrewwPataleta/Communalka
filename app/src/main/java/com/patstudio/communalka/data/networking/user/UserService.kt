@@ -3,6 +3,7 @@ package com.patstudio.communalka.data.networking.user
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.patstudio.communalka.data.model.APIResponse
+import com.patstudio.communalka.data.model.OrderCreator
 import com.patstudio.communalka.data.model.User
 import okhttp3.Response
 import okhttp3.ResponseBody
@@ -32,6 +33,9 @@ interface UserService {
 
     @PUT("consumer/")
     suspend fun updateFio(@Body fio: JsonObject)
+
+    @POST("order/")
+    suspend fun createOrderPayment(@Body creator: OrderCreator): APIResponse<JsonElement>
 
     @FormUrlEncoded
     @POST("auth/update_token/")

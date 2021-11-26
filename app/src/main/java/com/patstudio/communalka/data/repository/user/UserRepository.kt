@@ -7,6 +7,7 @@ import com.google.gson.JsonElement
 import com.google.gson.reflect.TypeToken
 import com.patstudio.communalka.data.database.user.UserDao
 import com.patstudio.communalka.data.model.APIResponse
+import com.patstudio.communalka.data.model.OrderCreator
 import com.patstudio.communalka.data.model.Result
 import com.patstudio.communalka.data.model.User
 import com.patstudio.communalka.data.networking.user.UserRemote
@@ -359,6 +360,27 @@ class UserRepository (
             if (connectivity.hasNetworkAccess()) {
                 emit(Result.loading())
                 val user = remote.updateEmail(email)
+                emit(Result.success(user))
+            }
+        } catch (throwable: Exception) {
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
+    fun createOrder(orderCreator: OrderCreator): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val user = remote.createOrder(orderCreator)
                 emit(Result.success(user))
             }
         } catch (throwable: Exception) {

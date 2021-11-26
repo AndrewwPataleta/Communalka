@@ -17,6 +17,7 @@ data class  PlacementAccount (
     val active: Boolean,
     val discount: String,
     val number_people: String,
-    val balance: String,
+    val balance: Double,
+    val penalty: Double,
     var meters: ArrayList<PlacementMeter>
 ) : Parcelable
