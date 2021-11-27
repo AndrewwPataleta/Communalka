@@ -120,7 +120,7 @@ class PaymentPlacementViewModel(private val userRepository: UserRepository, priv
                                 var taxShop = it.amount+it.taxAmount
 
                                 shop.amount =  Money.ofRubles(taxShop).coins
-                                shop.shopCode = paymentOrderShop.communalkaShopId.toString()
+                                shop.shopCode = it.shopId
                                 shops.add(shop)
                             }
                             paymentOrderShop.shops = shops

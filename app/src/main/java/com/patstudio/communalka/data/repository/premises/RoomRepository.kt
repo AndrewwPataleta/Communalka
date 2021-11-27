@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import java.io.IOException
+import java.text.SimpleDateFormat
 
 class RoomRepository(
     private val roomRemote: RoomRemote,
@@ -104,24 +105,25 @@ class RoomRepository(
 
 
 
-    suspend fun getPaymentsHistory(dateGte: String?,  dateLte: String?, placement: String?): Flow<Result<APIResponse<JsonElement>>> = flow {
+    suspend fun getPaymentsHistory(dateGte: String?, dateLte: String?, placement: List<String>?, services: List<String>?, suppliers: List<String>?): Flow<Result<APIResponse<JsonElement>>> = flow {
         try {
             if (connectivity.hasNetworkAccess()) {
+
+
                 emit(Result.loading())
 
-                val premises = roomRemote.getOrderList(dateGte, dateLte, placement)
+                val premises = roomRemote.getOrderList(dateGte, dateLte, placement, services, suppliers)
                 emit(Result.success(premises))
             }
         } catch (throwable: Exception) {
-            Log.d("PremisesRepository", (throwable is HttpException).toString())
             when (throwable) {
                 is IOException ->  emit(Result.error(throwable))
                 is HttpException -> {
                     val errorResponse = convertErrorBody(throwable)
-                    Log.d("PremisesRepository", errorResponse.toString())
                     emit(Result.errorResponse(errorResponse))
                 }
                 else -> {
+                    throwable.printStackTrace()
                     emit(Result.Error(throwable))
                 }
             }

@@ -19,7 +19,7 @@ interface RoomRemote {
 
     suspend fun updateRoom(room: Room): APIResponse<JsonElement>
 
-    suspend fun getOrderList(dateGte: String?,  dateLte: String?, placement: String?): APIResponse<JsonElement>
+    suspend fun getOrderList(dateGte: String?,  dateLte: String?, placement: List<String>?, services: List<String>?, suppliers: List<String>?): APIResponse<JsonElement>
 
     suspend fun getActualApiKey(): APIResponse<JsonElement>
 

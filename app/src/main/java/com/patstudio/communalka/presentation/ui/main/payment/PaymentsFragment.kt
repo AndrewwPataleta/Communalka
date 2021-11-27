@@ -59,6 +59,7 @@ class PaymentsFragment : Fragment() {
     }
 
 
+
     private fun initObservers() {
         viewModel.payments.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
@@ -69,6 +70,16 @@ class PaymentsFragment : Fragment() {
                 }
             }
         }
+          viewModel.actionReceipt.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.data = Uri.parse("https://ofd.ru/sites/default/files/inline-images/obrazec_cheka.png")
+                    startActivity(intent)
+                }
+            }
+        }
+
         viewModel.openFilter.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {

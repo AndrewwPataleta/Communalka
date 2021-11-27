@@ -50,9 +50,11 @@ class RoomRemoteImpl(
     override suspend fun getOrderList(
         dateGte: String?,
         dateLte: String?,
-        placement: String?
-    ) = withContext(dispatcherProvider.io) {
-        premisesService.getListOrder(dateGte, dateLte, placement)
+        placement: List<String>?,
+        services: List<String>?,
+        suppliers: List<String>?
+    ) = withContext(dispatcherProvider.io)  {
+        premisesService.getListOrder(dateGte, dateLte, placement, services, suppliers)
     }
 
 

@@ -34,6 +34,9 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
     private var _filterModel: MutableLiveData<Event<PaymentFilterModel>> = MutableLiveData()
     val filterModel: LiveData<Event<PaymentFilterModel>> = _filterModel
 
+    private var _actionReceipt: MutableLiveData<Event<PaymentHistoryModel>> = MutableLiveData()
+    val actionReceipt: LiveData<Event<PaymentHistoryModel>> = _actionReceipt
+
     private var filter: PaymentFilterModel? = null
 
     fun openFilter() {
@@ -71,6 +74,7 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
                                                             var services: ArrayList<Service> = gson.fromJson(it.data.data!!.asJsonObject.get("services"), turnsType)
                                                             filter = PaymentFilterModel(null, suppliers = Pair(true,suppliers), placement = Pair(true,placementList.placements), services = Pair(true,services))
                                                             _filterModel.postValue(Event(filter!!))
+                                                            getPaymentHistory()
                                                         }
                                                         is Result.ErrorResponse -> { }
                                                         is Result.Error -> { }
@@ -94,7 +98,9 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
             uploadFilter()
         } else {
             _filterModel.postValue(Event(filter!!))
+            getPaymentHistory()
         }
+
     }
 
     fun resetFilter() {
@@ -104,6 +110,9 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
                 it.selected = false
             }
             filter!!.suppliers.second.map {
+                it.selected = false
+            }
+            filter!!.services.second.map {
                 it.selected = false
             }
             _filterModel.postValue(Event(filter!!))
@@ -132,6 +141,10 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
         }
     }
 
+    fun selectActionReceipt(model: PaymentHistoryModel) {
+        _actionReceipt.postValue(Event(model))
+    }
+
     fun updateFilterDate(date: androidx.core.util.Pair<Long, Long>) {
         filter!!.date = date
         _filterModel.postValue(Event(filter!!))
@@ -149,21 +162,25 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
     fun removeDateFromFilter() {
         filter!!.date = null
         _filterModel.postValue(Event(filter!!))
+        getPaymentHistory()
     }
 
     fun removePlacementFromFilter(placement: Placement) {
         placement.selected = false
         _filterModel.postValue(Event(filter!!))
+        getPaymentHistory()
     }
 
     fun removeSupplierFromFilter(supplier: Supplier) {
         supplier.selected = false
         _filterModel.postValue(Event(filter!!))
+        getPaymentHistory()
     }
 
     fun removeServiceFromFilter(service: Service) {
         service.selected = false
         _filterModel.postValue(Event(filter!!))
+        getPaymentHistory()
     }
 
     fun changeSelectedFilterPlacement(placement: Placement, checked: Boolean) {
@@ -176,32 +193,47 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
         _updateLists.postValue(Event(true))
     }
 
-    init {
+    private fun getPaymentHistory() {
         viewModelScope.launch(dispatcherProvider.io) {
-            roomRepository.getPaymentsHistory(null, null, null)
+            var placemets = filter?.placement?.second?.filter { it.selected }
+            var placementsId = placemets?.map {
+                it.id
+            }
+
+            var suppliers = filter?.suppliers?.second?.filter { it.selected }
+            var suppliersId = suppliers?.map {
+                it.id
+            }
+
+            var services = filter?.services?.second?.filter { it.selected }
+            var servicesId = services?.map {
+                it.id
+            }
+
+            roomRepository.getPaymentsHistory(null, null, placement = placementsId, services = servicesId, suppliers = suppliersId)
                 .onStart {
-                  _showProgress.postValue(Event(true))
+                    _showProgress.postValue(Event(true))
                 }
                 .catch {
-                  it.printStackTrace()
+                    it.printStackTrace()
                 }
                 .collect {
-                  when (it) {
+                    when (it) {
+                        is Result.Success -> {
+                            _showProgress.postValue(Event(false))
+                            val type = object : TypeToken<List<PaymentHistoryModel>>() {}.type
+                            var paymentsList: List<PaymentHistoryModel> = gson.fromJson(it.data.data!!.asJsonObject.get("orders"), type)
+                            _payments.postValue(Event(paymentsList))
 
-                      is Result.Success -> {
-                          _showProgress.postValue(Event(false))
-    //                          val type = object : TypeToken<List<PaymentHistoryModel>>() {}.type
-    //                          var paymentsList: List<PaymentHistoryModel> = gson.fromJson(it.data.data, type)
-    //                          _payments.postValue(Event(paymentsList))
+                        }
+                        is Result.Error -> {
 
-                      }
-                      is Result.Error -> {
+                        }
+                        is Result.ErrorResponse -> {
 
-                      }
-                      is Result.ErrorResponse -> {
+                        }
+                    } }
+        }
+    }
 
-                      }
-                  } }
-      }
-  }
 }
