@@ -9,6 +9,8 @@ import com.example.imagegallery.contextprovider.DispatcherProvider
 import com.google.gson.Gson
 import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.*
+import com.patstudio.communalka.data.model.auth.ConfirmFormError
+import com.patstudio.communalka.data.model.auth.LoginFormError
 import com.patstudio.communalka.data.repository.premises.RoomRepository
 import com.patstudio.communalka.data.repository.user.UserRepository
 import kotlinx.coroutines.flow.catch
@@ -28,6 +30,9 @@ class TransmissionReadingsViewModel(private val userRepository: UserRepository, 
     private var _isSendingTransmissions: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val isSendingTransmissions: LiveData<Event<Boolean>> = _isSendingTransmissions
 
+    private var _userMessage: MutableLiveData<Event<String>> = MutableLiveData()
+    val userMessage: LiveData<Event<String>> = _userMessage
+
     public fun setCurrentMeter(placementMeter: PlacementMeter) {
         viewModelScope.launch(dispatcherProvider.io) {
             user = userRepository.getLastAuthUser()
@@ -37,13 +42,16 @@ class TransmissionReadingsViewModel(private val userRepository: UserRepository, 
     }
 
     fun sendTransmissions(readings: String) {
+
+        var reading = readings.toInt()
+
         if (!readings.isNullOrEmpty()) {
             viewModelScope.launch(dispatcherProvider.io) {
                 var serialNumber = ""
                 if (currentPlacementMeter.serial_number != null) {
                     serialNumber = currentPlacementMeter.serial_number!!
                 }
-                userRepository.editMeter(currentPlacementMeter.title, serialNumber, readings, currentPlacementMeter.id)
+                userRepository.editMeter(currentPlacementMeter.title, serialNumber, readings.toInt().toString(), currentPlacementMeter.id)
                     .onStart { _isSendingTransmissions.postValue(Event(true)) }
                     .catch { it.printStackTrace() }
                     .collect {
@@ -53,9 +61,18 @@ class TransmissionReadingsViewModel(private val userRepository: UserRepository, 
                             }
                             is Result.Error -> {
 
+                                _isSendingTransmissions.postValue(Event(false))
+
                             }
                             is Result.ErrorResponse -> {
-
+                                _isSendingTransmissions.postValue(Event(false))
+                                when(it.data.status) {
+                                    "error" -> {
+                                        it.data.message?.let {
+                                            _userMessage.postValue(Event(it))
+                                        }
+                                    }
+                                }
                             }
                         }
 

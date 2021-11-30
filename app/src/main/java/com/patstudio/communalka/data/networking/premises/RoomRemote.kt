@@ -13,6 +13,8 @@ interface RoomRemote {
 
     suspend fun getRooms(): APIResponse<JsonElement>
 
+    suspend fun getMetersForPlacement(placementId: String): APIResponse<JsonElement>
+
     suspend fun getPlacementInvoice(placement: Placement): APIResponse<JsonElement>
 
     suspend fun sendRoom(room: Room): APIResponse<JsonElement>

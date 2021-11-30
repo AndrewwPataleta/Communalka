@@ -13,6 +13,8 @@ import androidx.navigation.ui.*
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.bumptech.glide.Glide
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.patstudio.communalka.R
 import com.patstudio.communalka.databinding.ActivityMainBinding
 import com.patstudio.communalka.presentation.ui.main.payment.PaymentsViewModel
@@ -81,6 +83,7 @@ class MainActivity : AppCompatActivity() {
         binding.filter.setOnClickListener {
             paymentsListViewModel.openFilter()
         }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

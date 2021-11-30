@@ -7,6 +7,7 @@ import com.patstudio.communalka.presentation.ui.main.payment.PaymentsViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.welcome.WelcomeViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.HistoryVersionViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.PersonalInfoViewModel
+import com.patstudio.communalka.presentation.ui.main.profile.UserNotificationViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.security.EditPinCodeViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.security.EmailEditViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.security.EntranceSecurityViewModel
@@ -21,7 +22,7 @@ import org.koin.dsl.module
 val viewModelsModule = module {
 
     viewModel { SplashViewModel(get()) }
-    viewModel { MainViewModel(get()) }
+    viewModel { MainViewModel(get(), get() ,get()) }
     viewModel { LoginViewModel(get(), get()) }
     viewModel { RegistrationViewModel(get(), get()) }
     viewModel { PinCodeViewModel(get(), get()) }
@@ -43,5 +44,6 @@ val viewModelsModule = module {
     viewModel { TransmissionReadingsViewModel(get(), get(), get(), get()) }
     viewModel { PaymentsViewModel(get(), get(), get(), get()) }
     viewModel { PaymentPlacementViewModel(get(), get(), get(), get()) }
+    viewModel { UserNotificationViewModel(get(), get()) }
 
 }

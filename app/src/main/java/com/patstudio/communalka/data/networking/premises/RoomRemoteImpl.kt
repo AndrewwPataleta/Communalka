@@ -24,6 +24,10 @@ class RoomRemoteImpl(
         premisesService.getPremises()
     }
 
+    override suspend fun getMetersForPlacement(placementId: String) = withContext(dispatcherProvider.io) {
+        premisesService.getPlacementInvoice(placementId)
+    }
+
     override suspend fun getPlacementInvoice(placement: Placement)= withContext(dispatcherProvider.io) {
         premisesService.getPlacementInvoice(placement.id)
     }

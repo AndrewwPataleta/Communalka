@@ -6,10 +6,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.reflect.TypeToken
 import com.patstudio.communalka.data.database.user.UserDao
-import com.patstudio.communalka.data.model.APIResponse
-import com.patstudio.communalka.data.model.OrderCreator
-import com.patstudio.communalka.data.model.Result
-import com.patstudio.communalka.data.model.User
+import com.patstudio.communalka.data.model.*
 import com.patstudio.communalka.data.networking.user.UserRemote
 import com.patstudio.data.common.utils.Connectivity
 import kotlinx.coroutines.flow.*
@@ -77,6 +74,27 @@ class UserRepository (
             if (connectivity.hasNetworkAccess()) {
                 emit(Result.loading())
                 val user = remote.getAccount(accountId)
+                emit(Result.success(user))
+            }
+        } catch (throwable: Exception) {
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
+    fun updateGcm(gcm: Gcm): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val user = remote.updateGsm(gcm)
                 emit(Result.success(user))
             }
         } catch (throwable: Exception) {
@@ -314,6 +332,15 @@ class UserRepository (
 
      fun getCurrentPinCode(): String {
         return sharedPreferences.getString("pinCode", "")!!
+    }
+
+    fun getCurrentFbToken(): String {
+        return sharedPreferences.getString("fbToken", "")!!
+    }
+
+
+    fun setCurrentFbToken(fbToken: String){
+        sharedPreferences.edit().putString("fbToken", fbToken).apply()
     }
 
     suspend fun updatePreviosAuthUser() {

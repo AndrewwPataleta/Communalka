@@ -11,6 +11,8 @@ import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.*
 import com.patstudio.communalka.data.repository.premises.RoomRepository
 import com.patstudio.communalka.data.repository.user.UserRepository
+import convertLongToFilterTime
+import convertLongToTime
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
@@ -210,7 +212,15 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
                 it.id
             }
 
-            roomRepository.getPaymentsHistory(null, null, placement = placementsId, services = servicesId, suppliers = suppliersId)
+            var convertedDateStart = filter?.date?.first?.let {
+                convertLongToFilterTime(it)
+            }
+
+            var convertedDateEnd = filter?.date?.second?.let {
+                convertLongToFilterTime(it)
+            }
+
+            roomRepository.getPaymentsHistory(convertedDateStart, convertedDateEnd, placement = placementsId, services = servicesId, suppliers = suppliersId)
                 .onStart {
                     _showProgress.postValue(Event(true))
                 }

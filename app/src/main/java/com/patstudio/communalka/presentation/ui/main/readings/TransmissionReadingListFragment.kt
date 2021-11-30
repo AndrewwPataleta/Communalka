@@ -110,6 +110,11 @@ class TransmissionReadingListFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.updateMeters()
+    }
+
     private fun initListeners() {
 //
     }

@@ -3,6 +3,7 @@ package com.patstudio.communalka.data.networking.user
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.patstudio.communalka.data.model.APIResponse
+import com.patstudio.communalka.data.model.Gcm
 import com.patstudio.communalka.data.model.OrderCreator
 import com.patstudio.communalka.data.model.User
 import okhttp3.Response
@@ -61,6 +62,9 @@ interface UserService {
 
     @POST("account/{id}/meter/")
     suspend fun createMeter(@Body target: JsonObject, @Path("id") id: String): APIResponse<JsonElement>
+
+    @POST("device/gcm/")
+    suspend fun updateGcm(@Body target: Gcm): APIResponse<JsonElement>
 
     @PUT("meter/{id}/")
     suspend fun updateMeter(@Body target: JsonObject,@Path("id") id: String): APIResponse<JsonElement>

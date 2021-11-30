@@ -10,6 +10,7 @@ import androidx.core.net.toUri
 import androidx.core.view.setPadding
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.patstudio.communalka.R
 import com.patstudio.communalka.data.model.Placement
 import com.patstudio.communalka.data.model.PlacementMeter
@@ -46,6 +47,20 @@ class TransmissionReadingsFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     binding.model = it
+                }
+            }
+        }
+        viewModel.userMessage.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val builder = MaterialAlertDialogBuilder(requireContext())
+
+                    builder.setMessage(it)
+                    builder.setPositiveButton("Ок"){dialogInterface, which ->
+                        dialogInterface.dismiss()
+                    }
+                    builder.setCancelable(false)
+                    builder.show()
                 }
             }
         }

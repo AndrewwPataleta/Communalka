@@ -6,8 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.imagegallery.contextprovider.DispatcherProvider
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.patstudio.communalka.BuildConfig
 import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.*
 import com.patstudio.communalka.data.repository.premises.RoomRepository
@@ -122,17 +125,39 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
         this.needEnterPin = needPin
     }
 
+    private fun initGCMToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+
+                return@OnCompleteListener
+            }
+            val token = task.result
+            viewModelScope.launch(dispatcherProvider.io) {
+                userRepository.setCurrentFbToken(token.toString())
+                var gcm = Gcm(registration_id = token.toString(), application_id = BuildConfig.APPLICATION_ID, active = true)
+                userRepository.updateGcm(gcm)
+                    .catch {  }
+                    .collect {
+                        when (it) {
+                            is Result.Success -> {
+
+                            }
+                        }
+                    }
+            }
+        })
+    }
+
     fun initCurrentUser() {
         viewModelScope.launch(dispatcherProvider.io) {
             val it = userRepository.getLastAuthUser()
             user = it
 
             if (user != null) {
-                Log.d("WelcomeViewModel", "need pin before" +needEnterPin+" user auto "+!user!!.autoSignIn)
 
                 needEnterPin = !user!!.autoSignIn
 
-                Log.d("WelcomeViewModel", "need pin after "+needEnterPin+" type auth chnafd "+typeAuthChanged)
+               initGCMToken()
 
                 if (needEnterPin && !typeAuthChanged) {
 

@@ -329,6 +329,21 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/toUserNotificationSettings"
+            app:destination="@id/UserNotificationFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/UserNotificationFragment"
+        android:name="com.patstudio.communalka.presentation.ui.main.profile.UserNotificationFragment"
+        android:label="Уведомления"
+        tools:layout="@layout/fragment_user_notification_settings">
+
     </fragment>
 
     <fragment

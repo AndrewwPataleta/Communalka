@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.patstudio.communalka.BuildConfig
 import com.patstudio.communalka.R
 import com.patstudio.communalka.databinding.FragmentProfileBinding
 import com.patstudio.communalka.presentation.ui.MainActivity
@@ -22,6 +23,11 @@ import com.patstudio.communalka.presentation.ui.splash.MainViewModel
 import com.skydoves.balloon.extensions.dp
 import gone
 import org.koin.android.viewmodel.ext.android.viewModel
+import ru.tinkoff.acquiring.sdk.TinkoffAcquiring
+import ru.tinkoff.acquiring.sdk.models.enums.CheckType
+import ru.tinkoff.acquiring.sdk.models.options.CustomerOptions
+import ru.tinkoff.acquiring.sdk.models.options.screen.PaymentOptions
+import ru.tinkoff.acquiring.sdk.models.options.screen.SavedCardsOptions
 import visible
 
 class   ProfileFragment : Fragment() {
@@ -50,6 +56,21 @@ class   ProfileFragment : Fragment() {
         }
         this.binding.securityText.setOnClickListener {
             findNavController().navigate(R.id.toEntrance)
+        }
+        this.binding.notificationText.setOnClickListener {
+            findNavController().navigate(R.id.toUserNotificationSettings)
+        }
+        this.binding.cardsText.setOnClickListener {
+            val tinkoffAcquiring = TinkoffAcquiring(BuildConfig.TERMINAL_KEY, BuildConfig.PUBLIC_KEY)
+
+            val paymentOptions =
+                SavedCardsOptions().setOptions {
+                    customerOptions {
+                        checkType = CheckType.NO.toString()
+                        customerKey = "key"
+                    }
+                }
+            tinkoffAcquiring.openSavedCardsScreen(requireActivity(), paymentOptions, 1234)
         }
     }
 

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.imagegallery.contextprovider.DispatcherProvider
 import com.patstudio.communalka.common.utils.Event
+import com.patstudio.communalka.data.model.Placement
 import com.patstudio.communalka.data.model.User
 import com.patstudio.communalka.data.repository.user.UserRepository
 import isEmailValid
@@ -20,20 +21,21 @@ class UserNotificationViewModel(private val userRepository: UserRepository, priv
    private lateinit var user: User
    private val userMutable: MutableLiveData<Event<User>> = MutableLiveData()
 
-
+    private var _showProgress: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val showProgress: LiveData<Event<Boolean>> = _showProgress
 
    fun setCurrentUser(user:User) {
        this.user = user
        userMutable.postValue(Event(user))
-
    }
 
     fun initCurrentUser() {
+        _showProgress.postValue(Event(true))
         viewModelScope.launch(dispatcherProvider.io) {
             val user = userRepository.getLastAuthUser()
             if (user != null)  {
-                Log.d("WelcomeViewModel", user.toString())
                 userMutable.postValue(Event(user))
+                _showProgress.postValue(Event(false))
             }
         }
     }

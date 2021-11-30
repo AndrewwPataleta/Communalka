@@ -48,6 +48,12 @@ fun Group.setAllOnClickListener(listener: View.OnClickListener?) {
     return format.format(date)
 }
 
+fun convertLongToFilterTime(time: Long): String {
+    val date = Date(time)
+    val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+    return format.format(date)
+}
+
 fun maskEmail(email: String): String {
     return email.replace(Regex("""((?:\.|^).)?.(?=.*@)"""), "$1*")
 }

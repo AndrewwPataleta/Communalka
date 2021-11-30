@@ -11,6 +11,7 @@ import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.*
 import com.patstudio.communalka.data.repository.premises.RoomRepository
 import com.patstudio.communalka.data.repository.user.UserRepository
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class TransmissionReadingListViewModel(private val userRepository: UserRepository, private val roomRepository: RoomRepository, private val dispatcherProvider: DispatcherProvider, private val gson: Gson): ViewModel() {
@@ -34,20 +35,38 @@ class TransmissionReadingListViewModel(private val userRepository: UserRepositor
             viewModelScope.launch(dispatcherProvider.io) {
                 user = userRepository.getLastAuthUser()
                 currentPlacementModel = placement
-                Log.d("currentPlacementModel", "model ${currentPlacementModel}")
-                _currentPlacement.postValue(Event(currentPlacementModel))
-                placementMetersList = ArrayList()
-                Log.d("accounts", "size ${currentPlacementModel.accounts.size}")
-                currentPlacementModel.accounts.map {
 
-                        it.meters.map {
-                                placementMetersList.add(it)
-                        }
-                }
-                _placementMeters.postValue(Event(placementMetersList))
+                _currentPlacement.postValue(Event(currentPlacementModel))
+
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    fun updateMeters() {
+        viewModelScope.launch(dispatcherProvider.io) {
+            roomRepository.getMetersForPlacement(currentPlacementModel.id)
+                .collect {
+
+                    when (it) {
+                        is Result.Success -> {
+                            placementMetersList = ArrayList()
+                            currentPlacementModel.accounts.map {
+                                it.meters.map {
+                                    placementMetersList.add(it)
+                                }
+                            }
+                            _placementMeters.postValue(Event(placementMetersList))
+                        }
+                        is Result.Error -> {
+
+                        }
+                        is Result.ErrorResponse -> {
+
+                        }
+                    }
+                }
         }
     }
 
