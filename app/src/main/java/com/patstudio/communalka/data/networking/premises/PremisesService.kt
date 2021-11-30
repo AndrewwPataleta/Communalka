@@ -25,6 +25,9 @@ interface PremisesService {
     @GET("placement/{id}/invoices/")
     suspend fun getPlacementInvoice(@Path("id") id: String): APIResponse<JsonElement>
 
+    @GET("placement/{id}/")
+    suspend fun getPlacementDetail(@Path("id") id: String): APIResponse<JsonElement>
+
     @GET("account/{id}/meter/")
     suspend fun getMetersAccount(@Path("id") id: String): APIResponse<JsonElement>
 

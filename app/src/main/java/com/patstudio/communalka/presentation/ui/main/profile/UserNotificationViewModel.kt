@@ -6,8 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.imagegallery.contextprovider.DispatcherProvider
+import com.patstudio.communalka.BuildConfig
 import com.patstudio.communalka.common.utils.Event
+import com.patstudio.communalka.data.model.Gcm
 import com.patstudio.communalka.data.model.Placement
+import com.patstudio.communalka.data.model.Result
 import com.patstudio.communalka.data.model.User
 import com.patstudio.communalka.data.repository.user.UserRepository
 import isEmailValid
@@ -40,6 +43,27 @@ class UserNotificationViewModel(private val userRepository: UserRepository, priv
         }
     }
 
+    fun changePushEnable(enable: Boolean) {
+        viewModelScope.launch(dispatcherProvider.io) {
+            var gcm = Gcm(
+                registration_id = userRepository.getCurrentFbToken(),
+                application_id = BuildConfig.APPLICATION_ID,
+                active = enable
+            )
+            userRepository.updateGcm(gcm)
+                .onStart { _showProgress.postValue(Event(true)) }
+                .catch { }
+                .collect {
+                    when (it) {
+                        is Result.Success -> {
+                            user.notificationEnable = enable
+                            userRepository.saveUserLocal(user)
+                            _showProgress.postValue(Event(false))
+                        }
+                    }
+                }
+        }
+    }
 
     fun getUser(): MutableLiveData<Event<User>> {
         return userMutable

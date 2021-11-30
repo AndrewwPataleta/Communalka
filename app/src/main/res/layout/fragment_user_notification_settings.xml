@@ -15,14 +15,16 @@
 
         <TextView
             android:id="@+id/text"
-            android:layout_width="wrap_content"
+            style="@style/TextBody1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/TextAppearance.AppCompat.Body2"
+            android:fontFamily="@font/robotobold"
+            android:text="Включить уведомления"
+            android:textColor="@android:color/black"
+            android:textSize="17sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:textColor="@color/black"
-            android:text="Включить уведомления"/>
-
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <Switch
             android:id="@+id/enabled"
@@ -35,7 +37,7 @@
         <ProgressBar
             android:id="@+id/progress"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/text"
             android:visibility="gone"

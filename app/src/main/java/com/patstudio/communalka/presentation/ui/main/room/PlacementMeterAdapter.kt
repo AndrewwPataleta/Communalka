@@ -29,6 +29,11 @@ class PlacementMeterAdapter(private val placementMeters: ArrayList<PlacementMete
         fun bind(placementMeter: PlacementMeter, position: Int) {
             itemBinding.model = placementMeter
             itemBinding.viewModel = viewModel
+            if (placementMeter.last_values.lastValue != null) {
+               itemBinding.lastValueText.text = "Последние показания"
+            } else {
+                itemBinding.lastValueText.text = "Введите последние показания"
+            }
         }
     }
 }

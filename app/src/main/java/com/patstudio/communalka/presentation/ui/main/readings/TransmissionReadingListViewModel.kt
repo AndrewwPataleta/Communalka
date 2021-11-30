@@ -46,13 +46,14 @@ class TransmissionReadingListViewModel(private val userRepository: UserRepositor
 
     fun updateMeters() {
         viewModelScope.launch(dispatcherProvider.io) {
-            roomRepository.getMetersForPlacement(currentPlacementModel.id)
+            roomRepository.getPlacementDetail(currentPlacementModel.id)
                 .collect {
 
                     when (it) {
                         is Result.Success -> {
+                            var placement = gson.fromJson(it.data.data!!.asJsonObject.get("placement"), Placement::class.java)
                             placementMetersList = ArrayList()
-                            currentPlacementModel.accounts.map {
+                            placement.accounts.map {
                                 it.meters.map {
                                     placementMetersList.add(it)
                                 }

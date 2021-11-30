@@ -37,27 +37,29 @@ class UserNotificationFragment : Fragment() {
         viewModel.getUser().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                    binding.enabled.isEnabled = it.notificationEnable
+                    binding.enabled.isChecked = it.notificationEnable
                 }
             }
         }
         viewModel.showProgress.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                    if (it) {
-                        binding.enabled.visibility = View.GONE
-                        binding.progress.visibility = View.VISIBLE
-                    } else {
-                        binding.enabled.visibility = View.VISIBLE
-                        binding.progress.visibility = View.GONE
-                    }
+//                    if (it) {
+//                        binding.enabled.visibility = View.GONE
+//                        binding.progress.visibility = View.VISIBLE
+//                    } else {
+//                        binding.enabled.visibility = View.VISIBLE
+//                        binding.progress.visibility = View.GONE
+//                    }
                 }
             }
         }
     }
 
     private fun initListeners() {
-
+        binding.enabled.setOnCheckedChangeListener { compoundButton, b ->
+            viewModel.changePushEnable(b)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

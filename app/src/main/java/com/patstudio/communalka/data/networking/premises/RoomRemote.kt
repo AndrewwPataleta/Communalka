@@ -17,6 +17,8 @@ interface RoomRemote {
 
     suspend fun getPlacementInvoice(placement: Placement): APIResponse<JsonElement>
 
+    suspend fun getPlacementDetail(id: String): APIResponse<JsonElement>
+
     suspend fun sendRoom(room: Room): APIResponse<JsonElement>
 
     suspend fun updateRoom(room: Room): APIResponse<JsonElement>

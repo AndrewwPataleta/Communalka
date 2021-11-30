@@ -28,13 +28,16 @@ class RoomRemoteImpl(
         premisesService.getPlacementInvoice(placementId)
     }
 
-    override suspend fun getPlacementInvoice(placement: Placement)= withContext(dispatcherProvider.io) {
+    override suspend fun getPlacementInvoice(placement: Placement) = withContext(dispatcherProvider.io) {
         premisesService.getPlacementInvoice(placement.id)
+    }
+
+    override suspend fun getPlacementDetail(id: String) = withContext(dispatcherProvider.io) {
+        premisesService.getPlacementDetail(id)
     }
 
     override suspend fun sendRoom(room: Room) = withContext(dispatcherProvider.io) {
         val body = JsonObject()
-
         premisesService.addPlacement(room)
     }
 

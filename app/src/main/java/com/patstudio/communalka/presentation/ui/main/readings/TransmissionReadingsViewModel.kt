@@ -30,6 +30,9 @@ class TransmissionReadingsViewModel(private val userRepository: UserRepository, 
     private var _isSendingTransmissions: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val isSendingTransmissions: LiveData<Event<Boolean>> = _isSendingTransmissions
 
+    private var _prevScreen: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val prevScreen: LiveData<Event<Boolean>> = _prevScreen
+
     private var _userMessage: MutableLiveData<Event<String>> = MutableLiveData()
     val userMessage: LiveData<Event<String>> = _userMessage
 
@@ -58,6 +61,7 @@ class TransmissionReadingsViewModel(private val userRepository: UserRepository, 
                         when (it) {
                             is Result.Success -> {
                                 _isSendingTransmissions.postValue(Event(false))
+                                _prevScreen.postValue(Event(true))
                             }
                             is Result.Error -> {
 

@@ -50,6 +50,13 @@ class TransmissionReadingsFragment : Fragment() {
                 }
             }
         }
+        viewModel.prevScreen.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    requireActivity().onBackPressed()
+                }
+            }
+        }
         viewModel.userMessage.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {

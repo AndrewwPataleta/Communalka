@@ -65,12 +65,35 @@ class RoomRepository(
                 emit(Result.success(premises))
             }
         } catch (throwable: Exception) {
-            Log.d("PremisesRepository", (throwable is HttpException).toString())
+
             when (throwable) {
                 is IOException ->  emit(Result.error(throwable))
                 is HttpException -> {
                     val errorResponse = convertErrorBody(throwable)
-                    Log.d("PremisesRepository", errorResponse.toString())
+
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
+    suspend fun getPlacementDetail(idPlacement: String): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val premises = roomRemote.getPlacementDetail(idPlacement)
+                emit(Result.success(premises))
+            }
+        } catch (throwable: Exception) {
+
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+
                     emit(Result.errorResponse(errorResponse))
                 }
                 else -> {

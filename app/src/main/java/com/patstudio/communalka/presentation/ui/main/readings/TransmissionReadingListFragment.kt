@@ -93,7 +93,7 @@ class TransmissionReadingListFragment : Fragment() {
         viewModel.placementMeters.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                    Log.d("TransmissionReading", "size meters ${it.size}")
+
                     adater = PlacementMeterAdapter(it, requireContext(),viewModel)
                     binding.meterContainer.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL ,false)
                     binding.meterContainer.adapter = adater
