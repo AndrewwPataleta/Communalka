@@ -14,8 +14,6 @@ interface PremisesService {
     @GET("placement/")
     suspend fun getPremises(): APIResponse<JsonElement>
 
-
-
     @POST("placement/")
     suspend fun addPlacement(@Body room: Room): APIResponse<JsonElement>
 
@@ -28,6 +26,9 @@ interface PremisesService {
     @GET("placement/{id}/")
     suspend fun getPlacementDetail(@Path("id") id: String): APIResponse<JsonElement>
 
+    @GET("meter/{id}/history/")
+    suspend fun getMeterHistory(@Path("id") id: String): APIResponse<JsonElement>
+
     @GET("account/{id}/meter/")
     suspend fun getMetersAccount(@Path("id") id: String): APIResponse<JsonElement>
 
@@ -36,7 +37,6 @@ interface PremisesService {
 
     @GET("placement/{id}/services/")
     suspend fun getServicesForPlacement(@Path("id") id: String): APIResponse<JsonElement>
-
 
 
     @GET("order/")

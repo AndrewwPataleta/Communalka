@@ -70,16 +70,27 @@ class PaymentPlacementFragment : Fragment() {
             }
         }
 
+        viewModel.rebuildPosition.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    paymentsAdapter.notifyItemChanged(it)
+                }
+            }
+        }
+
         viewModel.totalPrice.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                    if (it > 0) {
-                       binding.payment.isEnabled = true
                        binding.payment.text = "Оплатить: ${roundOffTo2DecPlaces(it.toFloat())} ₽"
-
+                       binding.payment.setOnClickListener {
+                           viewModel.createPayment()
+                       }
+                       binding.payment.background = requireContext().resources.getDrawable(R.drawable.background_rounded_blue)
                    } else {
+                       binding.payment.setOnClickListener {}
+                       binding.payment.background = requireContext().resources.getDrawable(R.drawable.gray_button_disable_background)
                        binding.payment.text = "Оплатить"
-                       binding.payment.isEnabled = false
                    }
                 }
             }
@@ -91,18 +102,16 @@ class PaymentPlacementFragment : Fragment() {
                     val paymentOptions =
                     PaymentOptions().setOptions {
                         orderOptions {
-
-                            Log.d("PaymentPlacement", "money ${Money.ofRubles(it.amount)}")
-                            Log.d("PaymentPlacement", "amount ${it.amount}")
-
                             orderId = it.orderNumber.toString()
                             amount = Money.ofRubles(it.amount)
                             title = "Оплата коммунальных услуг"
+
                             recurrentPayment = false
                             shops = it.shops
                         }
                         customerOptions {
-                            checkType = CheckType.NO.toString()
+                           customerKey = "1"
+                            checkType = CheckType.THREE_DS.toString()
                         }
                     }
 

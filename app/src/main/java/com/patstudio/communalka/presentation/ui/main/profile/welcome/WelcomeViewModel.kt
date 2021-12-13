@@ -76,6 +76,7 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
                             val turnsType = object : TypeToken<ArrayList<Invoice>>() {}.type
                             var invoices: ArrayList<Invoice> = gson.fromJson(it.data.data, turnsType)
                             placement.invoices = invoices
+                            Log.d("WelcomeView"," ivoics ${placement.invoices}")
                             updateInvoicesForPlacement(placements, pos+1)
                         }
                     }

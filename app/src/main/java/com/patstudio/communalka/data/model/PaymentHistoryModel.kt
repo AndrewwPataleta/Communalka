@@ -11,6 +11,7 @@ data class PaymentHistoryModel (
     var status: String,
     var amount: Double,
     var taxAmount: Double,
+    var placementName: String,
     var payments: ArrayList<PaymentHistoryDetailModel>
 
 ) : Parcelable

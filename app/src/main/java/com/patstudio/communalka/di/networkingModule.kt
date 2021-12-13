@@ -76,7 +76,7 @@ val networkingModule = module {
             .addConverterFactory(get())
             .build()
     }
-  single { get<Retrofit>().create(CommunalkaApi::class.java) }
+   single { get<Retrofit>().create(CommunalkaApi::class.java) }
 
     single { provideUserService(get(named("BASE_URL"))) }
     single { providePremisesService(get(named("BASE_URL"))) }

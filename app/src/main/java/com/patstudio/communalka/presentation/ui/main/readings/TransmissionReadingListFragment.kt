@@ -26,7 +26,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class TransmissionReadingListFragment : Fragment() {
 
-   private var _binding: FragmentTransmissionReadingListBinding? = null
+    private var _binding: FragmentTransmissionReadingListBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModel<TransmissionReadingListViewModel>()
     private val mainViewModel by sharedViewModel<MainViewModel>()
@@ -100,11 +100,20 @@ class TransmissionReadingListFragment : Fragment() {
                 }
             }
         }
+
         viewModel.transmissionPlacementMeter.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     val bundle = bundleOf("meter" to it)
                     findNavController().navigate(R.id.toTransmissionReadingCounter, bundle)
+                }
+            }
+        }
+        viewModel.historyPlacementMeter.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val bundle = bundleOf("meter" to it)
+                    findNavController().navigate(R.id.toTransmissionHistory, bundle)
                 }
             }
         }

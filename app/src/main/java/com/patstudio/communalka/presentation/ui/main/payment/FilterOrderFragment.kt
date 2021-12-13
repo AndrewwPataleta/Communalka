@@ -97,6 +97,14 @@ class FilterOrderFragment : Fragment() {
                 }
             }
         }
+
+        viewModel.backScreen.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                   requireActivity().onBackPressed()
+                }
+            }
+        }
     }
 
 
@@ -111,6 +119,9 @@ class FilterOrderFragment : Fragment() {
         }
         binding.supplierDownIcon.setOnClickListener {
             viewModel.updateSupplierVisible()
+        }
+        binding.accept.setOnClickListener {
+            viewModel.acceptFilter()
         }
         binding.serviceDownIcon.setOnClickListener {
             viewModel.updateServiceVisible()

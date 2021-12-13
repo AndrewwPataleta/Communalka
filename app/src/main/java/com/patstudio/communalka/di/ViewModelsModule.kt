@@ -11,6 +11,7 @@ import com.patstudio.communalka.presentation.ui.main.profile.UserNotificationVie
 import com.patstudio.communalka.presentation.ui.main.profile.security.EditPinCodeViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.security.EmailEditViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.security.EntranceSecurityViewModel
+import com.patstudio.communalka.presentation.ui.main.readings.ConsumptionHistoryViewModel
 import com.patstudio.communalka.presentation.ui.main.readings.TransmissionReadingListViewModel
 import com.patstudio.communalka.presentation.ui.main.readings.TransmissionReadingsViewModel
 import com.patstudio.communalka.presentation.ui.main.room.*
@@ -45,5 +46,6 @@ val viewModelsModule = module {
     viewModel { PaymentsViewModel(get(), get(), get(), get()) }
     viewModel { PaymentPlacementViewModel(get(), get(), get(), get()) }
     viewModel { UserNotificationViewModel(get(), get()) }
+    viewModel { ConsumptionHistoryViewModel(get(), get(), get()) }
 
 }

@@ -1,11 +1,8 @@
 package com.patstudio.communalka.di
 
-import com.example.imagegallery.contextprovider.DefaultDispatcherProvider
+import com.patstudio.communalka.common.contextprovider.DefaultDispatcherProvider
 import com.example.imagegallery.contextprovider.DispatcherProvider
 import com.google.gson.Gson
-import com.patstudio.communalka.presentation.ui.splash.SplashViewModel
-import org.koin.android.experimental.dsl.viewModel
-import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {

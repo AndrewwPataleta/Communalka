@@ -89,7 +89,7 @@ class PaymentsFragment : Fragment() {
                 }
             }
         }
-        viewModel.filterModel.observe(viewLifecycleOwner) {
+        viewModel.confirmFilterModel.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     binding.chipGroup.removeAllViews()

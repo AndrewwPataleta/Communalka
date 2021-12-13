@@ -33,12 +33,12 @@ class UserNotificationViewModel(private val userRepository: UserRepository, priv
    }
 
     fun initCurrentUser() {
-        _showProgress.postValue(Event(true))
+
         viewModelScope.launch(dispatcherProvider.io) {
             val user = userRepository.getLastAuthUser()
             if (user != null)  {
                 userMutable.postValue(Event(user))
-                _showProgress.postValue(Event(false))
+
             }
         }
     }
@@ -56,9 +56,11 @@ class UserNotificationViewModel(private val userRepository: UserRepository, priv
                 .collect {
                     when (it) {
                         is Result.Success -> {
+                            Log.d("UserNotification", "succ update")
+                            _showProgress.postValue(Event(false))
                             user.notificationEnable = enable
                             userRepository.saveUserLocal(user)
-                            _showProgress.postValue(Event(false))
+                            initCurrentUser()
                         }
                     }
                 }

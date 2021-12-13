@@ -6,18 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import androidx.core.net.toUri
-import androidx.core.view.setPadding
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.patstudio.communalka.R
-import com.patstudio.communalka.data.model.Placement
 import com.patstudio.communalka.data.model.PlacementMeter
 import com.patstudio.communalka.databinding.FragmentTransmissionReadingsBinding
 import com.patstudio.communalka.presentation.ui.splash.MainViewModel
 import gone
-import org.koin.android.ext.android.bind
+import kotlinx.android.synthetic.main.fragment_transmission_readings.view.*
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import visible
@@ -86,6 +83,31 @@ class TransmissionReadingsFragment : Fragment() {
         }
     }
 
+    private fun generateTransmission(): String {
+        var transmission = binding.firstNumber.text.toString() + binding.secondNumber.text.toString() + binding.thirdNumber.text.toString() + binding.fourNumber.text.toString() + binding.fiveNumber.text.toString()
+        if (transmission.isNullOrEmpty()) {
+            disableTransmission()
+        } else {
+            enableTransmission()
+        }
+        return transmission
+    }
+
+    private fun enableTransmission() {
+        binding.sendTransmissions.background = resources.getDrawable(R.drawable.background_rounded_blue)
+        binding.sendTransmissions.setOnClickListener {
+            viewModel.sendTransmissions(generateTransmission())
+        }
+    }
+
+    private fun disableTransmission() {
+
+        binding.sendTransmissions.background = resources.getDrawable(R.drawable.gray_button_disable_background)
+        binding.sendTransmissions.setOnClickListener {
+
+        }
+    }
+
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initListeners() {
         editTextList.add(binding.firstNumber)
@@ -97,14 +119,7 @@ class TransmissionReadingsFragment : Fragment() {
 //        editTextList.add(binding.sevenNumber)
 //        editTextList.add(binding.eigthNumber)
 
-        binding.sendTransmissions.setOnClickListener {
-            var transmission = binding.firstNumber.text.toString()+binding.secondNumber.text.toString()+binding.thirdNumber.text.toString()+binding.fourNumber.text.toString()+binding.fiveNumber.text.toString()
-            if (!binding.sixNumber.text.toString().isNullOrEmpty() || !binding.sevenNumber.text.toString().isNullOrEmpty() || !binding.eigthNumber.text.toString().isNullOrEmpty()) {
-                transmission += ","+binding.sixNumber.text.toString()+binding.sevenNumber.text.toString()+binding.eigthNumber.text.toString()
-            }
-
-            viewModel.sendTransmissions(transmission)
-        }
+        disableTransmission()
 
         binding.back.setOnClickListener {
             requireActivity().onBackPressed()
@@ -132,27 +147,34 @@ class TransmissionReadingsFragment : Fragment() {
 
         binding.firstNumber.doAfterTextChanged {
            it?.let {
-               if (it.length == 1) binding.secondNumber.requestFocus()
+               if (it.length == 1) {
+                   binding.secondNumber.requestFocus()
+               }
+               generateTransmission()
            }
         }
         binding.secondNumber.doAfterTextChanged {
             it?.let {
                 if (it.length == 1) binding.thirdNumber.requestFocus()
+                generateTransmission()
             }
         }
         binding.thirdNumber.doAfterTextChanged {
             it?.let {
                 if (it.length == 1) binding.fourNumber.requestFocus()
+                generateTransmission()
             }
         }
         binding.fourNumber.doAfterTextChanged {
             it?.let {
                 if (it.length == 1) binding.fiveNumber.requestFocus()
+                generateTransmission()
             }
         }
         binding.fiveNumber.doAfterTextChanged {
             it?.let {
                 if (it.length == 1) binding.sixNumber.requestFocus()
+                generateTransmission()
             }
         }
 //        binding.sixNumber.doAfterTextChanged {

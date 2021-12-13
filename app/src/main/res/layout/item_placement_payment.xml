@@ -47,12 +47,39 @@
             android:text="@{model.supplier}"/>
 
         <TextView
-            android:id="@+id/penaltyTxt"
+            android:id="@+id/balanceTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/supplier"
             android:layout_marginTop="16dp"
             android:text="Начисление за месяц, ₽"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:fontFamily="@font/roboto_regular"/>
+
+
+        <TextView
+            android:id="@+id/balanceValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/balanceTxt"
+            android:text="@{String.valueOf(model.balance)}"
+            app:layout_constraintBottom_toBottomOf="@id/balanceTxt"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/balanceTxt"
+            app:layout_constraintHorizontal_bias="1.0"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:fontFamily="@font/roboto_regular"/>
+
+        <TextView
+            android:id="@+id/penaltyTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/balanceValue"
+            android:layout_marginTop="8dp"
+            android:text="Долг "
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -101,13 +128,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/penaltyPaymentContainer"
-            android:text="Размер комиссии появится после ввода суммы"
+
             android:textColor="@color/black"
             android:layout_marginTop="8dp"
             app:layout_constraintHorizontal_bias="1.0"
-            android:textSize="12sp"
+            android:textSize="13sp"
             app:layout_constraintStart_toStartOf="parent"
-            android:fontFamily="@font/roboto_regular"/>
+            android:fontFamily="@font/robotomedium"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

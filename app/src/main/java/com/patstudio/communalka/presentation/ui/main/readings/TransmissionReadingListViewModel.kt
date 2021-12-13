@@ -30,6 +30,9 @@ class TransmissionReadingListViewModel(private val userRepository: UserRepositor
     private var _transmissionPlacementMeter: MutableLiveData<Event<PlacementMeter>> = MutableLiveData()
     val transmissionPlacementMeter: LiveData<Event<PlacementMeter>> = _transmissionPlacementMeter
 
+    private var _historyPlacementMeter: MutableLiveData<Event<PlacementMeter>> = MutableLiveData()
+    val historyPlacementMeter: LiveData<Event<PlacementMeter>> = _historyPlacementMeter
+
     fun setCurrentPlacement(placement: Placement) {
         try {
             viewModelScope.launch(dispatcherProvider.io) {
@@ -69,6 +72,10 @@ class TransmissionReadingListViewModel(private val userRepository: UserRepositor
                     }
                 }
         }
+    }
+
+    fun selectMeterForHistory(placementMeter: PlacementMeter) {
+        _historyPlacementMeter.postValue(Event(placementMeter))
     }
 
     public fun selectMeterForTransmissionReading(placementMeter: PlacementMeter) {

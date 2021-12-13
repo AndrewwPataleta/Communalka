@@ -36,8 +36,11 @@ class RoomRemoteImpl(
         premisesService.getPlacementDetail(id)
     }
 
+    override suspend fun getMeterHistory(id: String) = withContext(dispatcherProvider.io) {
+        premisesService.getMeterHistory(id)
+    }
+
     override suspend fun sendRoom(room: Room) = withContext(dispatcherProvider.io) {
-        val body = JsonObject()
         premisesService.addPlacement(room)
     }
 

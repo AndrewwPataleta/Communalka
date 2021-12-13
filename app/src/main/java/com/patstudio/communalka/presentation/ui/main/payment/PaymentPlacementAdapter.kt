@@ -46,13 +46,31 @@ class PaymentPlacementAdapter(private val paymentsList: List<Invoice>, val viewM
         fun bind(invoice: Invoice, position: Int) {
             itemBinding.model = invoice
             itemBinding.viewModel = viewModel
+            itemBinding.selectedPayment.isChecked = invoice.selected
             itemBinding.selectedPayment.setOnCheckedChangeListener { compoundButton, b ->
                 viewModel.changeSelectTypeInvoice(invoice, b)
             }
-            itemBinding.penaltyPaymentValue.setFilters(arrayOf<InputFilter>(InputFilterMinMax(0f, invoice.penalty.toFloat()), DecimalDigitsInputFilter(10, 2)))
+            var amount = invoice.penalty+invoice.balance
+            invoice.penaltyValue?.let {
+                amount = it
+            }
+
+            var tax = ((amount*invoice.percentTax)/100)
+            itemBinding.penaltyPercent.text = "Комиссия ${tax} ₽"
+            itemBinding.penaltyPaymentValue.setFilters(arrayOf<InputFilter>(InputFilterMinMax(0f, (invoice.penalty.toFloat()+invoice.balance.toFloat())), DecimalDigitsInputFilter(10, 2)))
 
             itemBinding.penaltyPaymentValue.addTextChangedListener {
-                viewModel.setPenaltyValue(invoice, it.toString())
+                if (it.toString().toDoubleOrNull() != null) {
+                    var amount = it.toString().toDoubleOrNull()
+                    var tax = ((amount!!*invoice.percentTax)/100)
+                    itemBinding.penaltyPercent.text = "Комиссия ${tax} ₽"
+                } else {
+
+                    var amount = invoice.penalty+invoice.balance
+                    var tax = ((amount*invoice.percentTax)/100)
+                    itemBinding.penaltyPercent.text = "Комиссия ${tax} ₽"
+                }
+                viewModel.setPenaltyValue(invoice, it.toString(), position)
             }
         }
     }

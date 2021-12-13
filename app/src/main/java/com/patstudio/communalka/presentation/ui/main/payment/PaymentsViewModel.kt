@@ -36,14 +36,23 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
     private var _filterModel: MutableLiveData<Event<PaymentFilterModel>> = MutableLiveData()
     val filterModel: LiveData<Event<PaymentFilterModel>> = _filterModel
 
+    private var _confirmFilterModel: MutableLiveData<Event<PaymentFilterModel>> = MutableLiveData()
+    val confirmFilterModel: LiveData<Event<PaymentFilterModel>> = _confirmFilterModel
+
     private var _actionReceipt: MutableLiveData<Event<PaymentHistoryModel>> = MutableLiveData()
     val actionReceipt: LiveData<Event<PaymentHistoryModel>> = _actionReceipt
 
+    private var _backScreen: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val backScreen: LiveData<Event<Boolean>> = _backScreen
+
     private var filter: PaymentFilterModel? = null
+
+    private var confirmFilter: PaymentFilterModel? = null
 
     fun openFilter() {
         _openFilter.postValue(Event(true))
     }
+
 
     private fun uploadFilter() {
         viewModelScope.launch(dispatcherProvider.io) {
@@ -102,7 +111,6 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
             _filterModel.postValue(Event(filter!!))
             getPaymentHistory()
         }
-
     }
 
     fun resetFilter() {
@@ -129,11 +137,19 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
         }
     }
 
+
+    fun acceptFilter() {
+        confirmFilter = filter?.copy()
+        _confirmFilterModel.postValue(Event(confirmFilter!!))
+        _backScreen.postValue(Event(true))
+    }
+
     fun updateServiceVisible() {
         if (filter != null) {
             filter!!.services = Pair(!filter!!.services.first, filter!!.services.second)
             _filterModel.postValue(Event(filter!!))
         }
+
     }
 
     fun updatePlacementVisible() {
@@ -163,24 +179,29 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
 
     fun removeDateFromFilter() {
         filter!!.date = null
+        confirmFilter!!.date = null
         _filterModel.postValue(Event(filter!!))
+        _confirmFilterModel.postValue(Event(confirmFilter!!))
         getPaymentHistory()
     }
 
     fun removePlacementFromFilter(placement: Placement) {
         placement.selected = false
+        _confirmFilterModel.postValue(Event(confirmFilter!!))
         _filterModel.postValue(Event(filter!!))
         getPaymentHistory()
     }
 
     fun removeSupplierFromFilter(supplier: Supplier) {
         supplier.selected = false
+        _confirmFilterModel.postValue(Event(confirmFilter!!))
         _filterModel.postValue(Event(filter!!))
         getPaymentHistory()
     }
 
     fun removeServiceFromFilter(service: Service) {
         service.selected = false
+        _confirmFilterModel.postValue(Event(confirmFilter!!))
         _filterModel.postValue(Event(filter!!))
         getPaymentHistory()
     }
@@ -197,26 +218,26 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
 
     private fun getPaymentHistory() {
         viewModelScope.launch(dispatcherProvider.io) {
-            var placemets = filter?.placement?.second?.filter { it.selected }
+            var placemets = confirmFilter?.placement?.second?.filter { it.selected }
             var placementsId = placemets?.map {
                 it.id
             }
 
-            var suppliers = filter?.suppliers?.second?.filter { it.selected }
+            var suppliers = confirmFilter?.suppliers?.second?.filter { it.selected }
             var suppliersId = suppliers?.map {
                 it.id
             }
 
-            var services = filter?.services?.second?.filter { it.selected }
+            var services = confirmFilter?.services?.second?.filter { it.selected }
             var servicesId = services?.map {
                 it.id
             }
 
-            var convertedDateStart = filter?.date?.first?.let {
+            var convertedDateStart = confirmFilter?.date?.first?.let {
                 convertLongToFilterTime(it)
             }
 
-            var convertedDateEnd = filter?.date?.second?.let {
+            var convertedDateEnd = confirmFilter?.date?.second?.let {
                 convertLongToFilterTime(it)
             }
 

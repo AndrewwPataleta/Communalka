@@ -58,6 +58,9 @@
         <action
             android:id="@+id/toTransmissionReadingCounter"
             app:destination="@id/TransmissionReadingCounter"/>
+        <action
+            android:id="@+id/toTransmissionHistory"
+            app:destination="@id/ConsumptionHistoryFragment"/>
     </fragment>
 
     <fragment
@@ -343,6 +346,14 @@
         android:name="com.patstudio.communalka.presentation.ui.main.profile.UserNotificationFragment"
         android:label="Уведомления"
         tools:layout="@layout/fragment_user_notification_settings">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/ConsumptionHistoryFragment"
+        android:name="com.patstudio.communalka.presentation.ui.main.readings.ConsumptionHistoryFragment"
+        android:label="История начислений"
+        tools:layout="@layout/fragment_consumption_history">
 
     </fragment>
 

@@ -66,7 +66,7 @@ class PaymentHistoryAdapter(private val paymentsList: List<PaymentHistoryModel>,
 
                 val inflater = itemBinding.root.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                 val servicePaymentBinding: View = inflater.inflate(R.layout.item_payment_history_detail, null)
-                servicePaymentBinding.findViewById<TextView>(R.id.serviceName).text = "ООО “СевЭнергоСбыт"
+                servicePaymentBinding.findViewById<TextView>(R.id.serviceName).text = paymentHistoryModel.placementName
                 servicePaymentBinding.findViewById<TextView>(R.id.paymentAmount).text = "Сумма оплаты: ${it.amount+it.taxAmount} ₽"
                 itemBinding.paymentsContainer.addView(servicePaymentBinding)
             }

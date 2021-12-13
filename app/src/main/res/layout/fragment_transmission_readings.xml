@@ -110,7 +110,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:fontFamily="@font/robotoregular"
-                android:text="@{String.valueOf(model.last_values.prevValue)}"
+                android:text="@{String.valueOf(model.last_values.lastValue)}"
                 android:textColor="@color/black"
                 android:textSize="17sp"
                 android:layout_marginTop="8dp"
@@ -553,12 +553,13 @@
 <!--                    app:layout_constraintEnd_toEndOf="parent"/>-->
 
 
-            <com.google.android.material.button.MaterialButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/sendTransmissions"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:backgroundTint="@color/dark_blue"
+                android:textColor="@color/white"
+                android:background="@drawable/gray_button_disable_background"
                 android:fontFamily="@font/robotoregular"
                 android:padding="8dp"
                 app:cornerRadius="8dp"

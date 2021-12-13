@@ -39,9 +39,16 @@ class PaymentPlacementViewModel(private val userRepository: UserRepository, priv
     private var _totalPrice: MutableLiveData<Event<Double>> = MutableLiveData()
     val totalPrice: LiveData<Event<Double>> = _totalPrice
 
+    private var _rebuildPosition: MutableLiveData<Event<Int>> = MutableLiveData()
+    val rebuildPosition: LiveData<Event<Int>> = _rebuildPosition
+
     fun setCurrentPlacement(placement: Placement) {
         this.placementModel = placement
+        placement.invoices!!.map {
+            it.selected = true
+        }
         _placement.postValue(Event(placement))
+        calculatePrice()
     }
 
 
@@ -49,7 +56,7 @@ class PaymentPlacementViewModel(private val userRepository: UserRepository, priv
         var paymentAmount = 0.0
        placementModel.invoices?.map {
            if (it.selected) {
-               var amount = it.penalty
+               var amount = it.penalty+it.balance
                it.penaltyValue?.let {
                    amount = it
                }
@@ -61,12 +68,13 @@ class PaymentPlacementViewModel(private val userRepository: UserRepository, priv
         _totalPrice.postValue(Event(paymentAmount))
     }
 
-    fun setPenaltyValue(invoice: Invoice, penalty: String) {
+    fun setPenaltyValue(invoice: Invoice, penalty: String, position: Int) {
         invoice.penaltyValue = null
        penalty.toDoubleOrNull()?.let {
            invoice.penaltyValue = it
        }
         calculatePrice()
+      //  _rebuildPosition.postValue(Event(position))
     }
 
 
@@ -85,7 +93,7 @@ class PaymentPlacementViewModel(private val userRepository: UserRepository, priv
             placementModel.invoices?.map { invoice->
                if (invoice.selected) {
                    if (account.supplierName.compareTo(invoice.supplier) == 0) {
-                       var amount = invoice.penalty
+                       var amount = invoice.penalty+invoice.balance
                        invoice.penaltyValue?.let {
                            amount = it
                        }
@@ -117,12 +125,18 @@ class PaymentPlacementViewModel(private val userRepository: UserRepository, priv
                             var shops: ArrayList<Shop> = ArrayList()
                             paymentCreatorList.map {
                                 var shop = Shop()
-                                var taxShop = it.amount+it.taxAmount
+                                var taxShop = it.amount
 
                                 shop.amount =  Money.ofRubles(taxShop).coins
                                 shop.shopCode = it.shopId
+
                                 shops.add(shop)
                             }
+                            var shop = Shop()
+                            shop.amount =  Money.ofRubles(totalTax).coins
+                            shop.shopCode = paymentOrderShop.communalkaShopId.toString()
+                            shops.add(shop)
+
                             paymentOrderShop.shops = shops
 
                             _paymentOrder.postValue(Event(paymentOrderShop))

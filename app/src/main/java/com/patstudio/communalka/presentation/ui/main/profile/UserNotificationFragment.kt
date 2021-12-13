@@ -44,13 +44,13 @@ class UserNotificationFragment : Fragment() {
         viewModel.showProgress.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-//                    if (it) {
-//                        binding.enabled.visibility = View.GONE
-//                        binding.progress.visibility = View.VISIBLE
-//                    } else {
-//                        binding.enabled.visibility = View.VISIBLE
-//                        binding.progress.visibility = View.GONE
-//                    }
+                    if (it) {
+                        binding.enabled.visibility = View.GONE
+                        binding.progress.visibility = View.VISIBLE
+                    } else {
+                        binding.enabled.visibility = View.VISIBLE
+                        binding.progress.visibility = View.GONE
+                    }
                 }
             }
         }
@@ -64,9 +64,10 @@ class UserNotificationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initObservers()
         viewModel.initCurrentUser()
         initListeners()
+        initObservers()
+
     }
 
     override fun onDestroyView() {

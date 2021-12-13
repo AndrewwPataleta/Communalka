@@ -12,8 +12,7 @@ data class Invoice (
   var service: String,
   var percentTax: Double,
   var currentTax: Double? = null,
-
   var shopId: String,
-  var selected: Boolean = false
+  var selected: Boolean = true
 ) : Parcelable
 
