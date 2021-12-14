@@ -51,7 +51,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:fontFamily="@font/robotomedium"
-            android:text="1 520,00 ₽"
             android:textColor="@color/black"
             android:textSize="17sp"
             app:layout_constraintTop_toTopOf="parent"

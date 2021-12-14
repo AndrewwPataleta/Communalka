@@ -36,6 +36,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_delete_bucket"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:visibility="gone"
                     app:layout_constraintTop_toTopOf="parent"
                     android:onClick='@{() -> viewModel.removeCounter(model)}'
                     app:tint="@color/dark_blue" />

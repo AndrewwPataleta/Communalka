@@ -67,7 +67,7 @@ class   ProfileFragment : Fragment() {
                 SavedCardsOptions().setOptions {
                     customerOptions {
                         checkType = CheckType.NO.toString()
-                        customerKey = "key"
+                        customerKey = "1"
                     }
                 }
             tinkoffAcquiring.openSavedCardsScreen(requireActivity(), paymentOptions, 1234)

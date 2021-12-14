@@ -75,6 +75,7 @@
             style="@style/TextBold1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:fontFamily="@font/robotobold"
             android:text="Счетчики"
             android:textColor="@color/black"
@@ -89,6 +90,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_add"
             app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="@id/counters"
             app:layout_constraintBottom_toBottomOf="@id/counters"
             app:layout_constraintVertical_bias="0.5"/>

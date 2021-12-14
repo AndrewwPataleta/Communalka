@@ -117,16 +117,19 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
                 val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                 val servicePaymentBinding: View = inflater.inflate(R.layout.item_service_payment, null)
                 servicePaymentBinding.findViewById<TextView>(R.id.serviceName).text = it.service
-                servicePaymentBinding.findViewById<TextView>(R.id.message).text = ""
-                servicePaymentBinding.findViewById<TextView>(R.id.payment).text = it.penalty.toString().plus(" ₽")
-
+                placement.accounts.map { account-> {
+                    if (account.supplierName.compareTo(it.supplier) == 0) {
+                        servicePaymentBinding.findViewById<TextView>(R.id.message).text = account.message
+                    }
+                } }
+                servicePaymentBinding.findViewById<TextView>(R.id.payment).text = (it.balance+it.penalty).toString().plus(" ₽")
                 itemBinding.servicePaymentsContainer.addView(servicePaymentBinding)
             }
 
             var penaltySum = 0.0
 
             placement.invoices?.map {
-                penaltySum += it.penalty
+                penaltySum += it.penalty+it.balance
             }
 
             if (penaltySum > 0) {

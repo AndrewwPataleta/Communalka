@@ -37,6 +37,7 @@
                     android:src="@drawable/ic_delete_bucket"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="gone"
                     android:onClick='@{() -> viewModel.removeCounter(model)}'
                     app:tint="@color/dark_blue" />
 
@@ -99,6 +100,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:text="Значение"
+                    android:visibility="gone"
                     app:layout_constraintTop_toBottomOf="@+id/senderEdit"
                     android:layout_marginTop="16dp"/>
 
@@ -109,6 +111,7 @@
                     android:hint="1234"
                     android:inputType="numberDecimal"
                     android:text="@={model.value}"
+                    android:visibility="gone"
                     android:digits="0123456789."
                     android:textColorHint="@color/gray_placeholder"
                     android:textSize="16sp"
