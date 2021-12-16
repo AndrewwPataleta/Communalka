@@ -38,7 +38,7 @@ interface UserRemote {
 
     suspend fun createMeterForAccount(title: String, serial_number: String, value: String, accountId: String): APIResponse<JsonElement>
 
-    suspend fun editMeterForAccount(title: String, serial_number: String, value: String, meterId: String): APIResponse<JsonElement>
+    suspend fun editMeterForAccount(title: String, serial_number: String, value: String?, meterId: String): APIResponse<JsonElement>
 
     suspend fun getSuppliers(): APIResponse<JsonElement>
 

@@ -170,7 +170,7 @@ class EditPersonalAccountViewModel(private val userRepository: UserRepository, p
                 if (personalCounter.serial_number != null) {
                     serialNumber = personalCounter.serial_number!!
                 }
-                userRepository.editMeter(personalCounter.title, serialNumber, personalCounter.value, personalCounter.id!!)
+                userRepository.editMeter(personalCounter.title, serialNumber, null, personalCounter.id!!)
                     .catch { it.printStackTrace() }
                     .collect {
                         when (it) {

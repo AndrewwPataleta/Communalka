@@ -352,7 +352,7 @@
     <fragment
         android:id="@+id/ConsumptionHistoryFragment"
         android:name="com.patstudio.communalka.presentation.ui.main.readings.ConsumptionHistoryFragment"
-        android:label="История начислений"
+        android:label="История потребления"
         tools:layout="@layout/fragment_consumption_history">
 
     </fragment>

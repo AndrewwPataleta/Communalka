@@ -17,7 +17,7 @@ import ru.tinkoff.acquiring.sdk.models.Shop
 import ru.tinkoff.acquiring.sdk.utils.Money
 import kotlin.math.roundToLong
 
-class PaymentPlacementViewModel(private val userRepository: UserRepository, private val gson: Gson, private val roomRepository: RoomRepository, private val dispatcherProvider: DispatcherProvider): ViewModel() {
+class PaymentPlacementViewModel(private val userRepository: UserRepository, private val gson: Gson,): ViewModel() {
 
     private lateinit var placementModel: Placement
 
@@ -74,7 +74,6 @@ class PaymentPlacementViewModel(private val userRepository: UserRepository, priv
            invoice.penaltyValue = it
        }
         calculatePrice()
-      //  _rebuildPosition.postValue(Event(position))
     }
 
 
@@ -83,7 +82,7 @@ class PaymentPlacementViewModel(private val userRepository: UserRepository, priv
         calculatePrice()
     }
 
-    public fun createPayment() {
+    fun createPayment() {
 
         _showProgressPayment.postValue(Event(true))
         var paymentCreatorList: ArrayList<PaymentCreator> = ArrayList()
@@ -119,20 +118,20 @@ class PaymentPlacementViewModel(private val userRepository: UserRepository, priv
                 .collect {
                     when (it) {
                         is Result.Success -> {
-                            var paymentOrderShop: PaymentOrderShop = gson.fromJson(it.data.data, PaymentOrderShop::class.java)
+                            val paymentOrderShop: PaymentOrderShop = gson.fromJson(it.data.data, PaymentOrderShop::class.java)
                             paymentOrderShop.amount = totalAmount+totalTax
 
-                            var shops: ArrayList<Shop> = ArrayList()
+                            val shops: ArrayList<Shop> = ArrayList()
                             paymentCreatorList.map {
-                                var shop = Shop()
-                                var taxShop = it.amount
+                                val shop = Shop()
+                                val taxShop = it.amount
 
                                 shop.amount =  Money.ofRubles(taxShop).coins
                                 shop.shopCode = it.shopId
 
                                 shops.add(shop)
                             }
-                            var shop = Shop()
+                            val shop = Shop()
                             shop.amount =  Money.ofRubles(totalTax).coins
                             shop.shopCode = paymentOrderShop.communalkaShopId.toString()
                             shops.add(shop)
@@ -140,12 +139,6 @@ class PaymentPlacementViewModel(private val userRepository: UserRepository, priv
                             paymentOrderShop.shops = shops
 
                             _paymentOrder.postValue(Event(paymentOrderShop))
-                        }
-                        is Result.Error -> {
-                            _showProgressPayment.postValue(Event(false))
-                        }
-                        is Result.ErrorResponse -> {
-                            _showProgressPayment.postValue(Event(false))
                         }
                     }
                 }

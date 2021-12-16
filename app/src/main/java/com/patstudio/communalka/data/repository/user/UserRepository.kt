@@ -174,7 +174,7 @@ class UserRepository (
         }
     }
 
-    fun editMeter(title: String, serial_number: String, value: String, meterId: String): Flow<Result<APIResponse<JsonElement>>> = flow {
+    fun editMeter(title: String, serial_number: String, value: String?, meterId: String): Flow<Result<APIResponse<JsonElement>>> = flow {
         try {
             if (connectivity.hasNetworkAccess()) {
                 emit(Result.loading())

@@ -120,7 +120,7 @@ class UserRemoteImpl(
     override suspend fun editMeterForAccount(
         title: String,
         serial_number: String,
-        value: String,
+        value: String?,
         accountId: String
     ) = withContext(dispatcherProvider.default) {
         val body = JsonObject()
