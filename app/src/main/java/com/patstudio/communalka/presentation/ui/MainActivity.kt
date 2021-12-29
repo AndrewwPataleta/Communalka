@@ -26,8 +26,6 @@ import gone
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.content_main.*
-
-import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import visible
 
@@ -60,6 +58,17 @@ class MainActivity : AppCompatActivity() {
                    it?.let {
                        binding.toolbar.title = it.toString()
                    }
+                }
+            }
+        }
+        viewModel.toolbarWithTitle.observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    it?.let {
+                        Log.d("MainActivity", "it ${it}")
+                        binding.toolbar.title = it.first
+                        binding.toolbar.subtitle = it.second
+                    }
                 }
             }
         }
@@ -144,6 +153,14 @@ class MainActivity : AppCompatActivity() {
                     filter.visibility = View.GONE
                 }
                 R.id.CreatePersonalAccount-> {
+                    toolbar.visibility = View.VISIBLE
+                    toolbar.subtitle = ""
+                    deleteRoom.visibility = View.GONE
+                    deletePersonalAccount.visibility = View.GONE
+                    filter.visibility = View.GONE
+                    bottomNavigationView.visibility = View.GONE
+                }
+                R.id.AccrualFragment-> {
                     toolbar.visibility = View.VISIBLE
                     toolbar.subtitle = ""
                     deleteRoom.visibility = View.GONE

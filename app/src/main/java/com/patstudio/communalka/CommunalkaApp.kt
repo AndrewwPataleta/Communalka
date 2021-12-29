@@ -24,7 +24,7 @@ class CommunalkaApp: Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        AcquiringSdk.isDeveloperMode = true
+        AcquiringSdk.isDeveloperMode = false
         AcquiringSdk.isDebug = true
         startKoin()
         AppCenter.start(

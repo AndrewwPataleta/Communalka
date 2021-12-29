@@ -70,9 +70,12 @@ class PaymentPlacementViewModel(private val userRepository: UserRepository, priv
 
     fun setPenaltyValue(invoice: Invoice, penalty: String, position: Int) {
         invoice.penaltyValue = null
-       penalty.toDoubleOrNull()?.let {
-           invoice.penaltyValue = it
-       }
+        if (penalty.toDoubleOrNull() != null) {
+            invoice.penaltyValue = penalty.toDouble()
+        } else {
+            invoice.penaltyValue = 0.0
+        }
+
         calculatePrice()
     }
 

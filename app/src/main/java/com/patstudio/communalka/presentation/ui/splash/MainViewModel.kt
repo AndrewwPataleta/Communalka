@@ -19,6 +19,9 @@ class MainViewModel (private val userRepository: UserRepository, private val gso
     private val _needShadow: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val toolbarName: MutableLiveData<Event<String>> = MutableLiveData()
 
+     var _toolbarWithTitle: MutableLiveData<Event<Pair<String, String>>> = MutableLiveData()
+    val toolbarWithTitle: LiveData<Event<Pair<String, String>>> = _toolbarWithTitle
+
     public fun needBackgroundShadow(needShadow: Boolean) {
         _needShadow.postValue(Event(needShadow))
     }
@@ -31,9 +34,8 @@ class MainViewModel (private val userRepository: UserRepository, private val gso
         toolbarName.postValue(Event(name))
     }
 
-
-
     fun getToolbarName(): MutableLiveData<Event<String>> {
         return toolbarName
     }
+
 }

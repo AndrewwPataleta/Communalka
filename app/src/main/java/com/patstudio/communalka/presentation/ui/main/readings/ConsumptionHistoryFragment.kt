@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import android.widget.TableRow
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.PlacementMeter
 import com.patstudio.communalka.databinding.FragmentConsumptionHistoryBinding
+import com.patstudio.communalka.presentation.ui.splash.MainViewModel
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class ConsumptionHistoryFragment : Fragment() {
@@ -17,6 +20,7 @@ class ConsumptionHistoryFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel by viewModel<ConsumptionHistoryViewModel>()
     private lateinit var adapter: ConsumptionHistoryAdapter
+    private val mainViewModel by sharedViewModel<MainViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,6 +62,9 @@ class ConsumptionHistoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        mainViewModel._toolbarWithTitle.postValue(Event(Pair(requireArguments().getParcelable<PlacementMeter>("meter")!!.title, "${requireArguments().getString("placement")} ${requireArguments().getString("supplier")}")))
+
         arguments?.getParcelable<PlacementMeter>("meter")?.let {
             viewModel.setCurrentPlacementMeter(it)
         }

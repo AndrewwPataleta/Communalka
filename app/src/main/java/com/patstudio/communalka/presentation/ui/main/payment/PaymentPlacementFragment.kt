@@ -26,11 +26,6 @@ import com.patstudio.communalka.BuildConfig
 import com.patstudio.communalka.R
 import com.patstudio.communalka.data.model.Placement
 import com.patstudio.communalka.databinding.*
-import com.patstudio.communalka.presentation.ui.MainActivity
-import com.patstudio.communalka.presentation.ui.main.ProfileViewModel
-import com.patstudio.communalka.presentation.ui.main.profile.HistoryVersionViewModel
-import com.patstudio.communalka.presentation.ui.main.room.PlacementAdapter
-import gone
 import org.koin.android.viewmodel.ext.android.viewModel
 import roundOffTo2DecPlaces
 import ru.tinkoff.acquiring.sdk.TinkoffAcquiring

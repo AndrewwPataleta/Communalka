@@ -6,6 +6,7 @@ import android.text.InputFilter
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.core.view.setPadding
@@ -23,6 +24,8 @@ import com.patstudio.communalka.databinding.ItemPlacementPaymentBinding
 import com.patstudio.communalka.presentation.ui.main.profile.welcome.WelcomeViewModel
 import com.skydoves.balloon.*
 import gone
+import round
+import roundOffTo2DecPlaces
 import visible
 
 class PaymentPlacementAdapter(private val paymentsList: List<Invoice>, val viewModel: PaymentPlacementViewModel) : RecyclerView.Adapter<PaymentPlacementAdapter.PlacementHolder>() {
@@ -47,8 +50,19 @@ class PaymentPlacementAdapter(private val paymentsList: List<Invoice>, val viewM
             itemBinding.model = invoice
             itemBinding.viewModel = viewModel
             itemBinding.selectedPayment.isChecked = invoice.selected
+
+
+
             itemBinding.selectedPayment.setOnCheckedChangeListener { compoundButton, b ->
                 viewModel.changeSelectTypeInvoice(invoice, b)
+
+                if (b) {
+                    itemBinding.openGroup.visibility = View.VISIBLE
+                    itemBinding.service.setTextColor(itemBinding.root.context.resources.getColor(R.color.black))
+                } else {
+                    itemBinding.openGroup.visibility = View.GONE
+                    itemBinding.service.setTextColor(itemBinding.root.context.resources.getColor(R.color.gray_dark))
+                }
             }
             var amount = invoice.penalty+invoice.balance
             invoice.penaltyValue?.let {
@@ -56,19 +70,17 @@ class PaymentPlacementAdapter(private val paymentsList: List<Invoice>, val viewM
             }
 
             var tax = ((amount*invoice.percentTax)/100)
-            itemBinding.penaltyPercent.text = "Комиссия ${tax} ₽"
-            itemBinding.penaltyPaymentValue.setFilters(arrayOf<InputFilter>(InputFilterMinMax(0f, (invoice.penalty.toFloat()+invoice.balance.toFloat())), DecimalDigitsInputFilter(10, 2)))
-
+            itemBinding.penaltyPercent.text = "Комиссия ${roundOffTo2DecPlaces(tax.toFloat())} ₽"
+            itemBinding.penaltyPaymentValue.setFilters(arrayOf<InputFilter>(InputFilterMinMax(0f, 1000000f), DecimalDigitsInputFilter(10, 2)))
+            itemBinding.penaltyPaymentValue.setText(amount.toString()   )
             itemBinding.penaltyPaymentValue.addTextChangedListener {
                 if (it.toString().toDoubleOrNull() != null) {
                     var amount = it.toString().toDoubleOrNull()
                     var tax = ((amount!!*invoice.percentTax)/100)
-                    itemBinding.penaltyPercent.text = "Комиссия ${tax} ₽"
+                    itemBinding.penaltyPercent.text = "Комиссия ${roundOffTo2DecPlaces(tax.toFloat())} ₽"
                 } else {
 
-                    var amount = invoice.penalty+invoice.balance
-                    var tax = ((amount*invoice.percentTax)/100)
-                    itemBinding.penaltyPercent.text = "Комиссия ${tax} ₽"
+                    itemBinding.penaltyPercent.text = "Размер комиссии появится после ввода суммы"
                 }
                 viewModel.setPenaltyValue(invoice, it.toString(), position)
             }

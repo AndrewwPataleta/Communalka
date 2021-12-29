@@ -71,7 +71,7 @@ class TransmissionReadingsViewModel(private val userRepository: UserRepository, 
                             is Result.ErrorResponse -> {
                                 _isSendingTransmissions.postValue(Event(false))
                                 when(it.data.status) {
-                                    "error" -> {
+                                    "fail" -> {
                                         it.data.message?.let {
                                             _userMessage.postValue(Event(it))
                                         }

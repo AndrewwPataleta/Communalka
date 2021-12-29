@@ -123,6 +123,12 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/openGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="supplier, penaltyValue, balanceTxt, balanceValue, penaltyTxt, penaltyPercent, penaltyPaymentContainer"/>
+
         <TextView
             android:id="@+id/penaltyPercent"
             android:layout_width="wrap_content"

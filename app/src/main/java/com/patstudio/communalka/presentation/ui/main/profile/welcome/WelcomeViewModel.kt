@@ -42,6 +42,9 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
     private var _placementForPayment: MutableLiveData<Event<Placement>> = MutableLiveData()
     val placementForPayment: LiveData<Event<Placement>> = _placementForPayment
 
+    private var _detailService: MutableLiveData<Event<Triple<String, String, String>>> = MutableLiveData()
+    val detailService: LiveData<Event<Triple<String, String, String>>> = _detailService
+
 
     private lateinit var userPlacement: List<Placement>
 
@@ -201,7 +204,12 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
     fun selectPayment(placement: Placement) {
        _placementForPayment.postValue(Event(placement))
     }
-    
+
+    fun selectDetailService(service: String, placement: String, account: String) {
+        _detailService.postValue(Event(Triple(service, placement, account)))
+    }
+
+
     fun checkAvailableToOpenAddRoom() {
         if (user != null) {
            navigateTo.postValue(Event("ADD_ROOM"))

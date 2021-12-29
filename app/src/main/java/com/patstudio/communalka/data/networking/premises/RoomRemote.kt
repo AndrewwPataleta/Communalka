@@ -15,11 +15,15 @@ interface RoomRemote {
 
     suspend fun getMetersForPlacement(placementId: String): APIResponse<JsonElement>
 
+    suspend fun getMetersByAccount(id: String): APIResponse<JsonElement>
+
     suspend fun getPlacementInvoice(placement: Placement): APIResponse<JsonElement>
 
     suspend fun getPlacementDetail(id: String): APIResponse<JsonElement>
 
     suspend fun getMeterHistory(id: String): APIResponse<JsonElement>
+
+    suspend fun getAccrual(id: String): APIResponse<JsonElement>
 
     suspend fun sendRoom(room: Room): APIResponse<JsonElement>
 

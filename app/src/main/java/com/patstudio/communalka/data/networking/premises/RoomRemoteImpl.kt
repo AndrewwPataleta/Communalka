@@ -28,6 +28,10 @@ class RoomRemoteImpl(
         premisesService.getPlacementInvoice(placementId)
     }
 
+    override suspend fun getMetersByAccount(id: String)  = withContext(dispatcherProvider.io)  {
+        premisesService.getMetersByAccount(id)
+    }
+
     override suspend fun getPlacementInvoice(placement: Placement) = withContext(dispatcherProvider.io) {
         premisesService.getPlacementInvoice(placement.id)
     }
@@ -38,6 +42,10 @@ class RoomRemoteImpl(
 
     override suspend fun getMeterHistory(id: String) = withContext(dispatcherProvider.io) {
         premisesService.getMeterHistory(id)
+    }
+
+    override suspend fun getAccrual(id: String) = withContext(dispatcherProvider.io) {
+        premisesService.getAccrual(id)
     }
 
     override suspend fun sendRoom(room: Room) = withContext(dispatcherProvider.io) {

@@ -55,7 +55,7 @@ val networkingModule = module {
             if (BuildConfig.DEBUG)
                 addInterceptor(get())
                 .addInterceptor(HeaderInterceptor())
-                addInterceptor(AuthDaDataInterceptor(get(named("securePrefs"))))
+                 addInterceptor(AuthDaDataInterceptor(get(named("securePrefs"))))
                 .callTimeout(10, TimeUnit.SECONDS)
                 .addInterceptor(ChuckerInterceptor(get()))
         }.build()

@@ -99,32 +99,51 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
                 }
             }
 
+            itemBinding.servicePaymentsContainer.removeAllViews()
+
+
             if (!placement.isOpened) {
                 itemBinding.arrow.rotation = 0f
                 itemBinding.addressRoom.gone(false)
                 itemBinding.edit.gone(false)
+
             } else {
                 itemBinding.arrow.rotation = 180f
                 itemBinding.addressRoom.visible(false)
                 itemBinding.edit.visible(false)
+                placement.invoices?.map {
+
+                    val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                    val servicePaymentBinding: View = inflater.inflate(R.layout.item_service_payment, null)
+                    val service = it.service
+                    servicePaymentBinding.findViewById<TextView>(R.id.serviceName).text = it.service
+
+                    placement.accounts.map { account->
+
+                        if (account.supplierName.compareTo(it.supplier) == 0) {
+                            servicePaymentBinding.setOnClickListener {
+
+                                viewModel.selectDetailService(placement = placement.name, service = service, account = account.id)
+                            }
+
+                            if (account.message.isNotEmpty()) {
+                                servicePaymentBinding.findViewById<TextView>(R.id.message).text = account.message
+                            } else {
+                                account.meters.map {
+                                    if (it.account.compareTo(account.id) == 0) {
+                                        servicePaymentBinding.findViewById<TextView>(R.id.message).text = "Тек. показания: ${it.last_values.lastValue}"
+                                }
+                            }
+                        }
+                    } }
+
+                    servicePaymentBinding.findViewById<TextView>(R.id.payment).text = (it.balance+it.penalty).toString().plus(" ₽")
+                    itemBinding.servicePaymentsContainer.addView(servicePaymentBinding)
+                }
             }
 
-            itemBinding.servicePaymentsContainer.removeAllViews()
 
 
-            placement.invoices?.map {
-
-                val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                val servicePaymentBinding: View = inflater.inflate(R.layout.item_service_payment, null)
-                servicePaymentBinding.findViewById<TextView>(R.id.serviceName).text = it.service
-                placement.accounts.map { account-> {
-                    if (account.supplierName.compareTo(it.supplier) == 0) {
-                        servicePaymentBinding.findViewById<TextView>(R.id.message).text = account.message
-                    }
-                } }
-                servicePaymentBinding.findViewById<TextView>(R.id.payment).text = (it.balance+it.penalty).toString().plus(" ₽")
-                itemBinding.servicePaymentsContainer.addView(servicePaymentBinding)
-            }
 
             var penaltySum = 0.0
 
@@ -143,8 +162,7 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
             } else {
                 itemBinding.paymentButton.background = itemBinding.root.context.resources.getDrawable(R.drawable.gray_button_disable_background)
                 itemBinding.paymentAmount.gone(false)
-                itemBinding.paymentButton.setOnClickListener {
-                }
+                itemBinding.paymentButton.setOnClickListener {}
             }
 
 

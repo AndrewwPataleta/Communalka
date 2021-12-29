@@ -18,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.patstudio.communalka.R
+import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.databinding.FragmentWelcomeBinding
 import com.patstudio.communalka.presentation.ui.MainActivity
 import com.patstudio.communalka.presentation.ui.main.room.PlacementAdapter
@@ -73,7 +74,7 @@ class WelcomeFragment : Fragment() {
     }
 
     private fun initObservers() {
-        viewModel.getUser().observe(this) {
+        viewModel.getUser().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
 
                 it.getContentIfNotHandled {
@@ -104,7 +105,7 @@ class WelcomeFragment : Fragment() {
                 }
             }
         }
-        viewModel.getWithoutUser().observe(this) {
+        viewModel.getWithoutUser().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     (requireActivity() as MainActivity).clearBackground()
@@ -116,7 +117,7 @@ class WelcomeFragment : Fragment() {
             }
         }
 
-        viewModel.loadingPlacement.observe(this) {
+        viewModel.loadingPlacement.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                   if (it) {
@@ -128,7 +129,7 @@ class WelcomeFragment : Fragment() {
             }
         }
 
-        viewModel.getNavigateTo().observe(this) {
+        viewModel.getNavigateTo().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                    when (it) {
@@ -143,17 +144,27 @@ class WelcomeFragment : Fragment() {
 
             }
         }
-        viewModel.getEditPlacement().observe(this) {
+        viewModel.detailService.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                    Log.d("WelcomeFragment", "open edit")
+                    val bundle = bundleOf("service" to it.first, "placement" to it.second, "account" to it.third)
+                    findNavController().navigate(R.id.toAccrual, bundle)
+                }
+            }
+        }
+
+
+        viewModel.getEditPlacement().observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+
                     val bundle = bundleOf("placement" to it)
                     findNavController().navigate(R.id.EditPlacement, bundle)
                 }
             }
         }
 
-        viewModel.getPinForm().observe(this) {
+        viewModel.getPinForm().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     (requireActivity() as MainActivity).clearBackground()
@@ -166,14 +177,13 @@ class WelcomeFragment : Fragment() {
         viewModel.transmissionReadingPlacement.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                    Log.d("placement", it.name)
                     val bundle = bundleOf("placement" to it)
                     findNavController().navigate(R.id.toTransmissionReadings, bundle)
                 }
             }
         }
 
-        viewModel.getReadStoragePermission().observe(this) {
+        viewModel.getReadStoragePermission().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -193,7 +203,7 @@ class WelcomeFragment : Fragment() {
                 }
             }
         }
-        viewModel.getPlacementList().observe(this) {
+        viewModel.getPlacementList().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     (requireActivity() as MainActivity).setWhiteRootBackground()
@@ -206,7 +216,12 @@ class WelcomeFragment : Fragment() {
                     binding.premisesList.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL ,false)
                     binding.premisesList.adapter = placementAdapter
 
-                    if (it.second) {
+                    var haveconnect = false
+                    it.first.map {
+                        if (it.accounts.size > 0 ) haveconnect = true
+                    }
+
+                    if (it.second && !haveconnect) {
                         Handler().postDelayed({
                             val position =
                                 (binding.premisesList.getLayoutManager() as LinearLayoutManager).findFirstVisibleItemPosition()
@@ -227,7 +242,7 @@ class WelcomeFragment : Fragment() {
             }
         }
 
-        viewModel.getUpdatePosition().observe(this) {
+        viewModel.getUpdatePosition().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                   if (placementAdapter != null)
@@ -235,7 +250,7 @@ class WelcomeFragment : Fragment() {
                 }
             }
         }
-        viewModel.getPersonalAccountPlacement().observe(this) {
+        viewModel.getPersonalAccountPlacement().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     val bundle = bundleOf("placement" to it)
@@ -244,7 +259,7 @@ class WelcomeFragment : Fragment() {
             }
         }
 
-        viewModel.getEditPlacementDialog().observe(this) {
+        viewModel.getEditPlacementDialog().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     val placement = it

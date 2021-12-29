@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="viewModel" type="com.patstudio.communalka.presentation.ui.main.profile.welcome.WelcomeViewModel"/>
+        <variable name="position" type="Integer"/>
+        <variable name="model" type="com.patstudio.communalka.data.model.Placement"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/placementRoot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_gray_background"
+        android:layout_marginTop="8dp"
+        android:padding="16dp">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/placementImage"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:src="@drawable/ic_office"
+            android:background="@drawable/circle_gray_background"
+            android:padding="8dp"
+            android:tint="@color/gray_dark"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/placementName"
+            style="@style/TextBold1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/robotobold"
+            android:text="@{model.name}"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/placementImage"
+            app:layout_constraintTop_toTopOf="@id/placementImage" />
+
+        <TextView
+            android:id="@+id/addressRoom"
+            style="@style/TextBold1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:text="@{model.address}"
+
+            app:fontFamily="@font/robotoregular"
+            android:textColor="@color/gray_dark"
+            android:textSize="15sp"
+            android:layout_marginTop="6dp"
+            app:layout_constraintStart_toStartOf="@id/placementName"
+
+            app:layout_constraintTop_toBottomOf="@id/placementName"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/addressBarrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:constraint_referenced_ids="addressRoom"
+            app:barrierDirection="bottom"/>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -38,6 +38,9 @@
         <action
             android:id="@+id/action_WelcomeFragment_to_AddRoom"
             app:destination="@id/AddRoom" />
+        <action
+            android:id="@+id/toAccrual"
+            app:destination="@id/AccrualFragment" />
     </fragment>
 
     <fragment
@@ -48,6 +51,15 @@
         <action
             android:id="@+id/toWelcomePage"
             app:destination="@id/WelcomeFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/AccrualFragment"
+        android:name="com.patstudio.communalka.presentation.ui.main.readings.AccrualFragment"
+        tools:layout="@layout/fragment_accrual">
+        <action
+            android:id="@+id/toTransmissionHistory"
+            app:destination="@id/ConsumptionHistoryFragment"/>
     </fragment>
 
     <fragment

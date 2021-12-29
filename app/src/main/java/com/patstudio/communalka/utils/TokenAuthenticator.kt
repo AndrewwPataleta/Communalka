@@ -53,6 +53,9 @@ class TokenAuthenticator(private val sharedPreferences: SharedPreferences): Auth
 
         sharedPreferences.getString("currentRefreshToken", "")?.let { lastSavedAccessToken ->
 
+            Log.d("TokenAuthenticator", "current refresh token ${lastSavedAccessToken}")
+            Log.d("TokenAuthenticator", "current access token ${sharedPreferences.getString("currentToken", "")}")
+
             val resp = service.refreshToken(sharedPreferences.getString("currentRefreshToken", "")!!).execute()
 
             if (resp.isSuccessful) {
@@ -61,8 +64,13 @@ class TokenAuthenticator(private val sharedPreferences: SharedPreferences): Auth
 
                 sharedPreferences.edit().putString("currentToken", tokens?.asJsonObject?.get("access")!!.asString).apply()
                 sharedPreferences.edit().putString("currentRefreshToken", tokens?.asJsonObject?.get("refresh")!!.asString).apply()
+
+                Log.d("TokenAuthenticator", "updated refresh token ${tokens?.asJsonObject?.get("refresh")!!.asString}")
+                Log.d("TokenAuthenticator", "updated access token ${tokens?.asJsonObject?.get("access")!!.asString}")
+
+
                 if (tokens?.asJsonObject?.get("access")!!.asString != lastSavedAccessToken) {
-                    return getNewRequest(request, retryCount, lastSavedAccessToken)
+                    return getNewRequest(request, retryCount, tokens?.asJsonObject?.get("access")!!.asString)
                 }
             } else {
                 return null

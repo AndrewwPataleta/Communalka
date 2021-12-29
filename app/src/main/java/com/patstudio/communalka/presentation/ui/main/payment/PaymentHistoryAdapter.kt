@@ -20,6 +20,7 @@ import com.patstudio.communalka.presentation.ui.main.profile.welcome.WelcomeView
 import com.skydoves.balloon.*
 import convertLongToTime
 import gone
+import roundOffTo2DecPlaces
 import visible
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -60,14 +61,14 @@ class PaymentHistoryAdapter(private val paymentsList: List<PaymentHistoryModel>,
                 viewModel.selectActionReceipt(paymentHistoryModel)
             }
 
-            itemBinding.paymentAmount.text = "Общая сумма оплаты: ${paymentHistoryModel.amount+paymentHistoryModel.taxAmount} ₽"
+            itemBinding.paymentAmount.text = "Общая сумма оплаты: ${  roundOffTo2DecPlaces((paymentHistoryModel.amount+paymentHistoryModel.taxAmount).toFloat())} ₽"
 
             paymentHistoryModel.payments.map {
 
                 val inflater = itemBinding.root.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                 val servicePaymentBinding: View = inflater.inflate(R.layout.item_payment_history_detail, null)
                 servicePaymentBinding.findViewById<TextView>(R.id.serviceName).text = paymentHistoryModel.placementName
-                servicePaymentBinding.findViewById<TextView>(R.id.paymentAmount).text = "Сумма оплаты: ${it.amount+it.taxAmount} ₽"
+                servicePaymentBinding.findViewById<TextView>(R.id.paymentAmount).text = "Сумма оплаты: ${roundOffTo2DecPlaces((it.amount+it.taxAmount).toFloat())} ₽"
                 itemBinding.paymentsContainer.addView(servicePaymentBinding)
             }
 

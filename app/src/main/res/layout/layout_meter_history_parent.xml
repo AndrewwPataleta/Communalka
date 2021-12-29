@@ -20,10 +20,10 @@
 
             <ImageView
                 android:id="@+id/open"
-                android:layout_width="32dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_left"
                 android:rotation="270"
+                android:src="@drawable/ic_left"
                 app:tint="@color/black" />
 
             <TextView
@@ -32,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="16dp"
                 android:paddingBottom="16dp"
+                android:textSize="11sp"
                 android:layout_marginStart="10dp"
                 android:textColor="@color/black" />
 
@@ -46,7 +47,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+                android:textSize="11sp"
                 android:background="@drawable/table_boarder"
                 android:text="Период"/>
 
@@ -62,6 +63,7 @@
         android:padding="16dp"
         android:layout_height="wrap_content"
         android:gravity="end"
+        android:textSize="11sp"
         android:background="@drawable/table_boarder"
         android:textColor="@color/black" />
 
@@ -71,6 +73,7 @@
         android:layout_weight="1"
         android:padding="16dp"
         android:layout_height="wrap_content"
+        android:textSize="11sp"
         android:background="@drawable/table_boarder"
         android:gravity="end"
         android:textColor="@color/black" />

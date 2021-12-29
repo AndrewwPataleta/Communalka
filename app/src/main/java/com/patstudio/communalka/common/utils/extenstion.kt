@@ -22,6 +22,8 @@ fun CharSequence?.isValidPhoneNumber():Boolean{
     return !isNullOrEmpty() && Patterns.PHONE.matcher(this).matches()
 }
 
+fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).toDouble()
+
 val Int.dp: Int
     get() = (this / Resources.getSystem().displayMetrics.density).toInt()
 val Int.px: Int

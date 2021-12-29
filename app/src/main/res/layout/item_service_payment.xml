@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:fontFamily="@font/robotoregular"
-            android:text="Тек. показания: 546789"
+
             android:textColor="@color/gray_dark"
             android:textSize="17sp"
             android:layout_marginTop="4dp"

@@ -2,11 +2,14 @@ package com.patstudio.communalka.presentation.ui.main.readings
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doBeforeTextChanged
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.patstudio.communalka.R
@@ -115,9 +118,15 @@ class TransmissionReadingsFragment : Fragment() {
         editTextList.add(binding.thirdNumber)
         editTextList.add(binding.fourNumber)
         editTextList.add(binding.fiveNumber)
-//        editTextList.add(binding.sixNumber)
-//        editTextList.add(binding.sevenNumber)
-//        editTextList.add(binding.eigthNumber)
+        binding.firstNumber.setShowSoftInputOnFocus(false);
+        binding.secondNumber.setShowSoftInputOnFocus(false);
+        binding.thirdNumber.setShowSoftInputOnFocus(false);
+        binding.fourNumber.setShowSoftInputOnFocus(false);
+        binding.fiveNumber.setShowSoftInputOnFocus(false);
+
+
+
+
 
         disableTransmission()
 
@@ -158,51 +167,70 @@ class TransmissionReadingsFragment : Fragment() {
                 if (it.length == 1) binding.thirdNumber.requestFocus()
                 generateTransmission()
             }
+            if (it.isNullOrEmpty()) {
+                binding.firstNumber.requestFocus()
+            }
         }
         binding.thirdNumber.doAfterTextChanged {
             it?.let {
                 if (it.length == 1) binding.fourNumber.requestFocus()
+                else if (it.isEmpty()) binding.secondNumber.requestFocus()
                 generateTransmission()
+            }
+            if (it.isNullOrEmpty()) {
+                binding.secondNumber.requestFocus()
             }
         }
         binding.fourNumber.doAfterTextChanged {
             it?.let {
                 if (it.length == 1) binding.fiveNumber.requestFocus()
+                else if (it.isEmpty()) binding.thirdNumber.requestFocus()
                 generateTransmission()
             }
+            if (it.isNullOrEmpty()) {
+                binding.thirdNumber.requestFocus()
+            }
         }
+
         binding.fiveNumber.doAfterTextChanged {
             it?.let {
                 if (it.length == 1) binding.sixNumber.requestFocus()
+                else if (it.isEmpty()) binding.fourNumber.requestFocus()
                 generateTransmission()
             }
         }
-//        binding.sixNumber.doAfterTextChanged {
-//            it?.let {
-//                if (it.length == 1) binding.sevenNumber.requestFocus()
-//            }
-//        }
-//        binding.sevenNumber.doAfterTextChanged {
-//            it?.let {
-//                if (it.length == 1) binding.eigthNumber.requestFocus()
-//
-//            }
-//        }
+
+        binding.pinOne.setOnClickListener { setValueToCurrentFocus((getString(R.string.one))) }
+        binding.pinTwo.setOnClickListener { setValueToCurrentFocus((getString(R.string.two))) }
+        binding.pinTree.setOnClickListener { setValueToCurrentFocus((getString(R.string.tree))) }
+        binding.pinFour.setOnClickListener { setValueToCurrentFocus((getString(R.string.four))) }
+        binding.pinFive.setOnClickListener {setValueToCurrentFocus((getString(R.string.five))) }
+        binding.pinSix.setOnClickListener { setValueToCurrentFocus((getString(R.string.six))) }
+        binding.pinSeven.setOnClickListener {setValueToCurrentFocus((getString(R.string.seven)))}
+        binding.pinEight.setOnClickListener {setValueToCurrentFocus((getString(R.string.eigth))) }
+        binding.pinNine.setOnClickListener {setValueToCurrentFocus((getString(R.string.nine))) }
+        binding.pinZero.setOnClickListener { setValueToCurrentFocus((getString(R.string.zero))) }
+        binding.pinBack.setOnClickListener { clearValueCurrentFocus() }
     }
 
     private fun clearValueCurrentFocus() {
         editTextList.map {
-            if (it.hasFocus()) {
-                it.setText("value")
+            if (it.hasFocus() ) {
+
+                it.setText("")
             }
         }
     }
 
     private fun setValueToCurrentFocus(value: String) {
+        var editText: EditText = EditText(requireContext())
         editTextList.map {
             if (it.hasFocus()) {
-                it.setText(value)
+                editText = it
             }
+        }
+        editText?.let {
+            it.setText(value)
         }
     }
 

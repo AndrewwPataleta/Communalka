@@ -23,6 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="42dp"
                 android:paddingTop="16dp"
+                android:textSize="11sp"
                 android:paddingBottom="16dp" />
 
         </LinearLayout>
@@ -39,6 +40,7 @@
         android:padding="16dp"
         android:layout_height="wrap_content"
         android:gravity="end"
+        android:textSize="11sp"
         android:background="@drawable/table_boarder" />
 
     <TextView
@@ -46,6 +48,7 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:padding="16dp"
+        android:textSize="11sp"
         android:layout_height="wrap_content"
         android:background="@drawable/table_boarder"
         android:gravity="end" />
