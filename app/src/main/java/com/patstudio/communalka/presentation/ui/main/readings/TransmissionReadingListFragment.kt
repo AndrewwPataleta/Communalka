@@ -21,6 +21,12 @@ import com.patstudio.communalka.presentation.ui.main.room.PlacementMeterAdapter
 import com.patstudio.communalka.presentation.ui.splash.MainViewModel
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
+import android.widget.AdapterView
+
+import android.widget.AdapterView.OnItemSelectedListener
+
+
+
 
 
 class TransmissionReadingListFragment : Fragment() {
@@ -40,9 +46,6 @@ class TransmissionReadingListFragment : Fragment() {
         _binding = FragmentTransmissionReadingListBinding.inflate(inflater, container, false)
 
 
-        val adapter = PlacementSelectorAdapter(requireContext(), ArrayList())
-        binding.placementSelector.adapter = adapter
-
         return binding.root
     }
 
@@ -53,44 +56,6 @@ class TransmissionReadingListFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     binding.model = it
-                    when (it.imageType) {
-                        "DEFAULT" -> {
-                            when (it.path) {
-                                "HOME" -> {
-                                    binding.placementImage.setImageDrawable(
-                                        binding.root.context.resources.getDrawable(
-                                            R.drawable.ic_home
-                                        )
-                                    )
-                                }
-                                "ROOM" -> {
-                                    binding.placementImage.setImageDrawable(
-                                        binding.root.context.resources.getDrawable(
-                                            R.drawable.ic_room
-                                        )
-                                    )
-                                }
-                                "OFFICE" -> {
-                                    binding.placementImage.setImageDrawable(
-                                        binding.root.context.resources.getDrawable(
-                                            R.drawable.ic_office
-                                        )
-                                    )
-                                }
-                                "HOUSE" -> {
-                                    binding.placementImage.setImageDrawable(
-                                        binding.root.context.resources.getDrawable(
-                                            R.drawable.ic_country_house
-                                        )
-                                    )
-                                }
-                            }
-                        }
-                        "STORAGE" -> {
-                            binding.placementImage.setPadding(0)
-                            binding.placementImage.setImageURI(it.path.toUri())
-                        }
-                    }
                 }
             }
         }
@@ -104,6 +69,27 @@ class TransmissionReadingListFragment : Fragment() {
                 }
             }
         }
+        viewModel.placementsList.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val adapter = PlacementSelectorAdapter(requireContext(), it, viewModel)
+                    binding.placementSelector.onItemSelectedListener =
+                        object : OnItemSelectedListener {
+                            override fun onItemSelected(
+                                parent: AdapterView<*>,
+                                view: View,
+                                position: Int,
+                                id: Long
+                            ) {
+                                viewModel.selectedPlacement(parent.getItemAtPosition(position) as Placement)
+                            }
+                            override fun onNothingSelected(parent: AdapterView<*>?) {}
+                        }
+                    binding.placementSelector.adapter = adapter
+                }
+            }
+        }
+
 
         viewModel.transmissionPlacementMeter.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {

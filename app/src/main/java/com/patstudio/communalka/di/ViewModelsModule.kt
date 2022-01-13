@@ -45,7 +45,7 @@ val viewModelsModule = module {
     viewModel { TransmissionReadingListViewModel(get(), get(), get(), get()) }
     viewModel { TransmissionReadingsViewModel(get(), get(), get(), get()) }
     viewModel { PaymentsViewModel(get(), get(), get(), get()) }
-    viewModel { PaymentPlacementViewModel(get(), get()) }
+    viewModel { PaymentPlacementViewModel(get(), get(),get() ,get()) }
     viewModel { UserNotificationViewModel(get(), get()) }
     viewModel { ConsumptionHistoryViewModel(get(), get(), get()) }
     viewModel { AccrualViewModel(get(), get(), get()) }

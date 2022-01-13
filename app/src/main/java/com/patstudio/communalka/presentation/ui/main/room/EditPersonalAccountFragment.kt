@@ -57,8 +57,9 @@ class EditPersonalAccountFragment : Fragment() {
                 it.getContentIfNotHandled {
                     it?.let {
                         val builder = MaterialAlertDialogBuilder(requireContext())
-                        builder.setTitle("Вы действительно хотите удалить л/c '"+it.name+"'?")
-                        builder.setPositiveButton("Да"){dialogInterface, which ->
+                        builder.setTitle("Удалить личный счет?")
+                        builder.setMessage("Вы действительно хотите удалить л/c '"+it.name+"'?")
+                        builder.setPositiveButton("Удалить"){dialogInterface, which ->
                             viewModel.confirmRemovePersonalAccount()
                             dialogInterface.dismiss()
                         }

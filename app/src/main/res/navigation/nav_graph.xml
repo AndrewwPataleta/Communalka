@@ -212,6 +212,9 @@
         <action
             android:id="@+id/toFilter"
             app:destination="@id/FilterOrderFragment" />
+        <action
+            android:id="@+id/toPlacementPayment"
+            app:destination="@id/PaymentPlacement" />
     </fragment>
 
     <fragment

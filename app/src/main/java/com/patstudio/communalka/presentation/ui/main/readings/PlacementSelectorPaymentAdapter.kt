@@ -14,10 +14,11 @@ import androidx.core.net.toUri
 import androidx.core.view.setPadding
 import com.patstudio.communalka.R
 import com.patstudio.communalka.data.model.Placement
+import com.patstudio.communalka.presentation.ui.main.payment.PaymentPlacementViewModel
 import dp
 
 
-class PlacementSelectorAdapter(var context: Context, var placements: ArrayList<Placement>, var viewModel: TransmissionReadingListViewModel) :
+class PlacementSelectorPaymentAdapter(var context: Context, var placements: ArrayList<Placement>, var viewModel: PaymentPlacementViewModel) :
     BaseAdapter() {
 
     private val mInflator: LayoutInflater

@@ -16,103 +16,25 @@
         android:layout_marginTop="8dp"
         android:padding="16dp">
 
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/placementImage"
-            android:layout_width="54dp"
-            android:layout_height="54dp"
-            android:src="@drawable/ic_office"
-            android:background="@drawable/circle_gray_background"
-            android:padding="8dp"
-            android:tint="@color/gray_dark"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/placementName"
-            style="@style/TextBold1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/robotobold"
-            android:text="@{model.name}"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:layout_marginStart="16dp"
-            app:layout_constraintStart_toEndOf="@id/placementImage"
-            app:layout_constraintTop_toTopOf="@id/placementImage" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/edit"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:visibility="gone"
-            android:src="@drawable/ic_edit"
-
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/ownerName"
-            app:layout_constraintBottom_toBottomOf="@+id/ownerName"
-            app:layout_constraintVertical_bias="0.5"/>
-
-        <TextView
-            android:id="@+id/addressRoom"
-            style="@style/TextBold1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-
-            android:text="@{model.address}"
-
-            app:fontFamily="@font/robotoregular"
-            android:textColor="@color/gray_dark"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@id/placementName"
-            app:layout_constraintTop_toBottomOf="@id/placementName"
-            app:layout_constraintEnd_toStartOf="@+id/arrow"/>
-
-        <Spinner
-            android:id="@+id/placementSelector"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/addressBarrier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:constraint_referenced_ids="addressRoom"
-            app:barrierDirection="bottom"/>
-
-        <TextView
-            android:id="@+id/ownerName"
-            style="@style/TextBold1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fontFamily="@font/robotoregular"
-            android:text="@{model.fio}"
-            android:textColor="@color/gray_dark"
-            android:textSize="16sp"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="@id/placementName"
-            app:layout_constraintTop_toBottomOf="@id/addressBarrier" />
-
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/arrow"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_down"
             app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="@id/placementSelector"
+            app:layout_constraintBottom_toBottomOf="@id/placementSelector"
+            app:layout_constraintVertical_bias="0.5" />
 
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/roomInfoBarrier"
+        <Spinner
+            android:id="@+id/placementSelector"
             android:layout_width="match_parent"
+            android:spinnerMode="dropdown"
+            android:background="@null"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="ownerName, addressRoom, placementName"
-            app:barrierDirection="bottom"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <View
             android:id="@+id/decorator"
@@ -120,7 +42,7 @@
             android:layout_height="0.4dp"
             android:background="@color/gray_dark"
             android:layout_marginBottom="16dp"
-            app:layout_constraintTop_toBottomOf="@id/roomInfoBarrier"
+            app:layout_constraintTop_toBottomOf="@id/placementSelector"
             android:layout_marginTop="16dp"/>
 
         <androidx.recyclerview.widget.RecyclerView

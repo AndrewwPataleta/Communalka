@@ -60,7 +60,7 @@
             android:textAllCaps="false"
             android:fontFamily="@font/robotobold"
             app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="gone"
+
             android:layout_marginTop="16dp"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"

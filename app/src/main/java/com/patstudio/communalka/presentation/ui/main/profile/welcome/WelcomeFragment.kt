@@ -284,7 +284,7 @@ class WelcomeFragment : Fragment() {
         viewModel.placementForPayment.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                    val bundle = bundleOf("placement" to it)
+                    val bundle = bundleOf("placements" to it)
                     findNavController().navigate(R.id.toPlacementPayment, bundle)
                 }
             }

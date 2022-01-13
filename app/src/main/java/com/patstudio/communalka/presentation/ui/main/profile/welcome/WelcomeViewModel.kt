@@ -39,14 +39,14 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
     private var needEnterPin: Boolean = true
     private var typeAuthChanged: Boolean = false
 
-    private var _placementForPayment: MutableLiveData<Event<Placement>> = MutableLiveData()
-    val placementForPayment: LiveData<Event<Placement>> = _placementForPayment
+    private var _placementForPayment: MutableLiveData<Event<ArrayList<Placement>>> = MutableLiveData()
+    val placementForPayment: LiveData<Event<ArrayList<Placement>>> = _placementForPayment
 
     private var _detailService: MutableLiveData<Event<Triple<String, String, String>>> = MutableLiveData()
     val detailService: LiveData<Event<Triple<String, String, String>>> = _detailService
 
 
-    private lateinit var userPlacement: List<Placement>
+    private lateinit var userPlacement: ArrayList<Placement>
 
    fun setCurrentUser(user:User) {
        this.user = user
@@ -79,7 +79,6 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
                             val turnsType = object : TypeToken<ArrayList<Invoice>>() {}.type
                             var invoices: ArrayList<Invoice> = gson.fromJson(it.data.data, turnsType)
                             placement.invoices = invoices
-                            Log.d("WelcomeView"," ivoics ${placement.invoices}")
                             updateInvoicesForPlacement(placements, pos+1)
                         }
                     }
@@ -202,7 +201,14 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
     }
 
     fun selectPayment(placement: Placement) {
-       _placementForPayment.postValue(Event(placement))
+        Log.d("WelcomeViewModel", "placement ${userPlacement}")
+        userPlacement.map {
+            if (it.id.compareTo(placement.id) == 0) {
+                Log.d("Welcome","placement selected ${it}")
+                it.selected = true
+            }
+        }
+       _placementForPayment.postValue(Event(userPlacement))
     }
 
     fun selectDetailService(service: String, placement: String, account: String) {

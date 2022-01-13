@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -26,9 +27,13 @@ import com.patstudio.communalka.BuildConfig
 import com.patstudio.communalka.R
 import com.patstudio.communalka.data.model.Placement
 import com.patstudio.communalka.databinding.*
+import com.patstudio.communalka.presentation.ui.main.readings.PlacementSelectorAdapter
+import com.patstudio.communalka.presentation.ui.main.readings.PlacementSelectorPaymentAdapter
+import kotlinx.android.synthetic.main.item_payment_history.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import roundOffTo2DecPlaces
 import ru.tinkoff.acquiring.sdk.TinkoffAcquiring
+import ru.tinkoff.acquiring.sdk.models.Receipt
 import ru.tinkoff.acquiring.sdk.models.Shop
 import ru.tinkoff.acquiring.sdk.models.enums.CheckType
 import ru.tinkoff.acquiring.sdk.models.options.screen.PaymentOptions
@@ -48,6 +53,7 @@ class PaymentPlacementFragment : Fragment() {
     ): View? {
 
         _binding = FragmentPaymentPlacementBinding.inflate(inflater, container, false)
+        viewModel.initCurrentUser()
         return binding.root
     }
 
@@ -58,6 +64,7 @@ class PaymentPlacementFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     this.binding.model = it
+
                     paymentsAdapter = PaymentPlacementAdapter(it.invoices!!, viewModel)
                     binding.paymentPlacementContainer.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL ,false)
                     binding.paymentPlacementContainer.adapter = paymentsAdapter
@@ -72,7 +79,26 @@ class PaymentPlacementFragment : Fragment() {
                 }
             }
         }
-
+        viewModel.placementsList.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val adapter = PlacementSelectorPaymentAdapter(requireContext(), it, viewModel)
+                    binding.placementSelector.onItemSelectedListener =
+                        object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(
+                                parent: AdapterView<*>,
+                                view: View,
+                                position: Int,
+                                id: Long
+                            ) {
+                                viewModel.selectedPlacement(parent.getItemAtPosition(position) as Placement)
+                            }
+                            override fun onNothingSelected(parent: AdapterView<*>?) {}
+                        }
+                    binding.placementSelector.adapter = adapter
+                }
+            }
+        }
         viewModel.totalPrice.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
@@ -120,8 +146,6 @@ class PaymentPlacementFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        Log.d("Result", data.toString())
     }
 
     private fun initListeners() {
@@ -134,8 +158,8 @@ class PaymentPlacementFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.getParcelable<Placement>("placement")?.let {
-            viewModel.setCurrentPlacement(it)
+        arguments?.getParcelableArrayList<Placement>("placements")?.let {
+            viewModel.setCurrentPlacements(it)
         }
         initObservers()
         initListeners()

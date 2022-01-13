@@ -19,6 +19,7 @@ import android.widget.Toolbar
 import androidx.appcompat.content.res.AppCompatResources.getColorStateList
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.setPadding
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -169,7 +170,9 @@ class PaymentsFragment : Fragment() {
     }
 
     private fun initListeners() {
-
+        binding.paymentButton.setOnClickListener {
+            findNavController().navigate(R.id.toPlacementPayment)
+        }
     }
 
 
