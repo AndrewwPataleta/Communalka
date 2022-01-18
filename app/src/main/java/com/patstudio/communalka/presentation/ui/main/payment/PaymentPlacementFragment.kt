@@ -23,6 +23,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.setPadding
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.patstudio.communalka.BuildConfig
 import com.patstudio.communalka.R
 import com.patstudio.communalka.data.model.Placement
@@ -33,12 +34,16 @@ import kotlinx.android.synthetic.main.item_payment_history.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import roundOffTo2DecPlaces
 import ru.tinkoff.acquiring.sdk.TinkoffAcquiring
+import ru.tinkoff.acquiring.sdk.models.Item
 import ru.tinkoff.acquiring.sdk.models.Receipt
 import ru.tinkoff.acquiring.sdk.models.Shop
 import ru.tinkoff.acquiring.sdk.models.enums.CheckType
+import ru.tinkoff.acquiring.sdk.models.enums.Tax
+import ru.tinkoff.acquiring.sdk.models.enums.Taxation
 import ru.tinkoff.acquiring.sdk.models.options.screen.PaymentOptions
 import ru.tinkoff.acquiring.sdk.utils.Money
 import visible
+import java.util.ArrayList
 
 class PaymentPlacementFragment : Fragment() {
 
@@ -53,7 +58,7 @@ class PaymentPlacementFragment : Fragment() {
     ): View? {
 
         _binding = FragmentPaymentPlacementBinding.inflate(inflater, container, false)
-        viewModel.initCurrentUser()
+
         return binding.root
     }
 
@@ -120,18 +125,30 @@ class PaymentPlacementFragment : Fragment() {
         viewModel.paymentOrder.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
+                    var receiptOrder = Receipt().apply {
+                        taxation = Taxation.USN_INCOME_OUTCOME
+                        items = it.services?.map { service ->
+                            Item().apply {
+                                name = service
+                                quantity = 1.0
+                                amount = Money.ofRubles(it.amount).coins
+                                tax = Tax.NONE
+                            }} as ArrayList<Item>
+                        email = it.email
+                    }
                     val paymentOptions =
                     PaymentOptions().setOptions {
                         orderOptions {
                             orderId = it.orderNumber.toString()
                             amount = Money.ofRubles(it.amount)
                             title = "Оплата коммунальных услуг"
-
+                            receipt = receiptOrder
                             recurrentPayment = false
                             shops = it.shops
                         }
                         customerOptions {
-                           customerKey = "1"
+                            customerKey = "1"
+                            email = it.email
                             checkType = CheckType.THREE_DS.toString()
                         }
                     }
@@ -146,6 +163,20 @@ class PaymentPlacementFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 123) {
+            viewModel.updatePaymentsList()
+            if (resultCode == Activity.RESULT_OK) {
+                val builder = MaterialAlertDialogBuilder(requireContext())
+                builder.setMessage( "Ваша оплата проведена успешно! Мы сообщим вам, когда будут загружены чеки!")
+                builder.setPositiveButton("Ok"){dialogInterface, which ->
+                    dialogInterface.dismiss()
+                    findNavController().navigate(R.id.toPayments)
+                }
+                builder.setCancelable(true)
+                builder.show()
+            }
+        }
+
     }
 
     private fun initListeners() {
@@ -163,6 +194,7 @@ class PaymentPlacementFragment : Fragment() {
         }
         initObservers()
         initListeners()
+        viewModel.initCurrentUser()
     }
 
     override fun onDestroyView() {

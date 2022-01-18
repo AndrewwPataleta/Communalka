@@ -1,5 +1,6 @@
 package com.patstudio.communalka.presentation.ui.main.payment
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -35,6 +36,9 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
 
     private var _filterModel: MutableLiveData<Event<PaymentFilterModel>> = MutableLiveData()
     val filterModel: LiveData<Event<PaymentFilterModel>> = _filterModel
+
+    private var _totalPaymentAmount: MutableLiveData<Event<Float>> = MutableLiveData()
+    val totalPaymentAmount: LiveData<Event<Float>> = _totalPaymentAmount
 
     private var _confirmFilterModel: MutableLiveData<Event<PaymentFilterModel>> = MutableLiveData()
     val confirmFilterModel: LiveData<Event<PaymentFilterModel>> = _confirmFilterModel
@@ -254,6 +258,12 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
                             _showProgress.postValue(Event(false))
                             val type = object : TypeToken<List<PaymentHistoryModel>>() {}.type
                             var paymentsList: List<PaymentHistoryModel> = gson.fromJson(it.data.data!!.asJsonObject.get("orders"), type)
+                            var total = 0.0
+                            paymentsList.map {
+                                total += (it.taxAmount+it.amount)
+                            }
+
+                            _totalPaymentAmount.postValue(Event(total.toFloat()))
                             _payments.postValue(Event(paymentsList))
 
                         }

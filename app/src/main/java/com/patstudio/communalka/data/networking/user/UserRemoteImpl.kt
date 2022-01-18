@@ -5,6 +5,7 @@ import com.example.imagegallery.contextprovider.DispatcherProvider
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.patstudio.communalka.data.model.APIResponse
+import com.patstudio.communalka.data.model.Consumer
 import com.patstudio.communalka.data.model.Gcm
 import com.patstudio.communalka.data.model.OrderCreator
 import kotlinx.coroutines.withContext
@@ -24,6 +25,16 @@ class UserRemoteImpl(
         val body = JsonObject()
         body.addProperty("target",phone)
         userService.sendCode(body)
+    }
+
+    override suspend fun getConsumer() = withContext(dispatcherProvider.default) {
+        val body = JsonObject()
+
+        userService.getConsumer()
+    }
+
+    override suspend fun getFaq() = withContext(dispatcherProvider.default) {
+        userService.getFaq()
     }
 
     override suspend fun registration(fio: String, phone: String, email: String) = withContext(dispatcherProvider.default) {
@@ -83,6 +94,10 @@ class UserRemoteImpl(
 
     override suspend fun getAccount(accountId: String) = withContext(dispatcherProvider.default) {
         userService.getAccount(accountId)
+    }
+
+    override suspend fun updateConsumer(consumer: Consumer) = withContext(dispatcherProvider.default) {
+        userService.updateConsumer(consumer)
     }
 
     override suspend fun deleteAccount(accountId: String) = withContext(dispatcherProvider.default) {

@@ -21,8 +21,7 @@ import visible
 import android.view.View
 
 import android.widget.TextView
-
-
+import roundOffTo2DecPlaces
 
 
 class PlacementAdapter(private val placementList: List<Placement>,  val context: Context,  val viewModel: WelcomeViewModel) : RecyclerView.Adapter<PlacementAdapter.PlacementHolder>() {
@@ -142,9 +141,6 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
                 }
             }
 
-
-
-
             var penaltySum = 0.0
 
             placement.invoices?.map {
@@ -155,7 +151,7 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
                 itemBinding.paymentButton.background = itemBinding.root.context.resources.getDrawable(R.drawable.background_rounded_blue)
                 itemBinding.paymentAmount.visible(false)
                 itemBinding.paymentStatus.gone(false)
-                itemBinding.paymentAmount.text = penaltySum.toString().plus(" ₽")
+                itemBinding.paymentAmount.text = "${roundOffTo2DecPlaces(penaltySum.toFloat())} ₽"
                 itemBinding.paymentButton.setOnClickListener {
                     viewModel.selectPayment(placement)
                 }
@@ -164,6 +160,8 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
                 itemBinding.paymentAmount.gone(false)
                 itemBinding.paymentButton.setOnClickListener {}
             }
+
+
 
 
         }

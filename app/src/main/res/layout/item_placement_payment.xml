@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/supplier"
             android:layout_marginTop="16dp"
-            android:text="Начисление за месяц, ₽"
+            android:text="Начислено, ₽"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -64,7 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@id/balanceTxt"
-            android:text="@{String.valueOf(model.balance)}"
+
             app:layout_constraintBottom_toBottomOf="@id/balanceTxt"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/balanceTxt"
@@ -79,7 +79,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/balanceValue"
             android:layout_marginTop="8dp"
-            android:text="Долг "
+            android:text="Пеня, ₽"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -91,7 +91,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@id/penaltyTxt"
-            android:text="@{String.valueOf(model.penalty)}"
             app:layout_constraintBottom_toBottomOf="@id/penaltyTxt"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/penaltyTxt"
@@ -99,7 +98,6 @@
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             android:fontFamily="@font/roboto_regular"/>
-
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/penaltyPaymentContainer"
@@ -127,7 +125,14 @@
             android:id="@+id/openGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="supplier, penaltyValue, balanceTxt, balanceValue, penaltyTxt, penaltyPercent, penaltyPaymentContainer"/>
+            app:constraint_referenced_ids="supplier,  balanceTxt, balanceValue,  penaltyPercent, penaltyPaymentContainer"/>
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/penaltyGroup"
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="penaltyTxt,  penaltyValue"/>
 
         <TextView
             android:id="@+id/penaltyPercent"

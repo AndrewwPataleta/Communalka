@@ -158,10 +158,10 @@
             android:layout_height="match_parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="gone"
+
             android:background="@color/white"
             app:layout_constraintTop_toTopOf="parent"
-
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -179,19 +179,41 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
 
-                <androidx.appcompat.widget.AppCompatButton
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/addRoom"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:padding="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:drawableLeft="@drawable/ic_add_placement"
                     app:layout_constraintTop_toBottomOf="@id/premisesList"
                     android:background="@drawable/circle_gray_dotted_background"
-                    android:layout_marginTop="16dp"
-                    android:text="Добавить помещение"
-                    android:textColor="@color/dark_blue"
-                    android:textAllCaps="false" />
+                    android:layout_marginTop="16dp" >
 
+                    <TextView
+                        android:id="@+id/addText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Добавить помещение"
+                        android:textColor="@color/dark_blue"
+                        android:gravity="center"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textAllCaps="false"/>
 
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:src="@drawable/ic_add_placement"
+                        app:layout_constraintTop_toTopOf="@id/addText"
+                        app:layout_constraintBottom_toBottomOf="@id/addText"
+                        android:layout_marginEnd="16dp"
+
+                        app:layout_constraintEnd_toStartOf="@id/addText"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

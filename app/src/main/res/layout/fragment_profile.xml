@@ -305,12 +305,12 @@
             android:text="Помощь"
             android:textColor="@android:color/black"
             android:textSize="17sp"
-            android:layout_marginStart="16dp"
+            android:padding="16dp"
             app:layout_constraintVertical_bias="0.5"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@id/helpIcon"
             app:layout_constraintTop_toTopOf="@id/helpIcon"
-            app:layout_constraintEnd_toStartOf="@+id/helpArrow"
+            app:layout_constraintEnd_toEndOf="@+id/helpArrow"
             app:layout_constraintBottom_toBottomOf="@id/helpIcon"/>
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -329,7 +329,6 @@
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="#EEF1F5"
-            android:layout_marginTop="16dp"
             app:layout_constraintTop_toBottomOf="@id/helpText"/>
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -424,7 +423,6 @@
             android:id="@+id/helpGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             app:constraint_referenced_ids="helpArrow, helpIcon, helpDecorator, helpText"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

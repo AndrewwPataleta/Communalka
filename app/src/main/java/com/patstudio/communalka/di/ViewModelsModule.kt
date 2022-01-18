@@ -4,6 +4,7 @@ import com.patstudio.communalka.presentation.ui.auth.*
 import com.patstudio.communalka.presentation.ui.main.ProfileViewModel
 import com.patstudio.communalka.presentation.ui.main.payment.PaymentPlacementViewModel
 import com.patstudio.communalka.presentation.ui.main.payment.PaymentsViewModel
+import com.patstudio.communalka.presentation.ui.main.profile.FaqViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.welcome.WelcomeViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.HistoryVersionViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.PersonalInfoViewModel
@@ -46,8 +47,9 @@ val viewModelsModule = module {
     viewModel { TransmissionReadingsViewModel(get(), get(), get(), get()) }
     viewModel { PaymentsViewModel(get(), get(), get(), get()) }
     viewModel { PaymentPlacementViewModel(get(), get(),get() ,get()) }
-    viewModel { UserNotificationViewModel(get(), get()) }
+    viewModel { UserNotificationViewModel(get(), get(), get()) }
     viewModel { ConsumptionHistoryViewModel(get(), get(), get()) }
     viewModel { AccrualViewModel(get(), get(), get()) }
+    viewModel { FaqViewModel(get(), get(), get()) }
 
 }

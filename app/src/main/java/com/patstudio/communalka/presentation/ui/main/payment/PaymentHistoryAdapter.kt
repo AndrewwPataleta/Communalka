@@ -15,6 +15,7 @@ import com.patstudio.communalka.R
 import com.patstudio.communalka.data.model.PaymentHistoryModel
 import com.patstudio.communalka.data.model.Placement
 import com.patstudio.communalka.databinding.ItemPaymentHistoryBinding
+import com.patstudio.communalka.databinding.ItemPaymentHistoryNewBinding
 import com.patstudio.communalka.databinding.ItemPlacementBinding
 import com.patstudio.communalka.presentation.ui.main.profile.welcome.WelcomeViewModel
 import com.skydoves.balloon.*
@@ -33,7 +34,7 @@ class PaymentHistoryAdapter(private val paymentsList: List<PaymentHistoryModel>,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlacementHolder {
         val itemBinding =
-            ItemPaymentHistoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemPaymentHistoryNewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PlacementHolder(itemBinding, viewModel)
     }
 
@@ -44,7 +45,7 @@ class PaymentHistoryAdapter(private val paymentsList: List<PaymentHistoryModel>,
 
     override fun getItemCount(): Int = paymentsList.size
 
-    class PlacementHolder(private val itemBinding: ItemPaymentHistoryBinding,  val viewModel: PaymentsViewModel) :
+    class PlacementHolder(private val itemBinding: ItemPaymentHistoryNewBinding,  val viewModel: PaymentsViewModel) :
         RecyclerView.ViewHolder(itemBinding.root) {
 
         fun bind(paymentHistoryModel: PaymentHistoryModel, position: Int) {
@@ -53,24 +54,17 @@ class PaymentHistoryAdapter(private val paymentsList: List<PaymentHistoryModel>,
             val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
             val date = format.parse(dtStart)
 
-            itemBinding.paymentsContainer.removeAllViews()
+
             itemBinding.status.text = paymentHistoryModel.status
             itemBinding.date.text = SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(date)
+            itemBinding.placementName.text = paymentHistoryModel.placementName
 
             itemBinding.receipt.setOnClickListener {
                 viewModel.selectActionReceipt(paymentHistoryModel)
             }
 
-            itemBinding.paymentAmount.text = "Общая сумма оплаты: ${  roundOffTo2DecPlaces((paymentHistoryModel.amount+paymentHistoryModel.taxAmount).toFloat())} ₽"
+            itemBinding.paymentAmount.text = "Сумма оплаты: ${roundOffTo2DecPlaces((paymentHistoryModel.amount+paymentHistoryModel.taxAmount).toFloat())} ₽"
 
-            paymentHistoryModel.payments.map {
-
-                val inflater = itemBinding.root.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                val servicePaymentBinding: View = inflater.inflate(R.layout.item_payment_history_detail, null)
-                servicePaymentBinding.findViewById<TextView>(R.id.serviceName).text = paymentHistoryModel.placementName
-                servicePaymentBinding.findViewById<TextView>(R.id.paymentAmount).text = "Сумма оплаты: ${roundOffTo2DecPlaces((it.amount+it.taxAmount).toFloat())} ₽"
-                itemBinding.paymentsContainer.addView(servicePaymentBinding)
-            }
 
         }
     }

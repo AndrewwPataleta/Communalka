@@ -153,7 +153,7 @@ class TransmissionReadingsFragment : Fragment() {
 //                    resources.getDrawable(R.drawable.light_gray_button_disable_background)
 //            }
 //        }
-
+        binding.firstNumber.requestFocus()
         binding.firstNumber.doAfterTextChanged {
            it?.let {
                if (it.length == 1) {

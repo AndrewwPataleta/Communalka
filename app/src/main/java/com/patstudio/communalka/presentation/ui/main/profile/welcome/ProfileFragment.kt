@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.setPadding
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -59,6 +60,9 @@ class   ProfileFragment : Fragment() {
         }
         this.binding.notificationText.setOnClickListener {
             findNavController().navigate(R.id.toUserNotificationSettings)
+        }
+        this.binding.helpText.setOnClickListener {
+            findNavController().navigate(R.id.toHelp)
         }
         this.binding.cardsText.setOnClickListener {
             val tinkoffAcquiring = TinkoffAcquiring(BuildConfig.TERMINAL_KEY, BuildConfig.PUBLIC_KEY)
@@ -149,7 +153,8 @@ class   ProfileFragment : Fragment() {
                     root.findViewById<View>(R.id.login).setOnClickListener {
                         switchUserBinding.dismiss()
                         (requireActivity() as MainActivity).clearBackground()
-                        findNavController().navigate(R.id.toLogin)
+                        val bundle = bundleOf("type" to "default")
+                        findNavController().navigate(R.id.toLogin, bundle)
                     }
                     switchUserBinding.show()
                 }

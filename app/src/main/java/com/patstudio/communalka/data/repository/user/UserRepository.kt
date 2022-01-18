@@ -48,6 +48,49 @@ class UserRepository (
           }
      }
 
+
+    fun getConsumer(): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val user = remote.getConsumer()
+                emit(Result.success(user))
+            }
+        } catch (throwable: Exception) {
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
+    fun getFaq(): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val user = remote.getFaq()
+                emit(Result.success(user))
+            }
+        } catch (throwable: Exception) {
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
     fun sendCode(value: String): Flow<Result<APIResponse<JsonElement>>> = flow {
         try {
             if (connectivity.hasNetworkAccess()) {
@@ -74,6 +117,27 @@ class UserRepository (
             if (connectivity.hasNetworkAccess()) {
                 emit(Result.loading())
                 val user = remote.getAccount(accountId)
+                emit(Result.success(user))
+            }
+        } catch (throwable: Exception) {
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
+    fun updateConsumer(consumer: Consumer): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val user = remote.updateConsumer(consumer)
                 emit(Result.success(user))
             }
         } catch (throwable: Exception) {

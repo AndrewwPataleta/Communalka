@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.patstudio.communalka.BuildConfig
 import com.patstudio.communalka.R
+import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.databinding.FragmentAboutAppBinding
 import com.patstudio.communalka.databinding.FragmentPaymentsBinding
 import com.patstudio.communalka.databinding.FragmentPersonalInfoBinding
@@ -34,6 +35,7 @@ import com.patstudio.communalka.presentation.ui.MainActivity
 import com.patstudio.communalka.presentation.ui.main.ProfileViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.HistoryVersionViewModel
 import com.patstudio.communalka.presentation.ui.main.room.PlacementAdapter
+import com.patstudio.communalka.presentation.ui.splash.MainViewModel
 import gone
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -41,6 +43,8 @@ import visible
 import convertLongToTime
 import dp
 import kotlinx.android.synthetic.main.fragment_payments.*
+import roundOffTo2DecPlaces
+import roundOffTo2DecPlacesSecond
 
 
 class PaymentsFragment : Fragment() {
@@ -48,6 +52,7 @@ class PaymentsFragment : Fragment() {
     private var _binding: FragmentPaymentsBinding? = null
     private val binding get() = _binding!!
     private val viewModel by sharedViewModel<PaymentsViewModel>()
+    private val mainViewModel by sharedViewModel<MainViewModel>()
     private lateinit var paymentsAdapter: PaymentHistoryAdapter
 
     override fun onCreateView(
@@ -58,7 +63,6 @@ class PaymentsFragment : Fragment() {
         _binding = FragmentPaymentsBinding.inflate(inflater, container, false)
         return binding.root
     }
-
 
 
     private fun initObservers() {
@@ -77,6 +81,15 @@ class PaymentsFragment : Fragment() {
                     val intent = Intent(Intent.ACTION_VIEW)
                     intent.data = Uri.parse("https://ofd.ru/sites/default/files/inline-images/obrazec_cheka.png")
                     startActivity(intent)
+                }
+            }
+        }
+       viewModel.totalPaymentAmount.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    mainViewModel._toolbarWithTitle.postValue(Event(Pair("Оплаты", "Общая сумма: ${roundOffTo2DecPlacesSecond(
+                        it
+                    )} ₽")))
                 }
             }
         }

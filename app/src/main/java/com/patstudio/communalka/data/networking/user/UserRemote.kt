@@ -1,10 +1,7 @@
 package com.patstudio.communalka.data.networking.user
 
 import com.google.gson.JsonElement
-import com.patstudio.communalka.data.model.APIResponse
-import com.patstudio.communalka.data.model.Gcm
-import com.patstudio.communalka.data.model.OrderCreator
-import com.patstudio.communalka.data.model.User
+import com.patstudio.communalka.data.model.*
 import kotlinx.coroutines.flow.Flow
 import okhttp3.Response
 
@@ -13,6 +10,10 @@ interface UserRemote {
     suspend fun login(phone: String): APIResponse<JsonElement>
 
     suspend fun sendCode(phone: String): APIResponse<JsonElement>
+
+    suspend fun getConsumer(): APIResponse<JsonElement>
+
+    suspend fun getFaq(): APIResponse<JsonElement>
 
     suspend fun registration(fio: String, phone: String, email: String): APIResponse<JsonElement>
 
@@ -31,6 +32,8 @@ interface UserRemote {
     suspend fun removePlacement(placementId: String): Any
 
     suspend fun getAccount(accountId:  String): APIResponse<JsonElement>
+
+    suspend fun updateConsumer(consumer: Consumer): APIResponse<JsonElement>
 
     suspend fun deleteAccount(accountId:  String): Any
 

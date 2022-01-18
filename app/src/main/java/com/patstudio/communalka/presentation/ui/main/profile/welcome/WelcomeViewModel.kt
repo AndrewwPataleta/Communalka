@@ -135,6 +135,7 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
                 return@OnCompleteListener
             }
             val token = task.result
+            Log.d("FBToken", "task ${task.result}")
             viewModelScope.launch(dispatcherProvider.io) {
                 userRepository.setCurrentFbToken(token.toString())
                 var gcm = Gcm(registration_id = token.toString(), application_id = BuildConfig.APPLICATION_ID, active = true)

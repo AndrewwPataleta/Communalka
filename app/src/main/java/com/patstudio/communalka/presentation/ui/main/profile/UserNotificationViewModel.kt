@@ -1,31 +1,26 @@
 package com.patstudio.communalka.presentation.ui.main.profile
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.imagegallery.contextprovider.DispatcherProvider
-import com.patstudio.communalka.BuildConfig
+import com.google.gson.Gson
 import com.patstudio.communalka.common.utils.Event
-import com.patstudio.communalka.data.model.Gcm
-import com.patstudio.communalka.data.model.Placement
-import com.patstudio.communalka.data.model.Result
-import com.patstudio.communalka.data.model.User
+import com.patstudio.communalka.data.model.*
 import com.patstudio.communalka.data.repository.user.UserRepository
-import isEmailValid
-import isValidPhoneNumber
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class UserNotificationViewModel(private val userRepository: UserRepository, private val dispatcherProvider: DispatcherProvider): ViewModel() {
+class UserNotificationViewModel(private val userRepository: UserRepository, private val dispatcherProvider: DispatcherProvider, private val gson: Gson): ViewModel() {
 
    private lateinit var user: User
+   private lateinit var consumerInfo: Consumer
    private val userMutable: MutableLiveData<Event<User>> = MutableLiveData()
 
-    private var _showProgress: MutableLiveData<Event<Boolean>> = MutableLiveData()
-    val showProgress: LiveData<Event<Boolean>> = _showProgress
+    private var _showProgress: MutableStateFlow<Event<Boolean>> = MutableStateFlow(Event(true))
+    val showProgress: LiveData<Event<Boolean>> = _showProgress.asLiveData(dispatcherProvider.io)
+
+    private var _consumer: MutableLiveData<Event<Consumer>> = MutableLiveData()
+    val consumer: LiveData<Event<Consumer>> = _consumer
 
    fun setCurrentUser(user:User) {
        this.user = user
@@ -36,32 +31,40 @@ class UserNotificationViewModel(private val userRepository: UserRepository, priv
 
         viewModelScope.launch(dispatcherProvider.io) {
             val user = userRepository.getLastAuthUser()
-            if (user != null)  {
-                userMutable.postValue(Event(user))
-
-            }
-        }
-    }
-
-    fun changePushEnable(enable: Boolean) {
-        viewModelScope.launch(dispatcherProvider.io) {
-            var gcm = Gcm(
-                registration_id = userRepository.getCurrentFbToken(),
-                application_id = BuildConfig.APPLICATION_ID,
-                active = enable
-            )
-            userRepository.updateGcm(gcm)
-                .onStart { _showProgress.postValue(Event(true)) }
-                .catch { }
+            userRepository.getConsumer()
+                .onStart { _showProgress.emit(Event(true)) }
+                .catch { it.printStackTrace() }
                 .collect {
                     when (it) {
                         is Result.Success -> {
-                            Log.d("UserNotification", "succ update")
-                            _showProgress.postValue(Event(false))
-                            user.notificationEnable = enable
-                            userRepository.saveUserLocal(user)
-                            initCurrentUser()
+                            var consumer = gson.fromJson(it.data.data!!.asJsonObject.get("consumer"), Consumer::class.java)
+                            consumerInfo = consumer
+                            userMutable.postValue(Event(user))
+                            _consumer.postValue(Event(consumer))
+                            _showProgress.emit(Event(false))
                         }
+                    }
+                }
+        }
+    }
+
+    fun changePushEnable(enable: Boolean, type: String) {
+
+        when (type) {
+            "remindIndication" -> { consumerInfo.remindIndication = enable }
+            "remindPay" -> { consumerInfo.remindPay = enable }
+            "messageRSO" -> { consumerInfo.messageRSO = enable}
+            "personal" -> { consumerInfo.personal = enable}
+            "ad" -> { consumerInfo.ad = enable }
+        }
+
+        viewModelScope.launch(dispatcherProvider.io) {
+
+            userRepository.updateConsumer(consumerInfo)
+                .catch { }
+                .collect {
+                    when (it) {
+                        is Result.Success -> { }
                     }
                 }
         }

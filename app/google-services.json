@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "741592672804-5ogqbktt0bm7s29r5hvf4jc9dgbdkov8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.patstudio.communalka",
+            "certificate_hash": "2154715cb6d2f72fbfe015d20bdef36f9ec73be0"
+          }
+        },
+        {
           "client_id": "741592672804-3uch5uj2iqiuid1pilu4fo2sjjurbasv.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "741592672804-3uch5uj2iqiuid1pilu4fo2sjjurbasv.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "741592672804-kve527lk08mus3u28viigrvr9amprd28.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mob.communalka"
+              }
             }
           ]
         }

@@ -14,6 +14,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -35,8 +36,17 @@ fun CharSequence?.isEmailValid(): Boolean {
 
 
 fun roundOffTo2DecPlaces(value: Float): String? {
-    return String.format("%.2f", value)
+    val decim = DecimalFormat("#,###.##")
+
+    return decim.format(value)
 }
+
+
+fun roundOffTo2DecPlacesSecond(value: Float): String? {
+    val decim = DecimalFormat("#,###.##")
+    return decim.format(value)
+}
+
 
 fun Group.setAllOnClickListener(listener: View.OnClickListener?) {
     referencedIds.forEach { id ->

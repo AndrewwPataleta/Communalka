@@ -63,6 +63,17 @@
     </fragment>
 
     <fragment
+        android:id="@+id/HelpUserFragment"
+        android:name="com.patstudio.communalka.presentation.ui.main.profile.HelpFragment"
+        android:label="Помощь"
+        tools:layout="@layout/fragment_help_user">
+
+        <action
+            android:id="@+id/toFaq"
+            app:destination="@id/UserFaq" />
+    </fragment>
+
+    <fragment
         android:id="@+id/TransmissionReading"
         android:name="com.patstudio.communalka.presentation.ui.main.readings.TransmissionReadingListFragment"
         android:label="Передача показаний"
@@ -223,6 +234,10 @@
         android:label="Оплата услуг"
         tools:layout="@layout/fragment_payment_placement">
 
+        <action
+            android:id="@+id/toPayments"
+            app:destination="@id/Payments" />
+
     </fragment>
 
     <fragment
@@ -326,6 +341,10 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/toHelp"
+            app:destination="@id/HelpUserFragment" />
         <action
             android:id="@+id/toAboutApp"
             app:destination="@id/AboutApp"
@@ -361,6 +380,14 @@
         android:name="com.patstudio.communalka.presentation.ui.main.profile.UserNotificationFragment"
         android:label="Уведомления"
         tools:layout="@layout/fragment_user_notification_settings">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/UserFaq"
+        android:name="com.patstudio.communalka.presentation.ui.main.profile.FaqFragment"
+        android:label="Часто задаваемые вопросы"
+        tools:layout="@layout/fragment_faq">
 
     </fragment>
 

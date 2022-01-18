@@ -51,6 +51,8 @@ class PaymentPlacementAdapter(private val paymentsList: List<Invoice>, val viewM
             itemBinding.viewModel = viewModel
             itemBinding.selectedPayment.isChecked = invoice.selected
 
+            itemBinding.balanceValue.text  = roundOffTo2DecPlaces(invoice.balance.toFloat())
+            itemBinding.penaltyValue.text  = roundOffTo2DecPlaces(invoice.penalty.toFloat())
 
 
             itemBinding.selectedPayment.setOnCheckedChangeListener { compoundButton, b ->
@@ -58,10 +60,17 @@ class PaymentPlacementAdapter(private val paymentsList: List<Invoice>, val viewM
 
                 if (b) {
                     itemBinding.openGroup.visibility = View.VISIBLE
+
                     itemBinding.service.setTextColor(itemBinding.root.context.resources.getColor(R.color.black))
                 } else {
                     itemBinding.openGroup.visibility = View.GONE
                     itemBinding.service.setTextColor(itemBinding.root.context.resources.getColor(R.color.gray_dark))
+                }
+
+                if (invoice.penalty < 1) {
+                    itemBinding.penaltyGroup.visibility = View.GONE
+                } else {
+                    itemBinding.penaltyGroup.visibility = View.VISIBLE
                 }
             }
             var amount = invoice.penalty+invoice.balance
@@ -84,6 +93,13 @@ class PaymentPlacementAdapter(private val paymentsList: List<Invoice>, val viewM
                 }
                 viewModel.setPenaltyValue(invoice, it.toString(), position)
             }
+
+            if (invoice.penalty < 1) {
+                itemBinding.penaltyGroup.visibility = View.GONE
+            } else {
+                itemBinding.penaltyGroup.visibility = View.VISIBLE
+            }
+
         }
     }
 }

@@ -2,10 +2,7 @@ package com.patstudio.communalka.data.networking.user
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import com.patstudio.communalka.data.model.APIResponse
-import com.patstudio.communalka.data.model.Gcm
-import com.patstudio.communalka.data.model.OrderCreator
-import com.patstudio.communalka.data.model.User
+import com.patstudio.communalka.data.model.*
 import okhttp3.Response
 import okhttp3.ResponseBody
 import retrofit2.http.*
@@ -24,13 +21,22 @@ interface UserService {
     @POST("auth/register/")
     suspend fun registration(@Body target: JsonObject): APIResponse<JsonElement>
 
-
-
     @POST("auth/register/")
     suspend fun registrationWithCode(@Body target: JsonObject): APIResponse<JsonElement>
 
     @PUT("consumer/")
     suspend fun updateEmail(@Body target: JsonObject): APIResponse<JsonElement>
+
+    @GET("consumer/")
+    suspend fun getConsumer(): APIResponse<JsonElement>
+
+
+    @GET("faq/")
+    suspend fun getFaq(): APIResponse<JsonElement>
+
+
+    @PUT("consumer/")
+    suspend fun updateConsumer(@Body consumer: Consumer): APIResponse<JsonElement>
 
     @PUT("consumer/")
     suspend fun updateFio(@Body fio: JsonObject)

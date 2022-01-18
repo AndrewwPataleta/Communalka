@@ -9,5 +9,7 @@ data class PaymentOrderShop (
      var orderNumber: Int,
      var communalkaShopId: Int,
      var amount: Double,
-     var shops: ArrayList<Shop>
+     var shops: ArrayList<Shop>,
+     var services: ArrayList<String>?,
+     var email: String
 ) : Parcelable

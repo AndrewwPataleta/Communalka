@@ -1,47 +1,280 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+<layout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+
+        <variable name="model" type="com.patstudio.communalka.data.model.Consumer"/>
+    </data>
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:padding="16dp">
+        android:fillViewport="true">
 
-        <TextView
-            android:id="@+id/text"
-            style="@style/TextBody1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/robotobold"
-            android:text="Включить уведомления"
-            android:textColor="@android:color/black"
-            android:textSize="17sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
 
-        <Switch
-            android:id="@+id/enabled"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/text"
-            app:layout_constraintBottom_toBottomOf="@id/text"/>
 
-        <ProgressBar
-            android:id="@+id/progress"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/text"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/text"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/contentContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/needTransReadingsText"
+                    style="@style/TextBody1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/robotobold"
+                    android:text="Необходимость передачи показаний"
+                    android:textColor="@android:color/black"
+                    android:textSize="17sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                    android:id="@+id/needTransReadingsTextSecond"
+                    style="@style/TextBody1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/robotobold"
+                    android:layout_marginTop="4dp"
+                    android:text="коммунальных услуг"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="15sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/needTransReadingsText"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <Switch
+                    android:id="@+id/needTransReadingsSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{model.remindIndication}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/needTransReadingsText"
+                    app:layout_constraintBottom_toBottomOf="@id/needTransReadingsTextSecond" />
+
+                <View
+                    android:id="@+id/transReadingsDecorator"
+                    android:layout_width="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="16dp"
+                    android:background="#EEF1F5"
+                    app:layout_constraintTop_toBottomOf="@id/needTransReadingsTextSecond"
+                    android:layout_height="1dp"/>
+
+
+                <TextView
+                    android:id="@+id/needPaymentText"
+                    style="@style/TextBody1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/robotobold"
+                    android:text="Необходимость оплаты"
+                    android:textColor="@android:color/black"
+                    android:layout_marginTop="16dp"
+                    android:textSize="17sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/transReadingsDecorator"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                    android:id="@+id/needPaymentTextSecond"
+                    style="@style/TextBody1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/robotobold"
+                    android:layout_marginTop="4dp"
+                    android:text="коммунальных услуг"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="15sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/needPaymentText"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <Switch
+                    android:id="@+id/needPaymentSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:checked="@{model.remindPay}"
+                    app:layout_constraintTop_toTopOf="@id/needPaymentText"
+                    app:layout_constraintBottom_toBottomOf="@id/needPaymentTextSecond" />
+
+                <View
+                    android:id="@+id/transPaymentDecorator"
+                    android:layout_width="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="16dp"
+                    android:background="#EEF1F5"
+                    app:layout_constraintTop_toBottomOf="@id/needPaymentTextSecond"
+                    android:layout_height="1dp"/>
+
+                <TextView
+                    android:id="@+id/servicesText"
+                    style="@style/TextBody1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/robotobold"
+                    android:text="Общие сервисные"
+                    android:textColor="@android:color/black"
+                    android:layout_marginTop="16dp"
+                    android:textSize="17sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/transPaymentDecorator"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                    android:id="@+id/servicesSecond"
+                    style="@style/TextBody1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/robotobold"
+                    android:layout_marginTop="4dp"
+                    android:text="от коммунальных служб"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="15sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/servicesText"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <Switch
+                    android:id="@+id/servicesSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:checked="@{model.messageRSO}"
+                    app:layout_constraintTop_toTopOf="@id/servicesText"
+                    app:layout_constraintBottom_toBottomOf="@id/servicesSecond" />
+
+                <View
+                    android:id="@+id/servicesDecorator"
+                    android:layout_width="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="16dp"
+                    android:background="#EEF1F5"
+                    app:layout_constraintTop_toBottomOf="@id/servicesSecond"
+                    android:layout_height="1dp"/>
+
+                <TextView
+                    android:id="@+id/personalText"
+                    style="@style/TextBody1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/robotobold"
+                    android:text="Личные"
+                    android:textColor="@android:color/black"
+                    android:layout_marginTop="16dp"
+                    android:textSize="17sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/servicesDecorator"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                    android:id="@+id/personalSecond"
+                    style="@style/TextBody1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/robotobold"
+                    android:layout_marginTop="4dp"
+                    android:text="от коммунальных служб"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="15sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/personalText"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <Switch
+                    android:id="@+id/personalSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:checked="@{model.personal}"
+                    app:layout_constraintTop_toTopOf="@id/personalText"
+                    app:layout_constraintBottom_toBottomOf="@id/personalSecond" />
+
+                <View
+                    android:id="@+id/personalDecorator"
+                    android:layout_width="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="16dp"
+                    android:background="#EEF1F5"
+                    app:layout_constraintTop_toBottomOf="@id/personalSecond"
+                    android:layout_height="1dp"/>
+
+                <TextView
+                    android:id="@+id/adText"
+                    style="@style/TextBody1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/robotobold"
+                    android:text="Рекламные"
+                    android:textColor="@android:color/black"
+                    android:layout_marginTop="16dp"
+                    android:textSize="17sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/personalSecond"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                    android:id="@+id/adSecond"
+                    style="@style/TextBody1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/robotobold"
+                    android:layout_marginTop="4dp"
+                    android:text="не чаще 1 раза в месяц"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="15sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/adText"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <Switch
+                    android:id="@+id/adSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:checked="@{model.ad}"
+                    app:layout_constraintTop_toTopOf="@id/adText"
+                    app:layout_constraintBottom_toBottomOf="@id/adSecond" />
+
+                <View
+                    android:id="@+id/adDecorator"
+                    android:layout_width="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="16dp"
+                    android:background="#EEF1F5"
+                    app:layout_constraintTop_toBottomOf="@id/adSecond"
+                    android:layout_height="1dp"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ProgressBar
+                android:id="@+id/progress"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:layout_gravity="center" />
+
+        </FrameLayout>
+
+
+    </ScrollView>
+</layout>

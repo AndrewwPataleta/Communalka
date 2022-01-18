@@ -11,7 +11,7 @@
     <item
         android:id="@+id/Request"
         android:title="Заявки"
-        android:icon="@drawable/ic_requests"/>
+        android:icon="@drawable/ic_request_new"/>
     <item
         android:id="@+id/Profile"
         android:title="Профиль"
