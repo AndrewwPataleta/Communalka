@@ -19,8 +19,10 @@ import com.skydoves.balloon.*
 import gone
 import visible
 import android.view.View
+import android.widget.ImageView
 
 import android.widget.TextView
+import getServiceIcon
 import roundOffTo2DecPlaces
 
 
@@ -53,12 +55,21 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
             itemBinding.viewModel = viewModel
             itemBinding.position = position
 
+            var fio = placement.fio.split(" ");
+
+            var charArray = fio.get(1).toCharArray().get(0).plus(".")
+
+
+            if (fio.size > 2) {
+                charArray += fio.get(2).toCharArray().get(0)
+            }
+            
+            itemBinding.ownerName.setText(fio.get(0)+" "+charArray)
+
             var meterSize = 0
             placement.accounts.map {
                meterSize += it.meters.size
             }
-
-
 
             if (meterSize == 0) {
                 itemBinding.transmitTestimony.background = itemBinding.root.context.resources.getDrawable(R.drawable.background_transmission_readings_btn_disable)
@@ -93,7 +104,6 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
                 }
                 "STORAGE" -> {
                     itemBinding.placementImage.setPadding(0)
-                    Log.d("PlacementAdapter", "URI "+placement.path.toUri())
                     itemBinding.placementImage.setImageURI(placement.path.toUri())
                 }
             }
@@ -115,14 +125,17 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
                     val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                     val servicePaymentBinding: View = inflater.inflate(R.layout.item_service_payment, null)
                     val service = it.service
+
                     servicePaymentBinding.findViewById<TextView>(R.id.serviceName).text = it.service
 
                     placement.accounts.map { account->
 
                         if (account.supplierName.compareTo(it.supplier) == 0) {
-                            servicePaymentBinding.setOnClickListener {
 
-                                viewModel.selectDetailService(placement = placement.name, service = service, account = account.id)
+                            servicePaymentBinding.setOnClickListener {
+                                if (account.active) {
+                                    viewModel.selectDetailService(placement = placement.name, service = service, account = account.id)
+                                }
                             }
 
                             if (account.message.isNotEmpty()) {
@@ -137,6 +150,7 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
                     } }
 
                     servicePaymentBinding.findViewById<TextView>(R.id.payment).text = (it.balance+it.penalty).toString().plus(" ₽")
+                    servicePaymentBinding.findViewById<ImageView>(R.id.image).setImageDrawable(getServiceIcon(service, itemBinding.root.context))
                     itemBinding.servicePaymentsContainer.addView(servicePaymentBinding)
                 }
             }
@@ -160,9 +174,6 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
                 itemBinding.paymentAmount.gone(false)
                 itemBinding.paymentButton.setOnClickListener {}
             }
-
-
-
 
         }
     }

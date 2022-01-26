@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.patstudio.communalka.data.model.Service
 import com.patstudio.communalka.databinding.ItemUnconnectedPersonalAccountBinding
+import getServiceIcon
 
 class UnconnectedPersonalAccountAdapter(private val accountList: List<Service>, val context: Context, val viewModel: PersonalAccountManagementViewModel) : RecyclerView.Adapter<UnconnectedPersonalAccountAdapter.UnconnectedPersonalAccountHolder>() {
 
@@ -29,6 +30,7 @@ class UnconnectedPersonalAccountAdapter(private val accountList: List<Service>, 
 
             itemBinding.model = service
             itemBinding.viewModel = viewModel
+            itemBinding.image.setImageDrawable(getServiceIcon(service.name, itemView.context))
             itemBinding.position = position
 
         }

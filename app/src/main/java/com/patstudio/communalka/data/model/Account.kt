@@ -12,10 +12,14 @@ data class Account (
    val active: Boolean?,
    val discount: String?,
    val number_people: String?,
-   val balance: String?,
+   val balance: Double?,
+   val penalty: Double?,
+   val lastPayment: LastPayment?,
    val placement: String?,
    val supplier: String?,
    val service: String?,
    val consumer: String?
 ) : Parcelable
+
+
 

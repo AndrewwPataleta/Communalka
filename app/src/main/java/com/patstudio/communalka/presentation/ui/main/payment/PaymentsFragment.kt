@@ -79,7 +79,7 @@ class PaymentsFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     val intent = Intent(Intent.ACTION_VIEW)
-                    intent.data = Uri.parse("https://ofd.ru/sites/default/files/inline-images/obrazec_cheka.png")
+                    intent.data = Uri.parse(it.receipt_url)
                     startActivity(intent)
                 }
             }

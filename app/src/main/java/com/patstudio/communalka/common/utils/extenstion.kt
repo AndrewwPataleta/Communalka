@@ -1,6 +1,7 @@
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.res.Resources
+import android.graphics.Bitmap
 import android.text.InputFilter
 import android.util.Patterns
 import android.view.View
@@ -17,6 +18,12 @@ import retrofit2.HttpException
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import android.R.drawable
+import android.content.Context
+
+import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
+import com.patstudio.communalka.R
 
 
 fun CharSequence?.isValidPhoneNumber():Boolean{
@@ -32,6 +39,28 @@ val Int.px: Int
 
 fun CharSequence?.isEmailValid(): Boolean {
     return android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
+}
+
+
+fun getServiceIcon(serviceName: String, context: Context): Drawable {
+
+    lateinit var drawable: Drawable
+
+    when (serviceName) {
+        "Водоснабжение" -> {
+            drawable = context.resources.getDrawable(R.drawable.ic_water)
+        }
+        "Газ" -> {
+            drawable = context.resources.getDrawable(R.drawable.ic_gas)
+        }
+        "Теплоснабжение" -> {
+            drawable = context.resources.getDrawable(R.drawable.ic_warm)
+        }
+        "Электричество" -> {
+            drawable = context.resources.getDrawable(R.drawable.ic_electricity)
+        }
+    }
+    return drawable
 }
 
 

@@ -8,8 +8,9 @@ import ru.tinkoff.acquiring.sdk.models.Shop
 data class PaymentOrderShop (
      var orderNumber: Int,
      var communalkaShopId: Int,
+     var communalkaTax: String,
      var amount: Double,
      var shops: ArrayList<Shop>,
-     var services: ArrayList<String>?,
+     var services: ArrayList<Pair<Long,String>>?,
      var email: String
 ) : Parcelable

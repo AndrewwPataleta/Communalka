@@ -85,6 +85,7 @@ class PinCodeFragment : Fragment() {
             try {
                 if (it) {
                     binding.pinFingerprint.visible(false)
+                    binding.pinFingerprint.callOnClick()
                 } else {
                     binding.pinFingerprint.invisible(false)
                 }

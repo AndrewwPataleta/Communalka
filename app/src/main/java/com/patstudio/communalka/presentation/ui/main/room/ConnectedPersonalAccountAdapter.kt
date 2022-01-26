@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.patstudio.communalka.data.model.Service
 import com.patstudio.communalka.databinding.ItemConnectedPersonalAccountBinding
+import getServiceIcon
 import gone
 import visible
 
@@ -34,6 +35,7 @@ class ConnectedPersonalAccountAdapter(private val accountList: List<Service>, va
             itemBinding.viewModel = viewModel
             itemBinding.position = position
             itemBinding.accountMessage.gone(false)
+            itemBinding.image.setImageDrawable(getServiceIcon(service.name, itemView.context))
             service.account?.message?.let {
                 if (it.length > 0) {
                     itemBinding.accountMessage.visible(false)

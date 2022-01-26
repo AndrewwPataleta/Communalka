@@ -19,6 +19,7 @@ import com.patstudio.communalka.databinding.FragmentConsumptionHistoryBinding
 import com.patstudio.communalka.presentation.ui.splash.MainViewModel
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
+import java.text.SimpleDateFormat
 
 class AccrualFragment : Fragment() {
 
@@ -38,7 +39,16 @@ class AccrualFragment : Fragment() {
 
     private fun initObservers() {
         viewModel.meters.observe(viewLifecycleOwner) {
-            adapter = MeterAccrualAdapter(it, viewModel)
+
+            val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            val date = format.parse(it.first.lastPayment?.date)
+
+            binding.balanceValue.text = it.first.balance.toString()
+            binding.penaltyValue.text = it.first.penalty.toString()
+            binding.sumLastPaymentValue.text = it.first.lastPayment?.amount.toString()
+            binding.dateLastPaymentValue.text = SimpleDateFormat("dd.MM.yyyy").format(date)
+
+            adapter = MeterAccrualAdapter(it.second, viewModel)
             binding.container.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL ,false)
             binding.container.adapter = adapter
         }
@@ -64,15 +74,15 @@ class AccrualFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         mainViewModel._toolbarWithTitle.postValue(Event(Pair(requireArguments().getString("placement")!!, requireArguments().getString("service")!!)))
         arguments?.getString("placement")?.let {
-            Log.d("AccrualFragment ", "placement ${it}")
+
             viewModel.setCurrentPlacement(it)
         }
         arguments?.getString("account")?.let {
-            Log.d("AccrualFragment ", "account ${it}")
+
             viewModel.setCurrentService(it)
         }
         arguments?.getString("service")?.let {
-            Log.d("AccrualFragment ", "service ${it}")
+
             viewModel.setCurrentMeter(it)
         }
 

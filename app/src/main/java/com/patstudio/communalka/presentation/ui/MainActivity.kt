@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                     it?.let {
                         Log.d("MainActivity", "it ${it}")
                         binding.toolbar.title = it.first
-                        binding.toolbar.subtitle = it.second
+                        binding.toolbar.subtitle = it.second.trim()
                     }
                 }
             }

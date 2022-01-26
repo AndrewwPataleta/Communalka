@@ -1,12 +1,14 @@
 package com.patstudio.communalka.presentation.ui.main.readings
 
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.imagegallery.contextprovider.DispatcherProvider
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.*
 import com.patstudio.communalka.data.repository.premises.RoomRepository
@@ -116,17 +118,41 @@ class TransmissionReadingListViewModel(private val userRepository: UserRepositor
         viewModelScope.launch(dispatcherProvider.io) {
             roomRepository.getPlacementDetail(currentPlacementModel.id)
                 .collect {
-
                     when (it) {
                         is Result.Success -> {
                             var placement = gson.fromJson(it.data.data!!.asJsonObject.get("placement"), Placement::class.java)
                             placementMetersList = ArrayList()
-                            placement.accounts.map {
-                                it.meters.map {
-                                    placementMetersList.add(it)
+
+                            roomRepository.getServicesPlacement(currentPlacementModel)
+                                .catch { it.printStackTrace() }
+                                .collect {
+                                    when (it) {
+                                        is Result.Success -> {
+                                            val turnsType = object : TypeToken<List<Service>>() {}.type
+                                            var services: List<Service> = gson.fromJson(it.data.data!!.asJsonObject.get("services"), turnsType)
+                                            placement.accounts.map {
+                                                var serviceName = ""
+                                                services.map { service->
+                                                    if (service.id.compareTo(it.service) == 0) {
+                                                        serviceName = service.name
+                                                    }
+                                                }
+
+                                                it.meters.map { meter ->
+                                                    meter.serviceName = serviceName
+                                                    placementMetersList.add(meter)
+                                                }
+                                            }
+                                            _placementMeters.postValue(Event(placementMetersList))
+                                        }
+                                        is Result.Error -> {
+
+                                        }
+                                        is Result.ErrorResponse -> {
+
+                                        }
+                                    }
                                 }
-                            }
-                            _placementMeters.postValue(Event(placementMetersList))
                         }
                         is Result.Error -> {
 

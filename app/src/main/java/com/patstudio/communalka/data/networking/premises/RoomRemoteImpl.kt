@@ -48,6 +48,10 @@ class RoomRemoteImpl(
         premisesService.getAccrual(id)
     }
 
+    override suspend fun getAccount(id: String) = withContext(dispatcherProvider.io)  {
+        premisesService.getAccount(id)
+    }
+
     override suspend fun sendRoom(room: Room) = withContext(dispatcherProvider.io) {
         premisesService.addPlacement(room)
     }

@@ -50,7 +50,6 @@
                 app:layout_constraintTop_toBottomOf="@id/securityDecorator"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ProgressBar
@@ -59,7 +58,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="gone"/>
-
 
     </FrameLayout>
 

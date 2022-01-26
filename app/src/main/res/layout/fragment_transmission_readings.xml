@@ -110,7 +110,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:fontFamily="@font/robotoregular"
-                android:text="@{String.valueOf(model.last_values.lastValue)}"
+                android:text="@{String.valueOf(model.last_values.prevValue)}"
                 android:textColor="@color/black"
                 android:textSize="17sp"
                 android:layout_marginTop="8dp"

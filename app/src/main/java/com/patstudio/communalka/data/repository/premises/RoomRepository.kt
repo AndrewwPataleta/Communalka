@@ -150,6 +150,29 @@ class RoomRepository(
         }
     }
 
+    suspend fun getAccount(id: String): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val premises = roomRemote.getAccount(id)
+                emit(Result.success(premises))
+            }
+        } catch (throwable: Exception) {
+
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
     suspend fun getMetersForPlacement(placementId: String): Flow<Result<APIResponse<JsonElement>>> = flow {
         try {
             if (connectivity.hasNetworkAccess()) {
@@ -283,6 +306,7 @@ class RoomRepository(
                     emit(Result.errorResponse(errorResponse))
                 }
                 else -> {
+                    throwable.printStackTrace()
                     emit(Result.Error(throwable))
                 }
             }

@@ -1,12 +1,14 @@
 package com.patstudio.communalka.presentation.ui.main.room
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.patstudio.communalka.data.model.PlacementMeter
 import com.patstudio.communalka.databinding.ItemPersonalCounterBinding
 import com.patstudio.communalka.presentation.ui.main.readings.TransmissionReadingListViewModel
+import getServiceIcon
 
 class PlacementMeterAdapter(private val placementMeters: ArrayList<PlacementMeter>, val context: Context, val viewModel: TransmissionReadingListViewModel) : RecyclerView.Adapter<PlacementMeterAdapter.PlacementMeterHolder>() {
 
@@ -29,6 +31,11 @@ class PlacementMeterAdapter(private val placementMeters: ArrayList<PlacementMete
         fun bind(placementMeter: PlacementMeter, position: Int) {
             itemBinding.model = placementMeter
             itemBinding.viewModel = viewModel
+
+            Log.d("MeterName", "place ${placementMeter.serviceName}")
+
+            itemBinding.imageService.setImageDrawable(getServiceIcon(placementMeter.serviceName , itemBinding.root.context))
+
             if (placementMeter.last_values.lastValue != null) {
                itemBinding.lastValueText.text = "Последние показания"
             } else {

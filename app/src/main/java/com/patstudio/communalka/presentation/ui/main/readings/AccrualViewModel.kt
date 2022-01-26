@@ -26,12 +26,14 @@ class AccrualViewModel(private val roomRepository: RoomRepository, private val d
     private lateinit var currentService: String
     private lateinit var currentPlacement: String
     private lateinit var currentMeter: String
+    private lateinit var account: Account
+
 
     private var _historyPlacementMeter: MutableLiveData<Event<Triple<PlacementMeter, String, String>>> = MutableLiveData()
     val historyPlacementMeter: LiveData<Event<Triple<PlacementMeter, String, String>>> = _historyPlacementMeter
 
-    var _meters: MutableLiveData<ArrayList<PlacementMeter>> = MutableLiveData()
-    val meters: LiveData<ArrayList<PlacementMeter>> = _meters
+    var _meters: MutableLiveData<Pair<Account, ArrayList<PlacementMeter>>> = MutableLiveData()
+    val meters: LiveData<Pair<Account, ArrayList<PlacementMeter>>> = _meters
 
     fun setCurrentService(currentMeter: String) {
         this.currentService = currentMeter
@@ -52,25 +54,36 @@ class AccrualViewModel(private val roomRepository: RoomRepository, private val d
 
     private fun getMeterHistory() {
         viewModelScope.launch(dispatcherProvider.io) {
-            roomRepository.getAccrual(currentService)
+            roomRepository.getAccount(currentService)
                 .onStart {}
                 .collect {
                     when (it) {
                         is Result.Success -> {
-                            roomRepository.getMetersByAccount(currentService)
+                            account = gson.fromJson(it.data.data!!.asJsonObject.get("account"), Account::class.java)
+                            roomRepository.getAccrual(currentService)
                                 .onStart {}
                                 .collect {
                                     when (it) {
                                         is Result.Success -> {
-                                            val type = object : TypeToken<List<PlacementMeter>>() {}.type
-                                            var meters: ArrayList<PlacementMeter> = gson.fromJson(it.data.data!!.asJsonObject.get("meters"), type)
-                                            _meters.postValue(meters)
+                                            roomRepository.getMetersByAccount(currentService)
+                                                .onStart {}
+                                                .collect {
+                                                    when (it) {
+                                                        is Result.Success -> {
+
+                                                            val type = object : TypeToken<List<PlacementMeter>>() {}.type
+                                                            var meters: ArrayList<PlacementMeter> = gson.fromJson(it.data.data!!.asJsonObject.get("meters"), type)
+                                                            _meters.postValue(Pair(account,meters))
+                                                        }
+                                                    }
+                                                }
                                         }
                                     }
                                 }
                         }
                     }
                 }
+
         }
     }
 

@@ -54,13 +54,22 @@ class PaymentHistoryAdapter(private val paymentsList: List<PaymentHistoryModel>,
             val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
             val date = format.parse(dtStart)
 
-
             itemBinding.status.text = paymentHistoryModel.status
             itemBinding.date.text = SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(date)
             itemBinding.placementName.text = paymentHistoryModel.placementName
 
-            itemBinding.receipt.setOnClickListener {
-                viewModel.selectActionReceipt(paymentHistoryModel)
+            if (paymentHistoryModel.receipt_url != null) {
+                itemBinding.receiptNumber.visibility = View.VISIBLE
+                itemBinding.receipt.visibility = View.VISIBLE
+                itemBinding.receipt.setOnClickListener {
+                    viewModel.selectActionReceipt(paymentHistoryModel)
+                }
+            } else {
+                itemBinding.receipt.setOnClickListener {
+
+                }
+                itemBinding.receiptNumber.visibility = View.GONE
+                itemBinding.receipt.visibility = View.GONE
             }
 
             itemBinding.paymentAmount.text = "Сумма оплаты: ${roundOffTo2DecPlaces((paymentHistoryModel.amount+paymentHistoryModel.taxAmount).toFloat())} ₽"

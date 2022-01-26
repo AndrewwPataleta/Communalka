@@ -129,9 +129,10 @@ class PaymentPlacementFragment : Fragment() {
                         taxation = Taxation.USN_INCOME_OUTCOME
                         items = it.services?.map { service ->
                             Item().apply {
-                                name = service
+                                name = service.second
                                 quantity = 1.0
-                                amount = Money.ofRubles(it.amount).coins
+                                amount = 1
+                                price = service.first 
                                 tax = Tax.NONE
                             }} as ArrayList<Item>
                         email = it.email

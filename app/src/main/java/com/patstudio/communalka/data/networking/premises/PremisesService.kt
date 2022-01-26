@@ -26,6 +26,9 @@ interface PremisesService {
     @GET("accrual/{id}/")
     suspend fun getAccrual(@Path("id") id: String): APIResponse<JsonElement>
 
+    @GET("account/{id}/")
+    suspend fun getAccount(@Path("id") id: String): APIResponse<JsonElement>
+
     @GET("placement/{id}/")
     suspend fun getPlacementDetail(@Path("id") id: String): APIResponse<JsonElement>
 

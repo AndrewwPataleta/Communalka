@@ -4,15 +4,127 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="16dp"
         android:background="@color/white">
 
-      <androidx.recyclerview.widget.RecyclerView
+        <TextView
+            android:id="@+id/balance"
+            style="@style/TextBold1"
+            android:layout_width="0dp"
+
+            android:layout_height="wrap_content"
+            android:text="Баланс"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:fontFamily="@font/robotobold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
+        <TextView
+            android:id="@+id/balanceValue"
+            style="@style/TextBody1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:fontFamily="@font/robotobold"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/balance"
+            app:layout_constraintBottom_toBottomOf="@+id/balance"/>
+
+        <TextView
+            android:id="@+id/penalty"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Пеня, ₽ "
+            android:layout_marginTop="4dp"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:fontFamily="@font/robotoregular"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/balance"/>
+
+        <TextView
+            android:id="@+id/penaltyValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:fontFamily="@font/robotoregular"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/penalty"
+            app:layout_constraintBottom_toBottomOf="@+id/penalty"/>
+
+
+        <TextView
+            android:id="@+id/lastPayment"
+            style="@style/TextBold1"
+            android:layout_width="0dp"
+            android:layout_marginTop="16dp"
+            android:layout_height="wrap_content"
+            android:text="Последний платеж"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:fontFamily="@font/robotobold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/penalty"/>
+
+        <TextView
+            android:id="@+id/sumLastPayment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Сумма, ₽ "
+            android:layout_marginTop="4dp"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:fontFamily="@font/robotoregular"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lastPayment"/>
+
+        <TextView
+            android:id="@+id/sumLastPaymentValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:fontFamily="@font/robotoregular"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/sumLastPayment"
+            app:layout_constraintBottom_toBottomOf="@+id/sumLastPayment"/>
+
+
+        <TextView
+            android:id="@+id/dateLastPayment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Дата"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:fontFamily="@font/robotoregular"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sumLastPaymentValue"/>
+
+        <TextView
+            android:id="@+id/dateLastPaymentValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:fontFamily="@font/robotoregular"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/dateLastPayment"
+            app:layout_constraintBottom_toBottomOf="@+id/dateLastPayment"/>
+
+        <androidx.recyclerview.widget.RecyclerView
           android:id="@+id/container"
           android:layout_width="match_parent"
           android:layout_height="0dp"
+            android:layout_marginTop="16dp"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/dateLastPayment"
           app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

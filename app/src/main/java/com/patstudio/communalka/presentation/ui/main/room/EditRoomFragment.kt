@@ -9,6 +9,7 @@ import android.content.Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
 import android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -213,6 +214,7 @@ class EditRoomFragment : Fragment() {
                     val alertDialog: AlertDialog = builder.create()
                     alertDialog.setCancelable(false)
                     alertDialog.show()
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED)
                 }
             }
         }

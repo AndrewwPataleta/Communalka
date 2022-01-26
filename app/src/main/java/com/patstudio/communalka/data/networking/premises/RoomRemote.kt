@@ -25,6 +25,8 @@ interface RoomRemote {
 
     suspend fun getAccrual(id: String): APIResponse<JsonElement>
 
+    suspend fun getAccount(id: String): APIResponse<JsonElement>
+
     suspend fun sendRoom(room: Room): APIResponse<JsonElement>
 
     suspend fun updateRoom(room: Room): APIResponse<JsonElement>

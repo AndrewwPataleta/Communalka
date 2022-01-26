@@ -194,7 +194,7 @@ class PaymentPlacementViewModel(private val userRepository: UserRepository, priv
         var paymentCreatorList: ArrayList<PaymentCreator> = ArrayList()
         var totalAmount = 0.0
         var totalTax = 0.0
-        var suppliers: ArrayList<String> = arrayListOf()
+        var suppliers: ArrayList<Pair<Long,String>> = arrayListOf()
         placementModel.accounts.map { account->
             placementModel.invoices?.map { invoice->
                if (invoice.selected) {
@@ -203,7 +203,7 @@ class PaymentPlacementViewModel(private val userRepository: UserRepository, priv
                        invoice.penaltyValue?.let {
                            amount = it
                        }
-                        suppliers.add(account.supplierName)
+                        suppliers.add(Pair(Money.ofRubles(invoice.balance).coins, account.supplierName))
                         var tax = ((amount*invoice.percentTax)/100)
 
                         var paymentCreator = PaymentCreator(account = account.id, amount = amount, taxAmount = tax, shopId = invoice.shopId)
@@ -242,10 +242,10 @@ class PaymentPlacementViewModel(private val userRepository: UserRepository, priv
                             shop.amount =  Money.ofRubles(totalTax).coins
                             shop.shopCode = paymentOrderShop.communalkaShopId.toString()
                             shops.add(shop)
+                            suppliers.add(Pair(Money.ofRubles(totalTax).coins, "Комиссия"))
                             paymentOrderShop.services = suppliers
                             paymentOrderShop.email = user.email
                             paymentOrderShop.shops = shops
-
                             _paymentOrder.postValue(Event(paymentOrderShop))
                         }
                     }

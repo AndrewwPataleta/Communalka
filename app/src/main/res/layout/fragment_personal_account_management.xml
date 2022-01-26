@@ -43,7 +43,8 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:overScrollMode="never"
-                    android:padding="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
 
                     android:nestedScrollingEnabled="false"
                     app:layout_constraintStart_toStartOf="parent"
@@ -99,7 +100,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:overScrollMode="never"
-                    android:padding="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
 
                     android:nestedScrollingEnabled="false"
                     app:layout_constraintStart_toStartOf="parent"

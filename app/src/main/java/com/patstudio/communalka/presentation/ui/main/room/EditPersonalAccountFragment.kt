@@ -1,5 +1,7 @@
 package com.patstudio.communalka.presentation.ui.main.room
 
+import android.app.AlertDialog
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -56,7 +58,7 @@ class EditPersonalAccountFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     it?.let {
-                        val builder = MaterialAlertDialogBuilder(requireContext())
+                        val builder = AlertDialog.Builder(requireContext())
                         builder.setTitle("Удалить личный счет?")
                         builder.setMessage("Вы действительно хотите удалить л/c '"+it.name+"'?")
                         builder.setPositiveButton("Удалить"){dialogInterface, which ->
@@ -66,8 +68,11 @@ class EditPersonalAccountFragment : Fragment() {
                         builder.setNegativeButton("Отмена"){dialogInterface, which ->
                             dialogInterface.dismiss()
                         }
-                        builder.setCancelable(false)
-                        builder.show()
+                        val alertDialog: AlertDialog = builder.create()
+                        alertDialog.setCancelable(false)
+                        alertDialog.show()
+                     
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED)
                     }
                 }
             }
