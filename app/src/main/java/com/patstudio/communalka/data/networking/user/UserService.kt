@@ -34,6 +34,9 @@ interface UserService {
     @GET("faq/")
     suspend fun getFaq(): APIResponse<JsonElement>
 
+    @GET("api_keys/faq_playlist/")
+    suspend fun getVideoFaqKey(): APIResponse<JsonElement>
+
 
     @PUT("consumer/")
     suspend fun updateConsumer(@Body consumer: Consumer): APIResponse<JsonElement>

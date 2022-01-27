@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import com.patstudio.communalka.R
 import com.patstudio.communalka.databinding.FragmentEditPinCodeBinding
+import com.patstudio.communalka.presentation.ui.main.payment.PaymentsViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.welcome.WelcomeViewModel
 import gone
 import invisible
@@ -28,7 +29,9 @@ class EditPinCodeFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel by viewModel<EditPinCodeViewModel>()
     private val welcomeViewModel by sharedViewModel<WelcomeViewModel>()
+
     private lateinit var executor: Executor
+
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
@@ -79,13 +82,13 @@ class EditPinCodeFragment : Fragment() {
            }
        }
         viewModel.getAvailableFingerPrint().observe(this) {
-            try {
-                if (it) {
-                    binding.pinFingerprint.visible(false)
-                } else {
-                    binding.pinFingerprint.invisible(false)
-                }
-            } catch (e: Exception) {}
+//            try {
+//                if (it) {
+//                    binding.pinFingerprint.visible(false)
+//                } else {
+//                    binding.pinFingerprint.invisible(false)
+//                }
+//            } catch (e: Exception) {}
         }
 
         viewModel.getUser().observe(this) {

@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
 import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.FirebaseApp
 import com.patstudio.communalka.R
 import com.patstudio.communalka.databinding.FragmentHelpUserBinding
 import com.patstudio.communalka.databinding.FragmentPersonalInfoBinding
@@ -31,16 +32,17 @@ class HelpFragment : Fragment() {
 
     private var _binding: FragmentHelpUserBinding? = null
     private val binding get() = _binding!!
-    private val viewModel by viewModel<PersonalInfoViewModel>()
+    private val viewModel by viewModel<HelpViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentHelpUserBinding.inflate(inflater, container, false)
+        viewModel.initVideo()
+
         return binding.root
     }
-
 
     private fun initObservers() {
 

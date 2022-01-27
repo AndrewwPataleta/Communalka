@@ -24,6 +24,7 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import com.patstudio.communalka.R
+import java.text.DecimalFormatSymbols
 
 
 fun CharSequence?.isValidPhoneNumber():Boolean{
@@ -64,16 +65,26 @@ fun getServiceIcon(serviceName: String, context: Context): Drawable {
 }
 
 
-fun roundOffTo2DecPlaces(value: Float): String? {
-    val decim = DecimalFormat("#,###.##")
 
-    return decim.format(value)
+ fun roundOffTo2DecPlaces(value: Float): String? {
+
+    val DECIMAL_FORMAT = "###,###.#"
+    val formatSymbols = DecimalFormatSymbols(Locale.ENGLISH)
+    formatSymbols.decimalSeparator = ','
+    formatSymbols.groupingSeparator = ' '
+    val formatter = DecimalFormat(DECIMAL_FORMAT, formatSymbols)
+    return formatter.format(value)
 }
 
 
+
 fun roundOffTo2DecPlacesSecond(value: Float): String? {
-    val decim = DecimalFormat("#,###.##")
-    return decim.format(value)
+    val DECIMAL_FORMAT = "###,###.###"
+    val formatSymbols = DecimalFormatSymbols(Locale.ENGLISH)
+    formatSymbols.decimalSeparator = ','
+    formatSymbols.groupingSeparator = ' '
+    val formatter = DecimalFormat(DECIMAL_FORMAT, formatSymbols)
+    return formatter.format(value)
 }
 
 

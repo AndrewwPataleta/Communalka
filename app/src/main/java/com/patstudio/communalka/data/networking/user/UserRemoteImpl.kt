@@ -37,6 +37,10 @@ class UserRemoteImpl(
         userService.getFaq()
     }
 
+    override suspend fun getVideoFaqKey() = withContext(dispatcherProvider.default){
+        userService.getVideoFaqKey()
+    }
+
     override suspend fun registration(fio: String, phone: String, email: String) = withContext(dispatcherProvider.default) {
         val body = JsonObject()
         body.addProperty("fio",fio)

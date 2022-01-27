@@ -19,10 +19,12 @@ import com.patstudio.communalka.R
 import com.patstudio.communalka.databinding.FragmentProfileBinding
 import com.patstudio.communalka.presentation.ui.MainActivity
 import com.patstudio.communalka.presentation.ui.main.ProfileViewModel
+import com.patstudio.communalka.presentation.ui.main.payment.PaymentsViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.SwitchProfileAdapter
 import com.patstudio.communalka.presentation.ui.splash.MainViewModel
 import com.skydoves.balloon.extensions.dp
 import gone
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import ru.tinkoff.acquiring.sdk.TinkoffAcquiring
 import ru.tinkoff.acquiring.sdk.models.enums.CheckType
@@ -37,6 +39,7 @@ class   ProfileFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel by viewModel<ProfileViewModel>()
     private val mainViewModel by viewModel<MainViewModel>()
+    private val filterPayment by sharedViewModel<PaymentsViewModel>()
     private lateinit var adapter: SwitchProfileAdapter
     private lateinit var switchUserBinding: BottomSheetDialog
 
@@ -50,6 +53,10 @@ class   ProfileFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        filterPayment.resetFilter()
+    }
 
     private fun setAuthNavigation() {
         this.binding.profileText.setOnClickListener {

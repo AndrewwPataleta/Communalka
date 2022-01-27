@@ -91,6 +91,27 @@ class UserRepository (
         }
     }
 
+    fun getVideoFaqKey(): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val user = remote.getVideoFaqKey()
+                emit(Result.success(user))
+            }
+        } catch (throwable: Exception) {
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
     fun sendCode(value: String): Flow<Result<APIResponse<JsonElement>>> = flow {
         try {
             if (connectivity.hasNetworkAccess()) {

@@ -131,7 +131,7 @@ class PaymentPlacementFragment : Fragment() {
                             Item().apply {
                                 name = service.second
                                 quantity = 1.0
-                                amount = 1
+                                amount = service.first
                                 price = service.first 
                                 tax = Tax.NONE
                             }} as ArrayList<Item>

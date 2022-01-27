@@ -4,11 +4,8 @@ import com.patstudio.communalka.presentation.ui.auth.*
 import com.patstudio.communalka.presentation.ui.main.ProfileViewModel
 import com.patstudio.communalka.presentation.ui.main.payment.PaymentPlacementViewModel
 import com.patstudio.communalka.presentation.ui.main.payment.PaymentsViewModel
-import com.patstudio.communalka.presentation.ui.main.profile.FaqViewModel
+import com.patstudio.communalka.presentation.ui.main.profile.*
 import com.patstudio.communalka.presentation.ui.main.profile.welcome.WelcomeViewModel
-import com.patstudio.communalka.presentation.ui.main.profile.HistoryVersionViewModel
-import com.patstudio.communalka.presentation.ui.main.profile.PersonalInfoViewModel
-import com.patstudio.communalka.presentation.ui.main.profile.UserNotificationViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.security.EditPinCodeViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.security.EmailEditViewModel
 import com.patstudio.communalka.presentation.ui.main.profile.security.EntranceSecurityViewModel
@@ -51,5 +48,6 @@ val viewModelsModule = module {
     viewModel { ConsumptionHistoryViewModel(get(), get(), get()) }
     viewModel { AccrualViewModel(get(), get(), get()) }
     viewModel { FaqViewModel(get(), get(), get()) }
+    viewModel { HelpViewModel(get(), get(), get(), get()) }
 
 }

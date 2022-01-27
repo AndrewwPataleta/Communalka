@@ -55,4 +55,7 @@ interface PremisesService {
     @GET("api_keys/dadata/")
     suspend fun getDaDataApiKey(): APIResponse<JsonElement>
 
+    @GET("api_keys/faq_playlist/")
+    suspend fun getFaqPlaylist(): APIResponse<JsonElement>
+
 }

@@ -61,7 +61,7 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
 
 
             if (fio.size > 2) {
-                charArray += fio.get(2).toCharArray().get(0)
+                charArray += " "+fio.get(2).toCharArray().get(0)+"."
             }
             
             itemBinding.ownerName.setText(fio.get(0)+" "+charArray)

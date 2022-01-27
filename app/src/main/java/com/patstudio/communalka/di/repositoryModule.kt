@@ -4,6 +4,7 @@ package com.patstudio.communalka.di
 
 import com.patstudio.communalka.data.repository.premises.DaDataRepository
 import com.patstudio.communalka.data.repository.premises.RoomRepository
+import com.patstudio.communalka.data.repository.user.FaqRepository
 import com.patstudio.communalka.data.repository.user.UserRepository
 
 
@@ -17,6 +18,8 @@ val repositoryModule = module {
   factory<UserRepository> { UserRepository(get(),get(),get(),get(),get(named("securePrefs"))) }
   factory<RoomRepository> { RoomRepository(get(),get(),get(),get()) }
   factory<DaDataRepository> { DaDataRepository(get(),get(),get(),get(), get(named("securePrefs"))) }
+  factory<FaqRepository> { FaqRepository(get(),get(),get(),get(), get(named("securePrefs"))) }
+
   factory<Connectivity> { ConnectivityImpl(androidContext()) }
 
 

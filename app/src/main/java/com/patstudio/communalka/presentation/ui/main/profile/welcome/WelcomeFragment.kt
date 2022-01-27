@@ -21,6 +21,7 @@ import com.patstudio.communalka.R
 import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.databinding.FragmentWelcomeBinding
 import com.patstudio.communalka.presentation.ui.MainActivity
+import com.patstudio.communalka.presentation.ui.main.payment.PaymentsViewModel
 import com.patstudio.communalka.presentation.ui.main.room.PlacementAdapter
 import com.patstudio.communalka.presentation.ui.splash.MainViewModel
 import org.koin.android.viewmodel.ext.android.sharedViewModel
@@ -38,6 +39,7 @@ class WelcomeFragment : Fragment() {
     private var _binding: FragmentWelcomeBinding? = null
     private val binding get() = _binding!!
     private val viewModel by sharedViewModel<WelcomeViewModel>()
+    private val filterPayment by sharedViewModel<PaymentsViewModel>()
     private val mainViewModel by sharedViewModel<MainViewModel>()
     private lateinit var placementAdapter: PlacementAdapter
     private lateinit var balloonTransmit: Balloon
@@ -70,7 +72,7 @@ class WelcomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
+        filterPayment.resetFilter()
     }
 
     private fun initObservers() {

@@ -15,6 +15,8 @@ interface UserRemote {
 
     suspend fun getFaq(): APIResponse<JsonElement>
 
+    suspend fun getVideoFaqKey(): APIResponse<JsonElement>
+
     suspend fun registration(fio: String, phone: String, email: String): APIResponse<JsonElement>
 
     suspend fun updateFio(fio: String)
