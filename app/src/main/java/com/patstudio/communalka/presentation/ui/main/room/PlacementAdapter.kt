@@ -57,14 +57,21 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
 
             var fio = placement.fio.split(" ");
 
-            var charArray = fio.get(1).toCharArray().get(0).plus(".")
+            Log.d("PlacementADapter","fio ${fio}")
 
+            try {
+                var charArray = ""
 
-            if (fio.size > 2) {
-                charArray += " "+fio.get(2).toCharArray().get(0)+"."
-            }
-            
-            itemBinding.ownerName.setText(fio.get(0)+" "+charArray)
+                if (fio.size > 1) {
+                    charArray += " " + fio.get(1).toCharArray().get(0) + "."
+                }
+
+                if (fio.size > 2) {
+                    charArray += " " + fio.get(2).toCharArray().get(0) + "."
+                }
+
+                itemBinding.ownerName.setText(fio.get(0) + " " + charArray)
+            } catch (e: Exception) {}
 
             var meterSize = 0
             placement.accounts.map {

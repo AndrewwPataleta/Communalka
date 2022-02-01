@@ -86,10 +86,12 @@
         <TextView
             android:id="@+id/ownerName"
             style="@style/TextBold1"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:fontFamily="@font/robotoregular"
-
+            app:layout_constraintHorizontal_bias="0.0"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@id/arrow"
             android:textColor="@color/gray_dark"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="@id/placementName"

@@ -54,7 +54,9 @@ class PaymentPlacementViewModel(private val userRepository: UserRepository, priv
 
     fun setCurrentPlacements(placements: ArrayList<Placement>) {
         var indexSelected = 0
-        this.placements = placements
+        if (this.placements == null) {
+            this.placements = placements
+        }
         placements.forEachIndexed { index, it ->
             it.invoices?.map {
                 it.selected = true
@@ -130,9 +132,11 @@ class PaymentPlacementViewModel(private val userRepository: UserRepository, priv
     fun initCurrentUser() {
         viewModelScope.launch(dispatcherProvider.io) {
             user = userRepository.getLastAuthUser()
-
+            Log.d("PaymentPlacemtn", "currenet user ${placements}")
             if (placements.isNullOrEmpty()) {
                 getPlacementsWithInvoices()
+            } else {
+                setCurrentPlacements(placements!!)
             }
         }
     }

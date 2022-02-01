@@ -136,6 +136,14 @@ class MainActivity : AppCompatActivity() {
                     filter.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                 }
+                R.id.ConsumptionHistoryFragment-> {
+                    toolbar.visibility = View.VISIBLE
+
+                    deleteRoom.visibility = View.GONE
+                    deletePersonalAccount.visibility = View.GONE
+                    filter.visibility = View.GONE
+                    bottomNavigationView.visibility = View.GONE
+                }
                 R.id.Profile-> {
                     toolbar.visibility = View.VISIBLE
                     toolbar.subtitle = ""
@@ -218,6 +226,13 @@ class MainActivity : AppCompatActivity() {
                 R.id.EntranceSecurity-> {
                     toolbar.visibility = View.VISIBLE
                     toolbar.subtitle = ""
+                    deleteRoom.visibility = View.GONE
+                    deletePersonalAccount.visibility = View.GONE
+                    bottomNavigationView.visibility = View.GONE
+                    filter.visibility = View.GONE
+                }
+                R.id.WebFragment-> {
+                    toolbar.visibility = View.GONE
                     deleteRoom.visibility = View.GONE
                     deletePersonalAccount.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE

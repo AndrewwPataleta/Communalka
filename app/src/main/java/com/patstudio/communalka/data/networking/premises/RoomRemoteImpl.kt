@@ -7,6 +7,7 @@ import com.patstudio.communalka.data.model.APIResponse
 import com.patstudio.communalka.data.model.Placement
 import com.patstudio.communalka.data.model.Room
 import kotlinx.coroutines.withContext
+import okhttp3.ResponseBody
 
 class RoomRemoteImpl(
     private val dispatcherProvider: DispatcherProvider,
@@ -42,6 +43,10 @@ class RoomRemoteImpl(
 
     override suspend fun getMeterHistory(id: String) = withContext(dispatcherProvider.io) {
         premisesService.getMeterHistory(id)
+    }
+
+    override suspend fun getMeterPdf(id: String) = withContext(dispatcherProvider.io)  {
+        premisesService.getMeterPdf(id)
     }
 
     override suspend fun getAccrual(id: String) = withContext(dispatcherProvider.io) {

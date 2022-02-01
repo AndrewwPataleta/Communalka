@@ -10,6 +10,7 @@ import com.patstudio.communalka.data.networking.premises.RoomRemote
 import com.patstudio.data.common.utils.Connectivity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import okhttp3.ResponseBody
 import retrofit2.HttpException
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -126,6 +127,12 @@ class RoomRepository(
             }
         }
     }
+
+    suspend fun getMeterPdf(meterId: String): Flow<ResponseBody> = flow {
+        val premises = roomRemote.getMeterPdf(meterId)
+        emit(premises)
+    }
+
 
     suspend fun getAccrual(id: String): Flow<Result<APIResponse<JsonElement>>> = flow {
         try {

@@ -59,8 +59,9 @@ class PaymentHistoryAdapter(private val paymentsList: List<PaymentHistoryModel>,
             itemBinding.date.text = SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(date)
             itemBinding.placementName.text = paymentHistoryModel.placementName
 
-            if (paymentHistoryModel.receipt_url != null) {
+            if (paymentHistoryModel.receipt != null) {
                 itemBinding.receiptNumber.visibility = View.VISIBLE
+                itemBinding.receiptNumber.text = "Чек №"+paymentHistoryModel.receipt.number
                 itemBinding.receipt.visibility = View.VISIBLE
                 itemBinding.receipt.setOnClickListener {
                     viewModel.selectActionReceipt(paymentHistoryModel)

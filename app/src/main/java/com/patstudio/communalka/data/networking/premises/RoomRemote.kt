@@ -5,6 +5,7 @@ import com.patstudio.communalka.data.model.APIResponse
 import com.patstudio.communalka.data.model.Placement
 import com.patstudio.communalka.data.model.Premises
 import com.patstudio.communalka.data.model.Room
+import okhttp3.ResponseBody
 import retrofit2.http.Query
 
 interface RoomRemote {
@@ -22,6 +23,8 @@ interface RoomRemote {
     suspend fun getPlacementDetail(id: String): APIResponse<JsonElement>
 
     suspend fun getMeterHistory(id: String): APIResponse<JsonElement>
+
+    suspend fun getMeterPdf(id: String): ResponseBody
 
     suspend fun getAccrual(id: String): APIResponse<JsonElement>
 

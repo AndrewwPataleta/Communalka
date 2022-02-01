@@ -25,7 +25,7 @@ class TransmissionReadingListViewModel(private val userRepository: UserRepositor
 
     private lateinit var user: User
     private lateinit var currentService: Service
-    private lateinit var currentPlacementModel: Placement
+    private var currentPlacementModel: Placement? = null
     private lateinit var placementMetersList: ArrayList<PlacementMeter>
     private lateinit var placements: ArrayList<Placement>
 
@@ -54,8 +54,10 @@ class TransmissionReadingListViewModel(private val userRepository: UserRepositor
         try {
             viewModelScope.launch(dispatcherProvider.io) {
                 user = userRepository.getLastAuthUser()
-                currentPlacementModel = placement
-                _currentPlacement.postValue(Event(currentPlacementModel))
+                if (currentPlacementModel == null) {
+                    currentPlacementModel = placement
+                }
+                _currentPlacement.postValue(Event(currentPlacementModel!!))
                 getPlacements()
             }
         } catch (e: Exception) {
@@ -88,7 +90,7 @@ class TransmissionReadingListViewModel(private val userRepository: UserRepositor
                             var indexSelected = 0
                             placements.forEachIndexed { index, it ->
 
-                                if (it.id == currentPlacementModel.id) {
+                                if (it.id == currentPlacementModel!!.id) {
                                     it.selected = true
                                     indexSelected = index
                                     currentPlacementModel = it
@@ -116,14 +118,14 @@ class TransmissionReadingListViewModel(private val userRepository: UserRepositor
     fun updateMeters() {
 
         viewModelScope.launch(dispatcherProvider.io) {
-            roomRepository.getPlacementDetail(currentPlacementModel.id)
+            roomRepository.getPlacementDetail(currentPlacementModel!!.id)
                 .collect {
                     when (it) {
                         is Result.Success -> {
                             var placement = gson.fromJson(it.data.data!!.asJsonObject.get("placement"), Placement::class.java)
                             placementMetersList = ArrayList()
 
-                            roomRepository.getServicesPlacement(currentPlacementModel)
+                            roomRepository.getServicesPlacement(currentPlacementModel!!)
                                 .catch { it.printStackTrace() }
                                 .collect {
                                     when (it) {
@@ -166,7 +168,7 @@ class TransmissionReadingListViewModel(private val userRepository: UserRepositor
     }
 
     fun selectMeterForHistory(placementMeter: PlacementMeter) {
-        _historyPlacementMeter.postValue(Event(Triple(placementMeter, currentPlacementModel.name, "")))
+        _historyPlacementMeter.postValue(Event(Triple(placementMeter, currentPlacementModel!!.name, "")))
     }
 
     public fun selectMeterForTransmissionReading(placementMeter: PlacementMeter) {

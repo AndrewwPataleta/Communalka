@@ -33,7 +33,7 @@ class TransmissionReadingListFragment : Fragment() {
 
     private var _binding: FragmentTransmissionReadingListBinding? = null
     private val binding get() = _binding!!
-    private val viewModel by viewModel<TransmissionReadingListViewModel>()
+    private val viewModel by sharedViewModel<TransmissionReadingListViewModel>()
     private val mainViewModel by sharedViewModel<MainViewModel>()
     private lateinit var adater: PlacementMeterAdapter
 
@@ -111,7 +111,7 @@ class TransmissionReadingListFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.updateMeters()
+       // viewModel.updateMeters()
     }
 
     private fun initListeners() {

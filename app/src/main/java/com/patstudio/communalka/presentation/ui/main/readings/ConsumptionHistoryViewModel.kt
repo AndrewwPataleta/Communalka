@@ -1,13 +1,18 @@
 package com.patstudio.communalka.presentation.ui.main.readings
 
 import android.util.Log
+import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.example.imagegallery.contextprovider.DispatcherProvider
 import com.google.gson.Gson
+import androidx.navigation.fragment.findNavController
 import com.google.gson.reflect.TypeToken
+import com.patstudio.communalka.BuildConfig
+import com.patstudio.communalka.R
 import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.*
 import com.patstudio.communalka.data.model.auth.ConfirmFormError
@@ -31,11 +36,18 @@ class ConsumptionHistoryViewModel(private val roomRepository: RoomRepository, pr
     private var _userMessage: MutableLiveData<Event<String>> = MutableLiveData()
     val userMessage: LiveData<Event<String>> = _userMessage
 
+    private var _pdfBytes: MutableLiveData<Event<ByteArray>> = MutableLiveData()
+    val pdfBytes: LiveData<Event<ByteArray>> = _pdfBytes
+
     private var _consumptionHistory: MutableLiveData<Event<ArrayList<ConsumptionHistory>>> = MutableLiveData()
     val consumptionHistory: LiveData<Event<ArrayList<ConsumptionHistory>>> = _consumptionHistory
 
     private var _updatePosition: MutableLiveData<Event<Int>> = MutableLiveData()
     val updatePosition: LiveData<Event<Int>> = _updatePosition
+
+
+    private var _pdfDownload: MutableLiveData<Event<String>> = MutableLiveData()
+    val pdfDownload: LiveData<Event<String>> = _pdfDownload
 
     fun setCurrentPlacementMeter(currentMeter: PlacementMeter) {
         this.currentMeter = currentMeter
@@ -62,6 +74,22 @@ class ConsumptionHistoryViewModel(private val roomRepository: RoomRepository, pr
                     }
                 }
         }
+    }
+
+    fun downloadByPdf() {
+        viewModelScope.launch(dispatcherProvider.io) {
+            roomRepository.getMeterPdf(currentMeter.id)
+                .onStart {}
+                .collect {
+                   _pdfBytes.postValue(Event(it.bytes()))
+                }
+        }
+    }
+
+    fun selectDownloadPdf() {
+
+
+        _pdfDownload.postValue(Event(currentMeter.id))
     }
 
     fun updateOpenedTable(consumptionHistory: ConsumptionHistory, position: Int) {

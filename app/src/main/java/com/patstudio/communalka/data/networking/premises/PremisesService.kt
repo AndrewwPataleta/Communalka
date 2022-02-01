@@ -4,6 +4,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.patstudio.communalka.data.model.APIResponse
 import com.patstudio.communalka.data.model.Room
+import okhttp3.ResponseBody
 import retrofit2.http.*
 
 interface PremisesService {
@@ -34,6 +35,9 @@ interface PremisesService {
 
     @GET("meter/{id}/history/")
     suspend fun getMeterHistory(@Path("id") id: String): APIResponse<JsonElement>
+
+    @GET("meter/{id}/history/?pdf=true")
+    suspend fun getMeterPdf(@Path("id") id: String): ResponseBody
 
     @GET("account/{id}/meter/")
     suspend fun getMetersByAccount(@Path("id") id: String): APIResponse<JsonElement>

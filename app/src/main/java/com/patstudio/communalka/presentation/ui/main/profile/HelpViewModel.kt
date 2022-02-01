@@ -28,13 +28,12 @@ class HelpViewModel(private val userRepository: UserRepository, private val faqR
                     when (it) {
                         is Result.Success -> {
                             var key = gson.fromJson(it.data.data!!.asJsonObject.get("key"), String::class.java)
-                            faqRepository.getVideo(key, userRepository.getCurrentFbToken())
+                            faqRepository.getVideo(key, "AIzaSyDgsjkMeyLRXkPPT-_yjfeqwmMqpuccQEc")
                                 .onStart { _progress.postValue(Event(true)) }
                                 .collect {
                                     when (it) {
                                         is Result.Success -> {
-                                            val turnsType = object : TypeToken<List<Faq>>() {}.type
-                                            faqRepository.getVideo("123","AIzaSyDgsjkMeyLRXkPPT-_yjfeqwmMqpuccQEc")
+
                                         }
                                     }
                                 }

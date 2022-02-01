@@ -240,6 +240,17 @@
 
     </fragment>
 
+
+    <fragment
+        android:id="@+id/WebFragment"
+        android:name="com.patstudio.communalka.presentation.ui.main.profile.WebFragment"
+        android:label=""
+        tools:layout="@layout/fragment_web">
+
+
+
+    </fragment>
+
     <fragment
         android:id="@+id/ConfirmSms"
         android:name="com.patstudio.communalka.presentation.ui.auth.ConfirmSmsFragment"
@@ -396,6 +407,10 @@
         android:name="com.patstudio.communalka.presentation.ui.main.readings.ConsumptionHistoryFragment"
         android:label="История потребления"
         tools:layout="@layout/fragment_consumption_history">
+
+        <action
+            android:id="@+id/toWeb"
+            app:destination="@id/WebFragment" />
 
     </fragment>
 

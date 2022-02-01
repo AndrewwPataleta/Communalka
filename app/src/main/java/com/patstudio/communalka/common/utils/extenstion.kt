@@ -60,6 +60,7 @@ fun getServiceIcon(serviceName: String, context: Context): Drawable {
         "Электричество" -> {
             drawable = context.resources.getDrawable(R.drawable.ic_electricity)
         }
+        else -> { drawable = context.resources.getDrawable(R.mipmap.ic_launcher) }
     }
     return drawable
 }

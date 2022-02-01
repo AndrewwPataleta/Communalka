@@ -48,6 +48,7 @@ class ConsumptionHistoryAdapter(val placementList: List<ConsumptionHistory>, val
     class HistoryVersionHolder(private val itemBinding: ItemConsumptionHistoryBinding, val viewModel: ConsumptionHistoryViewModel) :
         RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(consumptionHistory: ConsumptionHistory, position: Int) {
+            itemBinding.viewModel = viewModel
             itemBinding.informationText.text = "История потребления за ${consumptionHistory.period_string}"
             itemBinding.table.removeAllViews()
             val inflater = itemBinding.root.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater

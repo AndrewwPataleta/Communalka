@@ -31,6 +31,7 @@ import com.patstudio.communalka.databinding.*
 import com.patstudio.communalka.presentation.ui.main.readings.PlacementSelectorAdapter
 import com.patstudio.communalka.presentation.ui.main.readings.PlacementSelectorPaymentAdapter
 import kotlinx.android.synthetic.main.item_payment_history.*
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import roundOffTo2DecPlaces
 import ru.tinkoff.acquiring.sdk.TinkoffAcquiring
@@ -49,7 +50,7 @@ class PaymentPlacementFragment : Fragment() {
 
     private var _binding: FragmentPaymentPlacementBinding? = null
     private val binding get() = _binding!!
-    private val viewModel by viewModel<PaymentPlacementViewModel>()
+    private val viewModel by sharedViewModel<PaymentPlacementViewModel>()
     private lateinit var paymentsAdapter: PaymentPlacementAdapter
 
     override fun onCreateView(
@@ -143,7 +144,7 @@ class PaymentPlacementFragment : Fragment() {
                             orderId = it.orderNumber.toString()
                             amount = Money.ofRubles(it.amount)
                             title = "Оплата коммунальных услуг"
-                            receipt = receiptOrder
+                            //receipt = receiptOrder
                             recurrentPayment = false
                             shops = it.shops
                         }
@@ -165,7 +166,7 @@ class PaymentPlacementFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 123) {
-            viewModel.updatePaymentsList()
+
             if (resultCode == Activity.RESULT_OK) {
                 val builder = MaterialAlertDialogBuilder(requireContext())
                 builder.setMessage( "Ваша оплата проведена успешно! Мы сообщим вам, когда будут загружены чеки!")
