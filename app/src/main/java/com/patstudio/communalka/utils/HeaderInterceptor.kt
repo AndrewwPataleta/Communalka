@@ -11,7 +11,7 @@ class HeaderInterceptor(
         val request = chain.request().newBuilder()
             .addHeader("Content-Type", "application/json")
             .addHeader("X-Android-Package", "com.patstudio.communalka")
-            .addHeader("X-Android-Cert", "21:54:71:5C:B6:D2:F7:2F:BF:E0:15:D2:0B:DE:F3:6F:9E:C7:3B:E0")
+            .addHeader("X-Android-Cert", "2154715cb6d2f72fbfe015d20bdef36f9ec73be0")
             .build()
         return chain.proceed(request)
     }

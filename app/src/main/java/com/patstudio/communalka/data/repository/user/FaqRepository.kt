@@ -5,6 +5,7 @@ import android.util.Log
 import com.example.imagegallery.contextprovider.DispatcherProvider
 import com.google.gson.Gson
 import com.google.gson.JsonElement
+import com.patstudio.communalka.data.model.ParentYoutube
 import com.patstudio.communalka.data.model.Result
 import com.patstudio.communalka.data.networking.dadata.FaqRemote
 import com.patstudio.data.common.utils.Connectivity
@@ -20,7 +21,7 @@ class FaqRepository(
     private val sharedPreferences: SharedPreferences
 ) {
 
-    fun getVideo(playlist: String, key: String): Flow<Result<JsonElement>> = flow {
+    fun getVideo(playlist: String, key: String): Flow<Result<ParentYoutube>> = flow {
         try {
             if (connectivity.hasNetworkAccess()) {
                 emit(Result.loading())

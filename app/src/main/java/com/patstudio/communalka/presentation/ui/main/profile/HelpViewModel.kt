@@ -1,5 +1,6 @@
 package com.patstudio.communalka.presentation.ui.main.profile
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,6 +20,15 @@ class HelpViewModel(private val userRepository: UserRepository, private val faqR
     private var _progress: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val progress: LiveData<Event<Boolean>> = _progress
 
+    private var _video: MutableLiveData<Event<List<Item>>> = MutableLiveData()
+    val video: LiveData<Event<List<Item>>> = _video
+
+    private var _item: MutableLiveData<Event<Item>> = MutableLiveData()
+    val item: LiveData<Event<Item>> = _item
+
+    fun openYoutubeLink(item: Item) {
+        _item.postValue(Event(item))
+    }
 
     fun initVideo() {
         viewModelScope.launch(dispatcherProvider.io) {
@@ -33,7 +43,7 @@ class HelpViewModel(private val userRepository: UserRepository, private val faqR
                                 .collect {
                                     when (it) {
                                         is Result.Success -> {
-
+                                            _video.postValue(Event(it.data.items))
                                         }
                                     }
                                 }
