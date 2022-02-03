@@ -68,9 +68,7 @@ class   ProfileFragment : Fragment() {
         this.binding.notificationText.setOnClickListener {
             findNavController().navigate(R.id.toUserNotificationSettings)
         }
-        this.binding.helpText.setOnClickListener {
-            findNavController().navigate(R.id.toHelp)
-        }
+
         this.binding.cardsText.setOnClickListener {
             val tinkoffAcquiring = TinkoffAcquiring(BuildConfig.TERMINAL_KEY, BuildConfig.PUBLIC_KEY)
 
@@ -106,7 +104,6 @@ class   ProfileFragment : Fragment() {
         this.binding.cardsArrow.setColorFilter(ContextCompat.getColor(requireContext(), R.color.gray_dark), android.graphics.PorterDuff.Mode.MULTIPLY)
         this.binding.securityArrow.setColorFilter(ContextCompat.getColor(requireContext(), R.color.gray_dark), android.graphics.PorterDuff.Mode.MULTIPLY)
         this.binding.notificationArrow.setColorFilter(ContextCompat.getColor(requireContext(), R.color.gray_dark), android.graphics.PorterDuff.Mode.MULTIPLY)
-
 
     }
 
@@ -178,6 +175,9 @@ class   ProfileFragment : Fragment() {
         }
         this.binding.InfoAppText.setOnClickListener {
             findNavController().navigate(R.id.AboutApp)
+        }
+        this.binding.helpText.setOnClickListener {
+            findNavController().navigate(R.id.toHelp)
         }
         this.binding.logoutText.setOnClickListener {
             viewModel.logout()
