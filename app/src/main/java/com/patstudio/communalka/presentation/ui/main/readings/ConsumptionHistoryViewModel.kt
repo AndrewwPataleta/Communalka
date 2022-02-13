@@ -46,8 +46,8 @@ class ConsumptionHistoryViewModel(private val roomRepository: RoomRepository, pr
     val updatePosition: LiveData<Event<Int>> = _updatePosition
 
 
-    private var _pdfDownload: MutableLiveData<Event<String>> = MutableLiveData()
-    val pdfDownload: LiveData<Event<String>> = _pdfDownload
+    private var _pdfDownload: MutableLiveData<Event<Pair<String,String>>> = MutableLiveData()
+    val pdfDownload: LiveData<Event<Pair<String,String>>> = _pdfDownload
 
     fun setCurrentPlacementMeter(currentMeter: PlacementMeter) {
         this.currentMeter = currentMeter
@@ -86,10 +86,10 @@ class ConsumptionHistoryViewModel(private val roomRepository: RoomRepository, pr
         }
     }
 
-    fun selectDownloadPdf() {
+    fun selectDownloadPdf(consumptionHistory: ConsumptionHistory) {
 
 
-        _pdfDownload.postValue(Event(currentMeter.id))
+        _pdfDownload.postValue(Event(Pair(currentMeter.id, consumptionHistory.period_string)))
     }
 
     fun updateOpenedTable(consumptionHistory: ConsumptionHistory, position: Int) {

@@ -359,31 +359,18 @@
         <action
             android:id="@+id/toAboutApp"
             app:destination="@id/AboutApp"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+        />
         <action
             android:id="@+id/toLogin"
             app:destination="@id/LoginFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+       />
         <action
             android:id="@+id/toEntrance"
             app:destination="@id/EntranceSecurity"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+          />
         <action
             android:id="@+id/toUserNotificationSettings"
-            app:destination="@id/UserNotificationFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:destination="@id/UserNotificationFragment" />
     </fragment>
 
     <fragment
@@ -467,19 +454,14 @@
         tools:layout="@layout/fragment_entrance_security">
         <action
             android:id="@+id/toEditEmail"
-            app:destination="@id/EditEmail"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:destination="@id/EditEmail" />
 
         <action
             android:id="@+id/toEditPinCode"
             app:destination="@id/EditPinCode"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popUpTo="@id/EntranceSecurity"
+            app:popUpToInclusive="true"
+            />
     </fragment>
 
     <fragment
@@ -495,13 +477,7 @@
         android:name="com.patstudio.communalka.presentation.ui.main.profile.security.EditPinCodeFragment"
         android:label="Изменить PIN-код"
         tools:layout="@layout/fragment_edit_pin_code">
-        <action
-            android:id="@+id/toEntrance"
-            app:destination="@id/EntranceSecurity"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+
     </fragment>
 
     <fragment

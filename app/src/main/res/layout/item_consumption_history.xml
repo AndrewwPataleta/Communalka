@@ -35,7 +35,7 @@
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
             android:paddingStart="16dp"
-            android:onClick="@{() -> viewModel.selectDownloadPdf()}"
+            android:onClick="@{() -> viewModel.selectDownloadPdf(model)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/informationText"
             app:layout_constraintBottom_toBottomOf="@id/informationText">

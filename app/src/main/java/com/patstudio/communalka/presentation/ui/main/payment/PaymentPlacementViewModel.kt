@@ -210,9 +210,16 @@ class PaymentPlacementViewModel(private val userRepository: UserRepository, priv
                         suppliers.add(Pair(Money.ofRubles(invoice.balance).coins, account.supplierName))
                         var tax = ((amount*invoice.percentTax)/100)
 
-                        var paymentCreator = PaymentCreator(account = account.id, amount = amount, taxAmount = tax, shopId = invoice.shopId)
+                       if (amount > 0) {
+                           var paymentCreator = PaymentCreator(
+                               account = account.id,
+                               amount = amount,
+                               taxAmount = tax,
+                               shopId = invoice.shopId
+                           )
 
-                       paymentCreatorList.add(paymentCreator)
+                           paymentCreatorList.add(paymentCreator)
+                       }
                    }
                }
             }

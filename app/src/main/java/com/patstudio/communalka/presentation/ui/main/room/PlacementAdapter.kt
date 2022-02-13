@@ -22,6 +22,7 @@ import android.view.View
 import android.widget.ImageView
 
 import android.widget.TextView
+import com.patstudio.communalka.utils.IconUtils
 import getServiceIcon
 import roundOffTo2DecPlaces
 
@@ -132,10 +133,11 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
                     val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                     val servicePaymentBinding: View = inflater.inflate(R.layout.item_service_payment, null)
                     val service = it.service
-
+                    var serviceId = ""
                     servicePaymentBinding.findViewById<TextView>(R.id.serviceName).text = it.service
 
                     placement.accounts.map { account->
+
 
                         if (account.supplierName.compareTo(it.supplier) == 0) {
 
@@ -157,7 +159,7 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
                     } }
 
                     servicePaymentBinding.findViewById<TextView>(R.id.payment).text = (it.balance+it.penalty).toString().plus(" ₽")
-                    servicePaymentBinding.findViewById<ImageView>(R.id.image).setImageDrawable(getServiceIcon(service, itemBinding.root.context))
+                    IconUtils.instance.getServiceIcon(service, servicePaymentBinding.context, servicePaymentBinding.findViewById<ImageView>(R.id.image))
                     itemBinding.servicePaymentsContainer.addView(servicePaymentBinding)
                 }
             }

@@ -8,5 +8,6 @@ data class Service (
    val id: String,
    var name: String,
    val account: Account,
+   val icon: String,
    var selected: Boolean = false
 ) : Parcelable

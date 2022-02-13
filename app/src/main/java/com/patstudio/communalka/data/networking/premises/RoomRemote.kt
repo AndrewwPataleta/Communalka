@@ -24,6 +24,8 @@ interface RoomRemote {
 
     suspend fun getMeterHistory(id: String): APIResponse<JsonElement>
 
+    suspend fun getServices(): APIResponse<JsonElement>
+
     suspend fun getMeterPdf(id: String): ResponseBody
 
     suspend fun getAccrual(id: String): APIResponse<JsonElement>

@@ -46,10 +46,29 @@ class RoomRepository(
         roomDao.updateFirstInitRoom(idRoom, consumerId, firstSaveNew = false, firstSaveOld = true)
     }
 
-    suspend fun sendPremises(room: Room): APIResponse<JsonElement> {
+    suspend fun sendPremises(room: Room):  Flow<Result<APIResponse<JsonElement>>> = flow  {
         Log.d("RoomRepository", "sub send ")
-       
-       return  roomRemote.sendRoom(room)
+
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val premises = roomRemote.sendRoom(room)
+                emit(Result.success(premises))
+            }
+        } catch (throwable: Exception) {
+
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
     }
 
 
@@ -58,7 +77,7 @@ class RoomRepository(
         return  roomRemote.updateRoom(room)
     }
 
-    suspend fun getUserPremises(): Flow<Result<APIResponse<JsonElement>>> = flow {
+    suspend fun getUserPremises():  Flow<Result<APIResponse<JsonElement>>> = flow {
         try {
             if (connectivity.hasNetworkAccess()) {
                 emit(Result.loading())
@@ -110,6 +129,29 @@ class RoomRepository(
             if (connectivity.hasNetworkAccess()) {
                 emit(Result.loading())
                 val premises = roomRemote.getMeterHistory(meterId)
+                emit(Result.success(premises))
+            }
+        } catch (throwable: Exception) {
+
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
+    suspend fun getServices(): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val premises = roomRemote.getServices()
                 emit(Result.success(premises))
             }
         } catch (throwable: Exception) {

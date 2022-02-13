@@ -11,10 +11,12 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.patstudio.communalka.BuildConfig
+import com.patstudio.communalka.CommunalkaApp
 import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.*
 import com.patstudio.communalka.data.repository.premises.RoomRepository
 import com.patstudio.communalka.data.repository.user.UserRepository
+import com.patstudio.communalka.utils.IconUtils
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -47,6 +49,10 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
 
 
     private lateinit var userPlacement: ArrayList<Placement>
+
+    init {
+
+    }
 
    fun setCurrentUser(user:User) {
        this.user = user
@@ -160,7 +166,18 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
             if (user != null) {
 
                 needEnterPin = !user!!.autoSignIn
-
+                viewModelScope.launch(dispatcherProvider.io) {
+                    roomRepository.getServices()
+                        .collect {
+                            when (it) {
+                                is Result.Success -> {
+                                    val type = object : TypeToken<List<Service>>() {}.type
+                                    var services: List<Service> = gson.fromJson(it.data.data!!.asJsonObject.get("services"), type)
+                                    IconUtils.instance.services = services
+                                }
+                            }
+                        }
+                }
                initGCMToken()
 
                 if (needEnterPin && !typeAuthChanged) {

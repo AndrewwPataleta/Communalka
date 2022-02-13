@@ -127,25 +127,32 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
     }
 
     private fun sendLocalRoom(room: Room, userForm: ConfirmSmsWrapper) {
-        Log.d("ConfirmViewModel", "send local room")
         viewModelScope.launch(dispatcherProvider.io) {
-            val resp = roomRepository.sendPremises(room)
+            val resp = roomRepository.sendPremises(room).collect {
+                when (it) {
+                    is Result.Success -> {
+                        var placement = gson.fromJson(it.data!!.data!!.asJsonObject.get("placement"), Placement::class.java)
+                        roomRepository.updateFirstInitRoom(placement.id, placement.consumer)
+                        smsCodeMutable.postValue(Event(smsCode))
+                        var currentPinCode = userRepository.getCurrentPinCode()
+                        if (currentPinCode.isNullOrEmpty()) {
+                            userFormMutable.postValue(Event(Pair(userForm.consumer, true)))
+                        } else {
+                            userFormMutable.postValue(Event(Pair(userForm.consumer, false)))
+                        }
 
-            var placement = gson.fromJson(resp.data!!.asJsonObject.get("placement"), Placement::class.java)
-            roomRepository.updateFirstInitRoom(placement.id, placement.consumer)
-            smsCodeMutable.postValue(Event(smsCode))
-            var currentPinCode = userRepository.getCurrentPinCode()
-            if (currentPinCode.isNullOrEmpty()) {
-                userFormMutable.postValue(Event(Pair(userForm.consumer, true)))
-            } else {
-                userFormMutable.postValue(Event(Pair(userForm.consumer, false)))
+                        progressPhoneSending.postValue(false)
+                    }
+                    is Result.Error -> {
+
+                    }
+                    is Result.ErrorResponse -> {
+
+                    }
+                }
             }
-
-            progressPhoneSending.postValue(false)
         }
-
     }
-
 
     private fun checkExistAndSaveUser(userForm: ConfirmSmsWrapper) {
         Log.d("ConfirmViewModel", "check exist "+userForm.consumer)

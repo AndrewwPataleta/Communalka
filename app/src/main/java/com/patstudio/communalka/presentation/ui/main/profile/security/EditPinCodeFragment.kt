@@ -119,7 +119,8 @@ class EditPinCodeFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                   if (it) {
-                      findNavController().navigate(R.id.toEntrance)
+                      findNavController().popBackStack()
+
                   }
                 }
             }

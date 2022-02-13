@@ -42,6 +42,8 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
     private val progressSuggestions: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val listSuggestions: MutableLiveData<Event<Pair<Boolean,List<Suggestion>>>> = MutableLiveData()
     private val imagesMutable: MutableLiveData<Event<HashMap<Int, String>>> = MutableLiveData()
+
+
     private var _openPermissionSettings: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val openPermissionSettings: LiveData<Event<Boolean>> = _openPermissionSettings
     private var roomName: String = ""
@@ -94,6 +96,7 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
     fun selectSuggest(position: Int) {
         needDrop = false
         selectedSuggestion = lastListSuggestions.get(position)
+
         showAddressLocation.postValue(Event(true))
         staticAddressImage.postValue(Event(Pair(selectedSuggestion!!.data.geoLat, selectedSuggestion!!.data.geoLon)))
     }
@@ -152,19 +155,20 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
                     val detailAddressInfo = selectedSuggestion!!.data
                     val totalArea = totalSpace.toDoubleOrNull()
                     val livingArea = livingSpace.toDoubleOrNull()
-                    room = Room("",roomName,totalArea = totalArea, livingArea = livingArea,selectedSuggestion!!.value,
+                    Log.d("AddRoom", detailAddressInfo.toString())
+                    room = Room(id = "",roomName,totalArea = totalArea, livingArea = livingArea,selectedSuggestion!!.value, imageType = IMAGE_MODE, imagePath = value,
 
-                        detailAddressInfo.postalCode,detailAddressInfo.country,detailAddressInfo.countryIsoCode, fioOwner,
-                        detailAddressInfo.federalDistrict,detailAddressInfo.regionFiasId,detailAddressInfo.regionKladrId,
-                        detailAddressInfo.regionIsoCode,detailAddressInfo.regionWithType,detailAddressInfo.regionType,
-                        detailAddressInfo.regionTypeFull,detailAddressInfo.region,detailAddressInfo.cityFiasId,
-                        detailAddressInfo.cityKladrId,detailAddressInfo.cityWithType,detailAddressInfo.cityType,
-                        detailAddressInfo.cityTypeFull,detailAddressInfo.city,detailAddressInfo.streetFiasId,detailAddressInfo.streetKladrId,
-                        detailAddressInfo.streetWithType,detailAddressInfo.streetType,detailAddressInfo.streetTypeFull,detailAddressInfo.street,
-                        detailAddressInfo.houseFiasId,detailAddressInfo.houseKladrId,detailAddressInfo.houseType,detailAddressInfo.houseTypeFull,
-                        detailAddressInfo.house,detailAddressInfo.flatFiasId,detailAddressInfo.flatType,detailAddressInfo.flatTypeFull,detailAddressInfo.flat,
-                        detailAddressInfo.fiasId,detailAddressInfo.fiasLevel,detailAddressInfo.kladrId,detailAddressInfo.timezone,detailAddressInfo.geoLat,
-                        detailAddressInfo.geoLon, imageType = IMAGE_MODE, imagePath = value)
+                        postalCode = detailAddressInfo.postalCode, country = detailAddressInfo.country, countryIsoCode =detailAddressInfo.countryIsoCode,fio =  fioOwner,
+                        federalDistrict = detailAddressInfo.federalDistrict, regionFiasId = detailAddressInfo.regionFiasId,regionKladrId = detailAddressInfo.regionKladrId,
+                        regionIsoCode = detailAddressInfo.regionIsoCode, regionWithType = detailAddressInfo.regionWithType, regionType = detailAddressInfo.regionType,
+                        regionTypeFull =  detailAddressInfo.regionTypeFull, region = detailAddressInfo.region, cityFiasId = detailAddressInfo.cityFiasId,
+                        cityKladrId = detailAddressInfo.cityKladrId,cityWithType = detailAddressInfo.cityWithType,cityType = detailAddressInfo.cityType,
+                        cityTypeFull = detailAddressInfo.cityTypeFull, city = detailAddressInfo.city,streetFiasId = detailAddressInfo.streetFiasId,streetKladrId = detailAddressInfo.streetKladrId,
+                        streetWithType =  detailAddressInfo.streetWithType,streetType = detailAddressInfo.streetType, streetTypeFull = detailAddressInfo.streetTypeFull, street = detailAddressInfo.street,
+                        houseFiasId = detailAddressInfo.houseFiasId,houseKladrId = detailAddressInfo.houseKladrId,houseType = detailAddressInfo.houseType, houseTypeFull = detailAddressInfo.houseTypeFull,
+                        house = detailAddressInfo.house,flatFiasId = detailAddressInfo.flatFiasId,flatType = detailAddressInfo.flatType,flatTypeFull = detailAddressInfo.flatTypeFull,flat = detailAddressInfo.flat,
+                        fiasId  = detailAddressInfo.fiasId,fiasLevel = detailAddressInfo.fiasLevel,kladrId = detailAddressInfo.kladrId,timezone = detailAddressInfo.timezone,geoLat = detailAddressInfo.geoLat,
+                        geoLon = detailAddressInfo.geoLon)
                 } else {
                     val totalArea = totalSpace.toDoubleOrNull()
                     val livingArea = livingSpace.toDoubleOrNull()
@@ -172,14 +176,28 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
                 }
 
                 if (it != null) {
-                    val resp = roomRepository.sendPremises(room)
-                    var placement = gson.fromJson(resp.data!!.asJsonObject.get("placement"), Placement::class.java)
-                    val premisesLocal = Premises(placement.id, placement.name, placement.address, "", placement.consumer, placement.total_area.toFloat(), placement.living_area.toFloat(), IMAGE_MODE, value,false)
-                    room.id = placement.id
-                    room.firstSave = false
-                    room.consumer = placement.consumer
-                    saveRoomLocal(room)
-                    openMainPage.postValue(Event(true))
+                    roomRepository.sendPremises(room)
+                        .collect {
+                            Log.d("AddRoomViewModel", "actual key resulr"+it.toString())
+                            when (it) {
+                                is Result.Success -> {
+                                    var placement = gson.fromJson(it.data!!.data!!.asJsonObject.get("placement"), Placement::class.java)
+                                    val premisesLocal = Premises(placement.id, placement.name, placement.address, "", placement.consumer, placement.total_area.toFloat(), placement.living_area.toFloat(), IMAGE_MODE, value,false)
+                                    room.id = placement.id
+                                    room.firstSave = false
+                                    room.consumer = placement.consumer
+                                    saveRoomLocal(room)
+                                    openMainPage.postValue(Event(true))
+                                }
+                                is Result.Error -> {
+                                    userMessage.postValue(Event("Ошибка при добавлении помещения, попробуйте позже."))
+                                }
+                                is Result.ErrorResponse -> {
+                                    userMessage.postValue(Event("Ошибка при добавлении помещения, попробуйте позже."))
+                                }
+                            }
+                        }
+
                 } else {
                     room.id = "firstInit"
                     room.firstSave = true

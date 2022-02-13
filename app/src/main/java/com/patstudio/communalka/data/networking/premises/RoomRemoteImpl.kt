@@ -45,6 +45,10 @@ class RoomRemoteImpl(
         premisesService.getMeterHistory(id)
     }
 
+    override suspend fun getServices() = withContext(dispatcherProvider.io) {
+        premisesService.getServices()
+    }
+
     override suspend fun getMeterPdf(id: String) = withContext(dispatcherProvider.io)  {
         premisesService.getMeterPdf(id)
     }

@@ -1,34 +1,17 @@
 package com.patstudio.communalka.presentation.ui.main.readings
 
 import android.content.Context
-import android.content.res.Resources
-import android.os.Build
-import android.util.Log
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TableRow
 import android.widget.TextView
-import androidx.annotation.Nullable
-import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
-import androidx.core.view.setPadding
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.patstudio.communalka.R
 import com.patstudio.communalka.data.model.ConsumptionHistory
-import com.patstudio.communalka.data.model.Placement
-import com.patstudio.communalka.data.model.VersionApp
 import com.patstudio.communalka.databinding.ItemConsumptionHistoryBinding
-import com.patstudio.communalka.databinding.ItemPlacementBinding
-import com.patstudio.communalka.databinding.ItemVersionAppBinding
-import com.skydoves.balloon.*
-import gone
-import it.sephiroth.android.library.xtooltip.Tooltip
-import kotlinx.coroutines.NonCancellable.children
-import visible
+
 
 class ConsumptionHistoryAdapter(val placementList: List<ConsumptionHistory>, val viewModel: ConsumptionHistoryViewModel) : RecyclerView.Adapter<ConsumptionHistoryAdapter.HistoryVersionHolder>() {
 
@@ -49,6 +32,7 @@ class ConsumptionHistoryAdapter(val placementList: List<ConsumptionHistory>, val
         RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(consumptionHistory: ConsumptionHistory, position: Int) {
             itemBinding.viewModel = viewModel
+            itemBinding.model = consumptionHistory
             itemBinding.informationText.text = "История потребления за ${consumptionHistory.period_string}"
             itemBinding.table.removeAllViews()
             val inflater = itemBinding.root.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater

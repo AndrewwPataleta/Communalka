@@ -61,10 +61,10 @@ class ConsumptionHistoryFragment : Fragment() {
         viewModel.pdfDownload.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                    val bundle = bundleOf("model" to it)
-                    NavHostFragment.findNavController(this).navigate(R.id.toWeb, bundle)
-//                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
-//                    startActivity(browserIntent)
+//                    val bundle = bundleOf("model" to it)
+//                    NavHostFragment.findNavController(this).navigate(R.id.toWeb, bundle)
+                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.google.com/gview?embedded=true&url="+BuildConfig.API_HOST+"meter/${it.first}/history/?pdf=true&year=${it.second})"))
+                    startActivity(browserIntent)
                 }
             }
         }

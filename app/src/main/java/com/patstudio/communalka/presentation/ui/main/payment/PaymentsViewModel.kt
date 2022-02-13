@@ -120,6 +120,7 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
     fun resetFilter() {
         if (filter != null) {
             filter!!.date = null
+            confirmFilter?.date = null
             filter!!.placement.second.map {
                 it.selected = false
             }

@@ -131,6 +131,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
 
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+    implementation 'com.github.corouteam:GlideToVectorYou:v2.0.0'
 
     implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
 

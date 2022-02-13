@@ -189,17 +189,17 @@ class EditRoomViewModel(private val userRepository: UserRepository, private val 
                 Log.d("imageValue", "value ${value}")
                 if (selectedSuggestion != null) {
                     val detailAddressInfo = selectedSuggestion!!.data
-                    room = Room(currentPlacement.id,roomName,totalSpace.toDouble(), livingSpace.toDouble(),selectedSuggestion!!.value,
+                    room = Room(id = currentPlacement.id,roomName,totalSpace.toDouble(), livingSpace.toDouble(),selectedSuggestion!!.value,
                         detailAddressInfo.postalCode, detailAddressInfo.country, currentPlacement.consumer, fioOwner,detailAddressInfo.countryIsoCode,
-                        detailAddressInfo.federalDistrict,detailAddressInfo.regionFiasId,detailAddressInfo.regionKladrId,
+                        federalDistrict = detailAddressInfo.federalDistrict,regionFiasId = detailAddressInfo.regionFiasId,detailAddressInfo.regionKladrId,
                         detailAddressInfo.regionIsoCode,detailAddressInfo.regionWithType,detailAddressInfo.regionType,
-                        detailAddressInfo.regionTypeFull,detailAddressInfo.region,detailAddressInfo.cityFiasId,
+                        detailAddressInfo.regionTypeFull,detailAddressInfo.region,cityFiasId = detailAddressInfo.cityFiasId,
                         detailAddressInfo.cityKladrId,detailAddressInfo.cityWithType,detailAddressInfo.cityType,
-                        detailAddressInfo.cityTypeFull,detailAddressInfo.city,detailAddressInfo.streetFiasId,detailAddressInfo.streetKladrId,
+                        detailAddressInfo.cityTypeFull,detailAddressInfo.city,streetFiasId = detailAddressInfo.streetFiasId,detailAddressInfo.streetKladrId,
                         detailAddressInfo.streetWithType,detailAddressInfo.streetType,detailAddressInfo.streetTypeFull,detailAddressInfo.street,
                         detailAddressInfo.houseFiasId,detailAddressInfo.houseKladrId,detailAddressInfo.houseType,detailAddressInfo.houseTypeFull,
                         detailAddressInfo.house,detailAddressInfo.flatFiasId,detailAddressInfo.flatType,detailAddressInfo.flatTypeFull,detailAddressInfo.flat,
-                        detailAddressInfo.fiasId,detailAddressInfo.fiasLevel,detailAddressInfo.kladrId,detailAddressInfo.timezone,detailAddressInfo.geoLat,
+                        detailAddressInfo.fiasId,fiasLevel = detailAddressInfo.fiasLevel,detailAddressInfo.kladrId,detailAddressInfo.timezone,detailAddressInfo.geoLat,
                         detailAddressInfo.geoLon, imageType = IMAGE_MODE, imagePath = value, createdDate = currentPlacement.createdDate )
                 } else {
                     room = Room(currentPlacement.id,roomName,totalSpace.toDouble(), livingSpace.toDouble(), addressRoom, imageType = IMAGE_MODE,  fio = fioOwner,imagePath = value)

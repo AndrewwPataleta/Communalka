@@ -52,6 +52,9 @@ interface PremisesService {
     suspend fun getServicesForPlacement(@Path("id") id: String): APIResponse<JsonElement>
 
 
+    @GET("services/")
+    suspend fun getServices(): APIResponse<JsonElement>
+
     @GET("order/")
     suspend fun getListOrder(@Query("date__gte") dateGte: String?, @Query("date__lte") dateLte: String?, @Query("payments__account__placements") placements: List<String>?,
                              @Query("payments__account__service") services: List<String>?, @Query("payments__account__supplier") suppliers: List<String>?): APIResponse<JsonElement>

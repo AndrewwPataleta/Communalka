@@ -4,6 +4,7 @@ import android.app.Application
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
+import com.patstudio.communalka.data.model.Service
 import com.patstudio.communalka.di.*
 import com.patstudio.communalka.di.databaseModule
 import com.patstudio.communalka.di.repositoryModule
@@ -13,7 +14,10 @@ import org.koin.core.logger.Level
 import ru.tinkoff.acquiring.sdk.AcquiringSdk
 
 
-class CommunalkaApp: Application() {
+public class CommunalkaApp: Application() {
+
+
+
 
     companion object {
 

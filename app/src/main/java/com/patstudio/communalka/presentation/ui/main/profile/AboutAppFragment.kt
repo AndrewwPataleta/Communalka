@@ -1,6 +1,7 @@
 package com.patstudio.communalka.presentation.ui.main.profile
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
@@ -45,13 +46,15 @@ class AboutAppFragment : Fragment() {
 
     }
 
+    @SuppressLint("IntentReset")
     private fun initListeners() {
          binding.versionAppText.setText("Версия "+BuildConfig.VERSION_NAME)
         binding.appLicenceText.setOnClickListener {
             val browserIntent = Intent(
                 Intent.ACTION_VIEW,
-                Uri.parse(BuildConfig.API_HOST+"/public_offer/")
+                Uri.parse("https://docs.google.com/gview?embedded=true&url="+BuildConfig.API_HOST+"/public_offer/")
             )
+
             startActivity(browserIntent)
         }
         binding.historyVersionText.setOnClickListener {
