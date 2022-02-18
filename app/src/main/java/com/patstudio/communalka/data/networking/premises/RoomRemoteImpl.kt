@@ -1,13 +1,10 @@
 package com.patstudio.communalka.data.networking.premises
 
-import com.example.imagegallery.contextprovider.DispatcherProvider
-import com.google.gson.JsonElement
+import com.patstudio.communalka.common.contextprovider.DispatcherProvider
 import com.google.gson.JsonObject
-import com.patstudio.communalka.data.model.APIResponse
 import com.patstudio.communalka.data.model.Placement
 import com.patstudio.communalka.data.model.Room
 import kotlinx.coroutines.withContext
-import okhttp3.ResponseBody
 
 class RoomRemoteImpl(
     private val dispatcherProvider: DispatcherProvider,

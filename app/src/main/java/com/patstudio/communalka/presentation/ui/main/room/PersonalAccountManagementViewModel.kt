@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.imagegallery.contextprovider.DispatcherProvider
+import com.patstudio.communalka.common.contextprovider.DispatcherProvider
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.patstudio.communalka.common.utils.Event
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class PersonalAccountManagementViewModel(private val userRepository: UserRepository, private val roomRepository: RoomRepository,  private val dispatcherProvider: DispatcherProvider, private val gson: Gson): ViewModel() {
+class PersonalAccountManagementViewModel(private val userRepository: UserRepository, private val roomRepository: RoomRepository, private val dispatcherProvider: DispatcherProvider, private val gson: Gson): ViewModel() {
 
     private lateinit var user: User
     private lateinit var currentPlacement: Placement

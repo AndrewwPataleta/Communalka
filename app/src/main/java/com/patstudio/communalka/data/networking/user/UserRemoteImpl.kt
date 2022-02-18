@@ -1,10 +1,7 @@
 package com.patstudio.communalka.data.networking.user
 
-import android.util.Log
-import com.example.imagegallery.contextprovider.DispatcherProvider
-import com.google.gson.JsonElement
+import com.patstudio.communalka.common.contextprovider.DispatcherProvider
 import com.google.gson.JsonObject
-import com.patstudio.communalka.data.model.APIResponse
 import com.patstudio.communalka.data.model.Consumer
 import com.patstudio.communalka.data.model.Gcm
 import com.patstudio.communalka.data.model.OrderCreator

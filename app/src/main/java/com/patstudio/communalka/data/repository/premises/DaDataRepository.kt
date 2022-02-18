@@ -2,19 +2,15 @@ package com.patstudio.communalka.data.repository.premises
 
 import android.content.SharedPreferences
 import android.util.Log
-import com.example.imagegallery.contextprovider.DispatcherProvider
+import com.patstudio.communalka.common.contextprovider.DispatcherProvider
 import com.google.gson.Gson
 import com.google.gson.JsonElement
-import com.patstudio.communalka.data.model.APIResponse
 import com.patstudio.communalka.data.model.Result
 import com.patstudio.communalka.data.networking.dadata.DaDataRemote
-import com.patstudio.communalka.data.networking.dadata.DaDataService
 import com.patstudio.data.common.utils.Connectivity
-import convertErrorBody
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
-import java.io.IOException
 
 class DaDataRepository(
     private val daDataRemote: DaDataRemote,

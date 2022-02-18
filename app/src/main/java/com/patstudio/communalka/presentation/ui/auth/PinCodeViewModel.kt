@@ -2,7 +2,7 @@ package com.patstudio.communalka.presentation.ui.auth
 
 import android.util.Log
 import androidx.lifecycle.*
-import com.example.imagegallery.contextprovider.DispatcherProvider
+import com.patstudio.communalka.common.contextprovider.DispatcherProvider
 import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.User
 import com.patstudio.communalka.data.model.UserForm

@@ -4,14 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.imagegallery.contextprovider.DispatcherProvider
+import com.patstudio.communalka.common.contextprovider.DispatcherProvider
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.patstudio.communalka.common.utils.Event
-import com.patstudio.communalka.data.model.ConsumptionHistory
 import com.patstudio.communalka.data.model.Faq
 import com.patstudio.communalka.data.model.Result
-import com.patstudio.communalka.data.model.Supplier
 import com.patstudio.communalka.data.repository.user.UserRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

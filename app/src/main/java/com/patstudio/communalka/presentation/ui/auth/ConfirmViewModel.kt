@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.imagegallery.contextprovider.DispatcherProvider
+import com.patstudio.communalka.common.contextprovider.DispatcherProvider
 import com.google.gson.Gson
 import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.*
@@ -144,10 +144,28 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
                         progressPhoneSending.postValue(false)
                     }
                     is Result.Error -> {
+                        roomRepository.removeFirstInitRoom()
+                        smsCodeMutable.postValue(Event(smsCode))
+                        var currentPinCode = userRepository.getCurrentPinCode()
+                        if (currentPinCode.isNullOrEmpty()) {
+                            userFormMutable.postValue(Event(Pair(userForm.consumer, true)))
+                        } else {
+                            userFormMutable.postValue(Event(Pair(userForm.consumer, false)))
+                        }
 
+                        progressPhoneSending.postValue(false)
                     }
                     is Result.ErrorResponse -> {
+                        roomRepository.removeFirstInitRoom()
+                        smsCodeMutable.postValue(Event(smsCode))
+                        var currentPinCode = userRepository.getCurrentPinCode()
+                        if (currentPinCode.isNullOrEmpty()) {
+                            userFormMutable.postValue(Event(Pair(userForm.consumer, true)))
+                        } else {
+                            userFormMutable.postValue(Event(Pair(userForm.consumer, false)))
+                        }
 
+                        progressPhoneSending.postValue(false)
                     }
                 }
             }

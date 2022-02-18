@@ -177,7 +177,7 @@ class AddRoomFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     val builder = MaterialAlertDialogBuilder(requireContext())
-                    builder.setTitle(it)
+                    builder.setMessage(it)
                     builder.setPositiveButton("Ok"){dialogInterface, which ->
                         dialogInterface.dismiss()
                     }

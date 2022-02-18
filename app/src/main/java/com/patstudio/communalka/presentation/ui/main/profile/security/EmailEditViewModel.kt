@@ -3,7 +3,7 @@ package com.patstudio.communalka.presentation.ui.main.profile.security
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.imagegallery.contextprovider.DispatcherProvider
+import com.patstudio.communalka.common.contextprovider.DispatcherProvider
 import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.Result
 import com.patstudio.communalka.data.model.User

@@ -1,4 +1,4 @@
-package com.example.imagegallery.contextprovider
+package com.patstudio.communalka.common.contextprovider
 
 import kotlinx.coroutines.CoroutineDispatcher
 

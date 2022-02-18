@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable name="viewModel" type="com.patstudio.communalka.presentation.ui.main.profile.HelpViewModel"/>
@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:onClick="@{() -> viewModel.openYoutubeLink(model)}"
         android:layout_marginTop="16dp"
+        android:padding="4dp"
        >
 
         <ImageView
@@ -23,33 +24,39 @@
             android:layout_height="50dp"
             android:scaleType="fitXY"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+
             app:layout_constraintStart_toStartOf="parent"/>
 
-        <TextView
-            android:id="@+id/time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@id/image"
-            app:layout_constraintEnd_toEndOf="@id/image"
-            android:textColor="@color/black"
-            android:layout_marginBottom="4dp"
-            android:layout_marginEnd="4dp"/>
 
         <TextView
             android:id="@+id/instruction"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/image"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/secondDecorator"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
+            android:textSize="16sp"
+            tools:text="@tools:sample/avatars"
             style="@style/TextBody1"
             android:text="@{model.snippet.title}"
             android:textColor="@color/black" />
+
+        <View
+            android:id="@+id/secondDecorator"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+
+            android:background="#EEF1F5"
+            android:layout_marginTop="8dp"
+
+            app:layout_constraintStart_toStartOf="@+id/instruction"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintEnd_toEndOf="@+id/instruction"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

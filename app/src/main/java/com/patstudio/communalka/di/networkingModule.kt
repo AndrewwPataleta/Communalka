@@ -1,7 +1,7 @@
 package com.patstudio.communalka.di
 
 import com.chuckerteam.chucker.api.ChuckerInterceptor
-import com.example.imagegallery.contextprovider.DispatcherProvider
+import com.patstudio.communalka.common.contextprovider.DispatcherProvider
 import com.patstudio.communalka.BuildConfig
 import com.patstudio.communalka.data.networking.CommunalkaApi
 import com.patstudio.communalka.data.networking.dadata.*
@@ -18,6 +18,10 @@ import com.patstudio.communalka.utils.TokenAuthenticator
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+
+
+import org.koin.core.qualifier.named
+
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Converter

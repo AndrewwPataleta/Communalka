@@ -16,9 +16,6 @@ import ru.tinkoff.acquiring.sdk.AcquiringSdk
 
 public class CommunalkaApp: Application() {
 
-
-
-
     companion object {
 
         lateinit var instance: Application

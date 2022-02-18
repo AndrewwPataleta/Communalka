@@ -26,9 +26,6 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 
 
-
-
-
 class TransmissionReadingListFragment : Fragment() {
 
     private var _binding: FragmentTransmissionReadingListBinding? = null

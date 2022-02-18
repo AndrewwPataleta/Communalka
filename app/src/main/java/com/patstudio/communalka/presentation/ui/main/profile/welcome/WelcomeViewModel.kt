@@ -5,13 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.imagegallery.contextprovider.DispatcherProvider
+import com.patstudio.communalka.common.contextprovider.DispatcherProvider
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.patstudio.communalka.BuildConfig
-import com.patstudio.communalka.CommunalkaApp
 import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.*
 import com.patstudio.communalka.data.repository.premises.RoomRepository

@@ -1,18 +1,10 @@
 package com.patstudio.communalka.presentation.ui.splash
 
-import android.util.Log
 import androidx.lifecycle.*
-import com.example.imagegallery.contextprovider.DispatcherProvider
+import com.patstudio.communalka.common.contextprovider.DispatcherProvider
 import com.google.gson.Gson
-import com.patstudio.communalka.BuildConfig
 import com.patstudio.communalka.common.utils.Event
-import com.patstudio.communalka.data.model.Gcm
-import com.patstudio.communalka.data.model.Result
 import com.patstudio.communalka.data.repository.user.UserRepository
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MainViewModel (private val userRepository: UserRepository, private val gson: Gson, private val dispatcherProvider: DispatcherProvider): ViewModel() {
 

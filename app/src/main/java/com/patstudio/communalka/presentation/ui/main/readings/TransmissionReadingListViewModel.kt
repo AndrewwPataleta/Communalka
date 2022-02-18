@@ -1,12 +1,11 @@
 package com.patstudio.communalka.presentation.ui.main.readings
 
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.imagegallery.contextprovider.DispatcherProvider
+import com.patstudio.communalka.common.contextprovider.DispatcherProvider
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.patstudio.communalka.common.utils.Event
@@ -54,9 +53,7 @@ class TransmissionReadingListViewModel(private val userRepository: UserRepositor
         try {
             viewModelScope.launch(dispatcherProvider.io) {
                 user = userRepository.getLastAuthUser()
-                if (currentPlacementModel == null) {
-                    currentPlacementModel = placement
-                }
+                currentPlacementModel = placement
                 _currentPlacement.postValue(Event(currentPlacementModel!!))
                 getPlacements()
             }

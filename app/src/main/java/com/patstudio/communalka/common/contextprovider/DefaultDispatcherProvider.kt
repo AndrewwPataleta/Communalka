@@ -1,6 +1,5 @@
 package com.patstudio.communalka.common.contextprovider
 
-import com.example.imagegallery.contextprovider.DispatcherProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 

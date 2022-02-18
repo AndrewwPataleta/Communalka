@@ -1,8 +1,7 @@
 package com.patstudio.communalka.presentation.ui.main.profile
 
-import android.util.Log
 import androidx.lifecycle.*
-import com.example.imagegallery.contextprovider.DispatcherProvider
+import com.patstudio.communalka.common.contextprovider.DispatcherProvider
 import com.google.gson.Gson
 import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.*

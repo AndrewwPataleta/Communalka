@@ -1,8 +1,6 @@
 package com.patstudio.communalka.data.networking.dadata
 
-import com.example.imagegallery.contextprovider.DispatcherProvider
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
+import com.patstudio.communalka.common.contextprovider.DispatcherProvider
 import kotlinx.coroutines.withContext
 
 class FaqRemoteImpl(
@@ -11,7 +9,7 @@ class FaqRemoteImpl(
 ): FaqRemote {
 
     override suspend fun getVideo(playlist: String, key: String) = withContext(dispatcherProvider.default) {
-        faqService.getVideoFaq("snippet", playlist, key)
+        faqService.getVideoFaq("snippet", playlist, key, 30)
     }
 
 }

@@ -1,9 +1,7 @@
 package com.patstudio.communalka.data.networking.dadata
 
-import com.example.imagegallery.contextprovider.DispatcherProvider
-import com.google.gson.JsonElement
+import com.patstudio.communalka.common.contextprovider.DispatcherProvider
 import com.google.gson.JsonObject
-import com.patstudio.communalka.data.model.APIResponse
 import kotlinx.coroutines.withContext
 
 class DaDataRemoteImpl(
