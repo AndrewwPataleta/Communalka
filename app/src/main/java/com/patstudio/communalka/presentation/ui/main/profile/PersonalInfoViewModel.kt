@@ -26,6 +26,9 @@ class PersonalInfoViewModel(private val userRepository: UserRepository, private 
     private var _openPermissionSettings: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val openPermissionSettings: LiveData<Event<Boolean>> = _openPermissionSettings
 
+
+
+
    fun setCurrentUser(user:User) {
        this.user = user
        userMutable.postValue(Event(user))

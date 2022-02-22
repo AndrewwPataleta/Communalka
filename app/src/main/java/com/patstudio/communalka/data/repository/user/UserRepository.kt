@@ -91,6 +91,8 @@ class UserRepository (
         }
     }
 
+
+
     fun getVideoFaqKey(): Flow<Result<APIResponse<JsonElement>>> = flow {
         try {
             if (connectivity.hasNetworkAccess()) {
@@ -404,6 +406,14 @@ class UserRepository (
         dao.updateToken(token, refresh, userId)
     }
 
+    fun updateEmail(email: String,  userId: String) {
+        dao.updateEmail(email, userId)
+    }
+
+    fun updatePhone(phone: String,  userId: String) {
+        dao.updatePhone(phone, userId)
+    }
+
     suspend fun setLastLoginUser(user: User) {
         sharedPreferences.edit().putString("currentToken", user.token).apply()
         sharedPreferences.edit().putString("currentRefreshToken", user.refresh).apply()
@@ -472,6 +482,27 @@ class UserRepository (
             if (connectivity.hasNetworkAccess()) {
                 emit(Result.loading())
                 val user = remote.updateEmail(email)
+                emit(Result.success(user))
+            }
+        } catch (throwable: Exception) {
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
+    fun updateEmailProfile(email: String): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val user = remote.updateEmailProfile(email)
                 emit(Result.success(user))
             }
         } catch (throwable: Exception) {
@@ -558,6 +589,27 @@ class UserRepository (
             if (connectivity.hasNetworkAccess()) {
                 emit(Result.loading())
                 val user = remote.registrationWithCode(fio, phone,email, smsCode)
+                emit(Result.success(user))
+            }
+        } catch (throwable: Exception) {
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
+    fun updatePhoneConfirm(phone: String, code: String): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val user = remote.updatePhone(phone, code)
                 emit(Result.success(user))
             }
         } catch (throwable: Exception) {

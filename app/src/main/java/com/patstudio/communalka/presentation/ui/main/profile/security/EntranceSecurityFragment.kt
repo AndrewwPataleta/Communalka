@@ -73,6 +73,12 @@ class EntranceSecurityFragment : Fragment() {
         binding.pinCodeText.setOnClickListener(){
             findNavController().navigate(R.id.toEditPinCode)
         }
+        binding.emailText.setOnClickListener(){
+            findNavController().navigate(R.id.toEditEmail)
+        }
+        binding.phoneText.setOnClickListener(){
+            findNavController().navigate(R.id.toEditPhone)
+        }
     }
 
 

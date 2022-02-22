@@ -139,7 +139,7 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
     //chuck
-    debugImplementation "com.github.chuckerteam.chucker:library:$chuckVersion"
+    debugImplementation "com.github.chuckerteam.chucker:library-no-op:$chuckVersion"
     releaseImplementation "com.github.chuckerteam.chucker:library-no-op:$chuckVersion"
 
     testImplementation 'junit:junit:4.+'

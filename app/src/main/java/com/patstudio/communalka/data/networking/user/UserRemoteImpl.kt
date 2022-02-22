@@ -1,7 +1,9 @@
 package com.patstudio.communalka.data.networking.user
 
+import com.google.gson.JsonElement
 import com.patstudio.communalka.common.contextprovider.DispatcherProvider
 import com.google.gson.JsonObject
+import com.patstudio.communalka.data.model.APIResponse
 import com.patstudio.communalka.data.model.Consumer
 import com.patstudio.communalka.data.model.Gcm
 import com.patstudio.communalka.data.model.OrderCreator
@@ -66,6 +68,12 @@ class UserRemoteImpl(
         userService.updateEmail(body)
     }
 
+    override suspend fun updateEmailProfile(email: String) = withContext(dispatcherProvider.default) {
+        val body = JsonObject()
+        body.addProperty("email",email)
+        userService.updateEmailProfile(body)
+    }
+
     override suspend fun createOrder(orderCreator: OrderCreator) = withContext(dispatcherProvider.default){
         userService.createOrderPayment(orderCreator)
     }
@@ -87,6 +95,15 @@ class UserRemoteImpl(
             body.addProperty("email",email)
         body.addProperty("code",smsCode)
         userService.registrationWithCode(body)
+    }
+
+    override suspend fun updatePhone(phone: String, code: String)= withContext(dispatcherProvider.default)  {
+        val body = JsonObject()
+
+        body.addProperty("phone",phone)
+        body.addProperty("code",code)
+
+        userService.updatePhone(body)
     }
 
     override suspend fun removePlacement(placementId: String) = withContext(dispatcherProvider.default) {

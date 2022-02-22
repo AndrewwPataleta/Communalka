@@ -452,13 +452,23 @@
         android:name="com.patstudio.communalka.presentation.ui.main.profile.security.EntranceSecurityFragment"
         android:label="Безопасность и вход"
         tools:layout="@layout/fragment_entrance_security">
-        <action
-            android:id="@+id/toEditEmail"
-            app:destination="@id/EditEmail" />
+
 
         <action
             android:id="@+id/toEditPinCode"
             app:destination="@id/EditPinCode"
+            app:popUpTo="@id/EntranceSecurity"
+            app:popUpToInclusive="true"
+            />
+        <action
+            android:id="@+id/toEditEmail"
+            app:destination="@id/EditEmail"
+            app:popUpTo="@id/EntranceSecurity"
+            app:popUpToInclusive="true"
+            />
+        <action
+            android:id="@+id/toEditPhone"
+            app:destination="@id/EditPhone"
             app:popUpTo="@id/EntranceSecurity"
             app:popUpToInclusive="true"
             />
@@ -472,6 +482,28 @@
 
     </fragment>
 
+
+    <fragment
+        android:id="@+id/EditPhone"
+        android:name="com.patstudio.communalka.presentation.ui.main.profile.EditPhoneFragment"
+        android:label="Сменить номер телефона"
+        tools:layout="@layout/fragment_edit_phone">
+        <action
+            android:id="@+id/toEditPhoneConfirm"
+            app:destination="@id/EditPhoneConfirm"
+            app:popUpTo="@id/EntranceSecurity"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/EditPhoneConfirm"
+        android:name="com.patstudio.communalka.presentation.ui.auth.EditPhoneConfirmFragment"
+        android:label="Сменить номер телефона"
+        tools:layout="@layout/fragment_edit_phone_confirm">
+
+    </fragment>
+
     <fragment
         android:id="@+id/EditPinCode"
         android:name="com.patstudio.communalka.presentation.ui.main.profile.security.EditPinCodeFragment"
@@ -479,6 +511,8 @@
         tools:layout="@layout/fragment_edit_pin_code">
 
     </fragment>
+
+
 
     <fragment
         android:id="@+id/AddRoom"

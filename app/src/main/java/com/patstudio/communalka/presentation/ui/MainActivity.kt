@@ -200,6 +200,14 @@ class MainActivity : AppCompatActivity() {
                     filter.visibility = View.GONE
                     bottomNavigationView.visibility = View.VISIBLE
                 }
+                R.id.EditPhoneConfirm-> {
+                    toolbar.visibility = View.GONE
+                    deleteRoom.visibility = View.GONE
+                    toolbar.subtitle = ""
+                    deletePersonalAccount.visibility = View.GONE
+                    filter.visibility = View.GONE
+                    bottomNavigationView.visibility = View.GONE
+                }
                 R.id.PinCode-> {
                     toolbar.visibility = View.GONE
                     deleteRoom.visibility = View.GONE
@@ -224,6 +232,14 @@ class MainActivity : AppCompatActivity() {
                     filter.visibility = View.GONE
                 }
                 R.id.EntranceSecurity-> {
+                    toolbar.visibility = View.VISIBLE
+                    toolbar.subtitle = ""
+                    deleteRoom.visibility = View.GONE
+                    deletePersonalAccount.visibility = View.GONE
+                    bottomNavigationView.visibility = View.GONE
+                    filter.visibility = View.GONE
+                }
+                R.id.EditPhone-> {
                     toolbar.visibility = View.VISIBLE
                     toolbar.subtitle = ""
                     deleteRoom.visibility = View.GONE

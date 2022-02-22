@@ -15,6 +15,7 @@ interface UserRemote {
 
     suspend fun getFaq(): APIResponse<JsonElement>
 
+
     suspend fun getVideoFaqKey(): APIResponse<JsonElement>
 
     suspend fun registration(fio: String, phone: String, email: String): APIResponse<JsonElement>
@@ -25,11 +26,15 @@ interface UserRemote {
 
     suspend fun updateEmail(email: String): APIResponse<JsonElement>
 
+    suspend fun updateEmailProfile(email: String): APIResponse<JsonElement>
+
     suspend fun createOrder(orderCreator: OrderCreator): APIResponse<JsonElement>
 
     suspend fun updateGsm(gcm: Gcm): APIResponse<JsonElement>
 
     suspend fun registrationWithCode(fio: String,phone: String, email: String, smsCode: String): APIResponse<JsonElement>
+
+    suspend fun updatePhone(phone: String,code: String): APIResponse<JsonElement>
 
     suspend fun removePlacement(placementId: String): Any
 

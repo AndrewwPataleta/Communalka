@@ -27,6 +27,9 @@ interface UserService {
     @PUT("consumer/")
     suspend fun updateEmail(@Body target: JsonObject): APIResponse<JsonElement>
 
+    @PATCH("consumer/")
+    suspend fun updateEmailProfile(@Body target: JsonObject): APIResponse<JsonElement>
+
     @GET("consumer/")
     suspend fun getConsumer(): APIResponse<JsonElement>
 
@@ -40,6 +43,9 @@ interface UserService {
 
     @PUT("consumer/")
     suspend fun updateConsumer(@Body consumer: Consumer): APIResponse<JsonElement>
+
+    @PATCH("consumer/")
+    suspend fun updatePhone(@Body fio: JsonObject): APIResponse<JsonElement>
 
     @PUT("consumer/")
     suspend fun updateFio(@Body fio: JsonObject)

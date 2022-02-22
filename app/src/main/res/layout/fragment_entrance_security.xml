@@ -72,7 +72,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@id/phoneIcon"
                 app:layout_constraintTop_toTopOf="@id/phoneIcon"
-                app:layout_constraintEnd_toStartOf="@id/phoneValue"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="@id/phoneIcon"/>
 
             <TextView
@@ -88,9 +88,21 @@
                 app:layout_constraintVertical_bias="0.5"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintTop_toTopOf="@id/phoneIcon"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/phoneArrow"
+                android:layout_marginEnd="8dp"
                 app:layout_constraintBottom_toBottomOf="@id/phoneIcon"/>
 
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/phoneArrow"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_down"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/phoneValue"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintBottom_toBottomOf="@id/phoneValue"
+                android:rotation="270"/>
 
 
             <androidx.constraintlayout.widget.Barrier
@@ -144,8 +156,19 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@id/emailIcon"
                 app:layout_constraintTop_toTopOf="@id/emailIcon"
-                app:layout_constraintEnd_toStartOf="@id/emailValue"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="@id/emailIcon"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/emailArrow"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_down"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/emailText"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintBottom_toBottomOf="@id/emailText"
+                android:rotation="270"/>
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/emailGroup"
@@ -159,10 +182,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/robotobold"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/emailArrow"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="17sp"
                 android:padding="16dp"
+                android:layout_marginEnd="8dp"
                 android:maxLength="15"
                 app:layout_constraintVertical_bias="0.5"
                 app:layout_constraintHorizontal_bias="0.0"

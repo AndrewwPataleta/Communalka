@@ -24,6 +24,14 @@ interface UserDao {
     fun getLastAuth(lastAuth: Boolean = true): User
 
     @Transaction
+    @Query("UPDATE user SET email = :email WHERE id = :userId")
+    fun updateEmail(email: String,  userId: String)
+
+    @Transaction
+    @Query("UPDATE user SET phone = :phone WHERE id = :userId")
+    fun updatePhone(phone: String,  userId: String)
+
+    @Transaction
     @Query("UPDATE user SET lastAuth = :lastAuth")
     fun updatePreviosAuth(lastAuth: Boolean = false)
 
