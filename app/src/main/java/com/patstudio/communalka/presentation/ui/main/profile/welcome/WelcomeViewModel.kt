@@ -46,6 +46,9 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
     private var _detailService: MutableLiveData<Event<Triple<String, String, String>>> = MutableLiveData()
     val detailService: LiveData<Event<Triple<String, String, String>>> = _detailService
 
+    private var _firstServices: MutableLiveData<Event<Pair<Placement, Boolean>>> = MutableLiveData()
+    val firstServices: LiveData<Event<Pair<Placement, Boolean>>> = _firstServices
+
 
     private lateinit var userPlacement: ArrayList<Placement>
 
@@ -105,18 +108,23 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
                             is Result.Success -> {
                                 var placementList: PlacementWrapper = gson.fromJson(it.data.data, PlacementWrapper::class.java)
                                 if (placementList.placements.count() > 0) {
-                                    var placementLocal = roomRepository.getUserPremises(user!!.id)
-                                    userPlacement = placementList.placements
-                                    placementList.placements.map { parent ->
-                                        placementLocal.map { child ->
-                                            if (parent.id.compareTo(child.id) == 0) {
-                                                parent.imageType = child.imageType
-                                                parent.path = child.imagePath
+                                    if (user!!.firstLogin) {
+                                        user!!.firstLogin = false
+                                        userRepository.saveUserLocal(user!!)
+                                        _firstServices.postValue(Event(Pair(placementList.placements.get(0), true)))
+                                    } else {
+                                        var placementLocal = roomRepository.getUserPremises(user!!.id)
+                                        userPlacement = placementList.placements
+                                        placementList.placements.map { parent ->
+                                            placementLocal.map { child ->
+                                                if (parent.id.compareTo(child.id) == 0) {
+                                                    parent.imageType = child.imageType
+                                                    parent.path = child.imagePath
+                                                }
                                             }
                                         }
+                                        updateInvoicesForPlacement(placementList.placements, 0)
                                     }
-
-                                    updateInvoicesForPlacement(placementList.placements, 0)
                                 } else {
                                     userMutable.postValue(Event(user!!))
                                 }
@@ -136,7 +144,6 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
     private fun initGCMToken() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
-
                 return@OnCompleteListener
             }
             val token = task.result
@@ -148,9 +155,7 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
                     .catch {  }
                     .collect {
                         when (it) {
-                            is Result.Success -> {
-
-                            }
+                            is Result.Success -> { }
                         }
                     }
             }
@@ -161,42 +166,42 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
         viewModelScope.launch(dispatcherProvider.io) {
             val it = userRepository.getLastAuthUser()
             user = it
-
             if (user != null) {
-
-                needEnterPin = !user!!.autoSignIn
-                viewModelScope.launch(dispatcherProvider.io) {
-                    roomRepository.getServices()
-                        .collect {
-                            when (it) {
-                                is Result.Success -> {
-                                    val type = object : TypeToken<List<Service>>() {}.type
-                                    var services: List<Service> = gson.fromJson(it.data.data!!.asJsonObject.get("services"), type)
-                                    IconUtils.instance.services = services
+                    needEnterPin = !user!!.autoSignIn
+                    viewModelScope.launch(dispatcherProvider.io) {
+                        roomRepository.getServices()
+                            .collect {
+                                when (it) {
+                                    is Result.Success -> {
+                                        val type = object : TypeToken<List<Service>>() {}.type
+                                        var services: List<Service> = gson.fromJson(
+                                            it.data.data!!.asJsonObject.get("services"),
+                                            type
+                                        )
+                                        IconUtils.instance.services = services
+                                    }
                                 }
                             }
-                        }
-                }
-               initGCMToken()
+                    }
+                    initGCMToken()
 
-                if (needEnterPin && !typeAuthChanged) {
+                    if (needEnterPin && !typeAuthChanged) {
 
-                    var userForm = UserForm(
-                        it.id,
-                        it.name,
-                        it.phone,
-                        it.email,
-                        "AUTH",
-                        it.token,
-                        it.refresh,
-                        fingerPrintSignIn = it.fingerPrintSignIn,
-                        autoSignIn = it.autoSignIn
-                    )
-                    pinForm.postValue(Event(userForm))
-                } else {
-
-                    getUserPremises()
-                }
+                        var userForm = UserForm(
+                            it.id,
+                            it.name,
+                            it.phone,
+                            it.email,
+                            "AUTH",
+                            it.token,
+                            it.refresh,
+                            fingerPrintSignIn = it.fingerPrintSignIn,
+                            autoSignIn = it.autoSignIn
+                        )
+                        pinForm.postValue(Event(userForm))
+                    } else {
+                        getUserPremises()
+                    }
             } else {
                 withoutUser.postValue(Event(true))
             }

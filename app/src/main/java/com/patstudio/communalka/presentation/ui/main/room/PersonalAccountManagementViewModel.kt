@@ -19,11 +19,13 @@ class PersonalAccountManagementViewModel(private val userRepository: UserReposit
 
     private lateinit var user: User
     private lateinit var currentPlacement: Placement
-    private val unconnectedService: MutableLiveData<Event<List<Service>>> = MutableLiveData()
+    private val unconnectedService: MutableLiveData<Event<Pair<List<Service>, Boolean>>> = MutableLiveData()
     private val connectedService: MutableLiveData<Event<List<Service>>> = MutableLiveData()
     private val serviceForConnect: MutableLiveData<Event<Pair<Service,Placement>>> = MutableLiveData()
     private var unconnectedServiceList: ArrayList<Service> = ArrayList()
     private var connectedServiceList: ArrayList<Service> = ArrayList()
+
+    private var firstServices = false
 
     private var _subTitlePlacement: MutableLiveData<Event<String>> = MutableLiveData()
     val subTitlePlacement: LiveData<Event<String>> = _subTitlePlacement
@@ -53,7 +55,8 @@ class PersonalAccountManagementViewModel(private val userRepository: UserReposit
                                 }
                             }
                             if (unconnectedServiceList.size > 0)
-                                unconnectedService.postValue(Event(unconnectedServiceList))
+                                unconnectedService.postValue(Event(Pair(unconnectedServiceList,firstServices)))
+                                firstServices = false
                             if (connectedServiceList.size > 0)
                                 connectedService.postValue(Event(connectedServiceList))
                         }
@@ -67,6 +70,11 @@ class PersonalAccountManagementViewModel(private val userRepository: UserReposit
                 }
         }
     }
+
+    public fun setFirstServices(firstServices: Boolean) {
+        this.firstServices = firstServices
+    }
+
 
     public fun setCurrentRoom(placement: Placement) {
         viewModelScope.launch(dispatcherProvider.io) {
@@ -82,7 +90,7 @@ class PersonalAccountManagementViewModel(private val userRepository: UserReposit
         serviceForConnect.postValue(Event(Pair(model,currentPlacement)))
     }
 
-    fun getUnconnectedPersonalAccount(): MutableLiveData<Event<List<Service>>> {
+    fun getUnconnectedPersonalAccount(): MutableLiveData<Event<Pair<List<Service>,Boolean>>> {
         return unconnectedService
     }
 

@@ -35,6 +35,7 @@
         <action
             android:id="@+id/toEditPlacement"
             app:destination="@id/EditPlacement" />
+
         <action
             android:id="@+id/action_WelcomeFragment_to_AddRoom"
             app:destination="@id/AddRoom" />

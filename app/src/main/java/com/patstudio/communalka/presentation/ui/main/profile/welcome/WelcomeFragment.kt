@@ -73,6 +73,7 @@ class WelcomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         filterPayment.resetFilter()
+        viewModel.initCurrentUser()
     }
 
     private fun initObservers() {
@@ -146,6 +147,17 @@ class WelcomeFragment : Fragment() {
 
             }
         }
+        viewModel.firstServices.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val bundle = bundleOf("placement" to it.first, "first" to it.second)
+                    findNavController().navigate(R.id.toPersonalAccountPlacement, bundle)
+                }
+
+            }
+        }
+
+
         viewModel.detailService.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
@@ -294,10 +306,12 @@ class WelcomeFragment : Fragment() {
 
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initObservers()
-        viewModel.initCurrentUser()
+
         initTooltip()
     }
 
