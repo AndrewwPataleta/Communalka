@@ -629,7 +629,7 @@ class UserRepository (
     private fun convertErrorBody(throwable: HttpException): APIResponse<JsonElement> {
 
             val type = object : TypeToken<APIResponse<JsonElement>>() {}.type
-            Log.d("UserRepository", "login error body"+throwable.response()?.errorBody()!!)
+
             return gson.fromJson(throwable.response()?.errorBody()!!.charStream().readText(), type)
 
     }

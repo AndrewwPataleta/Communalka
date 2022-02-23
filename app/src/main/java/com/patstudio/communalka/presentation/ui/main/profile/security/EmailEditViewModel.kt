@@ -1,5 +1,7 @@
 package com.patstudio.communalka.presentation.ui.main.profile.security
 
+import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,66 +19,82 @@ class EmailEditViewModel(private val userRepository: UserRepository, private val
     private lateinit var user: User
     private val userMutable: MutableLiveData<Event<User>> = MutableLiveData()
     private var userEmail: String = ""
-    private val userEmailError: MutableLiveData<Event<String>> = MutableLiveData()
     private val userMessage: MutableLiveData<Event<String>> = MutableLiveData()
+    private var _openPermissionSettings: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val openPermissionSettings: LiveData<Event<Boolean>> = _openPermissionSettings
+
+    private var _showProgress: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val showProgress: LiveData<Event<Boolean>> = _showProgress
+
+    private var _finish: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val finish: LiveData<Event<Boolean>> = _finish
+
+    private var _userEmailError: MutableLiveData<Event<String>> = MutableLiveData()
+    val userEmailError: LiveData<Event<String>> = _userEmailError
+
+    fun setCurrentUser(user:User) {
+        this.user = user
+        userMutable.postValue(Event(user))
+    }
 
     fun initCurrentUser() {
         viewModelScope.launch(dispatcherProvider.io) {
-             user = userRepository.getLastAuthUser()
-            if (user != null)  {
-                userMutable.postValue(Event(user))
-            }
+            user = userRepository.getLastAuthUser()
+            userMutable.postValue(Event(user))
         }
     }
 
     private fun validateUserForm(): Boolean {
         var valid = true
 
-        if (!userEmail.isEmailValid()) {
-            userEmailError.postValue(Event("Вы неправильно указали адрес электронной почты!"))
+        if (!userEmail.isEmailValid() || userEmail.isEmpty()) {
+            _userEmailError.postValue(Event("Вы неправильно указали адрес электронной почты!"))
             valid = false
         }
+
         return valid
     }
 
-     fun editUser() {
+    fun editUser() {
         if (validateUserForm()) {
-            user.email = userEmail
             viewModelScope.launch(dispatcherProvider.io) {
-                userRepository.updateEmail(userEmail)
+                userRepository.updateEmailProfile(userEmail)
                     .collect {
                         when (it) {
                             is Result.Success -> {
-                                userRepository.saveUserLocal(user)
+                                userRepository.updateEmail(userEmail, user.id)
                                 userMessage.postValue(Event("Изменения сохранены"))
+                                _finish.postValue(Event(true))
                             }
                             is Result.Error -> {
 
                             }
                             is Result.ErrorResponse -> {
-
+                                when(it.data.status) {
+                                    "error" -> {
+                                        it.data.message?.let {
+                                            Log.d("EditEMail", " eror ${it}")
+                                            userMessage.postValue(Event(it))
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
 
 
             }
-
         }
     }
 
-    fun setUserEmail(setUserEmail: String) {
-        this.userEmail = setUserEmail
+    fun setUserEmail(userEmail: String) {
+        this.userEmail = userEmail
     }
 
     fun getUser(): MutableLiveData<Event<User>> {
         return userMutable
     }
 
-
-    fun getEmailError(): MutableLiveData<Event<String>> {
-        return userEmailError
-    }
 
     fun getUserMessage(): MutableLiveData<Event<String>> {
         return userMessage

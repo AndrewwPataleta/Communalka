@@ -49,7 +49,6 @@ val viewModelsModule = module {
     viewModel { AccrualViewModel(get(), get(), get()) }
     viewModel { FaqViewModel(get(), get(), get()) }
     viewModel { HelpViewModel(get(), get(), get(), get()) }
-    viewModel { EditEmailViewModel(get(), get()) }
     viewModel { EditPhoneViewModel(get(), get()) }
     viewModel { EditPhoneConfirmViewModel(get(), get(), get(), get()) }
 

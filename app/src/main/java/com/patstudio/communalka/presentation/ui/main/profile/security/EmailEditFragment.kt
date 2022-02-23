@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
+import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.fragment.findNavController
 import com.patstudio.communalka.R
@@ -39,27 +40,38 @@ class EmailEditFragment : Fragment() {
     ): View? {
 
         _binding = FragmentEmailEditBinding.inflate(inflater, container, false)
-
+        viewModel.initCurrentUser()
         return binding.root
     }
 
 
     private fun initObservers() {
-        viewModel.getUser().observe(this) {
+
+
+        viewModel.getUser().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                    this.binding.emailCurrentValue.setText(it.email)
+                    binding.model = it
+                    binding.emailValue.setText(it.email)
                 }
             }
         }
-        viewModel.getEmailError().observe(this) {
+
+        viewModel.userEmailError.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                    this.binding.emailCurrentValue.setError(it)
+                    binding.emailValue.error = it
                 }
             }
         }
-        viewModel.getUserMessage().observe(this) {
+        viewModel.finish.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    requireActivity().onBackPressed()
+                }
+            }
+        }
+        viewModel.getUserMessage().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     val builder = AlertDialog.Builder(requireContext())
@@ -72,19 +84,18 @@ class EmailEditFragment : Fragment() {
                     alertDialog.show()
                 }
             }
-
         }
-
     }
 
     private fun initListeners() {
+
         binding.editUserBtn.setOnClickListener {
             viewModel.editUser()
         }
-        binding.emailValue.doAfterTextChanged {
+
+        binding.emailValue.addTextChangedListener {
             viewModel.setUserEmail(it.toString())
         }
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
