@@ -401,7 +401,7 @@ class UserRepository (
         return dao.saveUser(user)
     }
 
-    fun updateToken(token: String, refresh: String, userId: String) {
+    fun updateToken(token: String, refresh: String, userId: String, firstLogin: Boolean) {
         Log.d("UserRepository", "update")
         dao.updateToken(token, refresh, userId)
     }

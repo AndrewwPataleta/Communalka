@@ -23,6 +23,7 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
     private var enterMode = "INSTALL"
     private lateinit var savedUser: User
     private var currentPinCode: String = ""
+    lateinit var  currentUser: User
 
     private fun checkForInstall(symbol: String) {
         pinCode += symbol
@@ -49,7 +50,7 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
         if (pinCodeRepeat.length == 4) {
             if (pinCodeRepeat.compareTo(pinCode) == 0) {
                 var userForSave = User(userForm.id,userForm.fio, userForm.phone, userForm.email, pinCode, userForm.token, userForm.refresh, true,
-                    "")
+                    "", firstLogin = currentUser.firstLogin)
                 userRepository.setPinCode(pinCodeRepeat)
                 viewModelScope.launch(dispatcherProvider.io) {
                     try {
@@ -192,7 +193,15 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
         pinCodeMode.postValue((Event(enterMode)))
     }
 
+    private fun initCurrent() {
+        viewModelScope.launch(dispatcherProvider.io) {
+            currentUser = userRepository.getLastAuthUser()
+        }
+    }
+
+
      fun setUserForm(userForm: UserForm) {
+         initCurrent()
          this.userForm = userForm
          enterMode = userForm.type
          currentPinCode = userRepository.getCurrentPinCode()

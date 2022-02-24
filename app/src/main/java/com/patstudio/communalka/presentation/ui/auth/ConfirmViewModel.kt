@@ -106,7 +106,7 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
 
                                     userForm.consumer.token = userForm.tokens.access
                                     userForm.consumer.refresh = userForm.tokens.refresh
-                                    checkExistAndSaveUser(userForm)
+                                    checkExistAndSaveUser(userForm, false)
                                     progressPhoneSending.postValue(false)
                                 }
                             }
@@ -172,10 +172,17 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
         }
     }
 
-    private fun checkExistAndSaveUser(userForm: ConfirmSmsWrapper) {
+    private fun checkExistAndSaveUser(userForm: ConfirmSmsWrapper, firstLogin: Boolean) {
         Log.d("ConfirmViewModel", "check exist "+userForm.consumer)
         viewModelScope.launch(dispatcherProvider.io) {
+
             val user = userRepository.getUserById(userForm.consumer.id)
+            var boolean = false
+
+            user?.let {
+                boolean = it.firstLogin
+            }
+
             var userForSave = User(
                 userForm.consumer.id,
                 userForm.consumer.fio,
@@ -185,13 +192,14 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
                 userForm.consumer.token,
                 userForm.consumer.refresh,
                 true,
-                ""
+                "",
+                firstLogin = firstLogin
             )
 
             if (user != null) {
-                Log.d("ConfirmViewMode", user.toString())
+
                 withContext(dispatcherProvider.io) {
-                    userRepository.updateToken(user.token, user.refresh, user.id)
+                    userRepository.updateToken(user.token, user.refresh, user.id, firstLogin)
                 }
                 smsCode = ""
                 destoyTimer()
@@ -243,7 +251,7 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
                                     userForm.consumer.type = "INSTALL"
                                     userForm.consumer.token = userForm.tokens.access
                                     userForm.consumer.refresh = userForm.tokens.refresh
-                                    checkExistAndSaveUser(userForm)
+                                    checkExistAndSaveUser(userForm, true)
                                 }
                             }
                         }

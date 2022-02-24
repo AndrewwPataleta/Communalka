@@ -183,13 +183,14 @@ class EditPhoneConfirmViewModel(private val userRepository: UserRepository, priv
                 userForm.consumer.token,
                 userForm.consumer.refresh,
                 true,
-                ""
+                "",
+                firstLogin = false
             )
 
             if (user != null) {
                 Log.d("ConfirmViewMode", user.toString())
                 withContext(dispatcherProvider.io) {
-                    userRepository.updateToken(user.token, user.refresh, user.id)
+                    userRepository.updateToken(user.token, user.refresh, user.id, false)
                 }
                 smsCode = ""
                 destoyTimer()
