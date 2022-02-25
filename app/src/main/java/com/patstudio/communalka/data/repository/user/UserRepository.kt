@@ -626,6 +626,27 @@ class UserRepository (
         }
     }
 
+    fun updateEmailConfirm(phone: String, code: String): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val user = remote.updateEmail(phone, code)
+                emit(Result.success(user))
+            }
+        } catch (throwable: Exception) {
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
+
     private fun convertErrorBody(throwable: HttpException): APIResponse<JsonElement> {
 
             val type = object : TypeToken<APIResponse<JsonElement>>() {}.type

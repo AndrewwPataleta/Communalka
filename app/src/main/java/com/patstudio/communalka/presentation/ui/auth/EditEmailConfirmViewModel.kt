@@ -19,7 +19,7 @@ import isEmailValid
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-class EditPhoneConfirmViewModel(private val userRepository: UserRepository, private val roomRepository: RoomRepository, private val gson: Gson, private val dispatcherProvider: DispatcherProvider): ViewModel() {
+class EditEmailConfirmViewModel(private val userRepository: UserRepository, private val roomRepository: RoomRepository, private val gson: Gson, private val dispatcherProvider: DispatcherProvider): ViewModel() {
 
     private var smsCode = ""
     private lateinit var userForm: UserForm
@@ -81,17 +81,20 @@ class EditPhoneConfirmViewModel(private val userRepository: UserRepository, priv
                 }
             }
             timerSms?.let {
-                repeatSmsRegistration()
                 availableSendSms.postValue(Event(false))
+                repeatSmsRegistration()
                 it.start()
             }
     }
+
+
 
     fun setPhone(phone: String) {
         this.phone = phone;
         availableSendSms.postValue(Event(false))
         initCurrentUser()
         startTimer()
+
     }
 
 
@@ -320,14 +323,16 @@ class EditPhoneConfirmViewModel(private val userRepository: UserRepository, priv
         }
     }
 
+
+
     fun setSmsCode(smsCode: String) {
         this.smsCode = smsCode
         viewModelScope.launch(dispatcherProvider.io){
-            userRepository.updatePhoneConfirm(phone, smsCode)
+            userRepository.updateEmailConfirm(phone, smsCode)
                 .collect {
                     when (it) {
                         is Result.Success -> {
-                            userRepository.updatePhone(phone, user.id)
+                            userRepository.updateEmail(phone, user.id)
                             userMessageWithoutButton.postValue(Event("Изменения сохранены"))
                             _finish.postValue(Event(true))
                         }
@@ -509,8 +514,6 @@ class EditPhoneConfirmViewModel(private val userRepository: UserRepository, priv
 
                         }
                         is Result.ErrorResponse -> {
-                            Log.d("ConfirmViewModel", "error response "+it.toString())
-
                         }
                     }
                 }

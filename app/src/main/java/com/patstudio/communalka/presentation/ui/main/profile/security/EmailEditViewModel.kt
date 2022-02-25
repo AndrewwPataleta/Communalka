@@ -32,6 +32,9 @@ class EmailEditViewModel(private val userRepository: UserRepository, private val
     private var _userEmailError: MutableLiveData<Event<String>> = MutableLiveData()
     val userEmailError: LiveData<Event<String>> = _userEmailError
 
+    private var _openConfirmCode: MutableLiveData<Event<String>> = MutableLiveData()
+    val openConfirmCode: LiveData<Event<String>> = _openConfirmCode
+
     fun setCurrentUser(user:User) {
         this.user = user
         userMutable.postValue(Event(user))
@@ -62,9 +65,11 @@ class EmailEditViewModel(private val userRepository: UserRepository, private val
                     .collect {
                         when (it) {
                             is Result.Success -> {
-                                userRepository.updateEmail(userEmail, user.id)
-                                userMessage.postValue(Event("Изменения сохранены"))
-                                _finish.postValue(Event(true))
+
+                                _openConfirmCode.postValue(Event(userEmail))
+//                                userRepository.updateEmail(userEmail, user.id)
+//                                userMessage.postValue(Event("Изменения сохранены"))
+//                                _finish.postValue(Event(true))
                             }
                             is Result.Error -> {
 

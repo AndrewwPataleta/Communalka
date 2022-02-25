@@ -68,6 +68,13 @@ class UserRemoteImpl(
         userService.updateEmail(body)
     }
 
+    override suspend fun updateEmail(phone: String, code: String) = withContext(dispatcherProvider.default)  {
+        val body = JsonObject()
+        body.addProperty("email",phone)
+        body.addProperty("code",code)
+        userService.updateEmailProfile(body)
+    }
+
     override suspend fun updateEmailProfile(email: String) = withContext(dispatcherProvider.default) {
         val body = JsonObject()
         body.addProperty("email",email)

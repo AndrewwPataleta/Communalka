@@ -36,6 +36,9 @@ class EditPhoneViewModel(private val userRepository: UserRepository, private val
     private var _openConfirmCode: MutableLiveData<Event<String>> = MutableLiveData()
     val openConfirmCode: LiveData<Event<String>> = _openConfirmCode
 
+
+
+
     private var _userPhoneError: MutableLiveData<Event<String>> = MutableLiveData()
     val userPhoneError: LiveData<Event<String>> = _userPhoneError
 

@@ -36,6 +36,8 @@ interface UserRemote {
 
     suspend fun updatePhone(phone: String,code: String): APIResponse<JsonElement>
 
+    suspend fun updateEmail(phone: String,code: String): APIResponse<JsonElement>
+
     suspend fun removePlacement(placementId: String): Any
 
     suspend fun getAccount(accountId:  String): APIResponse<JsonElement>

@@ -71,6 +71,15 @@ class EmailEditFragment : Fragment() {
                 }
             }
         }
+        viewModel.openConfirmCode.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    var bundle = Bundle()
+                    bundle.putString("email", it)
+                    findNavController().navigate(R.id.EditEmailConfirm, bundle)
+                }
+            }
+        }
         viewModel.getUserMessage().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {

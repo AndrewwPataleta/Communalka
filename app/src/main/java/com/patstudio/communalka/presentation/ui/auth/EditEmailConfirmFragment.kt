@@ -18,28 +18,25 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.patstudio.communalka.R
 import com.patstudio.communalka.data.model.User
 import com.patstudio.communalka.data.model.UserForm
-import com.patstudio.communalka.databinding.FragmentConfirmSmsBinding
-import com.patstudio.communalka.databinding.FragmentEditPhoneConfirmBinding
-import com.patstudio.communalka.databinding.FragmentLoginBinding
-import com.patstudio.communalka.databinding.FragmentRegistrationBinding
+import com.patstudio.communalka.databinding.*
 import gone
 import org.koin.android.viewmodel.ext.android.viewModel
 import visible
 import java.lang.Exception
 
 
-class EditPhoneConfirmFragment : Fragment() {
+class EditEmailConfirmFragment : Fragment() {
 
-    private var _binding: FragmentEditPhoneConfirmBinding? = null
+    private var _binding: FragmentEditEmailConfirmBinding? = null
     private val binding get() = _binding!!
-    private val viewModel by viewModel<EditPhoneConfirmViewModel>()
+    private val viewModel by viewModel<EditEmailConfirmViewModel>()
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentEditPhoneConfirmBinding.inflate(inflater, container, false)
+        _binding = FragmentEditEmailConfirmBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -272,7 +269,7 @@ class EditPhoneConfirmFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arguments?.getString("phone")?.let {
+        arguments?.getString("email")?.let {
             viewModel.setPhone(it)
         }
         initListeners()

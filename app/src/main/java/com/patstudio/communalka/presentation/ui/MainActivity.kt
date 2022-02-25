@@ -247,6 +247,15 @@ class MainActivity : AppCompatActivity() {
                     bottomNavigationView.visibility = View.GONE
                     filter.visibility = View.GONE
                 }
+                R.id.EditEmailConfirm-> {
+                    toolbar.visibility = View.GONE
+                    toolbar.subtitle = ""
+                    deleteRoom.visibility = View.GONE
+                    deletePersonalAccount.visibility = View.GONE
+                    bottomNavigationView.visibility = View.GONE
+                    filter.visibility = View.GONE
+                }
+             
                 R.id.WebFragment-> {
                     toolbar.visibility = View.GONE
                     deleteRoom.visibility = View.GONE

@@ -51,5 +51,5 @@ val viewModelsModule = module {
     viewModel { HelpViewModel(get(), get(), get(), get()) }
     viewModel { EditPhoneViewModel(get(), get()) }
     viewModel { EditPhoneConfirmViewModel(get(), get(), get(), get()) }
-
+    viewModel { EditEmailConfirmViewModel(get(), get(), get(), get()) }
 }

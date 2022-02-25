@@ -506,6 +506,14 @@
     </fragment>
 
     <fragment
+        android:id="@+id/EditEmailConfirm"
+        android:name="com.patstudio.communalka.presentation.ui.auth.EditEmailConfirmFragment"
+        android:label="Сменить почтовый адрес"
+        tools:layout="@layout/fragment_edit_email_confirm">
+
+    </fragment>
+
+    <fragment
         android:id="@+id/EditPinCode"
         android:name="com.patstudio.communalka.presentation.ui.main.profile.security.EditPinCodeFragment"
         android:label="Изменить PIN-код"

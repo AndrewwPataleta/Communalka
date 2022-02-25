@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp">
+
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_left"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:paddingEnd="16dp"
+
+                android:paddingBottom="16dp"
+                app:tint="@color/black" />
+
+            <TextView
+                android:id="@+id/congratulation"
+                style="@style/TextBold1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/robotobold"
+                android:text="Подтвердите почту"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toTopOf="parent"
+
+                android:textSize="20sp"
+                app:layout_constraintStart_toEndOf="@+id/back"
+                 />
+
+
+            <TextView
+                android:id="@+id/thx_for_auth"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@+id/congratulation"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@id/congratulation"
+                android:text="Введите код подтверждения, который был
+отправлен на вашу почту"/>
+
+            <TextView
+                android:id="@+id/confirmation_code_text"
+                style="@style/TextBody1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/robotobold"
+                android:text="@string/confirmation_code"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/thx_for_auth" />
+
+
+            <EditText
+                android:id="@+id/smsEdit"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:textSize="16sp"
+                android:textColorHint="@color/gray_placeholder"
+                android:hint="123321"
+                android:theme="@style/EditTextBottomLine"
+                android:layout_marginTop="8dp"
+                android:inputType="number"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/confirmation_code_text"
+                android:maxLength="10" />
+
+            <ProgressBar
+                android:id="@+id/progressSmsSending"
+                android:layout_width="wrap_content"
+                android:layout_height="18dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@id/smsEdit"
+                app:layout_constraintTop_toTopOf="@id/smsEdit"
+                app:layout_constraintBottom_toBottomOf="@id/smsEdit"/>
+
+            <TextView
+                android:id="@+id/repeat_send_after_text"
+                style="@style/TextBody1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/robotoregular"
+                android:text="@string/resend_via"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@id/repeatSendAfterValue"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/smsEdit" />
+
+            <TextView
+                android:id="@+id/repeatSmsSendBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/repeat_send_sms"
+                android:textColor="@color/dark_blue"
+                android:textSize="14sp"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                android:fontFamily="@font/robotoregular"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/smsEdit"/>
+
+            <TextView
+                android:id="@+id/sendWithEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/repeat_send_sms_email"
+                android:textColor="@color/dark_blue"
+                android:textSize="14sp"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                android:fontFamily="@font/robotoregular"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/smsEdit"/>
+
+            <TextView
+                android:id="@+id/repeatSendAfterValue"
+                style="@style/TextBody1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/robotoregular"
+
+                android:textColor="@android:color/darker_gray"
+                android:textSize="14sp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/repeat_send_after_text"
+                app:layout_constraintTop_toBottomOf="@id/smsEdit" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
