@@ -125,6 +125,7 @@ class WelcomeFragment : Fragment() {
                 it.getContentIfNotHandled {
                   if (it) {
                       (requireActivity() as MainActivity).setWhiteRootBackground()
+                      binding.premisesContainer.gone(false)
                       binding.shimmerFrameLayout.visible(false)
                       binding.shimmerFrameLayout.startShimmerAnimation()
                   }
@@ -307,6 +308,10 @@ class WelcomeFragment : Fragment() {
     }
 
 
+    override fun onPause() {
+        super.onPause()
+        binding.premisesContainer.gone(false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
