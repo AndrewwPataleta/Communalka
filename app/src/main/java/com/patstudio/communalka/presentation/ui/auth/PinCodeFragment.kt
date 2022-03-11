@@ -101,6 +101,8 @@ class PinCodeFragment : Fragment() {
             }
         }
 
+
+
         viewModel.getAlertMessage().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {

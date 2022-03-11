@@ -62,11 +62,22 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
    }
 
     fun setReadStoragePermission(readStoragePermission: Boolean) {
-
+        Log.d("WelcomeViewModel","read permission ${readStoragePermission}")
             viewModelScope.launch(dispatcherProvider.io) {
-                delay(1000)
-                placementListMutable.postValue(Event(Pair(userPlacement, user!!.showPlacementTooltip)))
-                updateUserTooltipSpawn()
+                try {
+                    delay(1000)
+                    placementListMutable.postValue(
+                        Event(
+                            Pair(
+                                userPlacement,
+                                user!!.showPlacementTooltip
+                            )
+                        )
+                    )
+                    updateUserTooltipSpawn()
+                }catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
 
     }
@@ -78,6 +89,7 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
     }
 
     private suspend fun updateInvoicesForPlacement(placements: ArrayList<Placement>, pos: Int) {
+        Log.d("WelcomeVIewModel", "pos ${pos}")
         if (pos <= placements.size-1) {
             var placement = placements.get(pos)
             roomRepository.getPlacementInvoice(placement)
@@ -92,11 +104,13 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
                     }
                 }
         } else {
+            Log.d("WelcomeViewModel", "post request")
             readStoragePermissionMutable.postValue(Event(true))
         }
     }
 
     private fun getUserPremises() {
+        Log.d("WelcomeViewModel", "get user premises")
         viewModelScope.launch(dispatcherProvider.io) {
             roomRepository.getUserPremises()
                 .onStart { _loadingPlacement.postValue(Event(true)) }
@@ -163,6 +177,7 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
     }
 
     fun initCurrentUser() {
+        Log.d("WelcomeViewModel", "init current")
         viewModelScope.launch(dispatcherProvider.io) {
             val it = userRepository.getLastAuthUser()
             user = it

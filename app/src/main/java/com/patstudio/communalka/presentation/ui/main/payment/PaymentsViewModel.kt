@@ -9,13 +9,23 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.patstudio.communalka.common.utils.Event
 import com.patstudio.communalka.data.model.*
+import com.patstudio.communalka.data.model.auth.LoginResponseError
 import com.patstudio.communalka.data.repository.premises.RoomRepository
 import com.patstudio.communalka.data.repository.user.UserRepository
 import convertLongToFilterTime
+import isEmailValid
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import com.huxq17.download.core.DownloadInfo
+
+import android.R.id
+
+import com.huxq17.download.Pump
+
+
+
 
 
 class PaymentsViewModel(private val userRepository: UserRepository, private val gson: Gson, private val roomRepository: RoomRepository, private val dispatcherProvider: DispatcherProvider): ViewModel() {
@@ -43,6 +53,16 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
 
     private var _actionReceipt: MutableLiveData<Event<PaymentHistoryModel>> = MutableLiveData()
     val actionReceipt: LiveData<Event<PaymentHistoryModel>> = _actionReceipt
+
+    private var _dialogEmailSend: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val dialogEmailSend: LiveData<Event<Boolean>> = _dialogEmailSend
+
+    private var _dialogEmailSendError: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val dialogEmailSendError: LiveData<Event<Boolean>> = _dialogEmailSendError
+
+    private var _toastMessage: MutableLiveData<Event<String>> = MutableLiveData()
+    val toastMessage: LiveData<Event<String>> = _toastMessage
+
 
     private var _backScreen: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val backScreen: LiveData<Event<Boolean>> = _backScreen
@@ -115,6 +135,20 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
         }
     }
 
+
+
+    fun selectDownload() {
+
+    }
+
+    fun selectEmail() {
+        _dialogEmailSend.postValue(Event(true))
+    }
+
+    fun selectOpen() {
+
+    }
+
     fun resetFilter() {
         if (filter != null) {
             filter!!.date = null
@@ -160,6 +194,62 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
             filter!!.placement = Pair(!filter!!.placement.first, filter!!.placement.second)
             _filterModel.postValue(Event(filter!!))
         }
+    }
+
+    fun sendReceiptTo(email: String) {
+        if (email.isEmailValid()) {
+
+            var placemets = confirmFilter?.placement?.second?.filter { it.selected }
+            var placementsId = placemets?.map {
+                it.id
+            }
+
+            var suppliers = confirmFilter?.suppliers?.second?.filter { it.selected }
+            var suppliersId = suppliers?.map {
+                it.id
+            }
+
+            var services = confirmFilter?.services?.second?.filter { it.selected }
+            var servicesId = services?.map {
+                it.id
+            }
+
+            var convertedDateStart = confirmFilter?.date?.first?.let {
+                convertLongToFilterTime(it)
+            }
+
+            var convertedDateEnd = confirmFilter?.date?.second?.let {
+                convertLongToFilterTime(it)
+            }
+
+            viewModelScope.launch(dispatcherProvider.io) {
+                userRepository.sendReceiptToEmail(convertedDateStart, convertedDateEnd, placement = placementsId, services = servicesId, suppliers = suppliersId, email)
+                    .catch {
+                        it.printStackTrace()
+                    }
+                    .collect {
+                        when (it) {
+                            is Result.Success -> {
+                                _toastMessage.postValue(Event("Чеки отправлены на почту"))
+
+                            }
+                            is Result.Error -> {
+
+                            }
+                            is Result.ErrorResponse -> {
+                                when(it.data.status) {
+                                    "fail" -> {
+                                        _toastMessage.postValue(Event(it.data.message))
+                                    }
+                                }
+                        } }
+
+                    }
+            }
+        } else {
+            _dialogEmailSendError.postValue(Event(true))
+        }
+
     }
 
     fun selectActionReceipt(model: PaymentHistoryModel) {

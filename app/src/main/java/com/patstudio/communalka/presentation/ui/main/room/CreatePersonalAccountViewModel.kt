@@ -60,7 +60,7 @@ class CreatePersonalAccountViewModel(private val userRepository: UserRepository,
                             var filtred: ArrayList<Supplier> = ArrayList()
 
                                 suppliers.map {
-                                    if (it.service.compareTo(currentService.id) == 0)
+                                    if (it.service?.compareTo(currentService.id) == 0)
                                         filtred.add(it)
                                 }
                             suppliers = ArrayList()

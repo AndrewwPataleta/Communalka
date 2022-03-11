@@ -14,7 +14,10 @@ interface UserRemote {
     suspend fun getConsumer(): APIResponse<JsonElement>
 
     suspend fun getFaq(): APIResponse<JsonElement>
+    
+    suspend fun sendReceiptToEmail(): APIResponse<JsonElement>
 
+    suspend fun getOrderList(dateGte: String?,  dateLte: String?, placement: List<String>?, services: List<String>?, suppliers: List<String>?, email: String): APIResponse<JsonElement>
 
     suspend fun getVideoFaqKey(): APIResponse<JsonElement>
 

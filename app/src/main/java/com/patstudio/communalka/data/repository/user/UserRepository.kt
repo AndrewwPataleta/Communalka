@@ -91,6 +91,26 @@ class UserRepository (
         }
     }
 
+    fun sendReceiptToEmail(dateGte: String?, dateLte: String?, placement: List<String>?, services: List<String>?, suppliers: List<String>?, email: String): Flow<Result<APIResponse<JsonElement>>> = flow {
+        try {
+            if (connectivity.hasNetworkAccess()) {
+                emit(Result.loading())
+                val user = remote.getOrderList(dateGte, dateLte, placement, services, suppliers, email)
+                emit(Result.success(user))
+            }
+        } catch (throwable: Exception) {
+            when (throwable) {
+                is IOException ->  emit(Result.error(throwable))
+                is HttpException -> {
+                    val errorResponse = convertErrorBody(throwable)
+                    emit(Result.errorResponse(errorResponse))
+                }
+                else -> {
+                    emit(Result.Error(throwable))
+                }
+            }
+        }
+    }
 
 
     fun getVideoFaqKey(): Flow<Result<APIResponse<JsonElement>>> = flow {

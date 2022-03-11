@@ -11,6 +11,11 @@ class MainViewModel (private val userRepository: UserRepository, private val gso
     private val _needShadow: MutableLiveData<Event<Boolean>> = MutableLiveData()
     private val toolbarName: MutableLiveData<Event<String>> = MutableLiveData()
 
+    private val _receipt: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    var receipt: LiveData<Event<Boolean>> = _receipt
+
+
+
      var _toolbarWithTitle: MutableLiveData<Event<Pair<String, String>>> = MutableLiveData()
     val toolbarWithTitle: LiveData<Event<Pair<String, String>>> = _toolbarWithTitle
 
@@ -20,6 +25,10 @@ class MainViewModel (private val userRepository: UserRepository, private val gso
 
     public fun getNeedShadow():  MutableLiveData<Event<Boolean>> {
         return _needShadow
+    }
+
+    public fun showReceipt(show: Boolean) {
+        _receipt.postValue(Event(show))
     }
 
     public fun currentPersonalAccountName(name: String) {

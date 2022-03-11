@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.*
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.navigation.ui.NavigationUI.setupWithNavController
@@ -69,6 +70,20 @@ class MainActivity : AppCompatActivity() {
                         binding.toolbar.title = it.first
                         binding.toolbar.subtitle = it.second.trim()
                     }
+                }
+            }
+        }
+
+        viewModel.receipt.observe(this) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                   if (it) {
+                       toolbar.visibility = View.GONE
+                       bottomNavigationView.visibility = View.GONE
+                   } else {
+                       toolbar.visibility = View.VISIBLE
+                       bottomNavigationView.visibility = View.VISIBLE
+                   }
                 }
             }
         }

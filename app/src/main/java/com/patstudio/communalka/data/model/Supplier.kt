@@ -7,6 +7,6 @@ import kotlinx.android.parcel.Parcelize
 data class Supplier (
    val id: String,
    var name: String,
-   val service: String,
+   val service: String? = null,
    var selected: Boolean = false
 ) : Parcelable

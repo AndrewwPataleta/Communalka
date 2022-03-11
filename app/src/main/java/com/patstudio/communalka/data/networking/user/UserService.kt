@@ -41,6 +41,10 @@ interface UserService {
     suspend fun getVideoFaqKey(): APIResponse<JsonElement>
 
 
+    @GET("order/")
+    suspend fun getListOrder(@Query("date__gte") dateGte: String?, @Query("date__lte") dateLte: String?, @Query("payments__account__placements") placements: List<String>?,
+                             @Query("payments__account__service") services: List<String>?, @Query("payments__account__supplier") suppliers: List<String>?,@Query("sendTo") email: String): APIResponse<JsonElement>
+
     @PUT("consumer/")
     suspend fun updateConsumer(@Body consumer: Consumer): APIResponse<JsonElement>
 

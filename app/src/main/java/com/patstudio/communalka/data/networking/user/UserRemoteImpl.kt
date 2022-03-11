@@ -36,6 +36,21 @@ class UserRemoteImpl(
         userService.getFaq()
     }
 
+    override suspend fun sendReceiptToEmail() = withContext(dispatcherProvider.default)  {
+        userService.getFaq()
+    }
+
+    override suspend fun getOrderList(
+        dateGte: String?,
+        dateLte: String?,
+        placement: List<String>?,
+        services: List<String>?,
+        suppliers: List<String>?,
+        email: String
+    ) = withContext(dispatcherProvider.default) {
+        userService.getListOrder(dateGte, dateLte, placement, services, suppliers, email)
+    }
+
     override suspend fun getVideoFaqKey() = withContext(dispatcherProvider.default){
         userService.getVideoFaqKey()
     }

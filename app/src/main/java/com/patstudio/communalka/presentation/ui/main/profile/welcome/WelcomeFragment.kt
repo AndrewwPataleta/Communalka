@@ -66,6 +66,7 @@ class WelcomeFragment : Fragment() {
         binding.addRoom.setOnClickListener {
             viewModel.checkAvailableToOpenAddRoom()
         }
+        viewModel.initCurrentUser()
         return binding.root
     }
 
@@ -73,7 +74,7 @@ class WelcomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         filterPayment.resetFilter()
-        viewModel.initCurrentUser()
+
     }
 
     private fun initObservers() {
@@ -221,38 +222,46 @@ class WelcomeFragment : Fragment() {
         viewModel.getPlacementList().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                    (requireActivity() as MainActivity).setWhiteRootBackground()
+                    try {
+                        (requireActivity() as MainActivity).setWhiteRootBackground()
 
-                    requireActivity().findViewById<Toolbar>(R.id.toolbar).visible(false)
+                        requireActivity().findViewById<Toolbar>(R.id.toolbar).visible(false)
 
-                    binding.userContainer.gone(false)
-                    binding.premisesContainer.visible(false)
-                    placementAdapter = PlacementAdapter(it.first, requireContext(), viewModel)
-                    binding.premisesList.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL ,false)
-                    binding.premisesList.adapter = placementAdapter
+                        binding.userContainer.gone(false)
+                        binding.premisesContainer.visible(false)
+                        placementAdapter = PlacementAdapter(it.first, requireContext(), viewModel)
+                        binding.premisesList.layoutManager = LinearLayoutManager(
+                            requireContext(),
+                            LinearLayoutManager.VERTICAL,
+                            false
+                        )
+                        binding.premisesList.adapter = placementAdapter
 
-                    var haveconnect = false
-                    it.first.map {
-                        if (it.accounts.size > 0 ) haveconnect = true
+                        var haveconnect = false
+                        it.first.map {
+                            if (it.accounts.size > 0) haveconnect = true
+                        }
+
+                        if (it.second && !haveconnect) {
+                            Handler().postDelayed({
+                                val position =
+                                    (binding.premisesList.getLayoutManager() as LinearLayoutManager).findFirstVisibleItemPosition()
+                                var viewholder =
+                                    binding.premisesList.findViewHolderForAdapterPosition(position)
+
+                                (viewholder!!.itemView as ConstraintLayout)?.let {
+                                    val root = it;
+                                    transmitAnchor = root.findViewById(R.id.transmitBalloonTriger)
+                                    paymentAnchor = root.findViewById(R.id.paymentBalloonTrigger)
+                                    showTransmitTooltip()
+                                }
+                            }, 200)
+                        }
+                        binding.shimmerFrameLayout.stopShimmerAnimation()
+                        binding.shimmerFrameLayout.gone(false)
+                    }catch (e: Exception) {
+                        e.printStackTrace()
                     }
-
-                    if (it.second && !haveconnect) {
-                        Handler().postDelayed({
-                            val position =
-                                (binding.premisesList.getLayoutManager() as LinearLayoutManager).findFirstVisibleItemPosition()
-                            var viewholder =
-                                binding.premisesList.findViewHolderForAdapterPosition(position)
-
-                            (viewholder!!.itemView as ConstraintLayout)?.let {
-                                val root = it;
-                                transmitAnchor = root.findViewById(R.id.transmitBalloonTriger)
-                                paymentAnchor = root.findViewById(R.id.paymentBalloonTrigger)
-                                showTransmitTooltip()
-                            }
-                        }, 200)
-                    }
-                    binding.shimmerFrameLayout.stopShimmerAnimation()
-                    binding.shimmerFrameLayout.gone(false)
                 }
             }
         }

@@ -1,32 +1,48 @@
 package com.patstudio.communalka.presentation.ui.main.payment
 
 import android.Manifest
+import android.R.attr
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.DownloadManager
+import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
+import android.provider.MediaStore
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.Toast
 import android.widget.Toolbar
 import androidx.appcompat.content.res.AppCompatResources.getColorStateList
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import androidx.core.view.setPadding
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
+import com.huxq17.download.DownloadProvider
+import com.huxq17.download.Pump
+import com.huxq17.download.core.DownloadInfo
+import com.huxq17.download.core.DownloadListener
 import com.patstudio.communalka.BuildConfig
 import com.patstudio.communalka.R
 import com.patstudio.communalka.common.utils.Event
+import com.patstudio.communalka.data.model.PaymentHistoryModel
 import com.patstudio.communalka.databinding.FragmentAboutAppBinding
 import com.patstudio.communalka.databinding.FragmentPaymentsBinding
 import com.patstudio.communalka.databinding.FragmentPersonalInfoBinding
@@ -45,6 +61,14 @@ import dp
 import kotlinx.android.synthetic.main.fragment_payments.*
 import roundOffTo2DecPlaces
 import roundOffTo2DecPlacesSecond
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.IOException
+import java.io.OutputStream
+import android.R.attr.src
+import android.R.attr.src
+import android.webkit.WebView
+import android.webkit.WebViewClient
 
 
 class PaymentsFragment : Fragment() {
@@ -54,6 +78,12 @@ class PaymentsFragment : Fragment() {
     private val viewModel by sharedViewModel<PaymentsViewModel>()
     private val mainViewModel by sharedViewModel<MainViewModel>()
     private lateinit var paymentsAdapter: PaymentHistoryAdapter
+    private lateinit var paymentHistoryModel: PaymentHistoryModel
+    private lateinit var receiptAction: BottomSheetDialog
+    private lateinit var receiptFullAction: BottomSheetDialog
+    private lateinit var receiptEmailDialog: BottomSheetDialog
+
+    private val REQUEST_READ_EXTERNAL = 111
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,6 +92,71 @@ class PaymentsFragment : Fragment() {
 
         _binding = FragmentPaymentsBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode) {
+            REQUEST_READ_EXTERNAL -> {
+
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                     Pump.newRequest("https://receipts.ru/Home/Download"+paymentHistoryModel.receipt.url.split("receipts.ru")[1])
+                .listener(object : DownloadListener() {
+                    override fun onSuccess() {
+                        receiptAction.dismiss()
+                        val downloadFile = File(downloadInfo.filePath)
+                        Log.d("Size", "file "+ downloadInfo.completedSize)
+                        Log.d("file", "path ${downloadFile.path}")
+                        writeToFile(requireContext(), downloadFile.name, downloadFile)
+                        startActivity( Intent(DownloadManager.ACTION_VIEW_DOWNLOADS));
+                    }
+                    override fun onFailed() {}
+                    override fun onProgress(progress: Int) {
+                        val downloadInfo: DownloadInfo = downloadInfo
+
+
+                    }
+                }).submit()
+                } else {
+                    receiptAction.dismiss()
+                    Toast.makeText(requireContext(),"Требуется разрешение для доступа к файлам.", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    fun writeToFile(applicationContext: Context, filename: String, data: File) {
+
+
+
+        try {
+            val resolver = applicationContext.contentResolver
+            val values = ContentValues()
+            values.put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
+            values.put(MediaStore.MediaColumns.MIME_TYPE, "application/pdf")
+            values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+            val uri = resolver.insert(MediaStore.Files.getContentUri("external"), values)
+
+            val os: OutputStream? = uri?.let { resolver.openOutputStream(it,"wt") }
+
+            if (os != null) {
+                os.write(data.readBytes())
+                os.flush()
+                os.close()
+            }
+
+
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
     }
 
 
@@ -78,9 +173,48 @@ class PaymentsFragment : Fragment() {
           viewModel.actionReceipt.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                    val intent = Intent(Intent.ACTION_VIEW)
-                    intent.data = Uri.parse(it.receipt.url)
-                    startActivity(intent)
+                    paymentHistoryModel = it
+                    val root = layoutInflater.inflate(R.layout.layout_action_receipt, null)
+                    receiptAction = BottomSheetDialog(requireContext(), R.style.AppBottomSheetDialogTheme)
+                    receiptAction.setContentView(root)
+                    receiptAction.findViewById<View>(R.id.downloadReceipt)?.setOnClickListener {
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            requestPermissions(
+                                arrayOf(
+                                    Manifest.permission.ACCESS_MEDIA_LOCATION,
+                                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                                ), REQUEST_READ_EXTERNAL
+                            )
+                        } else {
+                            requestPermissions(
+                                arrayOf(
+                                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                                ), REQUEST_READ_EXTERNAL
+                            )
+                        }
+                    }
+                    receiptAction.findViewById<View>(R.id.sendEmail)?.setOnClickListener {
+                        viewModel.selectEmail()
+                    }
+                    receiptAction.findViewById<View>(R.id.openReceipt)?.setOnClickListener {
+                        receiptAction.dismiss()
+                        mainViewModel.showReceipt(true)
+                        binding.container.visibility = View.GONE
+                        binding.receiptContainer.visibility = View.VISIBLE
+                        binding.web.settings.javaScriptEnabled = true
+
+                        binding.web.webViewClient = object : WebViewClient() {
+                            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+                                view?.loadUrl(url!!)
+                                return true
+                            }
+                        }
+                        binding.web.loadUrl(paymentHistoryModel.receipt.url)
+
+                    }
+                    receiptAction.show()
+
                 }
             }
         }
@@ -180,11 +314,82 @@ class PaymentsFragment : Fragment() {
                 }
             }
         }
+
+        viewModel.dialogEmailSend.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    receiptAction?.let {
+                        it.dismiss()
+                    }
+                    val root = layoutInflater.inflate(R.layout.layout_email_receipt, null)
+                    receiptEmailDialog =
+                        BottomSheetDialog(requireContext(), R.style.AppBottomSheetDialogTheme)
+                    receiptEmailDialog.setContentView(root)
+                    receiptEmailDialog.findViewById<View>(R.id.send)?.setOnClickListener {
+                        viewModel.sendReceiptTo(receiptEmailDialog.findViewById<EditText>(R.id.email_value)!!.text.toString())
+                    }
+                    receiptEmailDialog.show()
+                }
+            }
+        }
+
+        viewModel.dialogEmailSendError.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {}
+
+                receiptEmailDialog.findViewById<EditText>(R.id.email_value)?.let {
+                    it.error = "Вы неправильно указали почту!"
+                }
+            }
+
+        }
+        viewModel.toastMessage.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    receiptEmailDialog.dismiss()
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
     }
 
     private fun initListeners() {
         binding.paymentButton.setOnClickListener {
             findNavController().navigate(R.id.toPlacementPayment)
+        }
+        binding.close.setOnClickListener {
+            mainViewModel.showReceipt(false)
+            binding.container.visibility = View.VISIBLE
+            binding.receiptContainer.visibility = View.GONE
+
+        }
+        binding.menu.setOnClickListener {
+            val root = layoutInflater.inflate(R.layout.layout_action_full_receipt, null)
+            receiptFullAction = BottomSheetDialog(requireContext(), R.style.AppBottomSheetDialogTheme)
+            receiptFullAction.setContentView(root)
+            receiptFullAction.findViewById<View>(R.id.downloadReceipt)?.setOnClickListener {
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    requestPermissions(
+                        arrayOf(
+                            Manifest.permission.ACCESS_MEDIA_LOCATION,
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                        ), REQUEST_READ_EXTERNAL
+                    )
+                } else {
+                    requestPermissions(
+                        arrayOf(
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                        ), REQUEST_READ_EXTERNAL
+                    )
+                }
+            }
+            receiptFullAction.findViewById<View>(R.id.sendEmail)?.setOnClickListener {
+                viewModel.selectEmail()
+            }
+
+            receiptFullAction.show()
+
         }
     }
 
@@ -192,6 +397,8 @@ class PaymentsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.updateFilters()
+
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

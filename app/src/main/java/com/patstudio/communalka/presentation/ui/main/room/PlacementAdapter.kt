@@ -58,8 +58,6 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
 
             var fio = placement.fio.split(" ");
 
-            Log.d("PlacementADapter","fio ${fio}")
-
             try {
                 var charArray = ""
 

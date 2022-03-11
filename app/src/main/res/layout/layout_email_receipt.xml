@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp"
+    android:background="@drawable/background_rounded_corners">
+
+    <View
+        android:id="@+id/decorator"
+        android:layout_width="30dp"
+        android:layout_height="3dp"
+        android:background="#D7D7D7"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/profileTitle"
+        style="@style/TextBold1"
+        android:layout_width="match_parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/robotobold"
+        android:layout_marginTop="16dp"
+        android:text="Введите почту, на которую отправить чек"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/decorator"/>
+
+
+
+    <TextView
+        android:id="@+id/email_text"
+        style="@style/TextBody1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/robotobold"
+        android:text="Почта"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profileTitle" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/email_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/gray_placeholder"
+        android:textSize="16sp"
+        android:theme="@style/EditTextBottomLine"
+        android:inputType="textFilter"
+        android:paddingEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/email_text" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/send"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/dark_blue"
+        android:fontFamily="@font/robotoregular"
+        android:padding="8dp"
+        app:cornerRadius="8dp"
+        android:text="Отправить чек"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/email_value" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
