@@ -81,7 +81,7 @@ class PaymentsFragment : Fragment() {
     private lateinit var paymentHistoryModel: PaymentHistoryModel
     private lateinit var receiptAction: BottomSheetDialog
     private lateinit var receiptFullAction: BottomSheetDialog
-    private lateinit var receiptEmailDialog: BottomSheetDialog
+    private  var receiptEmailDialog: BottomSheetDialog? = null
 
     private val REQUEST_READ_EXTERNAL = 111
 
@@ -105,22 +105,17 @@ class PaymentsFragment : Fragment() {
             REQUEST_READ_EXTERNAL -> {
 
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
                      Pump.newRequest("https://receipts.ru/Home/Download"+paymentHistoryModel.receipt.url.split("receipts.ru")[1])
                 .listener(object : DownloadListener() {
                     override fun onSuccess() {
                         receiptAction.dismiss()
                         val downloadFile = File(downloadInfo.filePath)
-                        Log.d("Size", "file "+ downloadInfo.completedSize)
-                        Log.d("file", "path ${downloadFile.path}")
                         writeToFile(requireContext(), downloadFile.name, downloadFile)
                         startActivity( Intent(DownloadManager.ACTION_VIEW_DOWNLOADS));
                     }
                     override fun onFailed() {}
                     override fun onProgress(progress: Int) {
                         val downloadInfo: DownloadInfo = downloadInfo
-
-
                     }
                 }).submit()
                 } else {
@@ -132,9 +127,6 @@ class PaymentsFragment : Fragment() {
     }
 
     fun writeToFile(applicationContext: Context, filename: String, data: File) {
-
-
-
         try {
             val resolver = applicationContext.contentResolver
             val values = ContentValues()
@@ -142,16 +134,12 @@ class PaymentsFragment : Fragment() {
             values.put(MediaStore.MediaColumns.MIME_TYPE, "application/pdf")
             values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
             val uri = resolver.insert(MediaStore.Files.getContentUri("external"), values)
-
             val os: OutputStream? = uri?.let { resolver.openOutputStream(it,"wt") }
-
             if (os != null) {
                 os.write(data.readBytes())
                 os.flush()
                 os.close()
             }
-
-
         } catch (e: FileNotFoundException) {
             e.printStackTrace()
         } catch (e: IOException) {
@@ -159,6 +147,10 @@ class PaymentsFragment : Fragment() {
         }
     }
 
+    private fun showSendToReceipt() {
+        binding.sendReceiptToEmail.visibility = View.VISIBLE
+        binding.paymentButton.visibility = View.GONE
+    }
 
     private fun initObservers() {
         viewModel.payments.observe(viewLifecycleOwner) {
@@ -227,6 +219,19 @@ class PaymentsFragment : Fragment() {
                 }
             }
         }
+        viewModel.progressSend.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                  if (it) {
+                      binding.progressSend.visibility = View.VISIBLE
+                      binding.sendReceiptToEmail.visibility = View.GONE
+                  } else {
+                      binding.progressSend.visibility = View.GONE
+                      binding.sendReceiptToEmail.visibility = View.VISIBLE
+                  }
+                }
+            }
+        }
 
         viewModel.openFilter.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
@@ -240,6 +245,7 @@ class PaymentsFragment : Fragment() {
         viewModel.confirmFilterModel.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
+                    var disableEmail = true
                     binding.chipGroup.removeAllViews()
                     if (it != null) {
                         it.date?.let {
@@ -253,6 +259,8 @@ class PaymentsFragment : Fragment() {
                                 viewModel.removeDateFromFilter()
                             }
                             binding.chipGroup.addView(chip)
+                            showSendToReceipt()
+                            disableEmail = false
                         }
                         it.placement.second.map { placement ->
                             if (placement.selected) {
@@ -266,6 +274,8 @@ class PaymentsFragment : Fragment() {
                                     viewModel.removePlacementFromFilter(placement)
                                 }
                                 binding.chipGroup.addView(chip)
+                                showSendToReceipt()
+                                disableEmail = false
                             }
                         }
                         it.suppliers.second.map { supplier ->
@@ -280,6 +290,8 @@ class PaymentsFragment : Fragment() {
                                     viewModel.removeSupplierFromFilter(supplier)
                                 }
                                 binding.chipGroup.addView(chip)
+                                showSendToReceipt()
+                                disableEmail = false
                             }
                         }
                         it.services.second.map { service ->
@@ -294,7 +306,13 @@ class PaymentsFragment : Fragment() {
                                     viewModel.removeServiceFromFilter(service)
                                 }
                                 binding.chipGroup.addView(chip)
+                                showSendToReceipt()
+                                disableEmail = false
                             }
+                        }
+                        if (disableEmail) {
+                            binding.sendReceiptToEmail.visibility = View.GONE
+                            binding.paymentButton.visibility = View.VISIBLE
                         }
                     }
                 }
@@ -324,30 +342,60 @@ class PaymentsFragment : Fragment() {
                     val root = layoutInflater.inflate(R.layout.layout_email_receipt, null)
                     receiptEmailDialog =
                         BottomSheetDialog(requireContext(), R.style.AppBottomSheetDialogTheme)
-                    receiptEmailDialog.setContentView(root)
-                    receiptEmailDialog.findViewById<View>(R.id.send)?.setOnClickListener {
-                        viewModel.sendReceiptTo(receiptEmailDialog.findViewById<EditText>(R.id.email_value)!!.text.toString())
+                    receiptEmailDialog!!.setContentView(root)
+
+                    receiptEmailDialog!!.findViewById<View>(R.id.send)?.setOnClickListener {
+                        viewModel.sendReceiptTo(receiptEmailDialog!!.findViewById<EditText>(R.id.email_value)!!.text.toString())
                     }
-                    receiptEmailDialog.show()
+                    receiptEmailDialog!!.findViewById<EditText>(R.id.email_value)!!.setText(it)
+                    receiptEmailDialog!!.show()
                 }
             }
         }
 
         viewModel.dialogEmailSendError.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
-                it.getContentIfNotHandled {}
-
-                receiptEmailDialog.findViewById<EditText>(R.id.email_value)?.let {
-                    it.error = "Вы неправильно указали почту!"
+                it.getContentIfNotHandled {
+                    receiptEmailDialog!!.findViewById<EditText>(R.id.email_value)?.let {
+                        it.error = "Вы неправильно указали почту!"
+                    }
                 }
             }
-
         }
+
+        viewModel.emailForFilter.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val root = layoutInflater.inflate(R.layout.layout_email_receipt, null)
+                    receiptEmailDialog =
+                        BottomSheetDialog(requireContext(), R.style.AppBottomSheetDialogTheme)
+                    receiptEmailDialog!!.setContentView(root)
+
+                    receiptEmailDialog!!.findViewById<View>(R.id.send)?.setOnClickListener {
+                        viewModel.sendReceiptTo(receiptEmailDialog!!.findViewById<EditText>(R.id.email_value)!!.text.toString())
+                    }
+                    receiptEmailDialog!!.findViewById<EditText>(R.id.email_value)!!.setText(it)
+                    receiptEmailDialog!!.show()
+                }
+            }
+        }
+
         viewModel.toastMessage.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                    receiptEmailDialog.dismiss()
+                    if (receiptEmailDialog != null)
+                        receiptEmailDialog!!.dismiss()
                     Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+        viewModel.selectShare.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled {
+                    val sharingIntent = Intent(Intent.ACTION_SEND)
+                    sharingIntent.type = "text/plain"
+                    sharingIntent.putExtra(Intent.EXTRA_TEXT, it)
+                    startActivity(Intent.createChooser(sharingIntent, "Кому отправить"))
                 }
             }
         }
@@ -357,12 +405,19 @@ class PaymentsFragment : Fragment() {
         binding.paymentButton.setOnClickListener {
             findNavController().navigate(R.id.toPlacementPayment)
         }
+        binding.share.setOnClickListener {
+            viewModel.selectShare()
+        }
+        binding.sendReceiptToEmail.setOnClickListener {
+            viewModel.sendReceiptToEmail()
+        }
         binding.close.setOnClickListener {
             mainViewModel.showReceipt(false)
             binding.container.visibility = View.VISIBLE
             binding.receiptContainer.visibility = View.GONE
 
         }
+
         binding.menu.setOnClickListener {
             val root = layoutInflater.inflate(R.layout.layout_action_full_receipt, null)
             receiptFullAction = BottomSheetDialog(requireContext(), R.style.AppBottomSheetDialogTheme)
@@ -389,7 +444,6 @@ class PaymentsFragment : Fragment() {
             }
 
             receiptFullAction.show()
-
         }
     }
 
@@ -397,8 +451,6 @@ class PaymentsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.updateFilters()
-
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

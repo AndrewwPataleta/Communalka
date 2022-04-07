@@ -42,8 +42,16 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
     private var _updateLists: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val updateLists: LiveData<Event<Boolean>> = _updateLists
 
+    private var _progressSend: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val progressSend: LiveData<Event<Boolean>> = _progressSend
+
+    private var paymentHistoryModel: PaymentHistoryModel? = null
+
     private var _filterModel: MutableLiveData<Event<PaymentFilterModel>> = MutableLiveData()
     val filterModel: LiveData<Event<PaymentFilterModel>> = _filterModel
+
+    private var _emailForFilter: MutableLiveData<Event<String>> = MutableLiveData()
+    val emailForFilter: LiveData<Event<String>> = _emailForFilter
 
     private var _totalPaymentAmount: MutableLiveData<Event<Float>> = MutableLiveData()
     val totalPaymentAmount: LiveData<Event<Float>> = _totalPaymentAmount
@@ -54,8 +62,8 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
     private var _actionReceipt: MutableLiveData<Event<PaymentHistoryModel>> = MutableLiveData()
     val actionReceipt: LiveData<Event<PaymentHistoryModel>> = _actionReceipt
 
-    private var _dialogEmailSend: MutableLiveData<Event<Boolean>> = MutableLiveData()
-    val dialogEmailSend: LiveData<Event<Boolean>> = _dialogEmailSend
+    private var _dialogEmailSend: MutableLiveData<Event<String>> = MutableLiveData()
+    val dialogEmailSend: LiveData<Event<String>> = _dialogEmailSend
 
     private var _dialogEmailSendError: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val dialogEmailSendError: LiveData<Event<Boolean>> = _dialogEmailSendError
@@ -63,6 +71,8 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
     private var _toastMessage: MutableLiveData<Event<String>> = MutableLiveData()
     val toastMessage: LiveData<Event<String>> = _toastMessage
 
+    private var _selectShare: MutableLiveData<Event<String>> = MutableLiveData()
+    val selectShare: LiveData<Event<String>> = _selectShare
 
     private var _backScreen: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val backScreen: LiveData<Event<Boolean>> = _backScreen
@@ -76,9 +86,12 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
     }
 
 
-    private fun uploadFilter() {
+    private fun uploadFilter(withHistory: Boolean) {
         viewModelScope.launch(dispatcherProvider.io) {
             userRepository.getSuppliers("")
+                .onStart {
+                    _showProgress.postValue(Event(true))
+                }
                 .catch { it.printStackTrace() }
                 .collect {
                     when (it) {
@@ -107,7 +120,8 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
                                                             var services: ArrayList<Service> = gson.fromJson(it.data.data!!.asJsonObject.get("services"), turnsType)
                                                             filter = PaymentFilterModel(null, suppliers = Pair(true,suppliers), placement = Pair(true,placementList.placements), services = Pair(true,services))
                                                             _filterModel.postValue(Event(filter!!))
-                                                            getPaymentHistory()
+                                                            if (withHistory)
+                                                                getPaymentHistory()
                                                         }
                                                         is Result.ErrorResponse -> { }
                                                         is Result.Error -> { }
@@ -128,7 +142,8 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
 
     fun updateFilters() {
         if (filter == null) {
-            uploadFilter()
+            resetFilter()
+            uploadFilter(true)
         } else {
             _filterModel.postValue(Event(filter!!))
             getPaymentHistory()
@@ -142,11 +157,18 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
     }
 
     fun selectEmail() {
-        _dialogEmailSend.postValue(Event(true))
+        viewModelScope.launch(dispatcherProvider.io) {
+            _dialogEmailSend.postValue(Event(userRepository.getLastAuthUser().email))
+        }
+
     }
 
     fun selectOpen() {
 
+    }
+
+    fun selectShare() {
+        _selectShare.postValue(Event(paymentHistoryModel!!.receipt.url))
     }
 
     fun resetFilter() {
@@ -163,6 +185,7 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
                 it.selected = false
             }
             _filterModel.postValue(Event(filter!!))
+            uploadFilter(false)
         }
     }
 
@@ -194,6 +217,67 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
             filter!!.placement = Pair(!filter!!.placement.first, filter!!.placement.second)
             _filterModel.postValue(Event(filter!!))
         }
+    }
+
+
+    fun sendReceiptToEmail() {
+        viewModelScope.launch(dispatcherProvider.io) {
+            _emailForFilter.postValue(Event(userRepository.getLastAuthUser().email))
+        }
+
+//        viewModelScope.launch(dispatcherProvider.io) {
+//            var placemets = confirmFilter?.placement?.second?.filter { it.selected }
+//            var placementsId = placemets?.map {
+//                it.id
+//            }
+//
+//            var suppliers = confirmFilter?.suppliers?.second?.filter { it.selected }
+//            var suppliersId = suppliers?.map {
+//                it.id
+//            }
+//
+//            var services = confirmFilter?.services?.second?.filter { it.selected }
+//            var servicesId = services?.map {
+//                it.id
+//            }
+//
+//            var convertedDateStart = confirmFilter?.date?.first?.let {
+//                convertLongToFilterTime(it)
+//            }
+//
+//            var convertedDateEnd = confirmFilter?.date?.second?.let {
+//                convertLongToFilterTime(it)
+//            }
+//
+//            viewModelScope.launch(dispatcherProvider.io) {
+//                userRepository.sendReceiptToEmail(convertedDateStart, convertedDateEnd, placement = placementsId, services = servicesId, suppliers = suppliersId, userRepository.getLastAuthUser().email)
+//                    .onStart { _progressSend.postValue(Event(true)) }
+//                    .catch {
+//                        it.printStackTrace()
+//                    }
+//                    .collect {
+//                        when (it) {
+//                            is Result.Success -> {
+//                                _toastMessage.postValue(Event("Чеки отправлены на почту"))
+//                                _progressSend.postValue(Event(false))
+//                            }
+//                            is Result.Error -> {
+//
+//                            }
+//                            is Result.ErrorResponse -> {
+//                                when(it.data.status) {
+//                                    "fail" -> {
+//                                        _progressSend.postValue(Event(false))
+//                                        _toastMessage.postValue(Event(it.data.message))
+//                                    }
+//                                }
+//                            } }
+//
+//                    }
+//            }
+//        }
+//
+//        }
     }
 
     fun sendReceiptTo(email: String) {
@@ -253,6 +337,7 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
     }
 
     fun selectActionReceipt(model: PaymentHistoryModel) {
+        paymentHistoryModel = model
         _actionReceipt.postValue(Event(model))
     }
 
@@ -321,16 +406,16 @@ class PaymentsViewModel(private val userRepository: UserRepository, private val 
                 it.id
             }
 
-            var services = confirmFilter?.services?.second?.filter { it.selected }
-            var servicesId = services?.map {
+            val services = confirmFilter?.services?.second?.filter { it.selected }
+            val servicesId = services?.map {
                 it.id
             }
 
-            var convertedDateStart = confirmFilter?.date?.first?.let {
+            val convertedDateStart = confirmFilter?.date?.first?.let {
                 convertLongToFilterTime(it)
             }
 
-            var convertedDateEnd = confirmFilter?.date?.second?.let {
+            val convertedDateEnd = confirmFilter?.date?.second?.let {
                 convertLongToFilterTime(it)
             }
 

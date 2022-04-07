@@ -319,7 +319,7 @@ class WelcomeFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        binding.premisesContainer.gone(false)
+       // binding.premisesContainer.gone(false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

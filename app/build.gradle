@@ -18,7 +18,8 @@ android {
         targetSdkVersion Integer.parseInt(ANDROID_TARGET_SDK_VERSION)
         versionCode Integer.parseInt(VERSION_CODE)
         versionName VERSION_NAME
-
+        setProperty("archivesBaseName", applicationId + "(" + versionName + ")")
+        archivesBaseName = "$applicationId($versionName)"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

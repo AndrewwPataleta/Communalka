@@ -322,45 +322,52 @@ class EditPhoneConfirmViewModel(private val userRepository: UserRepository, priv
 
     fun setSmsCode(smsCode: String) {
         this.smsCode = smsCode
-        viewModelScope.launch(dispatcherProvider.io){
-            userRepository.updatePhoneConfirm(phone, smsCode)
-                .collect {
-                    when (it) {
-                        is Result.Success -> {
-                            userRepository.updatePhone(phone, user.id)
-                            userMessageWithoutButton.postValue(Event("Изменения сохранены"))
-                            _finish.postValue(Event(true))
-                        }
-                        is Result.ErrorResponse -> {
-                            when(it.data.status) {
-                                "error" -> {
-                                    var confirmErrorCode = gson.fromJson(it.data.data, ConfirmFormError::class.java)
-                                    confirmErrorCode?.let {
-                                        it.code?.let {
-                                            userMessage.postValue(Event(it))
+        if (this.smsCode.length == 6) {
+            viewModelScope.launch(dispatcherProvider.io) {
+                userRepository.updatePhoneConfirm(phone, smsCode)
+                    .onStart { progressPhoneSending.postValue(true) }
+                    .collect {
+                        when (it) {
+                            is Result.Success -> {
+                                userRepository.updatePhone(phone, user.id)
+                                userMessageWithoutButton.postValue(Event("Изменения сохранены"))
+                                _finish.postValue(Event(true))
+                            }
+                            is Result.ErrorResponse -> {
+                                when (it.data.status) {
+                                    "fail" -> {
+                                        var confirmErrorCode = gson.fromJson(
+                                            it.data.data,
+                                            ConfirmFormError::class.java
+                                        )
+                                        confirmErrorCode?.let {
+                                            it.code?.let {
+                                                userMessage.postValue(Event(it))
+                                            }
+
                                         }
 
-                                    }
+                                        var confirmError =
+                                            gson.fromJson(it.data.data, LoginFormError::class.java)
+                                        confirmError.email?.let {
+                                            userForm.email = ""
+                                            userMessageWithoutButton.postValue(Event(confirmError.email[0]))
+                                        }
 
-                                    var confirmError = gson.fromJson(it.data.data, LoginFormError::class.java)
-                                    confirmError.email?.let {
-                                        userForm.email = ""
-                                        userMessageWithoutButton.postValue(Event(confirmError.email[0]))
+                                        progressPhoneSending.postValue(false)
+                                        clearSmsForm.postValue(Event(true))
                                     }
-
-                                    progressPhoneSending.postValue(false)
-                                    clearSmsForm.postValue(Event(true))
                                 }
                             }
-                        }
-                        is Result.Error -> {
-                            clearSmsForm.postValue(Event(true))
-                            userMessage.postValue(Event("Ошибка"))
-                            progressPhoneSending.postValue(false)
+                            is Result.Error -> {
+                                clearSmsForm.postValue(Event(true))
+                                userMessage.postValue(Event("Ошибка"))
+                                progressPhoneSending.postValue(false)
 
+                            }
                         }
                     }
-                }
+            }
         }
     }
 

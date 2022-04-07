@@ -67,4 +67,5 @@
     <string name="email_hint">ivanov@gmail.com</string>
     <string name="user_licence_text_second">приложения \"Коммуналка\"</string>
     <string name="create_new_user">Добавить нового пользователя</string>
+    <string name="send_receipt_to_email">Отправить чеки на почту</string>
 </resources>

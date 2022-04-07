@@ -34,6 +34,8 @@ class ConsumptionHistoryViewModel(private val roomRepository: RoomRepository, pr
     private var _updatePosition: MutableLiveData<Event<Int>> = MutableLiveData()
     val updatePosition: LiveData<Event<Int>> = _updatePosition
 
+    private var _shareLink: MutableLiveData<Event<String>> = MutableLiveData()
+    val shareLink: LiveData<Event<String>> = _shareLink
 
     private var _pdfDownload: MutableLiveData<Event<Pair<String,String>>> = MutableLiveData()
     val pdfDownload: LiveData<Event<Pair<String,String>>> = _pdfDownload
@@ -76,9 +78,11 @@ class ConsumptionHistoryViewModel(private val roomRepository: RoomRepository, pr
     }
 
     fun selectDownloadPdf(consumptionHistory: ConsumptionHistory) {
-
-
         _pdfDownload.postValue(Event(Pair(currentMeter.id, consumptionHistory.period_string)))
+    }
+
+    fun selectShare() {
+        //_shareLink.postValue(Event(cur))
     }
 
     fun updateOpenedTable(consumptionHistory: ConsumptionHistory, position: Int) {

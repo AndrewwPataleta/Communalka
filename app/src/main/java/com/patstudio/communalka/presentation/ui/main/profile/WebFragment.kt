@@ -59,6 +59,10 @@ class WebFragment : Fragment() {
         return binding.root
     }
 
+    private fun initView() {
+
+    }
+
     private fun initObserver() {
         viewModel.pdfBytes.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {

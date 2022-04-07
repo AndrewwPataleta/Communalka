@@ -29,6 +29,15 @@
         app:layout_constraintStart_toEndOf="@+id/close"
         app:layout_constraintBottom_toBottomOf="@id/close"/>
 
+    <ImageView
+        android:id="@+id/share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_share"
+        app:layout_constraintEnd_toStartOf="@id/menu"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="@id/close"
+        app:layout_constraintBottom_toBottomOf="@id/close"/>
 
     <ImageView
         android:id="@+id/menu"

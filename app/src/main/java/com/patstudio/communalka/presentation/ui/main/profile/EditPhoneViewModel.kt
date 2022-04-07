@@ -64,6 +64,11 @@ class EditPhoneViewModel(private val userRepository: UserRepository, private val
             valid = false
         }
 
+        if (userPhone.compareTo(user.phone) == 0) {
+            _userPhoneError.postValue(Event("Вы неправильно указали номер телефона!"))
+            valid = false
+        }
+
         return valid
     }
 
