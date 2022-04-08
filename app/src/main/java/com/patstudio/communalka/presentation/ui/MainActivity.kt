@@ -66,7 +66,6 @@ class MainActivity : AppCompatActivity() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     it?.let {
-                        Log.d("MainActivity", "it ${it}")
                         binding.toolbar.title = it.first
                         binding.toolbar.subtitle = it.second.trim()
                     }
@@ -341,7 +340,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.d("Result", data.toString())
     }
 
     override fun onSupportNavigateUp(): Boolean {

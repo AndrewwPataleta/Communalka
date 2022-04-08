@@ -53,7 +53,6 @@ class PersonalInfoViewModel(private val userRepository: UserRepository, private 
     }
 
     fun setUserAvatar(currentPath: Uri) {
-        Log.d("PersonalInfo", currentPath.path!!+" "+currentPath+" "+currentPath.toString())
         this.currentPath = currentPath.toString()
         imageURI.postValue(Event(currentPath))
     }

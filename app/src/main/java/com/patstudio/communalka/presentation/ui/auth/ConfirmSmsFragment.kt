@@ -48,16 +48,12 @@ class ConfirmSmsFragment : Fragment() {
         viewModel.getAvailableSendSms().observe(viewLifecycleOwner,  {
 
             if (!it.hasBeenHandled.get()) {
-                Log.d("ConfirmSmsFragment", "available sms peek " + it.peekContent())
                 try {
                     it.getContentIfNotHandled {
                         if (it) {
-                            Log.d("ConfirmSmsFragment", "gone start")
                             binding.repeatSendAfterText.visibility = View.GONE
                             binding.repeatSendAfterValue.visibility = View.GONE
                             binding.repeatSmsSendBtn.visibility = View.VISIBLE
-
-                            Log.d("ConfirmSmsFragment", "gone ok")
                         } else {
                             binding.repeatSendAfterText.visibility = View.VISIBLE
                             binding.repeatSendAfterValue.visibility = View.VISIBLE
@@ -67,21 +63,13 @@ class ConfirmSmsFragment : Fragment() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-//                it.getContentIfNotHandled {
-//                    try {
-//                        Log.d("ConfirmSmsFragment","available sms "+it)
-//
-//                    } catch (e: Exception) {}
-//                }
             }
         });
 
         viewModel.getCountDownTimer().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                    Log.d("ConfirmSmsFramgment", "set timer "+it)
                     try {
-                      //  binding.repeatSmsSendBtn.gone(false)
                         binding.repeatSendAfterValue.text = it
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -286,7 +274,6 @@ class ConfirmSmsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Log.d("ConfirmSmsFragment","destoy view")
         _binding = null
     }
 }

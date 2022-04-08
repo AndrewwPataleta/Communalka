@@ -272,7 +272,6 @@ class EditRoomFragment : Fragment() {
 
                     binding.addressEdit.setAdapter(adapter)
                     if (it.first) {
-                        Log.d("EditRoom", "first drop ")
                         binding.addressEdit.showDropDown()
                     }
 
@@ -317,7 +316,6 @@ class EditRoomFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     val path = getString(R.string.static_address_url, it.first, it.second)
-                    Log.d("AddRoomFragment", "path "+path)
                     Glide.with(requireActivity()).load(path).into(binding.addressLocation);
                 }
             }
@@ -326,7 +324,6 @@ class EditRoomFragment : Fragment() {
         viewModel.getProgressCreateRoom().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                    Log.d("AddRoomFragment", "progress is "+it)
                     if (it) {
                         binding.saveRoom.gone(false)
                         binding.progress.visible(false)
@@ -343,8 +340,6 @@ class EditRoomFragment : Fragment() {
                 it.getContentIfNotHandled {
                     binding.attachRoomImage.setPadding(0)
                     binding.attachRoomImage.setImageURI(it)
-                    Log.d("AddRoomFragment", "URI "+it.toString())
-                  //  Glide.with(requireActivity()).load(it).into(binding.attachRoomImage);
                 }
             }
         }
@@ -371,7 +366,6 @@ class EditRoomFragment : Fragment() {
         viewModel.getCurrentPlacement().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                    Log.d("EditRoomFragment", it.toString())
                     binding.model = it
                     binding.totalAreaEdit.setText(it.total_area.toString())
                     binding.livingSpaceEdit.setText(it.living_area.toString())
@@ -461,7 +455,6 @@ class EditRoomFragment : Fragment() {
                 if (binding.addressEdit.isPerformingCompletion()) {
 
                 } else {
-                    Log.d("EditRoom","Change to "+charSequence.toString())
                     viewModel.setAddressName(charSequence.toString())
                 }
             }
@@ -481,7 +474,6 @@ class EditRoomFragment : Fragment() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.d("EditRoom","req code ${requestCode} permis ${permissions} reslt ${grantResults}")
         when(requestCode) {
             REQUEST_READ_EXTERNAL -> {
                 viewModel.haveReadExternalPermission(grantResults[0] == PackageManager.PERMISSION_GRANTED)

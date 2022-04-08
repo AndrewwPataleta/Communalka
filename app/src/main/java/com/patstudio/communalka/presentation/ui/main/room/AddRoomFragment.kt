@@ -255,7 +255,6 @@ class AddRoomFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     val path = getString(R.string.static_address_url, it.first, it.second)
-                    Log.d("AddRoomFragment", "path "+path)
                     Glide.with(requireActivity()).load(path).into(binding.addressLocation);
                 }
             }
@@ -264,7 +263,6 @@ class AddRoomFragment : Fragment() {
         viewModel.getProgressCreateRoom().observe(this) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-                    Log.d("AddRoomFragment", "progress is "+it)
                     if (it) {
                         binding.saveRoom.gone(false)
                         binding.progressCreate.visible(false)
@@ -281,7 +279,6 @@ class AddRoomFragment : Fragment() {
                 it.getContentIfNotHandled {
                     binding.attachRoomImage.setPadding(0)
                     binding.attachRoomImage.setImageURI(it)
-                    Log.d("AddRoomFragment", "URI "+it.toString())
                   //  Glide.with(requireActivity()).load(it).into(binding.attachRoomImage);
                 }
             }

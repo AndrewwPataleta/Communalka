@@ -62,7 +62,6 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
    }
 
     fun setReadStoragePermission(readStoragePermission: Boolean) {
-        Log.d("WelcomeViewModel","read permission ${readStoragePermission}")
             viewModelScope.launch(dispatcherProvider.io) {
                 try {
                     delay(1000)
@@ -89,7 +88,6 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
     }
 
     private suspend fun updateInvoicesForPlacement(placements: ArrayList<Placement>, pos: Int) {
-        Log.d("WelcomeVIewModel", "pos ${pos}")
         if (pos <= placements.size-1) {
             var placement = placements.get(pos)
             roomRepository.getPlacementInvoice(placement)
@@ -104,13 +102,11 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
                     }
                 }
         } else {
-            Log.d("WelcomeViewModel", "post request")
             readStoragePermissionMutable.postValue(Event(true))
         }
     }
 
     private fun getUserPremises() {
-        Log.d("WelcomeViewModel", "get user premises")
         viewModelScope.launch(dispatcherProvider.io) {
             roomRepository.getUserPremises()
                 .onStart { _loadingPlacement.postValue(Event(true)) }
@@ -142,6 +138,7 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
                                 } else {
                                     userMutable.postValue(Event(user!!))
                                 }
+                                initGCMToken()
                             }
                             is Result.ErrorResponse -> { }
                             is Result.Error -> { }
@@ -161,7 +158,6 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
                 return@OnCompleteListener
             }
             val token = task.result
-            Log.d("FBToken", "task ${task.result}")
             viewModelScope.launch(dispatcherProvider.io) {
                 userRepository.setCurrentFbToken(token.toString())
                 var gcm = Gcm(registration_id = token.toString(), application_id = BuildConfig.APPLICATION_ID, active = true)
@@ -177,59 +173,47 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
     }
 
     fun initCurrentUser() {
-        Log.d("WelcomeViewModel", "init current")
         viewModelScope.launch(dispatcherProvider.io) {
             val it = userRepository.getLastAuthUser()
             user = it
             if (user != null) {
                     needEnterPin = !user!!.autoSignIn
-                    viewModelScope.launch(dispatcherProvider.io) {
-                        roomRepository.getServices()
-                            .collect {
-                                when (it) {
-                                    is Result.Success -> {
-                                        val type = object : TypeToken<List<Service>>() {}.type
-                                        var services: List<Service> = gson.fromJson(
-                                            it.data.data!!.asJsonObject.get("services"),
-                                            type
-                                        )
-                                        IconUtils.instance.services = services
-                                    }
-                                }
-                            }
-                    }
-                    initGCMToken()
-
                     if (needEnterPin && !typeAuthChanged) {
-
                         var userForm = UserForm(
-                            it.id,
-                            it.name,
-                            it.phone,
-                            it.email,
+                            user!!.id,
+                            user!!.name,
+                            user!!.phone,
+                            user!!.email,
                             "AUTH",
-                            it.token,
-                            it.refresh,
-                            fingerPrintSignIn = it.fingerPrintSignIn,
-                            autoSignIn = it.autoSignIn
+                            user!!.token,
+                            user!!.refresh,
+                            fingerPrintSignIn = user!!.fingerPrintSignIn,
+                            autoSignIn = user!!.autoSignIn
                         )
                         pinForm.postValue(Event(userForm))
-                    } else {
-                        getUserPremises()
                     }
+                    else {
+                        viewModelScope.launch(dispatcherProvider.io) {
+                            roomRepository.getServices()
+                                .collect {
+                                    when (it) {
+                                        is Result.Success -> {
+                                            val type = object : TypeToken<List<Service>>() {}.type
+                                            var services: List<Service> = gson.fromJson(
+                                                it.data.data!!.asJsonObject.get("services"),
+                                                type
+                                            )
+                                            IconUtils.instance.services = services
+                                            getUserPremises()
+                                        }
+                                    }
+                                }
+                        }
+                        }
+
             } else {
                 withoutUser.postValue(Event(true))
             }
-//            if (user != null) {
-//                else {
-//                    Log.d("WelcomeViewModel", it.toString())
-//                    userMutable.postValue(Event(it))
-//                    getUserPremises()
-//                }
-//            } else {
-//
-//            }
-
         }
     }
 
@@ -238,10 +222,8 @@ class WelcomeViewModel(private val userRepository: UserRepository, private val r
     }
 
     fun selectPayment(placement: Placement) {
-        Log.d("WelcomeViewModel", "placement ${userPlacement}")
         userPlacement.map {
             if (it.id.compareTo(placement.id) == 0) {
-                Log.d("Welcome","placement selected ${it}")
                 it.selected = true
             }
         }

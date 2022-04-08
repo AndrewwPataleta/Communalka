@@ -72,7 +72,6 @@ class LoginFragment : Fragment() {
         }
 
         viewModel.getLoginType().observe(this) {
-            Log.d("LoginFragment", "new type")
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                    when (it) {
@@ -82,35 +81,7 @@ class LoginFragment : Fragment() {
                            binding.phoneEdit.inputType = InputType.TYPE_CLASS_TEXT
                            binding.phoneEdit.hint = resources.getString(R.string.phone_hint)
                            binding.titleText.text = resources.getString(R.string.email_or_phone)
-//                           binding.phoneEdit.doBeforeTextChanged { text, start, count, after ->
-//                               text?.let { it ->
-//                                   if (it.trim().toString().compareTo("+7") == 0) {
-//                                       binding.phoneEdit.removeTextChangedListener(watcher)
-//                                       binding.phoneEdit.setText("")
-//
-//                                   //    watcher.removeFromTextView()
-//                                    //   binding.phoneEdit.inputType = InputType.TYPE_CLASS_TEXT
-//                                   }
-//                               }
-//                           }
-
                            binding.phoneEdit.doAfterTextChanged {
-
-                               it?.let { it ->
-
-//                                   if (it.length == 1) {
-//                                       Log.d("LoginFragment", "current "+it.length+" is digit "+it[0].isDigit())
-//                                       if (it[0].isDigit())  {
-//                                           binding.phoneEdit.setText("+"+it.toString())
-//                                           binding.phoneEdit.setSelection(binding.phoneEdit.text!!.length);
-//                                           binding.phoneEdit.setMaxLength(12)
-//                                           binding.phoneEdit.inputType = InputType.TYPE_CLASS_PHONE
-//                                       }
-//                                   } else if (it.length == 0) {
-//                                       binding.phoneEdit.setMaxLength(100)
-//                                       binding.phoneEdit.inputType = InputType.TYPE_CLASS_TEXT
-//                                   }
-                               }
                                viewModel.setPhoneNumber(binding.phoneEdit.text.toString())
                            }
 
@@ -204,7 +175,6 @@ class LoginFragment : Fragment() {
         initNavigationListeners()
         initObservers()
         arguments?.getString("type", "default").let {
-            Log.d("LoginFragment", "type "+it.toString())
             viewModel.setLoginType(it)
         }
 

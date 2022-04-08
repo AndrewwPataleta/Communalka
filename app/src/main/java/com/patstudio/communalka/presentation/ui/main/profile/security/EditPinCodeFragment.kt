@@ -46,7 +46,7 @@ class EditPinCodeFragment : Fragment() {
 
     private fun initObservers() {
        viewModel.getPinCode().observe(this) {
-           Log.d("PinCodeFragment", "pin "+it)
+
            when (it.length) {
 
                0 -> {

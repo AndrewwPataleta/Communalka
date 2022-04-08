@@ -56,7 +56,7 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
                     try {
                         userRepository.saveUserLocal(userForSave)
                         userRepository.updatePreviosAuthUser()
-                        userRepository.setLastLoginUser(userForSave)
+                    //    userRepository.setLastLoginUser(userForSave)
                         clearPinForm()
                         alertMessage.postValue(Event("PIN-код  установлен"))
                         user.postValue(Event(userForSave))
@@ -205,9 +205,6 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
          this.userForm = userForm
          enterMode = userForm.type
          currentPinCode = userRepository.getCurrentPinCode()
-
-         Log.d("PinCodeViewModel", "current pin code ${currentPinCode}")
-
          if (currentPinCode.length == 0) {
              enterMode = "INSTALL"
              pinCodeMode.postValue((Event(enterMode)))
@@ -226,21 +223,6 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
                  pinCodeMode.postValue((Event(enterMode)))
              }
          }
-
-//         when (enterMode.length) {
-//              -> {
-//
-//
-//             }
-//             "REPEAT" -> {
-//                 availableFingerPrint.postValue(false)
-//                 pinCodeMode.postValue((Event(enterMode)))
-//             }
-//             "AUTH" -> {
-//                 Log.d("PinCodeViewMode", "set user form")
-//
-//             }
-//         }
      }
 
     fun removeAllPin() {

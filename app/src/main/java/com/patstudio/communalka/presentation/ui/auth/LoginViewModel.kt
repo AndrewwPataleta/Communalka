@@ -33,8 +33,6 @@ class LoginViewModel(private val userRepository: UserRepository, private val gso
     private fun validateForm(): Boolean {
         when (loginType) {
             "default" -> {
-
-                Log.d("LoginViewModel", "phone number "+phoneNumber+" validate "+(phoneNumber.length == 12)+" "+phoneNumber.isEmailValid())
                 return if (phoneNumber.length > 11 && phoneNumber.length <= 12 || phoneNumber.isEmailValid()) {
                     true
                 } else {
@@ -51,7 +49,6 @@ class LoginViewModel(private val userRepository: UserRepository, private val gso
                 }
             }
             "email" -> {
-                Log.d("LoginViewModel", "email validate "+email)
                 return if (email.isEmailValid()) {
                     true
                 } else {
@@ -83,25 +80,18 @@ class LoginViewModel(private val userRepository: UserRepository, private val gso
                        progressPhoneSending.postValue(true)
                        disableNavigation.postValue(true)
                    }
-                   .catch {
-                       Log.d("LoginViewModel", it.localizedMessage)
-                   }
                    .collect {
                        when (it) {
                            is Result.Success -> {
                                when(it.data.status) {
                                    "success" -> {
                                        userRepository.sendCode(value)
-                                           .catch {
-                                               Log.d("LoginViewModel", it.localizedMessage)
-                                           }
                                            .collect {
                                                when (it) {
                                                    is Result.Success -> {
                                                        when(it.data.status) {
                                                            "fail" -> {
                                                                var loginError = gson.fromJson(it.data.data, LoginFormError::class.java)
-                                                               Log.d("LoginViewModel", loginError.toString())
                                                            }
                                                            "success" -> {
                                                                confirmSmsParams.postValue(Event(ConfirmSmsParams(value,false)))

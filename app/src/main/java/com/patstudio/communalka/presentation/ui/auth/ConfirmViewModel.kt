@@ -52,8 +52,6 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
 
             timerSms = object: CountDownTimer(TIME_FOR_REPEAT_SMS_SEND.toLong(), 1000) {
                 override fun onTick(millisUntilFinished: Long) {
-
-                    Log.d("ConfirmSmsCode", millisUntilFinished.toString())
                     var second = (millisUntilFinished / 1000 % 60)
                     var printSecond = ""
                     if (second < 10)
@@ -88,13 +86,9 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
                     progressPhoneSending.postValue(true)
 
                 }
-                .catch {
-                    Log.d("ConfirmViewModel", it.localizedMessage)
-                }
                 .collect {
                     when (it) {
                         is Result.Success -> {
-                            Log.d("ConfirmSmsModel", it.data.toString())
                             when(it.data.status) {
                                 "success" -> {
                                     var userForm: ConfirmSmsWrapper = gson.fromJson(it.data.data, ConfirmSmsWrapper::class.java)
@@ -173,7 +167,6 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
     }
 
     private fun checkExistAndSaveUser(userForm: ConfirmSmsWrapper, firstLogin: Boolean) {
-        Log.d("ConfirmViewModel", "check exist "+userForm.consumer)
         viewModelScope.launch(dispatcherProvider.io) {
 
             val user = userRepository.getUserById(userForm.consumer.id)
@@ -239,9 +232,6 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
                     progressPhoneSending.postValue(true)
 
                 }
-                .catch {
-                    Log.d("ConfirmViewModel", it.localizedMessage)
-                }
                 .collect {
                     when (it) {
                         is Result.Success -> {
@@ -281,7 +271,6 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
                             clearSmsForm.postValue(Event(true))
                             userMessage.postValue(Event("Ошибка"))
                             progressPhoneSending.postValue(false)
-                            Log.d("RegistrationViewMode", "Succ")
                         }
                     }
                 }
@@ -313,15 +302,9 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
                     when (it) {
                         is Result.Success -> {
                             startTimerForEmail()
-                            Log.d("ConfirmViewModel", "success")
-                        }
-                        is Result.Error -> {
-                            Log.d("ConfirmViewModel", "error")
-
                         }
                         is Result.ErrorResponse -> {
                             var smsError = gson.fromJson(it.data.data, APIResponse::class.java)
-                            Log.d("ConfirmViewModel", "error response "+smsError)
                         }
                     }
                 }
@@ -401,8 +384,6 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
 
         timerEmail = object: CountDownTimer(TIME_FOR_REPEAT_SMS_SEND.toLong(), 1000) {
             override fun onTick(millisUntilFinished: Long) {
-
-                Log.d("ConfirmSmsCode", millisUntilFinished.toString())
                 var second = (millisUntilFinished / 1000 % 60)
                 var printSecond = ""
                 if (second < 10)
@@ -452,15 +433,9 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
                     when (it) {
                         is Result.Success -> {
                             startTimer()
-                            Log.d("ConfirmViewModel", "success")
-                        }
-                        is Result.Error -> {
-                            Log.d("ConfirmViewModel", "error")
-
                         }
                         is Result.ErrorResponse -> {
                             var smsError = gson.fromJson(it.data.data, APIResponse::class.java)
-                            Log.d("ConfirmViewModel", "error response "+smsError)
                             onlyEmail = true
                             availableEmailSendSms.postValue(Event(true))
                         }
@@ -479,15 +454,7 @@ class ConfirmViewModel(private val userRepository: UserRepository, private val r
                             startTimer()
                             Log.d("ConfirmViewModel", "success")
                         }
-                        is Result.Error -> {
-                            Log.d("ConfirmViewModel", "error")
-
-                        }
                         is Result.ErrorResponse -> {
-                            Log.d("ConfirmViewModel", "error response "+it.toString())
-                       //     var smsError = gson.fromJson(it.data.data, APIResponse::class.java)
-
-                            // userMessage.postValue(Event(smsError.message))
                             onlyEmail = true
                             availableEmailSendSms.postValue(Event(true))
                         }

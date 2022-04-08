@@ -113,7 +113,6 @@ class ProfileFragment : Fragment() {
                 it.getContentIfNotHandled {
                     setAuthNavigation()
                     this.binding.userFio.text = it.name
-                    Log.d("ProfileFragment", "path "+it.photoPath)
                     if (it.photoPath.length > 0) {
                         binding.avatar.setPadding(0)
                         binding.avatar.setImageURI(Uri.parse(it.photoPath))

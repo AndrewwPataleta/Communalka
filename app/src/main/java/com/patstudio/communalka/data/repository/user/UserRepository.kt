@@ -422,7 +422,7 @@ class UserRepository (
     }
 
     fun updateToken(token: String, refresh: String, userId: String, firstLogin: Boolean) {
-        Log.d("UserRepository", "update")
+
         dao.updateToken(token, refresh, userId)
     }
 

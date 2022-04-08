@@ -67,26 +67,10 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
         viewModelScope.launch(dispatcherProvider.io) {
             roomRepository.getActualApiKey()
                 .collect {
-                    Log.d("AddRoomViewModel", "actual key resulr"+it.toString())
                     when (it) {
                         is Result.Success -> {
                             actualApiKey = it.data.data?.asJsonObject?.get("key")!!.asString
-                            Log.d("AddRoomViewModel", "actual key "+actualApiKey)
                             daDataRepository.setCurrentDaDataToken(actualApiKey)
-
-//                            when(it.data.status) {
-//                                "success" -> {
-//                                    actualApiKey = it.data.data?.asJsonObject?.get("key").toString()
-//                                    Log.d("AddRoomViewModel", "actual key "+actualApiKey)
-//                                    daDataRepository.setCurrentDaDataToken(actualApiKey)
-//                                }
-//                            }
-                        }
-                        is Result.Error -> {
-
-                        }
-                        is Result.ErrorResponse -> {
-
                         }
                     }
                 }
@@ -130,9 +114,7 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
         try {
             withContext(dispatcherProvider.io) {
                 val result = roomRepository.saveRoomLocal(room)
-                Log.d("AddRoomViewModel", "result "+result)
                 val firstInit = roomRepository.getFirstInitRoom()
-                Log.d("AddRoomViewModel", "first "+firstInit)
                 progressCreateRoom.postValue(Event(false))
             }
         } catch (e: Exception) {
@@ -155,7 +137,6 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
                     val detailAddressInfo = selectedSuggestion!!.data
                     val totalArea = totalSpace.toDoubleOrNull()
                     val livingArea = livingSpace.toDoubleOrNull()
-                    Log.d("AddRoom", detailAddressInfo.toString())
                     room = Room(id = "",roomName,totalArea = totalArea, livingArea = livingArea,selectedSuggestion!!.value, imageType = IMAGE_MODE, imagePath = value,
 
                         postalCode = detailAddressInfo.postalCode, country = detailAddressInfo.country, countryIsoCode =detailAddressInfo.countryIsoCode,fio =  fioOwner,
@@ -178,7 +159,7 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
                 if (it != null) {
                     roomRepository.sendPremises(room)
                         .collect {
-                            Log.d("AddRoomViewModel", "actual key resulr"+it.toString())
+
                             when (it) {
                                 is Result.Success -> {
                                     var placement = gson.fromJson(it.data!!.data!!.asJsonObject.get("placement"), Placement::class.java)
@@ -252,7 +233,7 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
     fun setAddressName(addressRoom: String) {
         this.addressRoom = addressRoom
         showAddressLocation.postValue(Event(false))
-        Log.d("AddRoomViewMode", addressRoom)
+
         if (firstInput) {
 
             firstInput = false
@@ -263,7 +244,6 @@ class AddRoomViewModel(private val userRepository: UserRepository, private val r
 
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
-            Log.d("AddRoomViewMode", "search "+addressRoom)
             delay(500)
             searchAddress()
         }

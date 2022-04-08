@@ -45,9 +45,6 @@ class RestoreViewModel(private val userRepository: UserRepository, private val g
                        progressPhoneSending.postValue(true)
                        disableNavigation.postValue(true)
                    }
-                   .catch {
-                       Log.d("LoginViewModel", it.localizedMessage)
-                   }
                    .collect {
                        when (it) {
                            is Result.Success -> {
@@ -89,7 +86,6 @@ class RestoreViewModel(private val userRepository: UserRepository, private val g
     }
 
     fun setPhoneNumber(phoneNumber: String) {
-        Log.d("LoginViewModel", phoneNumber)
         this.phoneNumber = phoneNumber
     }
 

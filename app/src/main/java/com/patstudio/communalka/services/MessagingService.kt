@@ -22,7 +22,7 @@ class MessagingService: FirebaseMessagingService() {
         }
     }
     override fun onNewToken(token: String) {
-        Log.d("TAG", "Refreshed token: $token")
+
     }
 
     private fun showNotification(title: String?, body: String?) {

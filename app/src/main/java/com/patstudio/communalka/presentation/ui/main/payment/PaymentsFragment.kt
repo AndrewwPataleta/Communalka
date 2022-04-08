@@ -163,53 +163,70 @@ class PaymentsFragment : Fragment() {
             }
         }
           viewModel.actionReceipt.observe(viewLifecycleOwner) {
-            if (!it.hasBeenHandled.get()) {
-                it.getContentIfNotHandled {
-                    paymentHistoryModel = it
-                    val root = layoutInflater.inflate(R.layout.layout_action_receipt, null)
-                    receiptAction = BottomSheetDialog(requireContext(), R.style.AppBottomSheetDialogTheme)
-                    receiptAction.setContentView(root)
-                    receiptAction.findViewById<View>(R.id.downloadReceipt)?.setOnClickListener {
+              if (!it.hasBeenHandled.get()) {
+                  it.getContentIfNotHandled {
+                      paymentHistoryModel = it
+//                    val root = layoutInflater.inflate(R.layout.layout_action_receipt, null)
+//                    receiptAction = BottomSheetDialog(requireContext(), R.style.AppBottomSheetDialogTheme)
+//                    receiptAction.setContentView(root)
+//                    receiptAction.findViewById<View>(R.id.downloadReceipt)?.setOnClickListener {
+//
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//                            requestPermissions(
+//                                arrayOf(
+//                                    Manifest.permission.ACCESS_MEDIA_LOCATION,
+//                                    Manifest.permission.READ_EXTERNAL_STORAGE,
+//                                ), REQUEST_READ_EXTERNAL
+//                            )
+//                        } else {
+//                            requestPermissions(
+//                                arrayOf(
+//                                    Manifest.permission.READ_EXTERNAL_STORAGE,
+//                                ), REQUEST_READ_EXTERNAL
+//                            )
+//                        }
+//                    }
+//                    receiptAction.findViewById<View>(R.id.sendEmail)?.setOnClickListener {
+//                        viewModel.selectEmail()
+//                    }
+//                    receiptAction.findViewById<View>(R.id.openReceipt)?.setOnClickListener {
+//                        receiptAction.dismiss()
+//                        mainViewModel.showReceipt(true)
+//                        binding.container.visibility = View.GONE
+//                        binding.receiptContainer.visibility = View.VISIBLE
+//                        binding.web.settings.javaScriptEnabled = true
+//
+//                        binding.web.webViewClient = object : WebViewClient() {
+//                            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+//                                view?.loadUrl(url!!)
+//                                return true
+//                            }
+//                        }
+//                        binding.web.loadUrl(paymentHistoryModel.receipt.url)
+//
+//                    }
+//                    receiptAction.show()
+//
+//                }
 
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                            requestPermissions(
-                                arrayOf(
-                                    Manifest.permission.ACCESS_MEDIA_LOCATION,
-                                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                                ), REQUEST_READ_EXTERNAL
-                            )
-                        } else {
-                            requestPermissions(
-                                arrayOf(
-                                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                                ), REQUEST_READ_EXTERNAL
-                            )
-                        }
-                    }
-                    receiptAction.findViewById<View>(R.id.sendEmail)?.setOnClickListener {
-                        viewModel.selectEmail()
-                    }
-                    receiptAction.findViewById<View>(R.id.openReceipt)?.setOnClickListener {
-                        receiptAction.dismiss()
-                        mainViewModel.showReceipt(true)
-                        binding.container.visibility = View.GONE
-                        binding.receiptContainer.visibility = View.VISIBLE
-                        binding.web.settings.javaScriptEnabled = true
+                      mainViewModel.showReceipt(true)
+                      binding.container.visibility = View.GONE
+                      binding.receiptContainer.visibility = View.VISIBLE
+                      binding.web.settings.javaScriptEnabled = true
 
-                        binding.web.webViewClient = object : WebViewClient() {
-                            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-                                view?.loadUrl(url!!)
-                                return true
-                            }
-                        }
-                        binding.web.loadUrl(paymentHistoryModel.receipt.url)
-
-                    }
-                    receiptAction.show()
-
-                }
-            }
-        }
+                      binding.web.webViewClient = object : WebViewClient() {
+                          override fun shouldOverrideUrlLoading(
+                              view: WebView?,
+                              url: String?
+                          ): Boolean {
+                              view?.loadUrl(url!!)
+                              return true
+                          }
+                      }
+                      binding.web.loadUrl(paymentHistoryModel.receipt.url)
+                  }
+              }
+          }
        viewModel.totalPaymentAmount.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {

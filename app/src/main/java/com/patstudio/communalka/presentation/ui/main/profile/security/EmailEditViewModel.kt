@@ -78,7 +78,6 @@ class EmailEditViewModel(private val userRepository: UserRepository, private val
                                 when(it.data.status) {
                                     "error" -> {
                                         it.data.message?.let {
-                                            Log.d("EditEMail", " eror ${it}")
                                             userMessage.postValue(Event(it))
                                         }
                                     }

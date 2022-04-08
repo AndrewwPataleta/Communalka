@@ -21,6 +21,7 @@ class TokenAuthenticator(private val sharedPreferences: SharedPreferences): Auth
         .readTimeout(30, TimeUnit.SECONDS)
         .callTimeout(30, TimeUnit.SECONDS)
         .followRedirects(false)
+        .authenticator(this)
         .followSslRedirects(false)
         .build()
 
@@ -51,31 +52,34 @@ class TokenAuthenticator(private val sharedPreferences: SharedPreferences): Auth
     ): Request? {
         if (retryCount > 2) return null
 
-        sharedPreferences.getString("currentRefreshToken", "")?.let { lastSavedAccessToken ->
 
-            Log.d("TokenAuthenticator", "current refresh token ${lastSavedAccessToken}")
-            Log.d("TokenAuthenticator", "current access token ${sharedPreferences.getString("currentToken", "")}")
+            sharedPreferences.getString("currentRefreshToken", "")?.let { lastSavedAccessToken ->
 
-            val resp = service.refreshToken(sharedPreferences.getString("currentRefreshToken", "")!!).execute()
+                Log.d("TokenAuthenticator", "current refresh token ${lastSavedAccessToken}")
+                Log.d("TokenAuthenticator", "current access token ${sharedPreferences.getString("currentToken", "")}")
 
-            if (resp.isSuccessful) {
+                val resp = service.refreshToken(sharedPreferences.getString("currentRefreshToken", "")!!).execute()
 
-                val tokens = resp?.body()?.data?.asJsonObject?.get("tokens")
+                Log.d("TokenAuthenticator", "resp ${resp.code()}")
 
-                sharedPreferences.edit().putString("currentToken", tokens?.asJsonObject?.get("access")!!.asString).apply()
-                sharedPreferences.edit().putString("currentRefreshToken", tokens?.asJsonObject?.get("refresh")!!.asString).apply()
+                if (resp.isSuccessful) {
 
-                Log.d("TokenAuthenticator", "updated refresh token ${tokens?.asJsonObject?.get("refresh")!!.asString}")
-                Log.d("TokenAuthenticator", "updated access token ${tokens?.asJsonObject?.get("access")!!.asString}")
+                    val tokens = resp?.body()?.data?.asJsonObject?.get("tokens")
+
+                    sharedPreferences.edit().putString("currentToken", tokens?.asJsonObject?.get("access")!!.asString).apply()
+                    sharedPreferences.edit().putString("currentRefreshToken", tokens?.asJsonObject?.get("refresh")!!.asString).apply()
+
+                    Log.d("TokenAuthenticator", "updated refresh token ${sharedPreferences.getString("currentRefreshToken", "")!!}")
+                    Log.d("TokenAuthenticator", "updated access token ${sharedPreferences.getString("currentToken", "")}")
 
 
-                if (tokens?.asJsonObject?.get("access")!!.asString != lastSavedAccessToken) {
+
                     return getNewRequest(request, retryCount, tokens?.asJsonObject?.get("access")!!.asString)
+
+                } else {
+                    return null
                 }
-            } else {
-                return null
             }
-        }
 
         return null
     }
@@ -92,29 +96,5 @@ class TokenAuthenticator(private val sharedPreferences: SharedPreferences): Auth
         return header != null && header.startsWith("Bearer ")
     }
 
-    private fun getNewToken( refreshToken: String): String? {
-        Log.d("TokenAuthenticator ", "get token func")
 
-        val resp = service.refreshToken(refreshToken).execute()
-
-        Log.d("TokenAuthenticator", "resp is successful "+resp.isSuccessful)
-
-        if (resp.isSuccessful) {
-
-            val tokens = resp?.body()?.data?.asJsonObject?.get("tokens")
-            Log.d("TokenAuthenticator ", "tokens "+tokens)
-
-            sharedPreferences.edit().putString("currentToken", tokens?.asJsonObject?.get("access")!!.asString).apply()
-            sharedPreferences.edit().putString("currentRefreshToken", tokens?.asJsonObject?.get("refresh")!!.asString).apply()
-
-
-            Log.d("TokenAuthenticator ", "token return"+tokens?.asJsonObject?.get("access")!!.asString.toString())
-
-            return tokens?.asJsonObject?.get("access")!!.asString
-        } else {
-            return null
-        }
-
-
-    }
 }

@@ -154,7 +154,6 @@ class RegistrationFragment : Fragment() {
         setPhoneMask()
 
         binding.phoneEdit.doAfterTextChanged {
-            Log.d("RegistrationFragment", watcher.mask.toUnformattedString())
             viewModel.setPhoneNumber(watcher.mask.toUnformattedString())
         }
 

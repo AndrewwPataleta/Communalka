@@ -82,11 +82,9 @@ class RegistrationViewModel(private val userRepository: UserRepository, private 
                                }
                            }
                            is Result.ErrorResponse -> {
-                               Log.d("RegistrationViewModel", "Error Response "+ it.toString())
                                when(it.data.status) {
                                    "fail" -> {
                                        var confirmError = gson.fromJson(it.data.data, LoginFormError::class.java)
-                                       Log.d("RegistrationViewModel", confirmError.toString())
                                        confirmError.email?.let {
                                            userEmailError.postValue(Event(confirmError.email[0]))
                                        }
@@ -102,7 +100,6 @@ class RegistrationViewModel(private val userRepository: UserRepository, private 
                                disableNavigation.postValue(false)
                            }
                            is Result.Error -> {
-                               Log.d("RegistrationViewModel", "Error "+it.toString())
                                progressPhoneSending.postValue(false)
                                disableNavigation.postValue(false)
                                userMessage.postValue(Event("Проверьте корректность заполнения полей"))
