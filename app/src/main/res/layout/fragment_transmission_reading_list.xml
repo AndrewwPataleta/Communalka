@@ -5,7 +5,7 @@
 
     <data>
 
-        <variable name="model" type="com.patstudio.communalka.data.model.Placement"/>
+        <variable name="model" type="com.communalka.app.data.model.Placement"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

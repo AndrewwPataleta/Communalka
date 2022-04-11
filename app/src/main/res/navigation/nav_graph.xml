@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/WelcomeFragment"
-        android:name="com.patstudio.communalka.presentation.ui.main.profile.welcome.WelcomeFragment"
+        android:name="com.communalka.app.presentation.ui.main.profile.welcome.WelcomeFragment"
         android:label="Главная"
         tools:layout="@layout/fragment_welcome">
         <action
@@ -46,7 +46,7 @@
 
     <fragment
         android:id="@+id/EditPlacement"
-        android:name="com.patstudio.communalka.presentation.ui.main.room.EditRoomFragment"
+        android:name="com.communalka.app.presentation.ui.main.room.EditRoomFragment"
         android:label="Редактировать помещение"
         tools:layout="@layout/fragment_edit_room">
         <action
@@ -56,7 +56,7 @@
 
     <fragment
         android:id="@+id/AccrualFragment"
-        android:name="com.patstudio.communalka.presentation.ui.main.readings.AccrualFragment"
+        android:name="com.communalka.app.presentation.ui.main.readings.AccrualFragment"
         tools:layout="@layout/fragment_accrual">
         <action
             android:id="@+id/toTransmissionHistory"
@@ -65,7 +65,7 @@
 
     <fragment
         android:id="@+id/HelpUserFragment"
-        android:name="com.patstudio.communalka.presentation.ui.main.profile.HelpFragment"
+        android:name="com.communalka.app.presentation.ui.main.profile.HelpFragment"
         android:label="Помощь"
         tools:layout="@layout/fragment_help_user">
 
@@ -76,7 +76,7 @@
 
     <fragment
         android:id="@+id/TransmissionReading"
-        android:name="com.patstudio.communalka.presentation.ui.main.readings.TransmissionReadingListFragment"
+        android:name="com.communalka.app.presentation.ui.main.readings.TransmissionReadingListFragment"
         android:label="Передача показаний"
         tools:layout="@layout/fragment_transmission_reading_list">
         <action
@@ -89,7 +89,7 @@
 
     <fragment
         android:id="@+id/FilterOrderFragment"
-        android:name="com.patstudio.communalka.presentation.ui.main.payment.FilterOrderFragment"
+        android:name="com.communalka.app.presentation.ui.main.payment.FilterOrderFragment"
         android:label="Фильтр"
         tools:layout="@layout/fragment_filter_payments">
     </fragment>
@@ -97,7 +97,7 @@
 
     <fragment
         android:id="@+id/PersonalAccountPlacement"
-        android:name="com.patstudio.communalka.presentation.ui.main.room.PersonalAccountManagementFragment"
+        android:name="com.communalka.app.presentation.ui.main.room.PersonalAccountManagementFragment"
         android:label="Управление л/с"
         tools:layout="@layout/fragment_personal_account_management">
         <action
@@ -113,7 +113,7 @@
 
     <fragment
         android:id="@+id/TransmissionReadingCounter"
-        android:name="com.patstudio.communalka.presentation.ui.main.readings.TransmissionReadingsFragment"
+        android:name="com.communalka.app.presentation.ui.main.readings.TransmissionReadingsFragment"
         android:label="Передача показаний"
         app:popUpTo="@id/WelcomeFragment"
         app:popUpToInclusive="false"
@@ -123,7 +123,7 @@
 
     <fragment
         android:id="@+id/CreatePersonalAccount"
-        android:name="com.patstudio.communalka.presentation.ui.main.room.CreatePersonalAccountFragment"
+        android:name="com.communalka.app.presentation.ui.main.room.CreatePersonalAccountFragment"
         tools:layout="@layout/fragment_create_personal_account">
 
         <action
@@ -139,7 +139,7 @@
 
     <fragment
         android:id="@+id/EditPersonalAccount"
-        android:name="com.patstudio.communalka.presentation.ui.main.room.EditPersonalAccountFragment"
+        android:name="com.communalka.app.presentation.ui.main.room.EditPersonalAccountFragment"
         tools:layout="@layout/fragment_edit_personal_account">
         <action
             android:id="@+id/toPersonalAccounts"
@@ -154,7 +154,7 @@
 
     <fragment
         android:id="@+id/LoginFragment"
-        android:name="com.patstudio.communalka.presentation.ui.auth.LoginFragment"
+        android:name="com.communalka.app.presentation.ui.auth.LoginFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_login">
         <action
@@ -182,7 +182,7 @@
 
     <fragment
         android:id="@+id/Registration"
-        android:name="com.patstudio.communalka.presentation.ui.auth.RegistrationFragment"
+        android:name="com.communalka.app.presentation.ui.auth.RegistrationFragment"
         android:label="Registration Fragment"
         tools:layout="@layout/fragment_registration">
         <action
@@ -210,7 +210,7 @@
 
     <fragment
         android:id="@+id/Request"
-        android:name="com.patstudio.communalka.presentation.ui.main.profile.welcome.RequestFragment"
+        android:name="com.communalka.app.presentation.ui.main.profile.welcome.RequestFragment"
         android:label="Заявки"
         tools:layout="@layout/fragment_request">
 
@@ -218,7 +218,7 @@
 
     <fragment
         android:id="@+id/Payments"
-        android:name="com.patstudio.communalka.presentation.ui.main.payment.PaymentsFragment"
+        android:name="com.communalka.app.presentation.ui.main.payment.PaymentsFragment"
         android:label="Оплаты"
         tools:layout="@layout/fragment_payments">
         <action
@@ -231,7 +231,7 @@
 
     <fragment
         android:id="@+id/PaymentPlacement"
-        android:name="com.patstudio.communalka.presentation.ui.main.payment.PaymentPlacementFragment"
+        android:name="com.communalka.app.presentation.ui.main.payment.PaymentPlacementFragment"
         android:label="Оплата услуг"
         tools:layout="@layout/fragment_payment_placement">
 
@@ -244,7 +244,7 @@
 
     <fragment
         android:id="@+id/WebFragment"
-        android:name="com.patstudio.communalka.presentation.ui.main.profile.WebFragment"
+        android:name="com.communalka.app.presentation.ui.main.profile.WebFragment"
         android:label=""
         tools:layout="@layout/fragment_web">
 
@@ -254,7 +254,7 @@
 
     <fragment
         android:id="@+id/ConfirmSms"
-        android:name="com.patstudio.communalka.presentation.ui.auth.ConfirmSmsFragment"
+        android:name="com.communalka.app.presentation.ui.auth.ConfirmSmsFragment"
         android:label="ConfirmSms Fragment"
         tools:layout="@layout/fragment_confirm_sms">
 
@@ -299,7 +299,7 @@
 
     <fragment
         android:id="@+id/RestorePinCode"
-        android:name="com.patstudio.communalka.presentation.ui.auth.RestorePinFragment"
+        android:name="com.communalka.app.presentation.ui.auth.RestorePinFragment"
         android:label="PinCode Fragment"
         tools:layout="@layout/fragment_restore">
 
@@ -307,7 +307,7 @@
 
     <fragment
         android:id="@+id/PinCode"
-        android:name="com.patstudio.communalka.presentation.ui.auth.PinCodeFragment"
+        android:name="com.communalka.app.presentation.ui.auth.PinCodeFragment"
         android:label="PinCode Fragment"
         tools:layout="@layout/fragment_pin_code">
 
@@ -336,7 +336,7 @@
 
     <fragment
         android:id="@+id/Profile"
-        android:name="com.patstudio.communalka.presentation.ui.main.profile.welcome.ProfileFragment"
+        android:name="com.communalka.app.presentation.ui.main.profile.welcome.ProfileFragment"
         android:label="Профиль"
         tools:layout="@layout/fragment_profile">
         <action
@@ -376,7 +376,7 @@
 
     <fragment
         android:id="@+id/UserNotificationFragment"
-        android:name="com.patstudio.communalka.presentation.ui.main.profile.UserNotificationFragment"
+        android:name="com.communalka.app.presentation.ui.main.profile.UserNotificationFragment"
         android:label="Уведомления"
         tools:layout="@layout/fragment_user_notification_settings">
 
@@ -384,7 +384,7 @@
 
     <fragment
         android:id="@+id/UserFaq"
-        android:name="com.patstudio.communalka.presentation.ui.main.profile.FaqFragment"
+        android:name="com.communalka.app.presentation.ui.main.profile.FaqFragment"
         android:label="Часто задаваемые вопросы"
         tools:layout="@layout/fragment_faq">
 
@@ -392,7 +392,7 @@
 
     <fragment
         android:id="@+id/ConsumptionHistoryFragment"
-        android:name="com.patstudio.communalka.presentation.ui.main.readings.ConsumptionHistoryFragment"
+        android:name="com.communalka.app.presentation.ui.main.readings.ConsumptionHistoryFragment"
         android:label="История потребления"
         tools:layout="@layout/fragment_consumption_history">
 
@@ -404,7 +404,7 @@
 
     <fragment
         android:id="@+id/AboutApp"
-        android:name="com.patstudio.communalka.presentation.ui.main.profile.AboutAppFragment"
+        android:name="com.communalka.app.presentation.ui.main.profile.AboutAppFragment"
         android:label="О приложении"
         tools:layout="@layout/fragment_about_app">
         <action
@@ -426,7 +426,7 @@
 
     <fragment
         android:id="@+id/ConnectDeveloper"
-        android:name="com.patstudio.communalka.presentation.ui.main.profile.ConnectDeveloperFragment"
+        android:name="com.communalka.app.presentation.ui.main.profile.ConnectDeveloperFragment"
         android:label="Связь с разработчиками"
         tools:layout="@layout/fragment_connect_developer">
 
@@ -434,7 +434,7 @@
 
     <fragment
         android:id="@+id/HistoryVersion"
-        android:name="com.patstudio.communalka.presentation.ui.main.profile.HistoryVersionFragment"
+        android:name="com.communalka.app.presentation.ui.main.profile.HistoryVersionFragment"
         android:label="История версий приложения"
         tools:layout="@layout/fragment_history_version">
 
@@ -442,7 +442,7 @@
 
     <fragment
         android:id="@+id/EditEmail"
-        android:name="com.patstudio.communalka.presentation.ui.main.profile.security.EmailEditFragment"
+        android:name="com.communalka.app.presentation.ui.main.profile.security.EmailEditFragment"
         android:label="Изменить почту"
         tools:layout="@layout/fragment_email_edit">
 
@@ -450,7 +450,7 @@
 
     <fragment
         android:id="@+id/EntranceSecurity"
-        android:name="com.patstudio.communalka.presentation.ui.main.profile.security.EntranceSecurityFragment"
+        android:name="com.communalka.app.presentation.ui.main.profile.security.EntranceSecurityFragment"
         android:label="Безопасность и вход"
         tools:layout="@layout/fragment_entrance_security">
 
@@ -477,7 +477,7 @@
 
     <fragment
         android:id="@+id/PersonalInfo"
-        android:name="com.patstudio.communalka.presentation.ui.main.profile.PersonalInfoFragment"
+        android:name="com.communalka.app.presentation.ui.main.profile.PersonalInfoFragment"
         android:label="Личные данные"
         tools:layout="@layout/fragment_personal_info">
 
@@ -486,7 +486,7 @@
 
     <fragment
         android:id="@+id/EditPhone"
-        android:name="com.patstudio.communalka.presentation.ui.main.profile.EditPhoneFragment"
+        android:name="com.communalka.app.presentation.ui.main.profile.EditPhoneFragment"
         android:label="Сменить номер телефона"
         tools:layout="@layout/fragment_edit_phone">
         <action
@@ -499,7 +499,7 @@
 
     <fragment
         android:id="@+id/EditPhoneConfirm"
-        android:name="com.patstudio.communalka.presentation.ui.auth.EditPhoneConfirmFragment"
+        android:name="com.communalka.app.presentation.ui.auth.EditPhoneConfirmFragment"
         android:label="Сменить номер телефона"
         tools:layout="@layout/fragment_edit_phone_confirm">
 
@@ -507,7 +507,7 @@
 
     <fragment
         android:id="@+id/EditEmailConfirm"
-        android:name="com.patstudio.communalka.presentation.ui.auth.EditEmailConfirmFragment"
+        android:name="com.communalka.app.presentation.ui.auth.EditEmailConfirmFragment"
         android:label="Сменить почтовый адрес"
         tools:layout="@layout/fragment_edit_email_confirm">
 
@@ -515,7 +515,7 @@
 
     <fragment
         android:id="@+id/EditPinCode"
-        android:name="com.patstudio.communalka.presentation.ui.main.profile.security.EditPinCodeFragment"
+        android:name="com.communalka.app.presentation.ui.main.profile.security.EditPinCodeFragment"
         android:label="Изменить PIN-код"
         tools:layout="@layout/fragment_edit_pin_code">
 
@@ -525,7 +525,7 @@
 
     <fragment
         android:id="@+id/AddRoom"
-        android:name="com.patstudio.communalka.presentation.ui.main.room.AddRoomFragment"
+        android:name="com.communalka.app.presentation.ui.main.room.AddRoomFragment"
         android:label="Добавить помещение"
         tools:layout="@layout/fragment_add_room">
         <action

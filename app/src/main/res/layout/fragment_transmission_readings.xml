@@ -5,7 +5,7 @@
 
     <data>
 
-        <variable name="model" type="com.patstudio.communalka.data.model.PlacementMeter"/>
+        <variable name="model" type="com.communalka.app.data.model.PlacementMeter"/>
     </data>
 
     <ScrollView

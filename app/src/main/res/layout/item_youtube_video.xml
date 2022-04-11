@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable name="viewModel" type="com.patstudio.communalka.presentation.ui.main.profile.HelpViewModel"/>
+        <variable name="viewModel" type="com.communalka.app.presentation.ui.main.profile.HelpViewModel"/>
         <variable name="position" type="Integer"/>
-        <variable name="model" type="com.patstudio.communalka.data.model.Item"/>
+        <variable name="model" type="com.communalka.app.data.model.Item"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

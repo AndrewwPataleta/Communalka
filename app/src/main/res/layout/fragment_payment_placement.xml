@@ -2,9 +2,9 @@
 <layout>
 
     <data>
-        <variable name="viewModel" type="com.patstudio.communalka.presentation.ui.main.payment.PaymentPlacementViewModel"/>
+        <variable name="viewModel" type="com.communalka.app.presentation.ui.main.payment.PaymentPlacementViewModel"/>
         <variable name="position" type="Integer"/>
-        <variable name="model" type="com.patstudio.communalka.data.model.Placement"/>
+        <variable name="model" type="com.communalka.app.data.model.Placement"/>
     </data>
 
     <ScrollView

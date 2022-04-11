@@ -3,7 +3,7 @@
 
     <data>
 
-        <variable name="model" type="com.patstudio.communalka.data.model.Consumer"/>
+        <variable name="model" type="com.communalka.app.data.model.Consumer"/>
     </data>
 
     <ScrollView

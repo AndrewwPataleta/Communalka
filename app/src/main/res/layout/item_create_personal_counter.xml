@@ -4,9 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="viewModel" type="com.patstudio.communalka.presentation.ui.main.room.CreatePersonalAccountViewModel"/>
+        <variable name="viewModel" type="com.communalka.app.presentation.ui.main.room.CreatePersonalAccountViewModel"/>
         <variable name="position" type="Integer"/>
-        <variable name="model" type="com.patstudio.communalka.data.model.PersonalCounter"/>
+        <variable name="model" type="com.communalka.app.data.model.PersonalCounter"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

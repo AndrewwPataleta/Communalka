@@ -2,9 +2,9 @@
 <layout>
 
     <data>
-        <variable name="viewModel" type="com.patstudio.communalka.presentation.ui.main.profile.security.EmailEditViewModel"/>
+        <variable name="viewModel" type="com.communalka.app.presentation.ui.main.profile.security.EmailEditViewModel"/>
         <variable name="position" type="Integer"/>
-        <variable name="model" type="com.patstudio.communalka.data.model.User"/>
+        <variable name="model" type="com.communalka.app.data.model.User"/>
     </data>
 
     <ScrollView

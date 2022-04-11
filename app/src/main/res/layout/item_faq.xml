@@ -4,9 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="viewModel" type="com.patstudio.communalka.presentation.ui.main.profile.FaqViewModel"/>
+        <variable name="viewModel" type="com.communalka.app.presentation.ui.main.profile.FaqViewModel"/>
         <variable name="position" type="Integer"/>
-        <variable name="model" type="com.patstudio.communalka.data.model.Faq"/>
+        <variable name="model" type="com.communalka.app.data.model.Faq"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
