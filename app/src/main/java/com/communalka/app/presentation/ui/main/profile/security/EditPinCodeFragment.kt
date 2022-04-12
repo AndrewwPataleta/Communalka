@@ -14,8 +14,10 @@ import androidx.navigation.fragment.findNavController
 import com.communalka.app.R
 import com.communalka.app.databinding.FragmentEditPinCodeBinding
 import com.communalka.app.presentation.ui.main.profile.welcome.WelcomeViewModel
+import com.communalka.app.common.utils.gone
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
+import com.communalka.app.common.utils.visible
 import java.util.concurrent.Executor
 
 class EditPinCodeFragment : Fragment() {

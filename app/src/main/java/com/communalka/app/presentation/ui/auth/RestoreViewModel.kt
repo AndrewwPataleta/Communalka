@@ -5,11 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.communalka.app.common.utils.Event
+import com.communalka.app.common.utils.isValidPhoneNumber
 import com.communalka.app.data.model.ConfirmSmsParams
 import com.communalka.app.data.model.Result
 import com.communalka.app.data.model.auth.LoginResponseError
 import com.communalka.app.data.repository.user.UserRepository
-import isValidPhoneNumber
+
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 

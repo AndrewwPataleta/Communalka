@@ -8,13 +8,14 @@ import androidx.lifecycle.viewModelScope
 import com.communalka.app.common.contextprovider.DispatcherProvider
 import com.google.gson.Gson
 import com.communalka.app.common.utils.Event
+import com.communalka.app.common.utils.isEmailValid
 import com.communalka.app.data.model.*
 import com.communalka.app.data.model.auth.ConfirmFormError
 import com.communalka.app.data.model.auth.ConfirmSmsWrapper
 import com.communalka.app.data.model.auth.LoginFormError
 import com.communalka.app.data.repository.premises.RoomRepository
 import com.communalka.app.data.repository.user.UserRepository
-import isEmailValid
+import com.communalka.app.common.utils.isEmailValid
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 

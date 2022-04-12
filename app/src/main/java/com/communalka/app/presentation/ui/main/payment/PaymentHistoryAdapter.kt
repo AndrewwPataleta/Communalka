@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.communalka.app.common.utils.roundOffTo2DecPlaces
 import com.communalka.app.data.model.PaymentHistoryModel
 import com.communalka.app.databinding.ItemPaymentHistoryNewBinding
-import roundOffTo2DecPlaces
 
 import java.text.SimpleDateFormat
 

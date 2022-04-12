@@ -8,11 +8,12 @@ import com.communalka.app.common.contextprovider.DispatcherProvider
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.communalka.app.common.utils.Event
+import com.communalka.app.common.utils.convertLongToFilterTime
 import com.communalka.app.data.model.*
 import com.communalka.app.data.repository.premises.RoomRepository
 import com.communalka.app.data.repository.user.UserRepository
-import convertLongToFilterTime
-import isEmailValid
+
+import com.communalka.app.common.utils.isEmailValid
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart

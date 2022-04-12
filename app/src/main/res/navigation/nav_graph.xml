@@ -24,7 +24,7 @@
             app:destination="@id/PinCode" />
         <argument
             android:name="user"
-            app:argType="com.patstudio.communalka.data.model.User" />
+            app:argType="com.communalka.app.data.model.User" />
         <action
             android:id="@+id/toRegistration"
             app:destination="@id/Registration" />
@@ -269,7 +269,7 @@
             app:argType="string" />
         <argument
             android:name="phone"
-            app:argType="com.patstudio.communalka.data.model.UserForm" />
+            app:argType="com.communalka.app.data.model.UserForm" />
         <action
             android:id="@+id/toPinCode"
             app:popUpTo="@id/WelcomeFragment"
@@ -328,7 +328,7 @@
             app:popExitAnim="@anim/slide_out_right"/>
         <argument
             android:name="user"
-            app:argType="com.patstudio.communalka.data.model.UserForm" />
+            app:argType="com.communalka.app.data.model.UserForm" />
         <argument
             android:name="type"
             app:argType="string" />

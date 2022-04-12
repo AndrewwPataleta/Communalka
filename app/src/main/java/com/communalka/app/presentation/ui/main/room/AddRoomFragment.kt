@@ -30,12 +30,10 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import android.text.Editable
 
 import android.text.TextWatcher
-
-
-
-
-
-
+import androidx.core.view.setPadding
+import androidx.core.widget.doAfterTextChanged
+import com.communalka.app.common.utils.gone
+import com.communalka.app.common.utils.visible
 
 
 class AddRoomFragment : Fragment() {

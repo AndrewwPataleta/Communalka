@@ -21,7 +21,7 @@ import com.skydoves.balloon.extensions.dp
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
-import visible
+import com.communalka.app.common.utils.visible
 
 
 class PersonalAccountManagementFragment : Fragment() {

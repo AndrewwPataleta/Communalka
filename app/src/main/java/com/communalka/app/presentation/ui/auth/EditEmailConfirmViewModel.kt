@@ -15,7 +15,7 @@ import com.communalka.app.data.model.auth.ConfirmSmsWrapper
 import com.communalka.app.data.model.auth.LoginFormError
 import com.communalka.app.data.repository.premises.RoomRepository
 import com.communalka.app.data.repository.user.UserRepository
-import isEmailValid
+import com.communalka.app.common.utils.isEmailValid
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 

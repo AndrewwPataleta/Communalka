@@ -4,13 +4,15 @@ import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import com.communalka.app.R
 import com.communalka.app.common.utils.DecimalDigitsInputFilter
 import com.communalka.app.common.utils.InputFilterMinMax
+import com.communalka.app.common.utils.roundOffTo2DecPlaces
 import com.communalka.app.data.model.Invoice
 import com.communalka.app.databinding.ItemPlacementPaymentBinding
-import roundOffTo2DecPlaces
+
 
 class PaymentPlacementAdapter(private val paymentsList: List<Invoice>, val viewModel: PaymentPlacementViewModel) : RecyclerView.Adapter<PaymentPlacementAdapter.PlacementHolder>() {
 

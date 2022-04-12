@@ -9,7 +9,7 @@ import com.communalka.app.common.utils.Event
 import com.communalka.app.data.model.Result
 import com.communalka.app.data.model.User
 import com.communalka.app.data.repository.user.UserRepository
-import isEmailValid
+import com.communalka.app.common.utils.isEmailValid
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 

@@ -10,6 +10,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.*
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import com.communalka.app.R
+import com.communalka.app.common.utils.gone
+import com.communalka.app.common.utils.visible
 import com.communalka.app.databinding.ActivityMainBinding
 import com.communalka.app.presentation.ui.main.payment.PaymentsViewModel
 import com.communalka.app.presentation.ui.main.room.EditPersonalAccountViewModel

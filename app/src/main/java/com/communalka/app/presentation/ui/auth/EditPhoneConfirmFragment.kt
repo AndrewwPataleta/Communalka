@@ -15,9 +15,9 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.communalka.app.R
 import com.communalka.app.databinding.FragmentEditPhoneConfirmBinding
-import gone
+import com.communalka.app.common.utils.gone
 import org.koin.android.viewmodel.ext.android.viewModel
-import visible
+import com.communalka.app.common.utils.visible
 import java.lang.Exception
 
 

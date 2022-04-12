@@ -17,8 +17,12 @@ import android.view.View
 import android.widget.ImageView
 
 import android.widget.TextView
+import androidx.core.view.setPadding
+import com.communalka.app.common.utils.gone
+import com.communalka.app.common.utils.roundOffTo2DecPlaces
+import com.communalka.app.common.utils.visible
 import com.communalka.app.utils.IconUtils
-import roundOffTo2DecPlaces
+
 
 
 class PlacementAdapter(private val placementList: List<Placement>,  val context: Context,  val viewModel: WelcomeViewModel) : RecyclerView.Adapter<PlacementAdapter.PlacementHolder>() {

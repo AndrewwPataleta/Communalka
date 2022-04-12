@@ -13,10 +13,10 @@ import com.communalka.app.R
 import com.communalka.app.data.model.PlacementMeter
 import com.communalka.app.databinding.FragmentTransmissionReadingsBinding
 import com.communalka.app.presentation.ui.splash.MainViewModel
-import gone
+import com.communalka.app.common.utils.gone
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
-import visible
+import com.communalka.app.common.utils.visible
 
 
 class TransmissionReadingsFragment : Fragment() {

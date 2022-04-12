@@ -14,11 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.communalka.app.BuildConfig
 import com.communalka.app.R
+import com.communalka.app.common.utils.roundOffTo2DecPlaces
 import com.communalka.app.data.model.Placement
 import com.communalka.app.databinding.*
 import com.communalka.app.presentation.ui.main.readings.PlacementSelectorPaymentAdapter
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import roundOffTo2DecPlaces
+
 import ru.tinkoff.acquiring.sdk.TinkoffAcquiring
 import ru.tinkoff.acquiring.sdk.models.Item
 import ru.tinkoff.acquiring.sdk.models.Receipt

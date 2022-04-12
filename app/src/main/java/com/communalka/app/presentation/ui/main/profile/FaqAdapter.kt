@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.communalka.app.data.model.Faq
 import com.communalka.app.databinding.ItemFaqBinding
-import gone
-import visible
+import com.communalka.app.common.utils.gone
+import com.communalka.app.common.utils.visible
 
 class FaqAdapter(val faq: List<Faq>, val viewModel: FaqViewModel) : RecyclerView.Adapter<FaqAdapter.HistoryVersionHolder>() {
 

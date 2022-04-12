@@ -1,3 +1,5 @@
+package com.communalka.app.common.utils
+
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.res.Resources

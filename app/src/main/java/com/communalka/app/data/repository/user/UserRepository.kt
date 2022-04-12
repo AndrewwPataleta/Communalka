@@ -8,7 +8,7 @@ import com.google.gson.reflect.TypeToken
 import com.communalka.app.data.database.user.UserDao
 import com.communalka.app.data.model.*
 import com.communalka.app.data.networking.user.UserRemote
-import com.communalka.data.common.utils.Connectivity
+import com.communalka.app.common.utils.Connectivity
 import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
 import java.io.IOException

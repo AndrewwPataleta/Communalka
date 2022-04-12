@@ -34,9 +34,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.communalka.app.R
 import com.communalka.app.data.model.Placement
 import com.communalka.app.databinding.FragmentEditRoomBinding
-import gone
+import com.communalka.app.common.utils.gone
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import visible
+import com.communalka.app.common.utils.visible
 
 
 class EditRoomFragment : Fragment() {

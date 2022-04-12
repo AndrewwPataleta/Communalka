@@ -8,12 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.setPadding
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.communalka.app.BuildConfig
 import com.communalka.app.R
+import com.communalka.app.common.utils.gone
+import com.communalka.app.common.utils.visible
 import com.communalka.app.databinding.FragmentProfileBinding
 import com.communalka.app.presentation.ui.MainActivity
 import com.communalka.app.presentation.ui.main.ProfileViewModel

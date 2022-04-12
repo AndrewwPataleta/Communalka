@@ -4,6 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.communalka.app.common.utils.gone
+import com.communalka.app.common.utils.visible
 import com.communalka.app.data.model.Service
 import com.communalka.app.databinding.ItemConnectedPersonalAccountBinding
 import com.communalka.app.utils.IconUtils

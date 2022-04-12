@@ -7,9 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.communalka.app.R
+import com.communalka.app.common.utils.gone
+import com.communalka.app.common.utils.invisible
+import com.communalka.app.common.utils.visible
 import com.communalka.app.databinding.FragmentLoginBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 import ru.tinkoff.decoro.MaskImpl

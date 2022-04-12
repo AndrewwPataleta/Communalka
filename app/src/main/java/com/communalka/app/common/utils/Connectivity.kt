@@ -1,4 +1,4 @@
-package com.communalka.data.common.utils
+package com.communalka.app.common.utils
 
 interface Connectivity {
   

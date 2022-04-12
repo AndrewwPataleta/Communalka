@@ -6,7 +6,7 @@ import com.google.gson.Gson
 import com.communalka.app.data.model.ParentYoutube
 import com.communalka.app.data.model.Result
 import com.communalka.app.data.networking.dadata.FaqRemote
-import com.communalka.data.common.utils.Connectivity
+import com.communalka.app.common.utils.Connectivity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

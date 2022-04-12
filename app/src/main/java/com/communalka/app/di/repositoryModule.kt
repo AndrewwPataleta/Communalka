@@ -8,7 +8,7 @@ import com.communalka.app.data.repository.user.FaqRepository
 import com.communalka.app.data.repository.user.UserRepository
 
 
-import com.communalka.data.common.utils.Connectivity
+import com.communalka.app.common.utils.Connectivity
 import com.communalka.data.common.utils.ConnectivityImpl
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named

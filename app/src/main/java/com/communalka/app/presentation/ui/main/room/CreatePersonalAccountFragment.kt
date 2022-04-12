@@ -17,10 +17,10 @@ import com.communalka.app.data.model.Service
 import com.communalka.app.data.model.Placement
 import com.communalka.app.databinding.FragmentCreatePersonalAccountBinding
 import com.communalka.app.presentation.ui.splash.MainViewModel
-import gone
+import com.communalka.app.common.utils.gone
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
-import visible
+import com.communalka.app.common.utils.visible
 
 
 class CreatePersonalAccountFragment : Fragment() {

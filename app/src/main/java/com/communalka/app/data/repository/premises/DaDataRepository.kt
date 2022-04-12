@@ -7,7 +7,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.communalka.app.data.model.Result
 import com.communalka.app.data.networking.dadata.DaDataRemote
-import com.communalka.data.common.utils.Connectivity
+import com.communalka.app.common.utils.Connectivity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException

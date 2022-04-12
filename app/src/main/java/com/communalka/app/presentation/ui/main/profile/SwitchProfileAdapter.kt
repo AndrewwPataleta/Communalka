@@ -10,8 +10,11 @@ import com.communalka.app.data.model.User
 import com.communalka.app.databinding.ItemSwitchUserBinding
 import com.communalka.app.presentation.ui.main.ProfileViewModel
 import com.skydoves.balloon.extensions.dp
-import gone
-import visible
+import com.communalka.app.common.utils.gone
+import com.communalka.app.common.utils.visible
+
+import com.communalka.app.common.utils.gone
+import com.communalka.app.common.utils.visible
 
 class SwitchProfileAdapter(val placementList: List<User>, val viewModel: ProfileViewModel) : RecyclerView.Adapter<SwitchProfileAdapter.SwitchProfileHolder>() {
 

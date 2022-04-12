@@ -17,13 +17,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.communalka.app.R
+import com.communalka.app.common.utils.gone
 import com.communalka.app.databinding.FragmentWelcomeBinding
 import com.communalka.app.presentation.ui.MainActivity
 import com.communalka.app.presentation.ui.main.payment.PaymentsViewModel
 import com.communalka.app.presentation.ui.main.room.PlacementAdapter
 import com.communalka.app.presentation.ui.splash.MainViewModel
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import visible
+import com.communalka.app.common.utils.visible
 import com.skydoves.balloon.*
 import com.skydoves.balloon.extensions.dp
 import kotlinx.android.synthetic.main.activity_main.*

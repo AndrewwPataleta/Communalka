@@ -15,7 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doAfterTextChanged
 import com.communalka.app.databinding.FragmentPersonalInfoBinding
-import gone
+import com.communalka.app.common.utils.gone
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class PersonalInfoFragment : Fragment() {

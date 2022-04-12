@@ -7,8 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.communalka.app.R
+import com.communalka.app.common.utils.maskEmail
 import com.communalka.app.databinding.FragmentEntranceSecurityBinding
-import maskEmail
+
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class EntranceSecurityFragment : Fragment() {

@@ -13,6 +13,9 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import com.communalka.app.R
+import com.communalka.app.common.utils.gone
+import com.communalka.app.common.utils.invisible
+import com.communalka.app.common.utils.visible
 import com.communalka.app.data.model.UserForm
 import com.communalka.app.databinding.FragmentPinCodeBinding
 import com.communalka.app.presentation.ui.MainActivity

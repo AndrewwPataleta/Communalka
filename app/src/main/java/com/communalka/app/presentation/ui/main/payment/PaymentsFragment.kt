@@ -24,19 +24,18 @@ import com.huxq17.download.Pump
 import com.huxq17.download.core.DownloadInfo
 import com.huxq17.download.core.DownloadListener
 import com.communalka.app.R
-import com.communalka.app.common.utils.Event
 import com.communalka.app.data.model.PaymentHistoryModel
 import com.communalka.app.databinding.FragmentPaymentsBinding
 import com.communalka.app.presentation.ui.splash.MainViewModel
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import convertLongToTime
-import roundOffTo2DecPlacesSecond
+
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.OutputStream
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import com.communalka.app.common.utils.*
 
 
 class PaymentsFragment : Fragment() {

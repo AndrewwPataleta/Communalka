@@ -7,7 +7,7 @@ import com.google.gson.reflect.TypeToken
 import com.communalka.app.data.database.user.RoomDao
 import com.communalka.app.data.model.*
 import com.communalka.app.data.networking.premises.RoomRemote
-import com.communalka.data.common.utils.Connectivity
+import com.communalka.app.common.utils.Connectivity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.ResponseBody

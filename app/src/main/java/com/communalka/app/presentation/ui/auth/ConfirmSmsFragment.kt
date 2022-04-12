@@ -13,11 +13,13 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.communalka.app.R
+import com.communalka.app.common.utils.gone
+import com.communalka.app.common.utils.visible
 import com.communalka.app.data.model.UserForm
 import com.communalka.app.databinding.FragmentConfirmSmsBinding
-import gone
+
 import org.koin.android.viewmodel.ext.android.viewModel
-import visible
+
 import java.lang.Exception
 
 

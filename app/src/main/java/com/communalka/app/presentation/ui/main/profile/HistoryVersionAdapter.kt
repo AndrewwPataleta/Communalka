@@ -3,6 +3,8 @@ package com.communalka.app.presentation.ui.main.profile
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.communalka.app.common.utils.gone
+import com.communalka.app.common.utils.visible
 import com.communalka.app.data.model.VersionApp
 import com.communalka.app.databinding.ItemVersionAppBinding
 import com.skydoves.balloon.*
