@@ -94,7 +94,6 @@
         tools:layout="@layout/fragment_filter_payments">
     </fragment>
 
-
     <fragment
         android:id="@+id/PersonalAccountPlacement"
         android:name="com.communalka.app.presentation.ui.main.room.PersonalAccountManagementFragment"

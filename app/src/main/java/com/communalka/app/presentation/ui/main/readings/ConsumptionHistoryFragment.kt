@@ -59,7 +59,7 @@ class ConsumptionHistoryFragment : Fragment() {
                 it.getContentIfNotHandled {
 //                    val bundle = bundleOf("model" to it)
 //                    NavHostFragment.findNavController(this).navigate(R.id.toWeb, bundle)
-                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.google.com/gview?embedded=true&url="+BuildConfig.API_HOST+"meter/${it.first}/history/?pdf=true&year=${it.second})"))
+                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.API_HOST+"meter/${it.first}/history/?pdf=true&year=${it.second})"))
                     startActivity(browserIntent)
                 }
             }

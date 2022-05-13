@@ -9,6 +9,7 @@ plugins {
 }
 
 android {
+
     compileSdkVersion Integer.parseInt(ANDROID_COMPILE_SDK_VERSION)
     buildToolsVersion "30.0.3"
 
@@ -31,14 +32,16 @@ android {
             buildConfigField("String", "API_HOST_DADATA", '"https://suggestions.dadata.ru/suggestions/api/4_1/rs/"')
             buildConfigField("String", "API_HOST_FAQ", '"https://www.googleapis.com/youtube/v3/"')
             buildConfigField("String", "DATABASE_NAME", '"communalka_release"')
+            buildConfigField("String", "YOUTUBE_KEY", '"AIzaSyDgsjkMeyLRXkPPT-_yjfeqwmMqpuccQEc"')
             buildConfigField("String", "PUBLIC_KEY", '"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv5yse9ka3ZQE0feuGtemYv3IqOlLck8zHUM7lTr0za6lXTszRSXfUO7jMb+L5C7e2QNFs+7sIX2OQJ6a+HG8kr+jwJ4tS3cVsWtd9NXpsU40PE4MeNr5RqiNXjcDxA+L4OsEm/BlyFOEOh2epGyYUd5/iO3OiQFRNicomT2saQYAeqIwuELPs1XpLk9HLx5qPbm8fRrQhjeUD5TLO8b+4yCnObe8vy/BMUwBfq+ieWADIjwWCMp2KTpMGLz48qnaD9kdrYJ0iyHqzb2mkDhdIzkim24A3lWoYitJCBrrB2xM05sm9+OdCI1f7nPNJbl5URHobSwR94IRGT7CJcUjvwIDAQAB"')
             buildConfigField("String", "TERMINAL_KEY", '"1630673707028"')
         }
         debug {
-            buildConfigField("String", "DATABASE_NAME", '"communalka_release"')
+            buildConfigField("String", "API_HOST", '"https://test.communalka.site/api/v1/"')
             buildConfigField("String", "API_HOST_DADATA", '"https://suggestions.dadata.ru/suggestions/api/4_1/rs/"')
-            buildConfigField("String", "API_HOST", '"https://core.communalka.site/api/v1/"')
             buildConfigField("String", "API_HOST_FAQ", '"https://www.googleapis.com/youtube/v3/"')
+            buildConfigField("String", "DATABASE_NAME", '"communalka_debug"')
+            buildConfigField("String", "YOUTUBE_KEY", '"AIzaSyDgsjkMeyLRXkPPT-_yjfeqwmMqpuccQEc"')
             buildConfigField("String", "PUBLIC_KEY", '"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv5yse9ka3ZQE0feuGtemYv3IqOlLck8zHUM7lTr0za6lXTszRSXfUO7jMb+L5C7e2QNFs+7sIX2OQJ6a+HG8kr+jwJ4tS3cVsWtd9NXpsU40PE4MeNr5RqiNXjcDxA+L4OsEm/BlyFOEOh2epGyYUd5/iO3OiQFRNicomT2saQYAeqIwuELPs1XpLk9HLx5qPbm8fRrQhjeUD5TLO8b+4yCnObe8vy/BMUwBfq+ieWADIjwWCMp2KTpMGLz48qnaD9kdrYJ0iyHqzb2mkDhdIzkim24A3lWoYitJCBrrB2xM05sm9+OdCI1f7nPNJbl5URHobSwR94IRGT7CJcUjvwIDAQAB"')
             buildConfigField("String", "TERMINAL_KEY", '"1630673707028DEMO"')
         }
@@ -53,6 +56,11 @@ android {
     buildFeatures {
         viewBinding true
         dataBinding true
+    }
+    lintOptions {
+        checkReleaseBuilds false
+
+        abortOnError false
     }
 }
 
@@ -143,6 +151,7 @@ dependencies {
 
     //chuck
     debugImplementation "com.github.chuckerteam.chucker:library:$chuckVersion"
+
     releaseImplementation "com.github.chuckerteam.chucker:library-no-op:$chuckVersion"
 
     testImplementation 'junit:junit:4.+'

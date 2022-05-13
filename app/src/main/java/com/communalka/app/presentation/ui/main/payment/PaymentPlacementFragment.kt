@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputFilter
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.communalka.app.BuildConfig
 import com.communalka.app.R
+import com.communalka.app.common.utils.DecimalDigitsInputFilter
+import com.communalka.app.common.utils.InputFilterMinMax
 import com.communalka.app.common.utils.roundOffTo2DecPlaces
 import com.communalka.app.data.model.Placement
 import com.communalka.app.databinding.*
@@ -93,7 +96,8 @@ class PaymentPlacementFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                    if (it > 0) {
-                       binding.payment.text = "Оплатить: ${roundOffTo2DecPlaces(it.toFloat())} ₽"
+                       //binding.payment.setFilters(arrayOf<InputFilter>(InputFilterMinMax(0f, 1000000f), DecimalDigitsInputFilter(10, 2)))
+                       binding.payment.text = "Оплатить: ${it.toFloat().toString()} ₽"
                        binding.payment.setOnClickListener {
                            viewModel.createPayment()
                        }

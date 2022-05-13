@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.communalka.app.BuildConfig
 import com.communalka.app.common.contextprovider.DispatcherProvider
 import com.google.gson.Gson
 import com.communalka.app.common.utils.Event
@@ -36,7 +37,7 @@ class HelpViewModel(private val userRepository: UserRepository, private val faqR
                     when (it) {
                         is Result.Success -> {
                             var key = gson.fromJson(it.data.data!!.asJsonObject.get("key"), String::class.java)
-                            faqRepository.getVideo(key, "AIzaSyDgsjkMeyLRXkPPT-_yjfeqwmMqpuccQEc")
+                            faqRepository.getVideo(key, BuildConfig.YOUTUBE_KEY)
                                 .onStart { _progress.postValue(Event(true)) }
                                 .collect {
                                     when (it) {

@@ -68,8 +68,7 @@ class TokenAuthenticator(private val sharedPreferences: SharedPreferences): Auth
                     Log.d("TokenAuthenticator", "updated refresh token ${sharedPreferences.getString("currentRefreshToken", "")!!}")
                     Log.d("TokenAuthenticator", "updated access token ${sharedPreferences.getString("currentToken", "")}")
 
-
-
+                    
                     return getNewRequest(request, retryCount, tokens?.asJsonObject?.get("access")!!.asString)
 
                 } else {

@@ -53,9 +53,8 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
                 userRepository.setPinCode(pinCodeRepeat)
                 viewModelScope.launch(dispatcherProvider.io) {
                     try {
-                        userRepository.saveUserLocal(userForSave)
+                      //  userRepository.saveUserLocal(userForSave)
                         userRepository.updatePreviosAuthUser()
-                        userRepository.setLastLoginUserWithoutToken(userForSave)
                         clearPinForm()
                         alertMessage.postValue(Event("PIN-код  установлен"))
                         user.postValue(Event(userForSave))
@@ -81,8 +80,8 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
             if (currentPinCode.compareTo(pinCode) == 0) {
                 viewModelScope.launch(dispatcherProvider.io) {
                     try {
-                        userRepository.updatePreviosAuthUser()
-                        userRepository.setLastLoginUser(savedUser)
+                      //  userRepository.updatePreviosAuthUser()
+                     //   userRepository.setLastLoginUser(savedUser)
                         clearPinForm()
                         user.postValue(Event(savedUser))
                     }catch (e: Exception) {
@@ -204,7 +203,7 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
          this.userForm = userForm
          enterMode = userForm.type
          currentPinCode = userRepository.getCurrentPinCode()
-         if (currentPinCode.length == 0) {
+         if (currentPinCode.isEmpty()) {
              enterMode = "INSTALL"
              pinCodeMode.postValue((Event(enterMode)))
          } else {

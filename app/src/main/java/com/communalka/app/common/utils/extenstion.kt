@@ -68,7 +68,7 @@ fun getServiceIcon(serviceName: String, context: Context): Drawable {
 
  fun roundOffTo2DecPlaces(value: Float): String? {
 
-    val DECIMAL_FORMAT = "###,###.#"
+    val DECIMAL_FORMAT = "###,###.##"
     val formatSymbols = DecimalFormatSymbols(Locale.ENGLISH)
     formatSymbols.decimalSeparator = ','
     formatSymbols.groupingSeparator = ' '
@@ -83,7 +83,9 @@ fun roundOffTo2DecPlacesSecond(value: Float): String? {
     val formatSymbols = DecimalFormatSymbols(Locale.ENGLISH)
     formatSymbols.decimalSeparator = ','
     formatSymbols.groupingSeparator = ' '
+
     val formatter = DecimalFormat(DECIMAL_FORMAT, formatSymbols)
+    formatter.minimumFractionDigits = 2
     return formatter.format(value)
 }
 
