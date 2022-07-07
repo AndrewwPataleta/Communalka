@@ -35,13 +35,25 @@ class AccrualFragment : Fragment() {
     private fun initObservers() {
         viewModel.meters.observe(viewLifecycleOwner) {
 
-            val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-            val date = format.parse(it.first.lastPayment?.date)
+
+            try {
+                it.first.lastPayment?.let {
+                    it.date?.let {
+                        val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                        val date = format.parse(it)
+                        binding.dateLastPaymentValue.text = SimpleDateFormat("dd.MM.yyyy").format(date)
+                    }
+                    it.amount?.let {
+                        binding.sumLastPaymentValue.text = it.toString()
+                    }
+                }
+            } catch (e: Exception) {}
+
 
             binding.balanceValue.text = it.first.balance.toString()
             binding.penaltyValue.text = it.first.penalty.toString()
-            binding.sumLastPaymentValue.text = it.first.lastPayment?.amount.toString()
-            binding.dateLastPaymentValue.text = SimpleDateFormat("dd.MM.yyyy").format(date)
+
+
 
             adapter = MeterAccrualAdapter(it.second, viewModel)
             binding.container.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL ,false)

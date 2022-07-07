@@ -41,7 +41,7 @@ class WebReceiptFragment : Fragment() {
         binding.appLicenceText.setOnClickListener {
             val browserIntent = Intent(
                 Intent.ACTION_VIEW,
-                Uri.parse("https://docs.google.com/gview?embedded=true&url="+BuildConfig.API_HOST+"/public_offer/")
+                Uri.parse("https://docs.google.com/gview?embedded=true&url="+BuildConfig.API_HOST+"public_offer/")
             )
 
             startActivity(browserIntent)

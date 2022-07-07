@@ -7,20 +7,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:741592672804:android:9420a916d4bc92d3ff46b1",
+        "mobilesdk_app_id": "1:741592672804:android:3af2f05d41421111ff46b1",
         "android_client_info": {
-          "package_name": "com.patstudio.communalka"
+          "package_name": "com.communalka.app"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "741592672804-5ogqbktt0bm7s29r5hvf4jc9dgbdkov8.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.patstudio.communalka",
-            "certificate_hash": "2154715cb6d2f72fbfe015d20bdef36f9ec73be0"
-          }
-        },
         {
           "client_id": "741592672804-3uch5uj2iqiuid1pilu4fo2sjjurbasv.apps.googleusercontent.com",
           "client_type": 3
@@ -28,7 +20,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDgsjkMeyLRXkPPT-_yjfeqwmMqpuccQEc"
+          "current_key": "AIzaSyD-dI8hSmf8OCcO8pYzF5-uxbRpmliOSmA"
         }
       ],
       "services": {

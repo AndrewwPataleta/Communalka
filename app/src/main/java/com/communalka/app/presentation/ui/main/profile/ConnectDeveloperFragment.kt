@@ -43,7 +43,7 @@ class ConnectDeveloperFragment : Fragment() {
             mIntent.data = Uri.parse("mailto:")
             mIntent.type = "text/plain"
 
-            mIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("support@test.communalka.site","stqagm@gmail.com"))
+            mIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("support@communalka.site"))
 
             it.putExtra(Intent.EXTRA_SUBJECT, binding.senderEdit.text.toString())
 

@@ -154,7 +154,7 @@ class PlacementAdapter(private val placementList: List<Placement>,  val context:
                         }
                     } }
 
-                    servicePaymentBinding.findViewById<TextView>(R.id.payment).text = (it.balance+it.penalty).toString().plus(" ₽")
+                    servicePaymentBinding.findViewById<TextView>(R.id.payment).text = roundOffTo2DecPlaces((it.balance+it.penalty).toFloat()).toString().plus(" ₽")
                     IconUtils.instance.getServiceIcon(service, servicePaymentBinding.context, servicePaymentBinding.findViewById<ImageView>(R.id.image))
                     itemBinding.servicePaymentsContainer.addView(servicePaymentBinding)
                 }

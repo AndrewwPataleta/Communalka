@@ -51,6 +51,15 @@ class FaqFragment : Fragment() {
                 }
             }
         }
+        viewModel.updatePosition.observe(viewLifecycleOwner) {
+            if (!it.hasBeenHandled.get()) {
+                it.getContentIfNotHandled { pos->
+                    faqAdapter.let {
+                        it.notifyItemChanged(pos)
+                    }
+                }
+            }
+        }
     }
 
     private fun initListeners() {

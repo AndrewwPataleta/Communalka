@@ -64,18 +64,7 @@ class TransmissionReadingListFragment : Fragment() {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
                     val adapter = PlacementSelectorAdapter(requireContext(), it, viewModel)
-                    binding.placementSelector.onItemSelectedListener =
-                        object : OnItemSelectedListener {
-                            override fun onItemSelected(
-                                parent: AdapterView<*>,
-                                view: View,
-                                position: Int,
-                                id: Long
-                            ) {
-                                viewModel.selectedPlacement(parent.getItemAtPosition(position) as Placement)
-                            }
-                            override fun onNothingSelected(parent: AdapterView<*>?) {}
-                        }
+
                     binding.placementSelector.adapter = adapter
                 }
             }

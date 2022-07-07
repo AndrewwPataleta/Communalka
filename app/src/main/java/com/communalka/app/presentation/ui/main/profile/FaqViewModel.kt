@@ -22,6 +22,9 @@ class FaqViewModel(private val userRepository: UserRepository, private val dispa
     private var _faq: MutableLiveData<Event<ArrayList<Faq>>> = MutableLiveData()
     val faq: LiveData<Event<ArrayList<Faq>>> = _faq
 
+    private var _updatePosition: MutableLiveData<Event<Int>> = MutableLiveData()
+    val updatePosition: LiveData<Event<Int>> = _updatePosition
+
     private  var faqList: ArrayList<Faq> = ArrayList()
     private  var stableFaqList: ArrayList<Faq> = ArrayList()
 
@@ -70,7 +73,8 @@ class FaqViewModel(private val userRepository: UserRepository, private val dispa
 
     public fun arrowClick(position: Int) {
         faqList[position].opened = !faqList[position].opened
-        _faq.postValue(Event(faqList))
+        _updatePosition.postValue(Event(position))
+
     }
 
 }
