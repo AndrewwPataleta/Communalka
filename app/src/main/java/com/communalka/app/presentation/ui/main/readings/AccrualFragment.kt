@@ -49,12 +49,8 @@ class AccrualFragment : Fragment() {
                 }
             } catch (e: Exception) {}
 
-
             binding.balanceValue.text = it.first.balance.toString()
             binding.penaltyValue.text = it.first.penalty.toString()
-
-
-
             adapter = MeterAccrualAdapter(it.second, viewModel)
             binding.container.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL ,false)
             binding.container.adapter = adapter

@@ -2,6 +2,7 @@ package com.communalka.app.presentation.ui.main.readings
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,7 +54,7 @@ class TransmissionReadingListFragment : Fragment() {
         viewModel.placementMeters.observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
-
+                    Log.d("Tramission", "adapter size ${it.size}")
                     adater = PlacementMeterAdapter(it, requireContext(),viewModel)
                     binding.meterContainer.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL ,false)
                     binding.meterContainer.adapter = adater

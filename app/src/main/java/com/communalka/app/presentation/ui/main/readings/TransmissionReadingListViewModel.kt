@@ -56,6 +56,7 @@ class TransmissionReadingListViewModel(private val userRepository: UserRepositor
                 currentPlacementModel = placement
                 _currentPlacement.postValue(Event(currentPlacementModel!!))
                 getPlacements()
+
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -91,11 +92,13 @@ class TransmissionReadingListViewModel(private val userRepository: UserRepositor
                                     it.selected = true
                                     indexSelected = index
                                     currentPlacementModel = it
+
                                 }
                             }
 
                             Collections.swap(placements, 0, indexSelected);
                             _placementsList.postValue(Event(placements))
+                            selectedPlacement(currentPlacementModel!!)
                         }
                         is Result.ErrorResponse -> { }
                         is Result.Error -> { }

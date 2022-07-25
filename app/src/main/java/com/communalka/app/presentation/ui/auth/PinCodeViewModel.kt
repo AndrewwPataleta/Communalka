@@ -53,8 +53,9 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
                 userRepository.setPinCode(pinCodeRepeat)
                 viewModelScope.launch(dispatcherProvider.io) {
                     try {
-                      //  userRepository.saveUserLocal(userForSave)
+                        userRepository.saveUserLocal(userForSave)
                         userRepository.updatePreviosAuthUser()
+                        userRepository.setLastLoginUser(userForSave)
                         clearPinForm()
                         alertMessage.postValue(Event("PIN-код  установлен"))
                         user.postValue(Event(userForSave))
@@ -80,8 +81,8 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
             if (currentPinCode.compareTo(pinCode) == 0) {
                 viewModelScope.launch(dispatcherProvider.io) {
                     try {
-                      //  userRepository.updatePreviosAuthUser()
-                     //   userRepository.setLastLoginUser(savedUser)
+//                        userRepository.updatePreviosAuthUser()
+//                        userRepository.setLastLoginUser(savedUser)
                         clearPinForm()
                         user.postValue(Event(savedUser))
                     }catch (e: Exception) {
@@ -198,30 +199,30 @@ class PinCodeViewModel(private val userRepository: UserRepository, private val d
     }
 
 
-     fun setUserForm(userForm: UserForm) {
-         initCurrent()
-         this.userForm = userForm
-         enterMode = userForm.type
-         currentPinCode = userRepository.getCurrentPinCode()
-         if (currentPinCode.isEmpty()) {
-             enterMode = "INSTALL"
-             pinCodeMode.postValue((Event(enterMode)))
-         } else {
-             enterMode = "AUTH"
-             availableFingerPrint.postValue(true)
-             accessBack.postValue(Event(false))
-             viewModelScope.launch(dispatcherProvider.io) {
-                 savedUser = userRepository.getUserById(userForm.id)
-                 if (savedUser.fingerPrintSignIn) {
+    fun setUserForm(userForm: UserForm) {
+        initCurrent()
+        this.userForm = userForm
+        enterMode = userForm.type
+        currentPinCode = userRepository.getCurrentPinCode()
+        if (currentPinCode.isEmpty()) {
+            enterMode = "INSTALL"
+            pinCodeMode.postValue((Event(enterMode)))
+        } else {
+            enterMode = "AUTH"
+            availableFingerPrint.postValue(true)
+            accessBack.postValue(Event(false))
+            viewModelScope.launch(dispatcherProvider.io) {
+                savedUser = userRepository.getUserById(userForm.id)
+                if (savedUser.fingerPrintSignIn) {
 
-                     availableFingerPrint.postValue(true)
-                 } else {
-                     availableFingerPrint.postValue(false)
-                 }
-                 pinCodeMode.postValue((Event(enterMode)))
-             }
-         }
-     }
+                    availableFingerPrint.postValue(true)
+                } else {
+                    availableFingerPrint.postValue(false)
+                }
+                pinCodeMode.postValue((Event(enterMode)))
+            }
+        }
+    }
 
     fun removeAllPin() {
         when (enterMode) {

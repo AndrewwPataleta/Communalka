@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -49,7 +50,7 @@ class WelcomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        Log.d("WelcomeFragment", "welcome fragment")
         _binding = FragmentWelcomeBinding.inflate(inflater, container, false)
         binding.login.setOnClickListener {
             val bundle = bundleOf("type" to "default")
@@ -110,6 +111,7 @@ class WelcomeFragment : Fragment() {
         viewModel.getWithoutUser().observe(viewLifecycleOwner) {
             if (!it.hasBeenHandled.get()) {
                 it.getContentIfNotHandled {
+                    Log.d("WelcomeFragment", "without user")
                     (requireActivity() as MainActivity).clearBackground()
                     requireActivity().toolbar.visibility = View.GONE
                     binding.userContainer.visible(false)
